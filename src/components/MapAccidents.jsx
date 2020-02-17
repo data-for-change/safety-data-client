@@ -56,7 +56,7 @@ const MapAccidents = observer(() => {
 const ListAccidents = observer(() => {
   const store = useStore();
   const reactMarkers = toJS(store.markers)
-  let listMarkers = reactMarkers.map((x) => <li key={`${x._id}`} >{x.accident_year}:  ({x.latitude}, {x.longitude})</li>)
+  let listMarkers = reactMarkers.map((x) => <li key={`${x._id}`} >{x.accident_year}, {x.accident_yishuv_name}:  ({x.latitude}, {x.longitude})</li>)
   return (
     <div className="listDiv">
       <ul>{listMarkers}</ul>
@@ -72,7 +72,7 @@ const AccidentsMarkers = observer(() => {
     if (x.latitude !== null && x.longitude !== null) {
       return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>
         {<Popup maxWidth="300">
-          {x.accident_year}
+          <div>{x.accident_year}, {x.accident_yishuv_name}</div> 
         </Popup>}
       </Marker>)
     }

@@ -16,7 +16,7 @@ export default class AccidentService {
     });
   }
     //get request using jsonp and post body
-    getFilter(collback){
+    getFilter(filter,collback){
       //"http://localhost:5000/api/v1/accident"
       var settings = {
         "url": "/api/v1/accident",
@@ -25,7 +25,7 @@ export default class AccidentService {
           "content-type": "application/json"
         },
         "processData": false,
-        "data": "{\"accident_year\":  { \"$gt\" : 2016} , \"accident_yishuv_name\": \"גבעתיים\"}"
+        "data": filter
       }
       
       $.ajax(settings).done(function (response) {

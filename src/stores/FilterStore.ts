@@ -31,9 +31,9 @@ export default class FilterStore {
     @observable
     startYear:number = 2015;
     @observable
-    EndYear:number = 2017;
+    endYear:number = 2017;
     @observable
-    City:string = "";
+    city:string = "";
 
     @observable
     markers:any[] = []
@@ -41,8 +41,13 @@ export default class FilterStore {
     @action
     submitFilter= () => {
      console.log(this.startYear)
+
+     let filter = `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}`;
+     if (this.city !== "") filter += `, "accident_yishuv_name": "${this.city}"`;
+     filter += `}`
+     console.log (filter)
      var service = new  AccidentService ();
-     service.getFilter(this.updateMarkers);
+     service.getFilter(filter,this.updateMarkers);
     }
 
     @action

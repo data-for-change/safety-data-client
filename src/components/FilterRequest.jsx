@@ -23,7 +23,7 @@ export const FilterRequest = observer(() => {
             </Form.Group>
             <Form.Group as={Col} controlId="exampleForm.ControlSelectEndYear">
                 <Form.Label>End Year</Form.Label>
-                <Form.Control as="select" onChange={(e) => {store.EndYear = e.target.value;}}>
+                <Form.Control as="select" onChange={(e) => {store.endYear = e.target.value;}}>
                     <option>2015</option>
                     <option>2016</option>
                     <option>2017</option>
@@ -34,7 +34,7 @@ export const FilterRequest = observer(() => {
         </Form.Row>
             <Form.Group controlId="exampleForm.ControlCity">
                 <Form.Label>City</Form.Label>
-                <Form.Control type="input" placeholder="חיפה" onChange={(e) => {store.City = e.target.value;}}/>
+                <Form.Control type="input" placeholder="גבעתיים" onChange={(e) => {store.city = e.target.value;}}/>
             </Form.Group>
             <Button variant="primary"  onClick={() => {store.submitFilter();}} >
                 Do Filter
