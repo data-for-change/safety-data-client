@@ -40,9 +40,10 @@ function App() {
 
 function About() {
   return (
-    <div>
-      <Header title="About" />
-      <h1>About page</h1>
+    <div className="heb">
+      <Header title="אודות" />
+      <div>פרוייקט נתונים על תאונות דרכים</div>
+      <div>מקור הנתונים - פרוייקט Anyway של הסדנא לידע ציבורי.</div>
       <Footer />
     </div>
   )

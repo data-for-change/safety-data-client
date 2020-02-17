@@ -6,6 +6,29 @@
   --secondary-color: #00aacc;
   --primary-old:#4576c4;
 }
+
+.heb{
+  direction: rtl;
+}
+.App-header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--primary-color);
+  color:var(--onprimary-color)
+}
+.HederTitle {
+  font-size: 20px;
+}
+.App-footer {
+  background-color:var(--primary-color);
+  color:var(--onprimary-color);
+  padding: 2px 10px;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
 /* 
 #map {
   width: 80vw;
