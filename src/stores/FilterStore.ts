@@ -1,4 +1,5 @@
 import { observable, computed, action } from "mobx"
+import AccidentService from "../services/Accident.Service"
 //import autorun  from "mobx"
 
 interface ITodo {
@@ -37,6 +38,8 @@ export default class FilterStore {
     @action
     submitFilter= () => {
      console.log(this.startYear)
+     var service = new  AccidentService ();
+     service.getFilter();
     }
 
 
