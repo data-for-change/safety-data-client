@@ -1,11 +1,14 @@
 import React from 'react'
+import { observer } from "mobx-react"
+import { useStore } from '../stores/storeConfig'
 import L from 'leaflet'
-import { Map, TileLayer, Marker,Popup} from 'react-leaflet'
-import {FilterPanel} from './FilterPanel'
-import AccidentService from '../services/Accident.Service'
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
+import { FilterPanel } from './FilterPanel'
+//import AccidentService from '../services/Accident.Service'
 import 'leaflet-css'
 import redMarker from '../assets/marker-icon-2x-red.png'
 import shadoMarker from '../assets/marker-shadow.png'
+import { toJS } from 'mobx'
 
 const redIcon = new L.Icon({
   iconUrl: redMarker,
@@ -16,28 +19,11 @@ const redIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-export default class MapAccidents extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      markers: []
-    };
-  }
-
-  getPoints =(e) =>{
-    var service = new  AccidentService ();
-    service.getAll(this.addPointsToMap);
-  }
-  addPointsToMap=(arrPoints) =>{
-    this.setState(() => {
-      return {markers: arrPoints};
-    })
-  }
-
-  render() {
-    const WRAPPER_STYLES = { height: '500px', width: '100vw' };
-    let listMarkers = this.state.markers.map((x) => <li key={`${x._id}`} >{x.accident_year}:  ({x.latitude}, {x.longitude}, )</li>);
-    let rendMarkers = this.state.markers.map((x) => {
+const MapAccidents = observer(() => {
+  const store = useStore();
+  const WRAPPER_STYLES = { height: '500px', width: '100vw' };
+  /*   let listMarkers = store.markers.map((x) => <li key={`${x._id}`} >{x.accident_year}:  ({x.latitude}, {x.longitude}, )</li>);
+    let rendMarkers = store.markers.map((x) => {
       if (x.latitude !== null && x.longitude !== null){
         return(
           <Marker key={`marker-${x._id}`} position={[x.latitude,x.longitude]} icon={redIcon}>
@@ -47,26 +33,70 @@ export default class MapAccidents extends React.Component {
           </Marker>)
         }
       else return null
-    });
+    }); */
+  return (
+    <div>
+      <Map
+        center={[32.09, 34.7818]}
+        zoom={13}
+        style={WRAPPER_STYLES}
+      >
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <AccidentsMarkers />
+      </Map>
+      {/* <button className="button" type="button" onClick={this.getPoints.bind()} >Get Accidents</button> */}
+      <FilterPanel />
+      <ListAccidents />
+    </div>
+  )
+})
+const ListAccidents = observer(() => {
+  const store = useStore();
+  const reactMarkers = toJS(store.markers)
+  let listMarkers = reactMarkers.map((x) => <li key={`${x._id}`} >{x.accident_year}:  ({x.latitude}, {x.longitude})</li>)
+  return (
+    <div className="listDiv">
+      <ul>{listMarkers}</ul>
+    </div>
+  )
+})
+
+const AccidentsMarkers = observer(() => {
+  const store = useStore();
+  const reactMarkers = toJS(store.markers);
+  console.log(reactMarkers);
+  const markersArr = reactMarkers.map((x) => {
+    if (x.latitude !== null && x.longitude !== null) {
+      return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>
+        {<Popup maxWidth="300">
+          {x.accident_year}
+        </Popup>}
+      </Marker>)
+    }
+    else { return null }
+  })
+  if (reactMarkers.length > 0) {
     return (
       <div>
-        <Map
-          center={[32.09, 34.7818]}
-          zoom={13}
-          style={WRAPPER_STYLES}
-        >
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {rendMarkers}
-        </Map>
-        <button className="button" type="button" onClick={this.getPoints.bind()} >Get Accidents</button>
-        <FilterPanel />
-        <div className="listDiv">
-        <ul>{listMarkers}</ul>
-        </div>
+        {markersArr}
       </div>
     )
   }
-}
+  else { return null }
+})
+
+/* const  getPoints =(e) =>{
+    var service = new  AccidentService ();
+    service.getAll(this.addPointsToMap);
+  }
+
+  const addPointsToMap=(arrPoints) =>{
+    this.setState(() => {
+      return {markers: arrPoints};
+    })
+  } */
+
+export default MapAccidents

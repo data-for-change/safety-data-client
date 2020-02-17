@@ -1,4 +1,4 @@
-import { observable, computed, action } from "mobx"
+import { observable, computed, action} from "mobx"
 import AccidentService from "../services/Accident.Service"
 //import autorun  from "mobx"
 
@@ -35,13 +35,23 @@ export default class FilterStore {
     @observable
     City:string = "";
 
+    @observable
+    markers:any[] = []
+
     @action
     submitFilter= () => {
      console.log(this.startYear)
      var service = new  AccidentService ();
-     service.getFilter();
+     service.getFilter(this.updateMarkers);
     }
 
+    @action
+    updateMarkers= (arrPoints:any[]) => {
+      if(arrPoints !== null)
+      {
+        this.markers = arrPoints;
+      }
+    }
 
     @observable
     todos:Array<ITodo> = [];
