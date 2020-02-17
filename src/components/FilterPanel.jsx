@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
-import { FilterRequest } from './FilterRequest';
+import {FilterRequest} from './FilterRequest';
 
 
 export function FilterPanel() {

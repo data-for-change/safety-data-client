@@ -1,0 +1,69 @@
+import { observable, computed, action } from "mobx"
+//import autorun  from "mobx"
+
+interface ITodo {
+  value: string;
+  id :number;
+  complete: boolean;
+}
+
+class Todo implements ITodo {
+  @observable
+  value: string;
+  @observable
+  id :number;
+  @observable
+  complete: boolean;
+  constructor(value:string){
+    this.value = value;
+    this.id = Date.now();
+    this.complete = false;
+  }
+}
+
+export default class FilterStore {
+    appInitialized = false
+    constructor () {
+        // init app data
+        this.appInitialized =false;
+    }
+    @observable
+    startYear:number = 2015;
+    @observable
+    EndYear:number = 2017;
+    @observable
+    City:string = "";
+
+    @action
+    submitFilter= () => {
+     console.log(this.startYear)
+    }
+
+
+    @observable
+    todos:Array<ITodo> = [];
+    @observable
+    filter:string = ""
+    @computed
+    get filterdTodos(){
+      let filterP = new RegExp(this.filter,"i");
+      return this.todos.filter((doto:ITodo) => filterP.test(doto.value));
+    }
+    @action
+    createTodo(value:string){
+      this.todos.push(new Todo(value));
+    }
+    @action
+    clearComleted = () => {
+      let list:Array<ITodo> = this.todos.filter(todo => !todo.complete)
+      this.todos = list;
+    }
+}
+
+
+// autorun(() =>{
+//     console.log(store.todos[0])
+//     console.log(store.filter)
+// })
+
+//export default store
