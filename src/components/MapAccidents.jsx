@@ -1,6 +1,7 @@
 import React from 'react'
 import L from 'leaflet'
 import { Map, TileLayer, Marker,Popup} from 'react-leaflet'
+import {FilterRequest} from './FilterRequest'
 import AccidentService from '../services/Accident.Service'
 import 'leaflet-css'
 import redMarker from '../assets/marker-icon-2x-red.png'
@@ -61,6 +62,7 @@ export default class MapAccidents extends React.Component {
           {rendMarkers}
         </Map>
         <button className="button" type="button" onClick={this.getPoints.bind()} >Get Accidents</button>
+        <FilterRequest />
         <div className="listDiv">
         <ul>{listMarkers}</ul>
         </div>
