@@ -22,7 +22,7 @@ const redIcon = new L.Icon({
 
 const MapAccidents = observer(() => {
   const store = useStore();
-  const WRAPPER_STYLES = { height: '500px', width: '100vw' };
+  const WRAPPER_STYLES = { height: '500px', width: '100vw' ,maxWidth:'100%'};
   return (
     <div>
       <Map
