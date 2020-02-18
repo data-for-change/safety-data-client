@@ -15,16 +15,24 @@ export const AccidentsTable = observer(() => {
         text: 'ID'
     }, {
         dataField: 'accident_year',
-        text: 'Year'
+        text: 'Year',
+        sort: true
     }, {
         dataField: 'accident_yishuv_name',
-        text: 'City'
+        text: 'City',
+        sort: true
+    }, {
+        dataField: 'street1_hebrew',
+        text: 'Street',
+        sort: true
     }, {
         dataField: 'age_group_hebrew',
-        text: 'Age'
+        text: 'Age',
+        sort: true
     }, {
         dataField: 'sex_hebrew',
-        text: 'Gender'
+        text: 'Gender',
+        sort: true
     }];
     if (reactMarkers.length >0 ){
         return (<div>
