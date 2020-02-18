@@ -28,7 +28,9 @@
   display: flex;
   justify-content: space-between;
 }
-
+.table-header{
+  background-color:var(--secondary-color);
+}
 /* 
 #map {
   width: 80vw;
