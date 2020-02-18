@@ -4,11 +4,12 @@ import { useStore } from '../stores/storeConfig'
 import L from 'leaflet'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 import { FilterPanel } from './FilterPanel'
-//import AccidentService from '../services/Accident.Service'
+import {AccidentsTable} from './AccidentsTable'
 import 'leaflet-css'
 import redMarker from '../assets/marker-icon-2x-red.png'
 import shadoMarker from '../assets/marker-shadow.png'
 import { toJS } from 'mobx'
+
 
 const redIcon = new L.Icon({
   iconUrl: redMarker,
@@ -22,18 +23,6 @@ const redIcon = new L.Icon({
 const MapAccidents = observer(() => {
   const store = useStore();
   const WRAPPER_STYLES = { height: '500px', width: '100vw' };
-  /*   let listMarkers = store.markers.map((x) => <li key={`${x._id}`} >{x.accident_year}:  ({x.latitude}, {x.longitude}, )</li>);
-    let rendMarkers = store.markers.map((x) => {
-      if (x.latitude !== null && x.longitude !== null){
-        return(
-          <Marker key={`marker-${x._id}`} position={[x.latitude,x.longitude]} icon={redIcon}>
-            <Popup maxWidth="300">
-             {x.accident_year}
-            </Popup>
-          </Marker>)
-        }
-      else return null
-    }); */
   return (
     <div>
       <Map
@@ -49,17 +38,7 @@ const MapAccidents = observer(() => {
       </Map>
       {/* <button className="button" type="button" onClick={this.getPoints.bind()} >Get Accidents</button> */}
       <FilterPanel />
-      <ListAccidents />
-    </div>
-  )
-})
-const ListAccidents = observer(() => {
-  const store = useStore();
-  const reactMarkers = toJS(store.markers)
-  let listMarkers = reactMarkers.map((x) => <li key={`${x._id}`} >{x.accident_year}, {x.accident_yishuv_name}:  ({x.latitude}, {x.longitude})</li>)
-  return (
-    <div className="listDiv">
-      <ul>{listMarkers}</ul>
+      <AccidentsTable/>
     </div>
   )
 })
