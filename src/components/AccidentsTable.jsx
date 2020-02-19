@@ -26,6 +26,10 @@ export const AccidentsTable = observer(() => {
         text: 'Street',
         sort: true
     }, {
+        dataField: 'injured_type_hebrew1',
+        text: 'Type',
+        sort: true
+    }, {
         dataField: 'age_group_hebrew',
         text: 'Age',
         sort: true

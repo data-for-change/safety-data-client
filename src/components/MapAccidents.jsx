@@ -49,7 +49,7 @@ const AccidentsMarkers = observer(() => {
     if (x.latitude !== null && x.longitude !== null) {
       return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>
         {<Popup maxWidth="300">
-          <div>{x.accident_year}, {x.accident_yishuv_name}</div> 
+    <div>{x.accident_year}, {x.accident_yishuv_name}, {x.injured_type_hebrew1}</div> 
         </Popup>}
       </Marker>)
     }
