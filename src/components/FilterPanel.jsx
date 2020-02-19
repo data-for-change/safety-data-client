@@ -1,27 +1,20 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
-import {FilterRequest} from './FilterRequest';
+import { FilterRequest } from './FilterRequest';
 
 
 export function FilterPanel() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
 
     return (
         <>
-            <Button
-                onClick={
-                    () => {
-                        setOpen(!open);
-                    }}
-                aria-controls="example-collapse-text"
-                aria-expanded={open}
-            >
-                Options
-        </Button>
+            <Button onClick={() => { setOpen(!open); }} aria-controls="example-collapse-text" aria-expanded={open}>
+                Filter
+            </Button>
             <Collapse in={open}>
                 <div id="example-collapse-text">
-                   <FilterRequest />
+                    <FilterRequest />
                 </div>
             </Collapse>
         </>
