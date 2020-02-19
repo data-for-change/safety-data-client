@@ -3,8 +3,7 @@ import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
 import L from 'leaflet'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
-import { FilterPanel } from './FilterPanel'
-import {AccidentsTable} from './AccidentsTable'
+
 import 'leaflet-css'
 import redMarker from '../assets/marker-icon-2x-red.png'
 import shadoMarker from '../assets/marker-shadow.png'
@@ -22,7 +21,7 @@ const redIcon = new L.Icon({
 
 const MapAccidents = observer(() => {
   const store = useStore();
-  const WRAPPER_STYLES = { height: '500px', width: '100vw' ,maxWidth:'100%'};
+   const WRAPPER_STYLES = { height: '500px', width: '100vw' ,maxWidth:'100%'};
   return (
     <div>
       <Map
@@ -37,8 +36,7 @@ const MapAccidents = observer(() => {
         <AccidentsMarkers />
       </Map>
       {/* <button className="button" type="button" onClick={this.getPoints.bind()} >Get Accidents</button> */}
-      <FilterPanel />
-      <AccidentsTable/>
+
     </div>
   )
 })

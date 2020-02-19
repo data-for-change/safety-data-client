@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import MapAccidents from './components/MapAccidents'
+import {HomePage} from './components/HomePage'
 import HeatMap from './components/HeatMap';
 import Header from './components/Headr';
 import Footer from './components/Footer';
@@ -27,9 +27,7 @@ function App() {
           </Route>
           <Route path="/">
             <div className="App">
-              <Header title="Accidents Map" />
-              <MapAccidents />
-              <Footer />
+              <HomePage/>
             </div>
           </Route>
          
