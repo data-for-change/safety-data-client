@@ -34,7 +34,7 @@ export const FilterRequest = observer(() => {
         </Form.Row>
             <Form.Group controlId="exampleForm.ControlCity">
                 <Form.Label>City</Form.Label>
-                <Form.Control type="input" placeholder="גבעתיים" value={store.city} onChange={(e) => {store.city = e.target.value;}}/>
+                <Form.Control type="input" placeholder="" value={store.city} onChange={(e) => {store.city = e.target.value;}}/>
             </Form.Group>
             <Button variant="primary"  onClick={() => {store.submitFilter();}} >
                 Do Filter

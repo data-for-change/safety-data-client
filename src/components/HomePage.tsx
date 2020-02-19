@@ -1,19 +1,30 @@
 import React from 'react'
 import MapAccidents from './MapAccidents'
-import Header from './Headr';
-import Footer from './Footer';
 import { FilterPanel } from './FilterPanel'
-import {AccidentsTable} from './AccidentsTable'
-interface IProps {}
+import { AccidentsTable } from './AccidentsTable'
+import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+interface IProps { }
 
 export const HomePage: React.FC<IProps> = () => {
-    return (
-        <div className="App">
-        <Header title="Accidents Map" />
-        <MapAccidents />
-        <FilterPanel/>
-        <AccidentsTable/>
-        <Footer />
+  return (
+    <div className="App">
+      <div className="container-fluid">
+        <div className="row ">
+          <div className="p-3 col-md-2"><FilterPanel /></div>
+          <div className="col-md-10"><Card><MapAccidents /></Card></div>
+        </div>
+        <div className="row">
+          <div className="col-auto"><AccidentsTable /></div>
+        </div>
       </div>
-    )
+
+
+
+
+
+
+
+    </div>
+  )
 }
