@@ -69,10 +69,19 @@ const CardFilterWhere = observer(() => {
     </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey="1">
+        <div>
+        <Form.Group controlId="exampleForm.ControlRoadeType">
+          <Form.Label>Road Type:</Form.Label>
+          <Form.Check inline label="urban junction" type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked}  onClick={(e) => { store.updateRoadType(0, e.target.checked); }}/>
+          <Form.Check inline label="urban road" type={'checkbox'} id={`checkboxroadt1`} checked={store.roadTypes[1].checked}  onClick={(e) => { store.updateRoadType(1, e.target.checked); }}/>
+          <Form.Check inline label="non-urban junction" type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onClick={(e) => { store.updateRoadType(2, e.target.checked); }}/>
+          <Form.Check inline label="non-urban road" type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onClick={(e) => { store.updateRoadType(3, e.target.checked); }}/>
+         </Form.Group>
         <Form.Group controlId="exampleForm.ControlCity">
           <Form.Label>City</Form.Label>
           <Form.Control type="input" placeholder="" value={store.city} onChange={(e) => { store.city = e.target.value; }} />
         </Form.Group>
+        </div>
       </Accordion.Collapse>
     </Card>
   );
@@ -87,7 +96,7 @@ const CardFilterWho  = observer(() => {
     </Accordion.Toggle>
       </Card.Header>
       <Accordion.Collapse eventKey="2">
-        <Form.Group controlId="exampleForm.ControlCity">
+        <Form.Group controlId="exampleForm.ControlInjType">
           <Form.Label>Type:</Form.Label>
           <Form.Check inline label="all" type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypes[0].checked}  onClick={(e) => { store.updateInjuerdType(0, e.target.checked); }}/>
           <Form.Check inline label="pedestrian" type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked}  onClick={(e) => { store.updateInjuerdType(1, e.target.checked); }}/>
