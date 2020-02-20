@@ -32,6 +32,7 @@ export default class FilterStore {
     // init app data
     this.initInjTypes(this.injTypes);
     this.initRoadTypes(this.roadTypes);
+    this.initGenderTypes(this.genderTypes);
     this.appInitialized = false;
 
   }
@@ -49,6 +50,11 @@ export default class FilterStore {
     arr.push(new FilterChecker(true, ["לא-עירונית בצומת"]));
     arr.push(new FilterChecker(true, ["לא-עירונית לא בצומת"]));
   }
+  initGenderTypes = (arr: any) => {
+    arr.push(new FilterChecker(true, ["נקבה"]));
+    arr.push(new FilterChecker(true, ["זכר"]));
+    //arr.push(new FilterChecker(true, ["לא ידוע"]));
+  }
 
 
   @observable
@@ -57,12 +63,21 @@ export default class FilterStore {
   endYear: number = 2019;
   @observable
   city: string = "";
+
   @observable
   roadTypes: Array<IFilterChecker> = [];
   @action
   updateRoadType = (aType: number, val: boolean) => {
     this.roadTypes[aType].checked = val;
   }
+
+  @observable
+  genderTypes: Array<IFilterChecker> = [];
+  @action
+  updateGenderType = (aType: number, val: boolean) => {
+    this.genderTypes[aType].checked = val;
+  }
+
   //injTypes
   @observable
   injTypes: Array<IFilterChecker> = [];
@@ -98,6 +113,7 @@ export default class FilterStore {
     if (this.city !== "") filter += `, {"accident_yishuv_name": "${this.city}"}`;
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
+    filter += this.getMultiplefilter("sex_hebrew",this.genderTypes);
     filter += `]}`
     console.log(filter)
     return filter;

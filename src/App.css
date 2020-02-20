@@ -31,20 +31,12 @@
   display: flex;
   justify-content: space-between;
 }
-
-.sidebar-container {
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: white;
-  padding-top: 40px;
-  width: 300px !important;
-  display: block;
+.filterControls{
+  font-size: 14px;
 }
-.sidebar-container-open {
-  right: 0;
-  transition: right 1s;
+.filterLable{
+  font-weight: 700;
+  padding-right: 1em;
 }
 
 .table-header{

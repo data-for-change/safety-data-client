@@ -15,7 +15,7 @@ export const FilterRequest = observer(() => {
       <Accordion defaultActiveKey="0">
         <CardFilterWhen />
         <CardFilterWhere />
-        <CardFilterWho/>
+        <CardFilterWho />
       </Accordion>
       <Button variant="primary" onClick={() => { store.submitFilter(); }} >Submit</Button>
     </Form>
@@ -30,11 +30,11 @@ const CardFilterWhen = observer(() => {
           When
       </Accordion.Toggle>
       </Card.Header>
-      <Accordion.Collapse eventKey="0">
+      <Accordion.Collapse eventKey="0" className="filterControls">
         <Card.Body>
           <Form.Row>
             <Form.Group as={Col} controlId="exampleForm.ControlSelectStartYear">
-              <Form.Label>Start Year</Form.Label>
+              <Form.Label className="filterLable">Start Year:</Form.Label>
               <Form.Control as="select" defaultValue={store.startYear} onChange={(e) => { store.startYear = e.target.value; }}>
                 <option>2015</option>
                 <option>2016</option>
@@ -44,7 +44,7 @@ const CardFilterWhen = observer(() => {
               </Form.Control>
             </Form.Group>
             <Form.Group as={Col} controlId="exampleForm.ControlSelectEndYear">
-              <Form.Label>End Year</Form.Label>
+              <Form.Label className="filterLable">End Year:</Form.Label>
               <Form.Control as="select" defaultValue={store.endYear} onChange={(e) => { store.endYear = e.target.value; }}>
                 <option>2015</option>
                 <option>2016</option>
@@ -68,43 +68,50 @@ const CardFilterWhere = observer(() => {
           Where
     </Accordion.Toggle>
       </Card.Header>
-      <Accordion.Collapse eventKey="1">
+      <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
-        <Form.Group controlId="exampleForm.ControlRoadeType">
-          <Form.Label>Road Type:</Form.Label>
-          <Form.Check inline label="urban junction" type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked}  onClick={(e) => { store.updateRoadType(0, e.target.checked); }}/>
-          <Form.Check inline label="urban road" type={'checkbox'} id={`checkboxroadt1`} checked={store.roadTypes[1].checked}  onClick={(e) => { store.updateRoadType(1, e.target.checked); }}/>
-          <Form.Check inline label="non-urban junction" type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onClick={(e) => { store.updateRoadType(2, e.target.checked); }}/>
-          <Form.Check inline label="non-urban road" type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onClick={(e) => { store.updateRoadType(3, e.target.checked); }}/>
-         </Form.Group>
-        <Form.Group controlId="exampleForm.ControlCity">
-          <Form.Label>City</Form.Label>
-          <Form.Control type="input" placeholder="" value={store.city} onChange={(e) => { store.city = e.target.value; }} />
-        </Form.Group>
+          <Form.Group controlId="exampleForm.ControlRoadeType" >
+            <Form.Label className="filterLable">Road Type:</Form.Label>
+            <Form.Check inline label="urban junction" type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked} onClick={(e) => { store.updateRoadType(0, e.target.checked); }} />
+            <Form.Check inline label="urban road" type={'checkbox'} id={`checkboxroadt1`} checked={store.roadTypes[1].checked} onClick={(e) => { store.updateRoadType(1, e.target.checked); }} />
+            <Form.Check inline label="non-urban junction" type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onClick={(e) => { store.updateRoadType(2, e.target.checked); }} />
+            <Form.Check inline label="non-urban road" type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onClick={(e) => { store.updateRoadType(3, e.target.checked); }} />
+          </Form.Group>
+          <Form.Group controlId="exampleForm.ControlCity">
+            <Form.Label className="filterLable">City:</Form.Label>
+            <Form.Control type="input" placeholder="" value={store.city} onChange={(e) => { store.city = e.target.value; }} />
+          </Form.Group>
         </div>
       </Accordion.Collapse>
     </Card>
   );
 })
-const CardFilterWho  = observer(() => {
+const CardFilterWho = observer(() => {
   const store = useStore();
   return (
     <Card>
       <Card.Header>
         <Accordion.Toggle as={Button} variant="link" eventKey="2">
-          Who 
+          Who
     </Accordion.Toggle>
       </Card.Header>
-      <Accordion.Collapse eventKey="2">
-        <Form.Group controlId="exampleForm.ControlInjType">
-          <Form.Label>Type:</Form.Label>
-          <Form.Check inline label="all" type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypes[0].checked}  onClick={(e) => { store.updateInjuerdType(0, e.target.checked); }}/>
-          <Form.Check inline label="pedestrian" type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked}  onClick={(e) => { store.updateInjuerdType(1, e.target.checked); }}/>
-          <Form.Check inline label="cyclist" type={'checkbox'} id={`checkboxinjerd2`} checked={store.injTypes[2].checked} onClick={(e) => { store.updateInjuerdType(2, e.target.checked); }}/>
-          <Form.Check inline label="motorcycle" type={'checkbox'} id={`checkboxinjerd3`} checked={store.injTypes[3].checked} onClick={(e) => { store.updateInjuerdType(3, e.target.checked); }}/>
-          <Form.Check inline label="car" type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onClick={(e) => { store.updateInjuerdType(4, e.target.checked); }} />
-          <Form.Check inline label="other" type={'checkbox'} id={`checkboxinjerd5`} checked={store.injTypes[5].checked} onClick={(e) => { store.updateInjuerdType(5, e.target.checked); }}/>
-        </Form.Group>
+      <Accordion.Collapse eventKey="2" className="filterControls">
+        <div>
+          <Form.Group controlId="exampleForm.ControlInjType">
+            <Form.Label className="filterLable">Vehicle:</Form.Label>
+            <Form.Check inline label="all" type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypes[0].checked} onClick={(e) => { store.updateInjuerdType(0, e.target.checked); }} />
+            <Form.Check inline label="pedestrian" type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked} onClick={(e) => { store.updateInjuerdType(1, e.target.checked); }} />
+            <Form.Check inline label="cyclist" type={'checkbox'} id={`checkboxinjerd2`} checked={store.injTypes[2].checked} onClick={(e) => { store.updateInjuerdType(2, e.target.checked); }} />
+            <Form.Check inline label="motorcycle" type={'checkbox'} id={`checkboxinjerd3`} checked={store.injTypes[3].checked} onClick={(e) => { store.updateInjuerdType(3, e.target.checked); }} />
+            <Form.Check inline label="car" type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onClick={(e) => { store.updateInjuerdType(4, e.target.checked); }} />
+            <Form.Check inline label="other" type={'checkbox'} id={`checkboxinjerd5`} checked={store.injTypes[5].checked} onClick={(e) => { store.updateInjuerdType(5, e.target.checked); }} />
+          </Form.Group>
+          <Form.Group controlId="exampleForm.ControlGenderType">
+            <Form.Label className="filterLable">Gender:</Form.Label>
+            <Form.Check inline label="female" type={'checkbox'} id={`checkboxgendert0`} checked={store.genderTypes[0].checked} onClick={(e) => { store.updateGenderType(0, e.target.checked); }} />
+            <Form.Check inline label="male" type={'checkbox'} id={`checkboxgendert1`} checked={store.genderTypes[1].checked} onClick={(e) => { store.updateGenderType(1, e.target.checked); }} />
+          </Form.Group>
+        </div>
       </Accordion.Collapse>
     </Card>
   );
