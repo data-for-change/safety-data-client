@@ -40,28 +40,13 @@ export default class FilterStore {
   @observable
   startYear: number = 2015;
   @observable
-  endYear: number = 2017;
+  endYear: number = 2019;
   @observable
   city: string = "";
 
-  //injType
+  //injTypes
   @observable
-  // injTypeAll: boolean = true;
-  // @observable
-  // injTypePed: boolean = false;
-  // @observable
-  // injTypeCycle: boolean = false;
-  // @observable
-  // injTypeMotorcycle: boolean = false;
-  // @observable
-  // injTypeCar: boolean = false;
-  // @observable
-  // injTypeOthers: boolean = false;
-  // @observable
   injTypes:Array<IPassenger> = [];
-
-  //injType: Map<number, any[]> = new Map<number, any[]>();
-
   @action
   updateInjuerdType = (aType:number, val :boolean) => {
     if (aType === 0)
@@ -116,19 +101,6 @@ export default class FilterStore {
       }
     console.log(filter)
     return filter;
-  /*   let res = `, { "$or" : [`
-    //replace with map function
-    let added = false;
-      if (this.injTypePed) { 
-        res  += `{"injured_type_hebrew1" : "הולך רגל"}`
-        added = true;
-      }
-      if (this.injTypeCycle) {
-        if (added ) res  += `,`
-        res  += `{"injured_type_hebrew" : "נהג - אופניים"}`
-      }
-      res  += `]}`;
-    return res; */
   }
 
   @action
