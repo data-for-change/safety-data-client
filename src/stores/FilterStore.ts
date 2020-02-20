@@ -1,32 +1,41 @@
-import { observable, computed, action } from "mobx"
+import { observable, action } from "mobx"
 import AccidentService from "../services/Accident.Service"
 //import autorun  from "mobx"
 
-interface ITodo {
-  value: string;
-  id: number;
-  complete: boolean;
+interface IPassenger {
+  checked: boolean;
+  filters: string[];
 }
 
-class Todo implements ITodo {
+class Passenger implements IPassenger {
   @observable
-  value: string;
-  @observable
-  id: number;
-  @observable
-  complete: boolean;
-  constructor(value: string) {
-    this.value = value;
-    this.id = Date.now();
-    this.complete = false;
+  checked: boolean;
+  filters: string[];
+  constructor(valid:boolean ,filters: string[]) {
+    this.checked = valid;
+    this.filters = filters;
   }
 }
 
+export enum EnumVehiclePass {
+  All,
+  Ped,
+  Cycle,
+  Motorcycle,
+  Car,
+  Others
+  }
 export default class FilterStore {
   appInitialized = false
   constructor() {
     // init app data
     this.appInitialized = false;
+    this.injTypes.push(new Passenger(true,[]));
+    this.injTypes.push(new Passenger(false, ["הולך רגל"]));  
+    this.injTypes.push(new Passenger(false, ["נהג - אופניים", "נוסע - אופניים (לא נהג)"]));
+    this.injTypes.push(new Passenger(false, ["נהג - אופנוע", "נוסע - אופנוע (לא נהג)"]));
+    this.injTypes.push(new Passenger(false, ["נהג - רכב בעל 4 גלגלים ויותר", "נוסע - רכב בעל 4 גלגלים ויותר"]));
+    this.injTypes.push(new Passenger(false,["נהג - רכב לא ידוע","נוסע - רכב לא ידוע"]));
   }
   @observable
   startYear: number = 2015;
@@ -37,38 +46,89 @@ export default class FilterStore {
 
   //injType
   @observable
-  injTypeAll: boolean = true;
-  @observable
-  injTypePed: boolean = false;
-  @observable
-  injTypeCycle: boolean = false;
-  @observable
-  injTypeMotorcycle: boolean = false;
+  // injTypeAll: boolean = true;
+  // @observable
+  // injTypePed: boolean = false;
+  // @observable
+  // injTypeCycle: boolean = false;
+  // @observable
+  // injTypeMotorcycle: boolean = false;
+  // @observable
+  // injTypeCar: boolean = false;
+  // @observable
+  // injTypeOthers: boolean = false;
+  // @observable
+  injTypes:Array<IPassenger> = [];
+
+  //injType: Map<number, any[]> = new Map<number, any[]>();
+
+  @action
+  updateInjuerdType = (aType:number, val :boolean) => {
+    if (aType === 0)
+    {
+      this.injTypes[0].checked = val;
+      this.injTypes[1].checked = !val;
+      this.injTypes[2].checked = !val;
+      this.injTypes[3].checked = !val;
+      this.injTypes[4].checked = !val;
+      this.injTypes[5].checked = !val;
+    }
+    else {
+      this.injTypes[0].checked = false;
+      this.injTypes[aType].checked = val;
+    }
+  }
 
   @observable
   markers: any[] = []
 
+
+  
+
   @action
   submitFilter = () => {
-    console.log(this.startYear)
-
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
     if (this.city !== "") filter += `, {"accident_yishuv_name": "${this.city}"}`;
-    if (!this.injTypeAll) {
-      filter += `, { "$or" : [
-        { 
-            "injured_type_hebrew1" : "הולך רגל"
-        }, 
-        { 
-            "injured_type_hebrew" : "נהג - אופניים"
-        }
-    ]}`;
-    }
+    filter += this.getfilterInjured();
     filter += `]}`
     console.log(filter)
     var service = new AccidentService();
     service.getFilter(filter, this.updateMarkers);
+  }
+
+  getfilterInjured =() =>{
+    let filter:string = '';
+    if (this.injTypes[0].checked)
+      filter = '';
+    else {  
+      let arrfilter: string[]  =[];
+      const iterator = this.injTypes.values();
+      for (const injType of iterator) {
+        if (injType.checked)
+        {
+          arrfilter =[...arrfilter,...injType.filters ]  
+        }
+      }
+      filter +=`,{"$or": [`
+      filter += arrfilter.map((x:string) => `{"injured_type_hebrew" : "${x}"}`).join(',')
+      filter += `]}`
+      }
+    console.log(filter)
+    return filter;
+  /*   let res = `, { "$or" : [`
+    //replace with map function
+    let added = false;
+      if (this.injTypePed) { 
+        res  += `{"injured_type_hebrew1" : "הולך רגל"}`
+        added = true;
+      }
+      if (this.injTypeCycle) {
+        if (added ) res  += `,`
+        res  += `{"injured_type_hebrew" : "נהג - אופניים"}`
+      }
+      res  += `]}`;
+    return res; */
   }
 
   @action
@@ -77,26 +137,27 @@ export default class FilterStore {
       this.markers = arrPoints;
     }
   }
-
-  @observable
-  todos: Array<ITodo> = [];
-  @observable
-  filter: string = ""
-  @computed
-  get filterdTodos() {
-    let filterP = new RegExp(this.filter, "i");
-    return this.todos.filter((doto: ITodo) => filterP.test(doto.value));
-  }
-  @action
-  createTodo(value: string) {
-    this.todos.push(new Todo(value));
-  }
-  @action
-  clearComleted = () => {
-    let list: Array<ITodo> = this.todos.filter(todo => !todo.complete)
-    this.todos = list;
-  }
 }
+
+//   @observable
+//   todos: Array<ITodo> = [];
+//   @observable
+//   filter: string = ""
+//   @computed
+//   get filterdTodos() {
+//     let filterP = new RegExp(this.filter, "i");
+//     return this.todos.filter((doto: ITodo) => filterP.test(doto.value));
+//   }
+//   @action
+//   createTodo(value: string) {
+//     this.todos.push(new Todo(value));
+//   }
+//   @action
+//   clearComleted = () => {
+//     let list: Array<ITodo> = this.todos.filter(todo => !todo.complete)
+//     this.todos = list;
+//   }
+// }
 
 
 // autorun(() =>{

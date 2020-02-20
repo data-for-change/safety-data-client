@@ -44,7 +44,7 @@ const MapAccidents = observer(() => {
 const AccidentsMarkers = observer(() => {
   const store = useStore();
   const reactMarkers = toJS(store.markers);
-  console.log(reactMarkers);
+  //console.log(reactMarkers);
   const markersArr = reactMarkers.map((x) => {
     if (x.latitude !== null && x.longitude !== null) {
       return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>

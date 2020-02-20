@@ -89,12 +89,12 @@ const CardFilterWho  = observer(() => {
       <Accordion.Collapse eventKey="2">
         <Form.Group controlId="exampleForm.ControlCity">
           <Form.Label>Type:</Form.Label>
-          <Form.Check inline label="all" type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypeAll}  onClick={(e) => { store.injTypeAll = e.target.checked; }}/>
-          <Form.Check inline label="pedestrian" type={'checkbox'} id={`checkboxinjerd1`} />
-          <Form.Check inline label="cyclist" type={'checkbox'} id={`checkboxinjerd2`} />
-          <Form.Check inline label="motorcycle" type={'checkbox'} id={`checkboxinjerd3`} />
-          <Form.Check inline label="car" type={'checkbox'} id={`checkboxinjerd4`} />
-          <Form.Check inline label="other" type={'checkbox'} id={`checkboxinjerd5`} />
+          <Form.Check inline label="all" type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypes[0].checked}  onClick={(e) => { store.updateInjuerdType(0, e.target.checked); }}/>
+          <Form.Check inline label="pedestrian" type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked}  onClick={(e) => { store.updateInjuerdType(1, e.target.checked); }}/>
+          <Form.Check inline label="cyclist" type={'checkbox'} id={`checkboxinjerd2`} checked={store.injTypes[2].checked} onClick={(e) => { store.updateInjuerdType(2, e.target.checked); }}/>
+          <Form.Check inline label="motorcycle" type={'checkbox'} id={`checkboxinjerd3`} checked={store.injTypes[3].checked} onClick={(e) => { store.updateInjuerdType(3, e.target.checked); }}/>
+          <Form.Check inline label="car" type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onClick={(e) => { store.updateInjuerdType(4, e.target.checked); }} />
+          <Form.Check inline label="other" type={'checkbox'} id={`checkboxinjerd5`} checked={store.injTypes[5].checked} onClick={(e) => { store.updateInjuerdType(5, e.target.checked); }}/>
         </Form.Group>
       </Accordion.Collapse>
     </Card>
