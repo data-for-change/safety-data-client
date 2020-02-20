@@ -12,7 +12,8 @@ export const AccidentsTable = observer(() => {
     const reactMarkers = toJS(store.markers)
     const columns = [{
         dataField: '_id',
-        text: 'ID'
+        text: 'ID',
+        hidden : true
     }, {
         dataField: 'accident_year',
         text: 'Year',
