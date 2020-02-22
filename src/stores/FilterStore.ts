@@ -1,5 +1,6 @@
 import { observable, action } from "mobx"
 import AccidentService from "../services/Accident.Service"
+import CityService from '../services/City.Service'
 //import autorun  from "mobx"
 
 interface IFilterChecker {
@@ -105,6 +106,8 @@ export default class FilterStore {
     let filter = this.getFilter();
     var service = new AccidentService();
     service.getFilter(filter, this.updateMarkers);
+    var srvCity  = new CityService();
+    srvCity.getCityByNameHe(this.city,this.updateLocation);
   }
 
   getFilter = () => {
@@ -167,6 +170,11 @@ export default class FilterStore {
       this.markers = arrPoints;
     }
   }
+  @action 
+  updateLocation = (res:any) => {
+    console.log(res);
+  }
+
 }
 
 
