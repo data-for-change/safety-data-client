@@ -21,7 +21,7 @@ const redIcon = new L.Icon({
 
 const MapAccidents = observer(() => {
   const store = useStore();
-   const WRAPPER_STYLES = { height: '500px', width: '100vw' ,maxWidth:'100%'};
+  const WRAPPER_STYLES = { height: '500px', width: '100vw', maxWidth: '100%' };
   return (
     <div>
       <Map
@@ -49,7 +49,11 @@ const AccidentsMarkers = observer(() => {
     if (x.latitude !== null && x.longitude !== null) {
       return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>
         {<Popup maxWidth="300">
-    <div>{x.accident_year}, {x.accident_yishuv_name}, {x.injured_type_hebrew1}</div> 
+          <div>
+            <div>{x.accident_timestamp}</div>
+            <div> {x.injured_type_hebrew},{x.sex_hebrew},{x.age_group_hebrew}</div>
+            <div>{x.accident_yishuv_name}, {x.street1_hebrew}, {x.road_type_hebrew}</div>
+          </div>
         </Popup>}
       </Marker>)
     }
