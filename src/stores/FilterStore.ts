@@ -1,4 +1,5 @@
 import { observable, action } from "mobx"
+import L from 'leaflet'
 import AccidentService from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
@@ -56,6 +57,10 @@ export default class FilterStore {
     arr.push(new FilterChecker(true, ["זכר"]));
     //arr.push(new FilterChecker(true, ["לא ידוע"]));
   }
+
+  //this belong to mapstore! need to move
+  @observable
+  mapCenter: L.LatLng = new L.LatLng(32.09, 34.7818)
 
 
   @observable
@@ -171,8 +176,11 @@ export default class FilterStore {
     }
   }
   @action 
-  updateLocation = (res:any) => {
-    console.log(res);
+  updateLocation = (res:any[]) => {
+    if (res !== null && res.length >0 ) {
+      let city = res[0]; 
+      this.mapCenter = new L.LatLng(city.lat,city.lon) ;
+    }
   }
 
 }

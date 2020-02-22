@@ -21,11 +21,12 @@ const redIcon = new L.Icon({
 
 const MapAccidents = observer(() => {
   const store = useStore();
+  const reactMapCenter = toJS(store.mapCenter);
   const WRAPPER_STYLES = { height: '500px', width: '100vw', maxWidth: '100%' };
   return (
     <div>
       <Map
-        center={[32.09, 34.7818]}
+        center={reactMapCenter}
         zoom={13}
         style={WRAPPER_STYLES}
       >
