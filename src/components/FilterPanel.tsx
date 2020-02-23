@@ -6,7 +6,6 @@ import { FilterRequest } from './FilterRequest';
 
 export function FilterPanel() {
     const [open, setOpen] = useState(true);
-
     return (
         <>
             <Button onClick={() => { setOpen(!open); }} aria-controls="example-collapse-text" aria-expanded={open}>

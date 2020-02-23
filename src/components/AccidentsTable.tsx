@@ -3,7 +3,9 @@ import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
+// @ts-ignore
 import BootstrapTable from 'react-bootstrap-table-next';
+// @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
