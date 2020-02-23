@@ -48,8 +48,9 @@ const AccidentsMarkers = observer(() => {
   //console.log(reactMarkers);
   const markersArr = reactMarkers.map((x) => {
     if (x.latitude !== null && x.longitude !== null) {
-      return (<Marker key={`marker-${x._id}`} position={new L.latLng(x.latitude, x.longitude)} icon={redIcon}>
-        {<Popup maxWidth="300">
+      let lPoint: L.LatLng = new L.LatLng(x.latitude, x.longitude);
+      return (<Marker key={`marker-${x._id}`} position={lPoint} icon={redIcon}>
+        {<Popup>
           <div>
             <div>{x.accident_timestamp}</div>
             <div> {x.injured_type_hebrew},{x.sex_hebrew},{x.age_group_hebrew}</div>
