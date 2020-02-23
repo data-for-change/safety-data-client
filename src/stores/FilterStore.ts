@@ -109,10 +109,13 @@ export default class FilterStore {
   @action
   submitFilter = () => {
     let filter = this.getFilter();
+    if (this.city !== ""){
+      var srvCity  = new CityService();
+      srvCity.getCityByNameHe(this.city,this.updateLocation);
+    }
     var service = new AccidentService();
     service.getFilter(filter, this.updateMarkers);
-    var srvCity  = new CityService();
-    srvCity.getCityByNameHe(this.city,this.updateLocation);
+   
   }
 
   getFilter = () => {
