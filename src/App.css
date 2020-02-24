@@ -39,7 +39,8 @@
 }
 .filterLable{
   font-weight: 700;
-  padding-right: 1em;
+  padding-right: 0.7em;
+  padding-left: 0.7em;
 }
 
 .table-header{

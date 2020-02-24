@@ -19,11 +19,43 @@ i18n
       'en':{
         'translation': {
           test: 'Test translation'
+          ,When: 'When'
+          ,FromYear:"From Year:"
+          ,ToYear:"To Year:"
+          ,Where : "Where"
+          ,Who :"Who"
+          ,Vehicle: "Vehicle:"
+          ,all :"all"
+          ,pedestrian : "Pedestrian"
+          ,cyclist:"Cyclist"
+          ,motorcycle: "Motorcycle"
+          ,car : "Car"
+          ,other: "Other"
+          ,Gender: "Gender:"
+          ,female :"Female"
+          ,male :"Male"
+          ,Submit :'Submit'
         }
     },
         'he':{
             'translation': {
               test: 'בדיקת תרגום'
+              ,When: 'מתי'
+              ,FromYear:"משנה:"
+              ,ToYear:"עד שנה:"
+              ,Where : "איפה"
+              ,Who :"מי"
+              ,Vehicle: "כלי רכב:"
+              ,all :"כל הסוגים"
+              ,pedestrian : "הולך-רגל"
+              ,cyclist:"אופניים"
+              ,motorcycle: "אופנוע"
+              ,car : "מכונית"
+              ,other: "אחרים"
+              ,Gender: "מגדר:"
+              ,female :"נקבות"
+              ,male :"זכרים"
+              ,Submit :'סינון'
             }
         }
     },

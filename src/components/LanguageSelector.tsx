@@ -3,15 +3,9 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
-import { useTranslation } from 'react-i18next';
-
 
 export const LanguageSelector = observer(() => {
   const store = useStore();
-  const { t } = useTranslation();
-  // const changeLanguage = (lng:string) => {
-  // i18n.changeLanguage(lng);
-  // };
   const style:any = document.getElementById('style-direction')
   if (style !== null)
   {
@@ -28,7 +22,6 @@ export const LanguageSelector = observer(() => {
         document.body.classList.add('dir-ltr');
     }
   }
- 
   return (
     <div>
     <ButtonGroup toggle size="sm" className="languageSelector">
@@ -39,17 +32,8 @@ export const LanguageSelector = observer(() => {
       Eng
     </ToggleButton>
   </ButtonGroup>
-  <div>{t('test')}</div>
   </div>
   );
 })
-
-    // <Form>
-    //    <Form.Group controlId="exampleForm.ControlSelectLang" >
-    //         <Form.Label className="filterLable">Lang:</Form.Label>
-    //         <Form.Check inline label="heb" type={'radio'} id={`radiolangheb`} checked={store.language === 'he'} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateLanguage('he'); }} />
-    //         <Form.Check inline label="eng" type={'radio'} id={`radiolangeng`} checked={store.language === 'en'} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateLanguage('en'); }} />
-    //       </Form.Group>
-    // </Form>
 
 
