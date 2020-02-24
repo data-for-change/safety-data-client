@@ -57,7 +57,14 @@ export default class FilterStore {
     arr.push(new FilterChecker(true, ["זכר"]));
     //arr.push(new FilterChecker(true, ["לא ידוע"]));
   }
-
+ 
+// this belong to root store
+  @observable
+  language : string = "he" 
+  @action
+  updateLanguage = (lang: string) => {
+    this.language = lang; 
+  }
   //this belong to mapstore! need to move
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.09, 34.7818)

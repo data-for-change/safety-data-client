@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { HomePage } from './components/HomePage'
 import HeatMap from './components/HeatMap';
@@ -10,6 +10,7 @@ import Card from 'react-bootstrap/Card';
 //import mapStore from './stores/MapStore';
 
 function App() {
+
   return (
     <Router>
       <div>
