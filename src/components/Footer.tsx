@@ -1,21 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default class Footer extends React.Component {
-
-  render() {
-    var divStyle = {
+//export default class Footer extends React.Component {
+interface IProps { }
+export const Footer: React.FC<IProps> = () =>
+{
+    const divStyle = {
       display: 'flex',
       flexFlow: 'row wrap'
     };
+    const { t } = useTranslation();
     return (
       <footer style={divStyle}>
         <nav  className= "App-nav">
-          <Link to="/">Home</Link>
-          <Link to="/heatmap">HeatMap</Link>
-          <Link to="/about">About</Link>
+          <Link to="/">{t('Home')}</Link>
+          <Link to="/heatmap">{t('HeatMap')}</Link>
+          <Link to="/about">{t('About')}</Link>
         </nav>
       </footer>
     );
-  }
 }
+export default Footer

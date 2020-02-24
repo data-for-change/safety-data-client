@@ -75,14 +75,14 @@ const CardFilterWhere = observer(() => {
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
           <Form.Group controlId="exampleForm.ControlRoadeType" >
-            <Form.Label className="filterLable">Road Type:</Form.Label>
-            <Form.Check inline label="urban junction" type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(0, e.target.checked); }} />
-            <Form.Check inline label="urban road" type={'checkbox'} id={`checkboxroadt1`} checked={store.roadTypes[1].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(1, e.target.checked); }} />
-            <Form.Check inline label="non-urban junction" type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(2, e.target.checked); }} />
-            <Form.Check inline label="non-urban road" type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(3, e.target.checked); }} />
+            <Form.Label className="filterLable">{t('RoadType')}</Form.Label>
+            <Form.Check inline label={t('urban-junction')} type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(0, e.target.checked); }} />
+            <Form.Check inline label={t('urban-road')} type={'checkbox'} id={`checkboxroadt1`} checked={store.roadTypes[1].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(1, e.target.checked); }} />
+            <Form.Check inline label={t('non-urban-junction')} type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(2, e.target.checked); }} />
+            <Form.Check inline label={t('non-urban-road')} type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(3, e.target.checked); }} />
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlCity">
-            <Form.Label className="filterLable">City:</Form.Label>
+            <Form.Label className="filterLable">{t('City')}</Form.Label>
             <Form.Control type="input" placeholder="" value={store.city} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.city = e.target.value; }} />
           </Form.Group>
         </div>

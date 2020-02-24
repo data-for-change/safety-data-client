@@ -21,7 +21,9 @@
   padding:3px;
 }
 .HederTitle {
-  font-size: 20px;
+  font-size: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .App-footer {
   background-color:var(--primary-color);
@@ -54,6 +56,7 @@
 } */
 .App-nav a{
   padding-left: 10px;
+  padding-right: 10px;
 }
 .listDiv{
   max-height: 30vh;
