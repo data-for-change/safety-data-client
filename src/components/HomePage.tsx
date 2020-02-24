@@ -1,15 +1,12 @@
 import React from 'react'
-import { observer } from "mobx-react"
-import { useStore } from '../stores/storeConfig'
 import MapAccidents from './MapAccidents'
 import { FilterPanel } from './FilterPanel'
 import { AccidentsTable } from './AccidentsTable'
 import Card from 'react-bootstrap/Card';
 
-
 interface IProps { }
 
-export const HomePage: React.FC<IProps> = observer(() => {
+export const HomePage: React.FC<IProps> = () => {
   return (
     <div className="App">
       <div className="container-fluid">
@@ -23,4 +20,4 @@ export const HomePage: React.FC<IProps> = observer(() => {
       </div>
     </div>
   )
-})
+}

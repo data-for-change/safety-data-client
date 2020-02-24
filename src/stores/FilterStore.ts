@@ -1,4 +1,5 @@
-import { observable, action } from "mobx"
+import { observable, action ,reaction} from "mobx"
+import i18n from "../i18n";
 import L from 'leaflet'
 import AccidentService from "../services/Accident.Service"
 import CityService from '../services/City.Service'
@@ -65,6 +66,15 @@ export default class FilterStore {
   updateLanguage = (lang: string) => {
     this.language = lang; 
   }
+  reaction1 = reaction(
+    () => this.language,
+    locale => {
+      console.log("change language");
+      i18n.changeLanguage(locale);
+    }
+  )
+
+
   //this belong to mapstore! need to move
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.09, 34.7818)

@@ -3,23 +3,34 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
+import { useTranslation } from 'react-i18next';
+
 
 export const LanguageSelector = observer(() => {
   const store = useStore();
+  const { t } = useTranslation();
+  // const changeLanguage = (lng:string) => {
+  // i18n.changeLanguage(lng);
+  // };
   const style:any = document.getElementById('style-direction')
   if (style !== null)
   {
-      if(store.language === 'he') {
+    if(store.language === 'he') {
         style.href = './bootstrap.rtl.min.css';
+        //changeLanguage('he')
         document.body.classList.remove('dir-ltr');
         document.body.classList.add('dir-rtl');
-    } else {
+    } 
+    else {
         style.href = './bootstrap.min.css';
+        //changeLanguage('en')
         document.body.classList.remove('dir-rtl');
         document.body.classList.add('dir-ltr');
     }
   }
+ 
   return (
+    <div>
     <ButtonGroup toggle size="sm" className="languageSelector">
     <ToggleButton type="radio" name="radiolang"  value="he" defaultChecked onClick={(e:MouseEvent) => { store.updateLanguage('he'); }}>
       heb
@@ -28,6 +39,8 @@ export const LanguageSelector = observer(() => {
       Eng
     </ToggleButton>
   </ButtonGroup>
+  <div>{t('test')}</div>
+  </div>
   );
 })
 
