@@ -12,10 +12,13 @@
 }
 .App-header {
   display: flex;
-  justify-content: center;
-  text-align: center;
+  justify-content: space-between;
   background-color: var(--primary-color);
   color:var(--onprimary-color)
+}
+.languageSelector
+{
+  padding:3px;
 }
 .HederTitle {
   font-size: 20px;
