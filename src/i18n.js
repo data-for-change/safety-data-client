@@ -1,6 +1,9 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import translationEng from "./lng/en/translation.json";
+import translationHeb from "./lng/he/translation.json";
+
 
 i18n
   // detect user language
@@ -17,47 +20,11 @@ i18n
     // learn more: https://github.com/i18next/i18next-xhr-backend
     resources: {
       'en':{
-        'translation': {
-          test: 'Test translation'
-          ,When: 'When'
-          ,FromYear:"From Year:"
-          ,ToYear:"To Year:"
-          ,Where : "Where"
-          ,Who :"Who"
-          ,Vehicle: "Vehicle:"
-          ,all :"all"
-          ,pedestrian : "Pedestrian"
-          ,cyclist:"Cyclist"
-          ,motorcycle: "Motorcycle"
-          ,car : "Car"
-          ,other: "Other"
-          ,Gender: "Gender:"
-          ,female :"Female"
-          ,male :"Male"
-          ,Submit :'Submit'
-        }
-    },
+        'translation':translationEng  
+      },
         'he':{
-            'translation': {
-              test: 'בדיקת תרגום'
-              ,When: 'מתי'
-              ,FromYear:"משנה:"
-              ,ToYear:"עד שנה:"
-              ,Where : "איפה"
-              ,Who :"מי"
-              ,Vehicle: "כלי רכב:"
-              ,all :"כל הסוגים"
-              ,pedestrian : "הולך-רגל"
-              ,cyclist:"אופניים"
-              ,motorcycle: "אופנוע"
-              ,car : "מכונית"
-              ,other: "אחרים"
-              ,Gender: "מגדר:"
-              ,female :"נקבות"
-              ,male :"זכרים"
-              ,Submit :'סינון'
-            }
-        }
+        'translation':translationHeb 
+      }
     },
     interpolation: {
       escapeValue: false, // not needed for React as it escapes by default
