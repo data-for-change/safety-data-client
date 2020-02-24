@@ -8,16 +8,26 @@ import { useStore } from '../stores/storeConfig'
 import BootstrapTable from 'react-bootstrap-table-next';
 // @ts-ignore
 import paginationFactory from 'react-bootstrap-table2-paginator';
+// @ts-ignore
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
 
-export const AccidentsTable = observer(() => {
+interface IProps { }
+
+export const AccidentsTable = observer((props: IProps) => {
     const store = useStore();
     const { t } = useTranslation();
+    const divStyle = {
+        display: 'flex',
+        justifyContent: 'flex-end'
+      };
     const reactMarkers = toJS(store.markers)
+    const { ExportCSVButton } = CSVExport;
     const columns = [{
         dataField: '_id',
         text: 'ID',
-        hidden : true
+        hidden: true
     }, {
         dataField: 'accident_year',
         text: 'Year',
@@ -43,12 +53,29 @@ export const AccidentsTable = observer(() => {
         text: 'Gender',
         sort: true
     }];
-    if (reactMarkers.length >0 ){
+    if (reactMarkers.length > 0) {
         return (<div>
-             <h4>{t('Found')} {reactMarkers.length} {t('Casualties')} </h4>
-            <BootstrapTable keyField='_id' data={reactMarkers} columns={columns} pagination={ paginationFactory()}  headerClasses="table-header" />
-            </div>
-            )
+            <h4>{t('Found')} {reactMarkers.length} {t('Casualties')} </h4>
+            <ToolkitProvider
+                keyField="id"
+                data={reactMarkers}
+                columns={columns}
+                exportCSV
+            >
+                {
+                    (props: any) => (
+                        <div>
+                            <BootstrapTable {...props.baseProps} pagination={ paginationFactory()}  headerClasses="table-header"/>
+                            <hr />
+                            <div style={divStyle}>
+                            <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
+                            </div>
+                        </div>
+                    )
+                }
+            </ToolkitProvider>
+        </div>
+        )
     }
     else return null;
 })
