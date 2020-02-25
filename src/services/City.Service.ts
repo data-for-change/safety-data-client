@@ -15,5 +15,17 @@ export default class CityService {
       collback(response);
     });
   }
+  getCitiesNames(lang:string,collback :(res:any[]) =>void ){
+    //"http://localhost:5000/api/v1/city?name_he=חיפה"
+    var settings = {
+      "url": "/api/v1/city?lang=" +lang,
+      "method": "GET",
+      "headers": {}
+    }
+    $.ajax(settings).done(function (response:any[]) {
+      //console.log(response)
+      collback(response);
+    });
+  }
 }
 

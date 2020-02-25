@@ -3,8 +3,12 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col'
-import Accordion from 'react-bootstrap/Accordion'
+import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
+// @ts-ignore
+import {Typeahead} from 'react-bootstrap-typeahead'; 
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import citisNamesHeb from "../assets/cities_names_heb.json";
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
 
@@ -65,6 +69,7 @@ const CardFilterWhen = observer(() => {
 const CardFilterWhere = observer(() => {
   const store = useStore();
   const { t } = useTranslation();
+  //const citiesNames = toJS(store.citiesNames);  
   return (
     <Card>
       <Card.Header>
@@ -74,6 +79,18 @@ const CardFilterWhere = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
+        <Form.Group controlId="exampleForm.ControlCity">
+            <Form.Label className="filterLable">{t('City')}</Form.Label>
+            <Typeahead
+           id="typeaheadCity"
+            onChange={(selected:string) => {
+              store.city = selected;
+            }}
+            options={citisNamesHeb}
+            placeholder={t('ChooseCity')}
+          />
+            {/* <Form.Control type="input" placeholder="" value={store.city} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.city = e.target.value; }} /> */}
+          </Form.Group>
           <Form.Group controlId="exampleForm.ControlRoadeType" >
             <Form.Label className="filterLable">{t('RoadType')}</Form.Label>
             <Form.Check inline label={t('urban-junction')} type={'checkbox'} id={`checkboxroadt0`} checked={store.roadTypes[0].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(0, e.target.checked); }} />
@@ -81,10 +98,7 @@ const CardFilterWhere = observer(() => {
             <Form.Check inline label={t('non-urban-junction')} type={'checkbox'} id={`checkboxroadt2`} checked={store.roadTypes[2].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(2, e.target.checked); }} />
             <Form.Check inline label={t('non-urban-road')} type={'checkbox'} id={`checkboxroadt3`} checked={store.roadTypes[3].checked} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.updateRoadType(3, e.target.checked); }} />
           </Form.Group>
-          <Form.Group controlId="exampleForm.ControlCity">
-            <Form.Label className="filterLable">{t('City')}</Form.Label>
-            <Form.Control type="input" placeholder="" value={store.city} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.city = e.target.value; }} />
-          </Form.Group>
+        
         </div>
       </Accordion.Collapse>
     </Card>

@@ -36,6 +36,7 @@ export default class FilterStore {
     this.initInjTypes(this.injTypes);
     this.initRoadTypes(this.roadTypes);
     this.initGenderTypes(this.genderTypes);
+    //this.initCitis();
     this.appInitialized = false;
 
   }
@@ -58,6 +59,22 @@ export default class FilterStore {
     arr.push(new FilterChecker(true, ["זכר"]));
     //arr.push(new FilterChecker(true, ["לא ידוע"]));
   }
+
+  @observable
+  city: string = "";
+  //@observable
+  // citiesNames: string[] = ["חיפה","גבעתיים"]
+  // initCitis = () =>{
+  //   var srvCity  = new CityService();
+  //   srvCity.getCitiesNames("he",this.updateCitisNames);
+  // }
+  // @action 
+  // updateCitisNames = (res:any[]) => {
+  //   console.log("updateCitisNames")
+  //   if (res !== null && res.length >0 ) {
+  //     this.citiesNames  = res.map((x:any)=>x.name_he).filter(x => !!x);
+  //   }
+  // }
  
 // this belong to root store
   @observable
@@ -66,10 +83,9 @@ export default class FilterStore {
   updateLanguage = (lang: string) => {
     this.language = lang; 
   }
-  reaction1 = reaction(
+  reactionChangeLang = reaction(
     () => this.language,
     locale => {
-      console.log("change language");
       i18n.changeLanguage(locale);
     }
   )
@@ -84,8 +100,8 @@ export default class FilterStore {
   startYear: number = 2015;
   @observable
   endYear: number = 2019;
-  @observable
-  city: string = "";
+
+
 
   @observable
   roadTypes: Array<IFilterChecker> = [];
@@ -125,20 +141,24 @@ export default class FilterStore {
 
   @action
   submitFilter = () => {
+    //this.city = trimCity.toString().trim();
     let filter = this.getFilter();
-    if (this.city !== ""){
+    let trimCity: string = this.city;
+    trimCity = trimCity.toString().trim();
+    if (trimCity !== ""){
       var srvCity  = new CityService();
       srvCity.getCityByNameHe(this.city,this.updateLocation);
     }
     var service = new AccidentService();
     service.getFilter(filter, this.updateMarkers);
-   
   }
 
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-    if (this.city !== "") filter += `, {"accident_yishuv_name": "${this.city}"}`;
+    let trimCity: string = this.city;
+    trimCity = trimCity.toString().trim();
+    if (trimCity !== "") filter += `, {"accident_yishuv_name": "${trimCity}"}`;
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew",this.genderTypes);
@@ -199,7 +219,8 @@ export default class FilterStore {
   updateLocation = (res:any[]) => {
     if (res !== null && res.length >0 ) {
       let city = res[0]; 
-      this.mapCenter = new L.LatLng(city.lat,city.lon) ;
+      if (city.lat !== null && city.lon !== null)
+        this.mapCenter = new L.LatLng(city.lat,city.lon) ;
     }
   }
 
