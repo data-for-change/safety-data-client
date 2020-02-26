@@ -10,6 +10,13 @@
 .heb{
   direction: rtl;
 }
+.texthe{
+  text-align: right;
+}
+.texten{
+  text-align: left;
+}
+
 .App-header {
   display: flex;
   justify-content: space-between;
