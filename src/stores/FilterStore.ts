@@ -34,8 +34,11 @@ export default class FilterStore {
   constructor() {
     // init app data
     this.initInjTypes(this.injTypes);
-    this.initRoadTypes(this.roadTypes);
     this.initGenderTypes(this.genderTypes);
+    this.initAgeTypes(this.ageTypes)
+    this.initPopulationTypes(this.populationTypes)
+    this.initRoadTypes(this.roadTypes);
+    
     //this.initCitis();
     this.appInitialized = false;
 
@@ -48,17 +51,40 @@ export default class FilterStore {
     arr.push(new FilterChecker(false, ["נהג - רכב בעל 4 גלגלים ויותר", "נוסע - רכב בעל 4 גלגלים ויותר"]));
     arr.push(new FilterChecker(false, ["נהג - רכב לא ידוע", "נוסע - רכב לא ידוע"]));
   }
+  initGenderTypes = (arr: any) => {
+    arr.push(new FilterChecker(true, ["נקבה"]));
+    arr.push(new FilterChecker(true, ["זכר"]));
+    //arr.push(new FilterChecker(true, ["לא ידוע"]));
+  }
+  initAgeTypes = (arr: any) => {
+    arr.push(new FilterChecker(true, ["00-04"]));
+    arr.push(new FilterChecker(true, ["05-09"]));
+    arr.push(new FilterChecker(true, ["10-14"]));
+    arr.push(new FilterChecker(true, ["15-19"]));
+    arr.push(new FilterChecker(true, ["20-24","25-29"]));
+    arr.push(new FilterChecker(true, ["30-34","35-39"]));
+    arr.push(new FilterChecker(true, ["40-44","45-49"]));
+    arr.push(new FilterChecker(true, ["50-54","55-59"]));
+    arr.push(new FilterChecker(true, ["60-64","65-69"]));
+    arr.push(new FilterChecker(true, ["70-74","75-79"]));
+    arr.push(new FilterChecker(true, ["80-84","85+"]));
+    arr.push(new FilterChecker(true, ["לא ידוע"]));
+  }
+  initPopulationTypes = (arr: any) => {
+    arr.push(new FilterChecker(true, ["יהודים"]));
+    arr.push(new FilterChecker(true, ["ערבים"]));
+    arr.push(new FilterChecker(true, ["זרים"]));
+    arr.push(new FilterChecker(true, ["לא ידוע"]));
+  }
+
   initRoadTypes = (arr: any) => {
     arr.push(new FilterChecker(true, ["עירונית בצומת"]));
     arr.push(new FilterChecker(true, ["עירונית לא בצומת"]));
     arr.push(new FilterChecker(true, ["לא-עירונית בצומת"]));
     arr.push(new FilterChecker(true, ["לא-עירונית לא בצומת"]));
   }
-  initGenderTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, ["נקבה"]));
-    arr.push(new FilterChecker(true, ["זכר"]));
-    //arr.push(new FilterChecker(true, ["לא ידוע"]));
-  }
+  
+
 
   @observable
   city: string = "";
@@ -117,6 +143,19 @@ export default class FilterStore {
     this.genderTypes[aType].checked = val;
   }
 
+  @observable
+  ageTypes: Array<IFilterChecker> = [];
+  @action
+  updateAgeType = (aType: number, val: boolean) => {
+    this.ageTypes[aType].checked = val;
+  }
+  @observable
+  populationTypes: Array<IFilterChecker> = [];
+  @action
+  updatePopulationType = (aType: number, val: boolean) => {
+    this.populationTypes[aType].checked = val;
+  }
+
   //injTypes
   @observable
   injTypes: Array<IFilterChecker> = [];
@@ -138,10 +177,13 @@ export default class FilterStore {
 
   @observable
   markers: any[] = []
+  @observable 
+  isLoading : boolean =false;
 
   @action
   submitFilter = () => {
     //this.city = trimCity.toString().trim();
+    this.isLoading = true;
     let filter = this.getFilter();
     let trimCity: string = this.city;
     trimCity = trimCity.toString().trim();
@@ -162,6 +204,8 @@ export default class FilterStore {
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew",this.genderTypes);
+    filter += this.getMultiplefilter("age_group_hebrew",this.ageTypes);
+    filter += this.getMultiplefilter("population_type_hebrew",this.populationTypes);
     filter += `]}`
     console.log(filter)
     return filter;
@@ -214,6 +258,7 @@ export default class FilterStore {
     if (arrPoints !== null) {
       this.markers = arrPoints;
     }
+    this.isLoading = false;
   }
   @action 
   updateLocation = (res:any[]) => {
