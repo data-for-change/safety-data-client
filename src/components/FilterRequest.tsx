@@ -1,9 +1,7 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent} from 'react'
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import Col from 'react-bootstrap/Col'
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
@@ -73,7 +71,6 @@ const CardFilterWhen = observer(() => {
 const CardFilterWhere = observer(() => {
   const store = useStore();
   const { t } = useTranslation();
-  //const citiesNames = toJS(store.citiesNames);  
   return (
     <Card>
       <Card.Header>
@@ -87,10 +84,14 @@ const CardFilterWhere = observer(() => {
             <Form.Label className="filterLable">{t('City')}:</Form.Label>
             <Typeahead
               id="typeaheadCity"
-              onChange={(selected: string) => {
-                store.city = selected;
+              //defaultSelected={[store.city]}
+              onChange={(selected: string[]) => {
+                if (selected.length >0 )
+                  store.updateCity(selected[0]);
               }}
               options={citisNamesHeb}
+              //multiple
+              selected ={[store.city]}
               placeholder={t('ChooseCity')}
             />
             {/* <Form.Control type="input" placeholder="" value={store.city} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.city = e.target.value; }} /> */}

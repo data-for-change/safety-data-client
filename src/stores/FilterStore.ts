@@ -88,6 +88,11 @@ export default class FilterStore {
 
   @observable
   city: string = "";
+  @action
+  updateCity = (name: string) => {
+    this.city = name;
+  }
+
   //@observable
   // citiesNames: string[] = ["חיפה","גבעתיים"]
   // initCitis = () =>{

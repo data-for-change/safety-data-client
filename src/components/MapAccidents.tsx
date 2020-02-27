@@ -1,4 +1,4 @@
-import React from 'react'
+import React , {FunctionComponent} from 'react'
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 import { useStore } from '../stores/storeConfig'
@@ -7,7 +7,10 @@ import { Map, TileLayer} from 'react-leaflet'
 import AccidentsMarkers from '../components/AccidentsMarkers'
 import 'leaflet-css'
 
-const MapAccidents = observer(() => {
+interface IProps {
+  name:string
+}
+const MapAccidents:FunctionComponent<IProps> = observer(({ name }) => {
   const store = useStore();
   const reactMapCenter = toJS(store.mapCenter);
   const WRAPPER_STYLES = { height: '500px', width: '100vw', maxWidth: '100%' };
