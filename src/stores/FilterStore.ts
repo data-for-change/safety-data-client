@@ -189,7 +189,6 @@ export default class FilterStore {
 
   @action
   submitFilter = () => {
-    //this.city = trimCity.toString().trim();
     this.isLoading = true;
     let filter = this.getFilter();
     let trimCity: string = this.city;
@@ -199,7 +198,21 @@ export default class FilterStore {
       srvCity.getCityByNameHe(this.city,this.updateLocation);
     }
     var service = new AccidentService();
-    service.getFilter(filter, this.updateMarkers);
+    service.postFilter(filter, this.updateMarkers);
+  }
+
+  @action
+  submitGroupByYears = () =>{
+    var service = new AccidentService();
+    let filter = "[" 
+     + '{"$match": {"accident_yishuv_name": "תל אביב -יפו" }}' 
+     + ',{"$group": { "_id": "$accident_year", "count": { "$sum": 1 }}}'
+     +',{"$sort": {"_id": 1}}'
+     +']'
+    service.postGroupby(filter, this.updateDataByYears)
+  }
+  updateDataByYears =(arr: any[]) =>{
+    console.log(arr)
   }
 
   getFilter = () => {
