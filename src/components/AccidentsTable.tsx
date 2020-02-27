@@ -12,6 +12,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
+import {CasualtiesSumLabel} from './atoms/CasualtiesSumLabel'
 
 interface IProps { }
 
@@ -55,7 +56,7 @@ export const AccidentsTable = observer((props: IProps) => {
     }];
     if (reactMarkers.length > 0) {
         return (<div>
-            <h4>{t('Found')} {reactMarkers.length} {t('Casualties')} </h4>
+            <CasualtiesSumLabel length={reactMarkers.length} name={store.cityResult}/>
             <ToolkitProvider
                 keyField="id"
                 data={reactMarkers}
@@ -77,5 +78,7 @@ export const AccidentsTable = observer((props: IProps) => {
         </div>
         )
     }
-    else return null;
+    else return (  
+        <CasualtiesSumLabel length={reactMarkers.length} name={store.cityResult}/> 
+    );
 })

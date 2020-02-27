@@ -84,14 +84,16 @@ export default class FilterStore {
     arr.push(new FilterChecker(true, ["לא-עירונית לא בצומת"]));
   }
   
-
-
   @observable
   city: string = "";
   @action
   updateCity = (name: string) => {
     this.city = name;
   }
+
+  @observable
+  cityResult: string = "";
+
 
   //@observable
   // citiesNames: string[] = ["חיפה","גבעתיים"]
@@ -264,6 +266,7 @@ export default class FilterStore {
       this.markers = arrPoints;
     }
     this.isLoading = false;
+    this.cityResult = this.city;
   }
   @action 
   updateLocation = (res:any[]) => {
