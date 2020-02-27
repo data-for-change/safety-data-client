@@ -88,6 +88,8 @@ const CardFilterWhere = observer(() => {
               onChange={(selected: string[]) => {
                 if (selected.length >0 )
                   store.updateCity(selected[0]);
+                else
+                  store.updateCity("");
               }}
               options={citisNamesHeb}
               //multiple
