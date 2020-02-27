@@ -15,6 +15,7 @@ export const Footer: React.FC<IProps> = () =>
       <footer style={divStyle}>
         <nav  className= "App-nav">
           <Link to="/">{t('Home')}</Link>
+          <Link to="/city">{t('Cities')}</Link>
           <Link to="/heatmap">{t('HeatMap')}</Link>
           <Link to="/about">{t('About')}</Link>
         </nav>

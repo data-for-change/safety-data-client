@@ -10,28 +10,20 @@ import { useStore } from '../stores/storeConfig'
 interface IProps { }
 
 export const CityPage: React.FC<IProps> = () => {
-  //init city query by url
-  let query = useQuery();
   const store = useStore();
-  let cityName = "תל אביב -יפו";  
-  let name = query.get("name")
-  let found = false;
-  if (name !== null)
-     found = citisNamesHeb.includes(name);
-  if(found)
-  {
-    cityName = citisNamesHeb.find(element => element === name!)!;
-  }
+  let cityName  = useCityNamefromQuery();
+  let ipage = 1;
   store.updateCity(cityName);
   store.submitFilter();
-  console.log (cityName)
-
   return (
     <div className="App">
       <div className="container-fluid">
+        <div className="row">
+          <h4>{cityName}</h4>
+        </div>
         <div className="row ">
-          <div className="p-3 col-md-3"><FilterPanel /></div>
-          <div className="col-md-9"><Card><MapAccidents name={query.get("name")!} /></Card></div>
+          <div className="p-3 col-md-3"><FilterPanel activeCardKey={ipage}/></div>
+          <div className="col-md-9"><Card><MapAccidents name={cityName} /></Card></div>
         </div>
         <div className="row">
           <div className="col-auto"><AccidentsTable /></div>
@@ -40,7 +32,20 @@ export const CityPage: React.FC<IProps> = () => {
     </div>
   )
 }
-
+//get city name by query by url
+function useCityNamefromQuery(){
+  let query = useQuery();
+  let res = "תל אביב -יפו";  
+  let name = query.get("name")
+  let found = false;
+  if (name !== null)
+     found = citisNamesHeb.includes(name);
+  if(found)
+  {
+    res = citisNamesHeb.find(element => element === name!)!;
+  }
+  return res;
+}
 // A custom hook that builds on useLocation to parse
 // the query string for you.
 function useQuery() {

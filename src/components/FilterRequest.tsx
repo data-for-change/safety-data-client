@@ -11,14 +11,17 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import citisNamesHeb from "../assets/cities_names_heb.json";
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
+interface IProps {
+  activeCardKey?:number 
+}
 
-export const FilterRequest = observer(() => {
+export const FilterRequest: React.FC<IProps> = observer(({activeCardKey = 0}) => {
   const store = useStore();
   const { t } = useTranslation();
   //const {startYear, EndYear, City} = store;
   return (
     <Form>
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey={activeCardKey.toString()}>
         <CardFilterWhen />
         <CardFilterWhere />
         <CardFilterWho />

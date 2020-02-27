@@ -4,8 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import { FilterRequest } from './FilterRequest';
 
+interface IProps {
+    activeCardKey?:number 
+  }
 
-export function FilterPanel() {
+export const FilterPanel:React.FC<IProps>=  ({activeCardKey}) => {
     const [open, setOpen] = useState(true);
     const { t } = useTranslation();
     return (
@@ -15,7 +18,7 @@ export function FilterPanel() {
             </Button>
             <Collapse in={open}>
                 <div id="example-collapse-text">
-                    <FilterRequest />
+                    <FilterRequest activeCardKey={activeCardKey}/>
                 </div>
             </Collapse>
         </>
