@@ -126,7 +126,7 @@ export default class FilterStore {
 
   //this belong to mapstore! need to move
   @observable
-  mapCenter: L.LatLng = new L.LatLng(32.09, 34.7818)
+  mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
 
 
   @observable
@@ -186,6 +186,8 @@ export default class FilterStore {
   markers: any[] = []
   @observable
   dataByYears: any [] =[]
+  @observable
+  dataFilterdByYears: any [] =[]
   @observable 
   isLoading : boolean =false;
 
@@ -204,30 +206,46 @@ export default class FilterStore {
     var service = new AccidentService();
     service.postFilter(filter, this.updateMarkers);
     this.submitGroupByYears();
+    this.submitfilterdGroupByYears();
   }
 
   @action
   submitGroupByYears = () =>{
-    var service = new AccidentService();
     let filtermatch = this.getfilterForCityOnly();
-    console.log(filtermatch)
+    let filter = this.getFilterGroupByYears(filtermatch);
+    var service = new AccidentService();
+    service.postGroupby(filter, this.updateDataByYears)
+  }
+  submitfilterdGroupByYears = () =>{
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupByYears(filtermatch);
+    var service = new AccidentService();
+    service.postGroupby(filter, this.updateDataFilterdByYears)
+  }
+
+  getFilterGroupByYears=(filterMatch:string) =>{
     let filter = "[" 
-     + '{"$match": '+ filtermatch +'}' 
+     + '{"$match": '+ filterMatch +'}' 
      + ',{"$group": { "_id": "$accident_year", "count": { "$sum": 1 }}}'
      +',{"$sort": {"_id": 1}}'
      +']'
     console.log(filter)
-    service.postGroupby(filter, this.updateDataByYears)
+    return filter;
   }
+
   @action
   updateDataByYears =(arr: any[]) =>{
     this.dataByYears= arr;
-    //console.log(arr)
   }
+  @action
+  updateDataFilterdByYears =(arr: any[]) =>{
+    this.dataFilterdByYears= arr;
+  }
+
 
   getFilter = () => {
     let filter = `{"$and" : [`
-    filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
+    filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
     filter += this.getfilterCity();
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
@@ -236,6 +254,14 @@ export default class FilterStore {
     filter += this.getMultiplefilter("population_type_hebrew",this.populationTypes);
     filter += `]}`
     console.log(filter)
+    return filter;
+  }
+  getfilterMatch = () =>{
+    let filter = `{"$and" : [`
+    filter += `{"accident_year":{"$gte":"${this.startYear}"}}`;
+    filter += `{"accident_year":{"$gte":"2015"}}`;
+    filter += this.getfilterCity();
+    filter += `]}`
     return filter;
   }
   getfilterForCityOnly = () =>{

@@ -8,10 +8,20 @@ import { useStore } from '../stores/storeConfig'
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
-export const GroupByTable = observer(() => {
+interface IProps {
+    type? :number 
+    title?:string
+  }
+export const GroupByTable:React.FC<IProps> = observer(({title, type =0}) => {
     const store = useStore();
     const { t } = useTranslation();
-    const reactData = toJS(store.dataByYears)
+    //const rtitle = title ? <div>{title}</div> : null 
+    let reactData = null;
+    if (type ==0)
+        reactData = toJS(store.dataByYears)
+    else 
+        reactData = toJS(store.dataFilterdByYears)
+
     const columns = [{
         dataField: '_id',
         text: t('Year'),
@@ -20,7 +30,8 @@ export const GroupByTable = observer(() => {
         text: t('Casualties'),
     }];
     if (reactData.length >0 ){
-        return (<div>
+        return (<div className="groupByTable">
+            {title}
             <BootstrapTable keyField='_id' data={reactData} columns={columns} headerClasses="table-header" />
             </div>
             )

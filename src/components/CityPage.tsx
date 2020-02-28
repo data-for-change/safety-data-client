@@ -1,26 +1,26 @@
 import React from 'react'
 import { useLocation} from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
+import Card from 'react-bootstrap/Card';
 import MapAccidents from './MapAccidents'
 import { FilterPanel } from './FilterPanel'
 import { AccidentsTable } from './AccidentsTable'
 import {GroupByTable} from './GroupByTable'
-import Card from 'react-bootstrap/Card';
 import citisNamesHeb from "../assets/cities_names_heb.json";
-
 import { useStore } from '../stores/storeConfig'
 
 interface IProps { }
 
 export const CityPage: React.FC<IProps> = observer(() => {
   const store = useStore();
+  const { t } = useTranslation();
   const {cityResult} = store;
   if(cityResult === ""){
     let cityName  = useCityNamefromQuery();
     store.updateCity(cityName);
     store.submitFilter();
   }
-  console.log("cityResult:", cityResult)
   return (
     <div className="App">
       <div className="container-fluid">
@@ -29,8 +29,11 @@ export const CityPage: React.FC<IProps> = observer(() => {
         </div>
         <div className="row ">
           <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
-          <div className="col-md-6"><Card><MapAccidents name={cityResult} /></Card></div>
-          <div className="col-md-3"><GroupByTable /></div>
+          <div className="col-md-7"><Card><MapAccidents name={cityResult} /></Card></div>
+          <div className="col-md-2">
+            <GroupByTable type={0} title={t('AllCasualtiesInRegion')}/>
+            <GroupByTable type={1} title={t('CasualtiesByFilter')} />
+          </div>
         </div>
         <div className="row">
           <div className="col-auto"><AccidentsTable /></div>
