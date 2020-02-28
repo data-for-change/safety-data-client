@@ -12,7 +12,7 @@ import citisNamesHeb from "../assets/cities_names_heb.json";
 import { observer } from "mobx-react"
 import { useStore } from '../stores/storeConfig'
 interface IProps {
-  activeCardKey?:number 
+  activeCardKey:number 
 }
 
 export const FilterRequest: React.FC<IProps> = observer(({activeCardKey = 0}) => {
@@ -29,6 +29,8 @@ export const FilterRequest: React.FC<IProps> = observer(({activeCardKey = 0}) =>
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
+      <Button variant="primary"
+        onClick={() => {  store.submitGroupByYears(); }} >group by</Button>
     </Form>
   );
 })

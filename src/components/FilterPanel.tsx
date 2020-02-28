@@ -8,7 +8,7 @@ interface IProps {
     activeCardKey?:number 
   }
 
-export const FilterPanel:React.FC<IProps>=  ({activeCardKey}) => {
+export const FilterPanel:React.FC<IProps>=  ({activeCardKey=0}) => {
     const [open, setOpen] = useState(true);
     const { t } = useTranslation();
     return (

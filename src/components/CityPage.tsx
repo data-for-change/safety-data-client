@@ -1,5 +1,6 @@
 import React from 'react'
 import { useLocation} from 'react-router-dom'
+import { observer } from "mobx-react"
 import MapAccidents from './MapAccidents'
 import { FilterPanel } from './FilterPanel'
 import { AccidentsTable } from './AccidentsTable'
@@ -9,21 +10,24 @@ import { useStore } from '../stores/storeConfig'
 
 interface IProps { }
 
-export const CityPage: React.FC<IProps> = () => {
+export const CityPage: React.FC<IProps> = observer(() => {
   const store = useStore();
-  let cityName  = useCityNamefromQuery();
-  let ipage = 1;
-  store.updateCity(cityName);
-  store.submitFilter();
+  const {cityResult} = store;
+  if(cityResult === ""){
+    let cityName  = useCityNamefromQuery();
+    store.updateCity(cityName);
+    store.submitFilter();
+  }
+  console.log("cityResult:", cityResult)
   return (
     <div className="App">
       <div className="container-fluid">
         <div className="row">
-          <h4>{cityName}</h4>
+          <h4>{cityResult}</h4>
         </div>
         <div className="row ">
-          <div className="p-3 col-md-3"><FilterPanel activeCardKey={ipage}/></div>
-          <div className="col-md-9"><Card><MapAccidents name={cityName} /></Card></div>
+          <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
+          <div className="col-md-9"><Card><MapAccidents name={cityResult} /></Card></div>
         </div>
         <div className="row">
           <div className="col-auto"><AccidentsTable /></div>
@@ -31,7 +35,8 @@ export const CityPage: React.FC<IProps> = () => {
       </div>
     </div>
   )
-}
+})
+
 //get city name by query by url
 function useCityNamefromQuery(){
   let query = useQuery();
