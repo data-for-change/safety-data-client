@@ -40,6 +40,7 @@
     ,"Year":"Year"
     ,"Type" :"Type"
     ,"Street" :"Street"
+    ,"AccidentType":"AccidentType"
     ,"Found" : "Found"
     ,"NoResultsFound" :"No results found"
     ,"export-to-csv":"Export to CSV"

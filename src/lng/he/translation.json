@@ -40,6 +40,7 @@
     ,"Year":"שנה"
     ,"Type" :"סוג"
     ,"Street" :"רחוב"
+    ,"AccidentType":"סוג תאונה"
     ,"Found" : "נמצאו"
     ,"NoResultsFound" :"לא נמצאו תוצאות"
     ,"export-to-csv":"יצוא לקובץ CSV"
