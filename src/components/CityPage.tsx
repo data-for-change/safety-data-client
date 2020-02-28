@@ -29,7 +29,7 @@ export const CityPage: React.FC<IProps> = observer(() => {
         </div>
         <div className="row ">
           <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
-          <div className="col-md-5"><Card><MapAccidents name={cityResult} /></Card></div>
+          <div className="col-md-6"><Card><MapAccidents name={cityResult} /></Card></div>
           <div className="col-md-3"><GroupByTable /></div>
         </div>
         <div className="row">
