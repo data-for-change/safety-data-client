@@ -184,8 +184,12 @@ export default class FilterStore {
 
   @observable
   markers: any[] = []
+  @observable
+  dataByYears: any [] =[]
   @observable 
   isLoading : boolean =false;
+
+
 
   @action
   submitFilter = () => {
@@ -199,28 +203,32 @@ export default class FilterStore {
     }
     var service = new AccidentService();
     service.postFilter(filter, this.updateMarkers);
+    this.submitGroupByYears();
   }
 
   @action
   submitGroupByYears = () =>{
     var service = new AccidentService();
+    let filtermatch = this.getfilterForCityOnly();
+    console.log(filtermatch)
     let filter = "[" 
-     + '{"$match": {"accident_yishuv_name": "תל אביב -יפו" }}' 
+     + '{"$match": '+ filtermatch +'}' 
      + ',{"$group": { "_id": "$accident_year", "count": { "$sum": 1 }}}'
      +',{"$sort": {"_id": 1}}'
      +']'
+    console.log(filter)
     service.postGroupby(filter, this.updateDataByYears)
   }
+  @action
   updateDataByYears =(arr: any[]) =>{
-    console.log(arr)
+    this.dataByYears= arr;
+    //console.log(arr)
   }
 
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-    let trimCity: string = this.city;
-    trimCity = trimCity.toString().trim();
-    if (trimCity !== "") filter += `, {"accident_yishuv_name": "${trimCity}"}`;
+    filter += this.getfilterCity();
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew",this.genderTypes);
@@ -228,6 +236,20 @@ export default class FilterStore {
     filter += this.getMultiplefilter("population_type_hebrew",this.populationTypes);
     filter += `]}`
     console.log(filter)
+    return filter;
+  }
+  getfilterForCityOnly = () =>{
+    let filter = `{"$and" : [`
+    filter += `{"accident_year":{"$gte":"2015"}}`;
+    filter += this.getfilterCity();
+    filter += `]}`
+    return filter;
+  }
+  getfilterCity = () => {
+    let filter: string = '';
+    let trimCity: string = this.city;
+    trimCity = trimCity.toString().trim();
+    if (trimCity !== "") filter += `, {"accident_yishuv_name": "${trimCity}"}`;
     return filter;
   }
   getMultiplefilter = (filterKey: string, arr: Array<IFilterChecker>) => {

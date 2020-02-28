@@ -29,8 +29,8 @@ export const FilterRequest: React.FC<IProps> = observer(({activeCardKey = 0}) =>
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
-      <Button variant="primary"
-        onClick={() => {  store.submitGroupByYears(); }} >group by</Button>
+      {/* <Button variant="primary"
+        onClick={() => {  store.submitGroupByYears(); }} >group by</Button> */}
     </Form>
   );
 })

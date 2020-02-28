@@ -4,8 +4,10 @@ import { observer } from "mobx-react"
 import MapAccidents from './MapAccidents'
 import { FilterPanel } from './FilterPanel'
 import { AccidentsTable } from './AccidentsTable'
+import {GroupByTable} from './GroupByTable'
 import Card from 'react-bootstrap/Card';
 import citisNamesHeb from "../assets/cities_names_heb.json";
+
 import { useStore } from '../stores/storeConfig'
 
 interface IProps { }
@@ -27,7 +29,8 @@ export const CityPage: React.FC<IProps> = observer(() => {
         </div>
         <div className="row ">
           <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
-          <div className="col-md-9"><Card><MapAccidents name={cityResult} /></Card></div>
+          <div className="col-md-5"><Card><MapAccidents name={cityResult} /></Card></div>
+          <div className="col-md-3"><GroupByTable /></div>
         </div>
         <div className="row">
           <div className="col-auto"><AccidentsTable /></div>
