@@ -31,27 +31,27 @@ export const AccidentsTable = observer((props: IProps) => {
         hidden: true
     }, {
         dataField: 'accident_year',
-        text: 'Year',
+        text: t('Year'),
         sort: true
     }, {
         dataField: 'accident_yishuv_name',
-        text: 'City',
+        text: t('City'),
         sort: true
     }, {
         dataField: 'street1_hebrew',
-        text: 'Street',
+        text: t('Street'),
         sort: true
     }, {
         dataField: 'injured_type_hebrew',
-        text: 'Type',
+        text: t('Type'),
         sort: true
     }, {
         dataField: 'age_group_hebrew',
-        text: 'Age',
+        text: t('Age'),
         sort: true
     }, {
         dataField: 'sex_hebrew',
-        text: 'Gender',
+        text: t('Gender'),
         sort: true
     }];
     if (reactMarkers.length > 0) {
