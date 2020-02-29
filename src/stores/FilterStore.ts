@@ -11,6 +11,7 @@ export default class FilterStore {
   appInitialized = false
   constructor() {
     // init app data
+    FC.initDayNight(this.dayNight)
     FC.initInjTypes(this.injTypes);
     FC.initGenderTypes(this.genderTypes);
     FC.initAgeTypes(this.ageTypes)
@@ -28,7 +29,6 @@ export default class FilterStore {
   updateCity = (name: string) => {
     this.city = name;
   }
-
   @observable
   cityResult: string = "";
  
@@ -49,13 +49,17 @@ export default class FilterStore {
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
 
-
+  //when
   @observable
   startYear: number = 2015;
   @observable
   endYear: number = 2019;
-
-
+  @observable
+  dayNight: Array<IFilterChecker> = [];
+  @action
+  updateDayNight = (aType: number, val: boolean) => {
+    this.dayNight[aType].checked = val;
+  }
 
   @observable
   roadTypes: Array<IFilterChecker> = [];
@@ -161,10 +165,10 @@ export default class FilterStore {
     this.dataFilterdByYears= arr;
   }
 
-
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
+    filter += this.getMultiplefilter("day_night_hebrew",this.dayNight);
     filter += this.getfilterCity();
     filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
     filter += this.getfilterInjured();
