@@ -2,7 +2,7 @@ import React , {MouseEvent} from 'react'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { observer } from "mobx-react"
-import { useStore } from '../stores/storeConfig'
+import { useStore } from '../../stores/storeConfig'
 
 export const LanguageSelector = observer(() => {
   const store = useStore();

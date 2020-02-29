@@ -1,5 +1,6 @@
 import React, { ChangeEvent} from 'react'
 import { useTranslation } from 'react-i18next';
+import { observer } from "mobx-react"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col'
@@ -8,9 +9,9 @@ import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import citisNamesHeb from "../assets/cities_names_heb.json";
-import { observer } from "mobx-react"
-import { useStore } from '../stores/storeConfig'
+import citisNamesHeb from "../../assets/cities_names_heb.json";
+import { useStore } from '../../stores/storeConfig'
+
 interface IProps {
   activeCardKey:number 
 }

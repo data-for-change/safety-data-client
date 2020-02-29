@@ -1,5 +1,5 @@
 import React from 'react';
-import {LanguageSelector} from './LanguageSelector'
+import {LanguageSelector} from '../molecules/LanguageSelector';
 
 interface IProps {
   title: string

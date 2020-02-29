@@ -1,11 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 import Card from 'react-bootstrap/Card';
-import MapAccidents from './MapAccidents'
-import { FilterPanel } from './FilterPanel'
-import { GroupByTable } from './GroupByTable'
-import { AccidentsTable } from './AccidentsTable'
-
+import MapAccidents from '../organisms/MapAccidents'
+import { FilterPanel } from '../organisms/FilterPanel'
+import { GroupByTable } from '../molecules/GroupByTable'
+import { AccidentsTable } from '../organisms/AccidentsTable'
 
 interface IProps { }
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
-import { useStore } from '../stores/storeConfig'
+import { useStore } from '../../stores/storeConfig'
 import L from 'leaflet'
 import { Marker, Popup } from 'react-leaflet'
 
 import 'leaflet-css'
-import redMarker from '../assets/marker-icon-2x-red.png'
-import shadoMarker from '../assets/marker-shadow.png'
+import redMarker from '../../assets/marker-icon-2x-red.png'
+import shadoMarker from '../../assets/marker-shadow.png'
 import { toJS } from 'mobx'
 
 const redIcon = new L.Icon({

@@ -4,7 +4,7 @@ import {LeafletMouseEvent} from 'leaflet'
 import 'leaflet-css'
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import AccidentService from '../services/Accident.Service'
+import AccidentService from '../../services/Accident.Service'
  
 
 

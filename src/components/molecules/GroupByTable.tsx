@@ -3,10 +3,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { toJS } from 'mobx'
 import { observer } from "mobx-react"
-import { useStore } from '../stores/storeConfig'
 // @ts-ignore
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import { useStore } from '../../stores/storeConfig'
 
 interface IProps {
     type? :number 
@@ -17,7 +17,7 @@ export const GroupByTable:React.FC<IProps> = observer(({title, type =0}) => {
     const { t } = useTranslation();
     //const rtitle = title ? <div>{title}</div> : null 
     let reactData = null;
-    if (type ==0)
+    if (type ===0)
         reactData = toJS(store.dataByYears)
     else 
         reactData = toJS(store.dataFilterdByYears)

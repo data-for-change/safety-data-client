@@ -3,12 +3,12 @@ import { useLocation} from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import Card from 'react-bootstrap/Card';
-import MapAccidents from './MapAccidents'
-import { FilterPanel } from './FilterPanel'
-import { AccidentsTable } from './AccidentsTable'
-import {GroupByTable} from './GroupByTable'
-import citisNamesHeb from "../assets/cities_names_heb.json";
-import { useStore } from '../stores/storeConfig'
+import MapAccidents from '../organisms/MapAccidents'
+import { FilterPanel } from '../organisms/FilterPanel'
+import { GroupByTable } from '../molecules/GroupByTable'
+import { AccidentsTable } from '../organisms/AccidentsTable'
+import { useStore } from '../../stores/storeConfig'
+import citisNamesHeb from "../../assets/cities_names_heb.json";
 
 interface IProps { }
 

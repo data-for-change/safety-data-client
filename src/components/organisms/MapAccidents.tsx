@@ -1,10 +1,11 @@
 import React , {FunctionComponent} from 'react'
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
-import { useStore } from '../stores/storeConfig'
+
 //import L from 'leaflet'
 import { Map, TileLayer} from 'react-leaflet'
-import AccidentsMarkers from '../components/AccidentsMarkers'
+import AccidentsMarkers from '../molecules/AccidentsMarkers'
+import { useStore } from '../../stores/storeConfig'
 import 'leaflet-css'
 
 interface IProps {
