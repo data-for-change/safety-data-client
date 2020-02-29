@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import MapAccidents from '../organisms/MapAccidents'
 import { FilterPanel } from '../organisms/FilterPanel'
 import { GroupByTable } from '../molecules/GroupByTable'
+import { SmallCard } from '../molecules/SmallCard'
 import { AccidentsTable } from '../organisms/AccidentsTable'
 import { useStore } from '../../stores/storeConfig'
 import citisNamesHeb from "../../assets/cities_names_heb.json";
@@ -31,8 +32,12 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
           <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
           <div className="col-md-7"><Card><MapAccidents name={cityResult} /></Card></div>
           <div className="col-md-2">
-            <GroupByTable type={0} title={t('AllCasualtiesInRegion')}/>
-            <GroupByTable type={1} title={t('CasualtiesByFilter')} />
+            <SmallCard title={t('AllCasualtiesInRegion')}>
+                <GroupByTable type={0} />
+            </SmallCard>
+            <SmallCard title={t('CasualtiesByFilter')}>
+                <GroupByTable type={1} />
+            </SmallCard>
           </div>
         </div>
         <div className="row">

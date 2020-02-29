@@ -10,9 +10,8 @@ import { useStore } from '../../stores/storeConfig'
 
 interface IProps {
     type? :number 
-    title?:string
   }
-export const GroupByTable:React.FC<IProps> = observer(({title, type =0}) => {
+export const GroupByTable:React.FC<IProps> = observer(({type =0}) => {
     const store = useStore();
     const { t } = useTranslation();
     //const rtitle = title ? <div>{title}</div> : null 
@@ -31,7 +30,6 @@ export const GroupByTable:React.FC<IProps> = observer(({title, type =0}) => {
     }];
     if (reactData.length >0 ){
         return (<div className="groupByTable">
-            {title}
             <BootstrapTable keyField='_id' data={reactData} columns={columns} headerClasses="table-header" />
             </div>
             )

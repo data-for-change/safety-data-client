@@ -135,7 +135,7 @@ const CardFilterWho = observer(() => {
             <Form.Check inline label={t('pedestrian')} type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(1, e.target.checked); }} />
             <Form.Check inline label={t('cyclist')} type={'checkbox'} id={`checkboxinjerd2`} checked={store.injTypes[2].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(2, e.target.checked); }} />
             <Form.Check inline label={t('motorcycle')} type={'checkbox'} id={`checkboxinjerd3`} checked={store.injTypes[3].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(3, e.target.checked); }} />
-            <Form.Check inline label={t('car')} type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(4, e.target.checked); }} />
+            <Form.Check inline label={t('wheels4+')} type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(4, e.target.checked); }} />
             <Form.Check inline label={t('other')} type={'checkbox'} id={`checkboxinjerd5`} checked={store.injTypes[5].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(5, e.target.checked); }} />
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlGenderType">

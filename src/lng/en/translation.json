@@ -22,6 +22,7 @@
     ,"pedestrian" : "Pedestrian"
     ,"cyclist":"Cyclist"
     ,"motorcycle": "Motorcycle"
+    ,"Wheels4+" : "4+ Wheels"
     ,"car" : "Car"
     ,"other": "Other"
     ,"Gender": "Gender"
