@@ -1,6 +1,7 @@
 
 import React, { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next';
+import { observer } from "mobx-react"
 import Form from 'react-bootstrap/Form';
 import { Checkbox } from '../atoms/Checkbox';
 import { IFilterChecker } from '../../stores/FilterChecker'
@@ -12,7 +13,7 @@ interface IProps {
   onChange: (aType: number, val: boolean) => void
 }
 
-export const GroupCheckbox: React.FC<IProps> = ({ formName, groupName, dataArr, onChange }) => {
+export const GroupCheckbox: React.FC<IProps> = observer(({ formName, groupName, dataArr, onChange }) => {
   const { t } = useTranslation();
   //const store = useStore();
   return (
@@ -23,4 +24,4 @@ export const GroupCheckbox: React.FC<IProps> = ({ formName, groupName, dataArr, 
       ))}
     </Form.Group>
   )
-}
+})
