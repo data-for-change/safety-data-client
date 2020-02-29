@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import citisNamesHeb from "../../assets/cities_names_heb.json";
-import {Checkbox} from '../atoms/Checkbox';
+import {GroupCheckbox} from '../molecules/GroupCheckBox'
 import { useStore } from '../../stores/storeConfig'
 
 interface IProps {
@@ -103,16 +103,8 @@ const CardFilterWhere = observer(() => {
               selected ={[store.city]}
               placeholder={t('ChooseCity')}
             />
-            {/* <Form.Control type="input" placeholder="" value={store.city} onChange={(e:ChangeEvent<HTMLInputElement>) => { store.city = e.target.value; }} /> */}
           </Form.Group>
-          <Form.Group controlId="exampleForm.ControlRoadeType" >
-            <Form.Label className="filterLable">{t('RoadType')}:</Form.Label>
-            <Checkbox label='urban-junction' group='roadtype' id={0} checked={store.roadTypes[0].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateRoadType(0, e.target.checked); }}/>
-            <Checkbox label='urban-road' group='roadtype' id={1} checked={store.roadTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateRoadType(1, e.target.checked); }} />
-            <Checkbox label='non-urban-junction' group='roadtype' id={2} checked={store.roadTypes[2].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateRoadType(2, e.target.checked); }} />
-            <Checkbox label='non-urban-road' group='roadtype' id={3} checked={store.roadTypes[3].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateRoadType(3, e.target.checked); }} />
-          </Form.Group>
-
+          <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType}/>
         </div>
       </Accordion.Collapse>
     </Card>

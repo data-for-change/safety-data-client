@@ -5,7 +5,7 @@ import AccidentService from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
 
-interface IFilterChecker {
+export interface IFilterChecker {
   checked: boolean;
   filters: string[];
 }
@@ -19,7 +19,23 @@ class FilterChecker implements IFilterChecker {
     this.filters = filters;
   }
 }
+export interface IFilterChecker2 {
+  checked: boolean;
+  label:string;
+  filters: string[];
+}
 
+class FilterChecker2 implements IFilterChecker2 {
+  @observable
+  checked: boolean;
+  label:string;
+  filters: string[];
+  constructor(label:string, valid: boolean, filters: string[]) {
+    this.label = label;
+    this.checked = valid;
+    this.filters = filters;
+  }
+}
 export enum EnumVehiclePass {
   All,
   Ped,
@@ -78,10 +94,10 @@ export default class FilterStore {
   }
 
   initRoadTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, ["עירונית בצומת"]));
-    arr.push(new FilterChecker(true, ["עירונית לא בצומת"]));
-    arr.push(new FilterChecker(true, ["לא-עירונית בצומת"]));
-    arr.push(new FilterChecker(true, ["לא-עירונית לא בצומת"]));
+    arr.push(new FilterChecker2('urban-junction',true, ["עירונית בצומת"]));
+    arr.push(new FilterChecker2('urban-road', true, ["עירונית לא בצומת"]));
+    arr.push(new FilterChecker2('non-urban-junction',true, ["לא-עירונית בצומת"]));
+    arr.push(new FilterChecker2('non-urban-road',true, ["לא-עירונית לא בצומת"]));
   }
   
   @observable
@@ -137,7 +153,7 @@ export default class FilterStore {
 
 
   @observable
-  roadTypes: Array<IFilterChecker> = [];
+  roadTypes: Array<IFilterChecker2> = [];
   @action
   updateRoadType = (aType: number, val: boolean) => {
     this.roadTypes[aType].checked = val;
