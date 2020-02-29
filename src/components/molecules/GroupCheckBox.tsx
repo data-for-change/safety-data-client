@@ -1,11 +1,9 @@
 
 import React, { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next';
-//import { observer } from "mobx-react"
 import Form from 'react-bootstrap/Form';
 import { Checkbox } from '../atoms/Checkbox';
 import { IFilterChecker } from '../../stores/FilterChecker'
-//import { useStore } from '../../stores/storeConfig'
 
 interface IProps {
   formName: string,
