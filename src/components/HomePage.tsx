@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Card from 'react-bootstrap/Card';
 import MapAccidents from './MapAccidents'
 import { FilterPanel } from './FilterPanel'
-import {GroupByTable} from './GroupByTable'
+import { GroupByTable } from './GroupByTable'
 import { AccidentsTable } from './AccidentsTable'
 
 
@@ -15,15 +15,21 @@ export const HomePage: React.FC<IProps> = () => {
     <div className="App">
       <div className="container-fluid">
         <div className="row ">
-          <div className="p-3 col-md-3"><FilterPanel /></div>
-          <div className="col-md-7"><Card><MapAccidents name=""/></Card></div>
-          <div className="col-md-2">
-            <GroupByTable type={0} title={t('AllCasualtiesInRegion')}/>
-            <GroupByTable type={1} title={t('CasualtiesByFilter')} />
+          <div className="p-2 col-md-2"><FilterPanel /></div>
+          <div className="col-md-10">
+            <div className="row">
+              <Card style={{ width: '18rem' }}>
+                <GroupByTable type={0} title={t('AllCasualtiesInRegion')} />
+              </Card>
+              <Card style={{ width: '18rem' }}>
+                <GroupByTable type={1} title={t('CasualtiesByFilter')} />
+              </Card>
+            </div>
+            <Card><MapAccidents name="" /></Card>
+            <div className="row">
+              <div className="col-auto"><AccidentsTable /></div>
+            </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-auto"><AccidentsTable /></div>
         </div>
       </div>
     </div>
