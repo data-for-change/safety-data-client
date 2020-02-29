@@ -1,104 +1,26 @@
 import { observable, action ,reaction} from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
+import IFilterChecker from './FilterChecker'
+import * as FC from './FilterChecker'
 import AccidentService from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
-
-export interface IFilterChecker {
-  checked: boolean;
-  filters: string[];
-}
-
-class FilterChecker implements IFilterChecker {
-  @observable
-  checked: boolean;
-  filters: string[];
-  constructor(valid: boolean, filters: string[]) {
-    this.checked = valid;
-    this.filters = filters;
-  }
-}
-export interface IFilterChecker2 {
-  checked: boolean;
-  label:string;
-  filters: string[];
-}
-
-class FilterChecker2 implements IFilterChecker2 {
-  @observable
-  checked: boolean;
-  label:string;
-  filters: string[];
-  constructor(label:string, valid: boolean, filters: string[]) {
-    this.label = label;
-    this.checked = valid;
-    this.filters = filters;
-  }
-}
-export enum EnumVehiclePass {
-  All,
-  Ped,
-  Cycle,
-  Motorcycle,
-  Car,
-  Others
-}
 
 export default class FilterStore {
   appInitialized = false
   constructor() {
     // init app data
-    this.initInjTypes(this.injTypes);
-    this.initGenderTypes(this.genderTypes);
-    this.initAgeTypes(this.ageTypes)
-    this.initPopulationTypes(this.populationTypes)
-    this.initRoadTypes(this.roadTypes);
+    FC.initInjTypes(this.injTypes);
+    FC.initGenderTypes(this.genderTypes);
+    FC.initAgeTypes(this.ageTypes)
+    FC.initPopulationTypes(this.populationTypes)
+    FC.initRoadTypes(this.roadTypes);
     
-    //this.initCitis();
     this.appInitialized = false;
 
   }
-  initInjTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, []));
-    arr.push(new FilterChecker(false, ["הולך רגל"]));
-    arr.push(new FilterChecker(false, ["נהג - אופניים", "נוסע - אופניים (לא נהג)"]));
-    arr.push(new FilterChecker(false, ["נהג - אופנוע", "נוסע - אופנוע (לא נהג)"]));
-    arr.push(new FilterChecker(false, ["נהג - רכב בעל 4 גלגלים ויותר", "נוסע - רכב בעל 4 גלגלים ויותר"]));
-    arr.push(new FilterChecker(false, ["נהג - רכב לא ידוע", "נוסע - רכב לא ידוע"]));
-  }
-  initGenderTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, ["נקבה"]));
-    arr.push(new FilterChecker(true, ["זכר"]));
-    //arr.push(new FilterChecker(true, ["לא ידוע"]));
-  }
-  initAgeTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, ["00-04"]));
-    arr.push(new FilterChecker(true, ["05-09"]));
-    arr.push(new FilterChecker(true, ["10-14"]));
-    arr.push(new FilterChecker(true, ["15-19"]));
-    arr.push(new FilterChecker(true, ["20-24","25-29"]));
-    arr.push(new FilterChecker(true, ["30-34","35-39"]));
-    arr.push(new FilterChecker(true, ["40-44","45-49"]));
-    arr.push(new FilterChecker(true, ["50-54","55-59"]));
-    arr.push(new FilterChecker(true, ["60-64","65-69"]));
-    arr.push(new FilterChecker(true, ["70-74","75-79"]));
-    arr.push(new FilterChecker(true, ["80-84","85+"]));
-    arr.push(new FilterChecker(true, ["לא ידוע"]));
-  }
-  initPopulationTypes = (arr: any) => {
-    arr.push(new FilterChecker(true, ["יהודים"]));
-    arr.push(new FilterChecker(true, ["ערבים"]));
-    arr.push(new FilterChecker(true, ["זרים"]));
-    arr.push(new FilterChecker(true, ["לא ידוע"]));
-  }
-
-  initRoadTypes = (arr: any) => {
-    arr.push(new FilterChecker2('urban-junction',true, ["עירונית בצומת"]));
-    arr.push(new FilterChecker2('urban-road', true, ["עירונית לא בצומת"]));
-    arr.push(new FilterChecker2('non-urban-junction',true, ["לא-עירונית בצומת"]));
-    arr.push(new FilterChecker2('non-urban-road',true, ["לא-עירונית לא בצומת"]));
-  }
+  
   
   @observable
   city: string = "";
@@ -109,21 +31,6 @@ export default class FilterStore {
 
   @observable
   cityResult: string = "";
-
-
-  //@observable
-  // citiesNames: string[] = ["חיפה","גבעתיים"]
-  // initCitis = () =>{
-  //   var srvCity  = new CityService();
-  //   srvCity.getCitiesNames("he",this.updateCitisNames);
-  // }
-  // @action 
-  // updateCitisNames = (res:any[]) => {
-  //   console.log("updateCitisNames")
-  //   if (res !== null && res.length >0 ) {
-  //     this.citiesNames  = res.map((x:any)=>x.name_he).filter(x => !!x);
-  //   }
-  // }
  
 // this belong to root store
   @observable
@@ -138,8 +45,6 @@ export default class FilterStore {
       i18n.changeLanguage(locale);
     }
   )
-
-
   //this belong to mapstore! need to move
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
@@ -153,7 +58,7 @@ export default class FilterStore {
 
 
   @observable
-  roadTypes: Array<IFilterChecker2> = [];
+  roadTypes: Array<IFilterChecker> = [];
   @action
   updateRoadType = (aType: number, val: boolean) => {
     this.roadTypes[aType].checked = val;
@@ -206,8 +111,6 @@ export default class FilterStore {
   dataFilterdByYears: any [] =[]
   @observable 
   isLoading : boolean =false;
-
-
 
   @action
   submitFilter = () => {
@@ -272,14 +175,7 @@ export default class FilterStore {
     console.log(filter)
     return filter;
   }
-  getfilterMatch = () =>{
-    let filter = `{"$and" : [`
-    filter += `{"accident_year":{"$gte":"${this.startYear}"}}`;
-    filter += `{"accident_year":{"$gte":"2015"}}`;
-    filter += this.getfilterCity();
-    filter += `]}`
-    return filter;
-  }
+
   getfilterForCityOnly = () =>{
     let filter = `{"$and" : [`
     filter += `{"accident_year":{"$gte":"2015"}}`;

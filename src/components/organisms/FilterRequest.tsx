@@ -122,42 +122,10 @@ const CardFilterWho = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="2" className="filterControls">
         <div>
-          <Form.Group controlId="exampleForm.ControlInjType">
-            <Form.Label className="filterLable">{t('Vehicle')}:</Form.Label>
-            <Form.Check inline label={t('all')} type={'checkbox'} id={`checkboxinjerd0`} checked={store.injTypes[0].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(0, e.target.checked); }} />
-            <Form.Check inline label={t('pedestrian')} type={'checkbox'} id={`checkboxinjerd1`} checked={store.injTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(1, e.target.checked); }} />
-            <Form.Check inline label={t('cyclist')} type={'checkbox'} id={`checkboxinjerd2`} checked={store.injTypes[2].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(2, e.target.checked); }} />
-            <Form.Check inline label={t('motorcycle')} type={'checkbox'} id={`checkboxinjerd3`} checked={store.injTypes[3].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(3, e.target.checked); }} />
-            <Form.Check inline label={t('wheels4+')} type={'checkbox'} id={`checkboxinjerd4`} checked={store.injTypes[4].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(4, e.target.checked); }} />
-            <Form.Check inline label={t('other')} type={'checkbox'} id={`checkboxinjerd5`} checked={store.injTypes[5].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateInjuerdType(5, e.target.checked); }} />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlGenderType">
-            <Form.Label className="filterLable">{t('Gender')}:</Form.Label>
-            <Form.Check inline label={t('female')} type={'checkbox'} id={`checkboxgendert0`} checked={store.genderTypes[0].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGenderType(0, e.target.checked); }} />
-            <Form.Check inline label={t('male')} type={'checkbox'} id={`checkboxgendert1`} checked={store.genderTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGenderType(1, e.target.checked); }} />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlAgeType">
-            <Form.Label className="filterLable">{t('Age')}:</Form.Label>
-            <Form.Check inline label={t('00-04')} type={'checkbox'} id={`checkboxage0`} checked={store.ageTypes[0].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(0, e.target.checked); }} />
-            <Form.Check inline label={t('05-09')} type={'checkbox'} id={`checkboxage1`} checked={store.ageTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(1, e.target.checked); }} />
-            <Form.Check inline label={t('10-14')} type={'checkbox'} id={`checkboxage2`} checked={store.ageTypes[2].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(2, e.target.checked); }} />
-            <Form.Check inline label={t('15-19')} type={'checkbox'} id={`checkboxage3`} checked={store.ageTypes[3].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(3, e.target.checked); }} />
-            <Form.Check inline label={t('20-29')} type={'checkbox'} id={`checkboxage4`} checked={store.ageTypes[4].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(4, e.target.checked); }} />
-            <Form.Check inline label={t('30-39')} type={'checkbox'} id={`checkboxage5`} checked={store.ageTypes[5].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(5, e.target.checked); }} />
-            <Form.Check inline label={t('40-49')} type={'checkbox'} id={`checkboxage6`} checked={store.ageTypes[6].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(6, e.target.checked); }} />
-            <Form.Check inline label={t('50-59')} type={'checkbox'} id={`checkboxage7`} checked={store.ageTypes[7].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(7, e.target.checked); }} />
-            <Form.Check inline label={t('60-69')} type={'checkbox'} id={`checkboxage8`} checked={store.ageTypes[8].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(8, e.target.checked); }} />
-            <Form.Check inline label={t('70-79')} type={'checkbox'} id={`checkboxage9`} checked={store.ageTypes[9].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(9, e.target.checked); }} />
-            <Form.Check inline label={t('80+')} type={'checkbox'} id={`checkboxage10`} checked={store.ageTypes[10].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(10, e.target.checked); }} />
-            <Form.Check inline label={t('unknown')} type={'checkbox'} id={`checkboxage11`} checked={store.ageTypes[11].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateAgeType(11, e.target.checked); }} />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlPopType">
-            <Form.Label className="filterLable">{t('Population')}:</Form.Label>
-            <Form.Check inline label={t('jews')} type={'checkbox'} id={`checkboxpop0`} checked={store.populationTypes[0].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updatePopulationType(0, e.target.checked); }} />
-            <Form.Check inline label={t('arabs')} type={'checkbox'} id={`checkboxpop1`} checked={store.populationTypes[1].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updatePopulationType(1, e.target.checked); }} />
-            <Form.Check inline label={t('immigrants')} type={'checkbox'} id={`checkboxpop2`} checked={store.populationTypes[2].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updatePopulationType(2, e.target.checked); }} />
-            <Form.Check inline label={t('unknown')} type={'checkbox'} id={`checkboxpop3`} checked={store.populationTypes[3].checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updatePopulationType(3, e.target.checked); }} />
-          </Form.Group>
+          <GroupCheckbox formName="exampleForm" groupName='Vehicle' dataArr={store.injTypes} onChange={store.updateInjuerdType}/>
+          <GroupCheckbox formName="exampleForm" groupName='Gender' dataArr={store.genderTypes} onChange={store.updateGenderType}/>
+          <GroupCheckbox formName="exampleForm" groupName='Age' dataArr={store.ageTypes} onChange={store.updateAgeType}/>
+          <GroupCheckbox formName="exampleForm" groupName='Population' dataArr={store.populationTypes} onChange={store.updatePopulationType}/>
         </div>
       </Accordion.Collapse>
     </Card>
