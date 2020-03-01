@@ -1,9 +1,9 @@
-import { observable, action ,reaction} from "mobx"
+import { observable, action, reaction } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
 import IFilterChecker from './FilterChecker'
 import * as FC from './FilterChecker'
-import AccidentService from "../services/Accident.Service"
+import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
 
@@ -17,12 +17,10 @@ export default class FilterStore {
     FC.initAgeTypes(this.ageTypes)
     FC.initPopulationTypes(this.populationTypes)
     FC.initRoadTypes(this.roadTypes);
-    
     this.appInitialized = false;
-
   }
-  
-  
+
+
   @observable
   city: string = "";
   @action
@@ -31,13 +29,13 @@ export default class FilterStore {
   }
   @observable
   cityResult: string = "";
- 
-// this belong to root store
+
+  // this belong to root store
   @observable
-  language : string = "he" 
+  language: string = "he"
   @action
   updateLanguage = (lang: string) => {
-    this.language = lang; 
+    this.language = lang;
   }
   reactionChangeLang = reaction(
     () => this.language,
@@ -110,11 +108,11 @@ export default class FilterStore {
   @observable
   markers: any[] = []
   @observable
-  dataByYears: any [] =[]
+  dataByYears: any[] = []
   @observable
-  dataFilterdByYears: any [] =[]
-  @observable 
-  isLoading : boolean =false;
+  dataFilterdByYears: any[] = []
+  @observable
+  isLoading: boolean = false;
 
   @action
   submitFilter = () => {
@@ -122,65 +120,67 @@ export default class FilterStore {
     let filter = this.getFilter();
     let trimCity: string = this.city;
     trimCity = trimCity.toString().trim();
-    if (trimCity !== ""){
-      var srvCity  = new CityService();
-      srvCity.getCityByNameHe(this.city,this.updateLocation);
+    if (trimCity !== "") {
+      var srvCity = new CityService();
+      srvCity.getCityByNameHe(this.city, this.updateLocation);
     }
-    var service = new AccidentService();
-    service.postFilter(filter, this.updateMarkers);
+    fetchFilter(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.markers = data;
+        }
+        this.isLoading = false;
+        this.cityResult = this.city;
+      })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
   }
 
   @action
-  submitGroupByYears = () =>{
+  submitGroupByYears = () => {
     let filtermatch = this.getfilterForCityOnly();
-    let filter = this.getFilterGroupByYears(filtermatch);
-    var service = new AccidentService();
-    service.postGroupby(filter, this.updateDataByYears)
+    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataByYears = data;
+      })
   }
-  submitfilterdGroupByYears = () =>{
+  @action
+  submitfilterdGroupByYears = () => {
     let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupByYears(filtermatch);
-    var service = new AccidentService();
-    service.postGroupby(filter, this.updateDataFilterdByYears)
+    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataFilterdByYears = data;
+      })
   }
-
-  getFilterGroupByYears=(filterMatch:string) =>{
-    let filter = "[" 
-     + '{"$match": '+ filterMatch +'}' 
-     + ',{"$group": { "_id": "$accident_year", "count": { "$sum": 1 }}}'
-     +',{"$sort": {"_id": 1}}'
-     +']'
-    console.log(filter)
+  getFilterGroupBy = (filterMatch: string, groupName: string) => {
+    let filter = "["
+      + '{"$match": ' + filterMatch + '}'
+      + ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}'
+      + ',{"$sort": {"_id": 1}}'
+      + ']'
     return filter;
-  }
-
-  @action
-  updateDataByYears =(arr: any[]) =>{
-    this.dataByYears= arr;
-  }
-  @action
-  updateDataFilterdByYears =(arr: any[]) =>{
-    this.dataFilterdByYears= arr;
   }
 
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
-    filter += this.getMultiplefilter("day_night_hebrew",this.dayNight);
+    filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getfilterCity();
-    filter += this.getMultiplefilter("road_type_hebrew",this.roadTypes);
+    filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
-    filter += this.getMultiplefilter("sex_hebrew",this.genderTypes);
-    filter += this.getMultiplefilter("age_group_hebrew",this.ageTypes);
-    filter += this.getMultiplefilter("population_type_hebrew",this.populationTypes);
+    filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
+    filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
+    filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
     filter += `]}`
     console.log(filter)
     return filter;
   }
 
-  getfilterForCityOnly = () =>{
+  getfilterForCityOnly = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":{"$gte":"2015"}}`;
     filter += this.getfilterCity();
@@ -238,19 +238,11 @@ export default class FilterStore {
   }
 
   @action
-  updateMarkers = (arrPoints: any[]) => {
-    if (arrPoints !== null) {
-      this.markers = arrPoints;
-    }
-    this.isLoading = false;
-    this.cityResult = this.city;
-  }
-  @action 
-  updateLocation = (res:any[]) => {
-    if (res !== null && res.length >0 ) {
-      let city = res[0]; 
+  updateLocation = (res: any[]) => {
+    if (res !== null && res.length > 0) {
+      let city = res[0];
       if (city.lat !== null && city.lon !== null)
-        this.mapCenter = new L.LatLng(city.lat,city.lon) ;
+        this.mapCenter = new L.LatLng(city.lat, city.lon);
     }
   }
 

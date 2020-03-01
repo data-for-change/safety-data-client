@@ -4,7 +4,7 @@ import {LeafletMouseEvent} from 'leaflet'
 import 'leaflet-css'
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import AccidentService from '../../services/Accident.Service'
+import {getAll} from '../../services/Accident.Service'
  
 
 
@@ -37,8 +37,8 @@ export default class HeatMap extends React.Component<{},IState> {
     console.log("heatmap")
   }
   getPoints =(e:object) =>{
-    var service = new  AccidentService ();
-    service.getAll(this.addPointsToMap);
+   
+    getAll(this.addPointsToMap);
   }
   addPoint = (e:LeafletMouseEvent) => {
     let newPoint:any = [e.latlng.lat,e.latlng.lng,e.originalEvent.timeStamp.toString()]
