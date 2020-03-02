@@ -46,7 +46,6 @@ export default class FilterStore {
   //this belong to mapstore! need to move
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
-
   //when
   @observable
   startYear: number = 2015;
@@ -111,6 +110,17 @@ export default class FilterStore {
   dataByYears: any[] = []
   @observable
   dataFilterdByYears: any[] = []
+  @observable 
+  groupeBy:string = "injured_type_hebrew"
+  @action
+  updateGroupby = (val: string) => {
+    this.groupeBy = val;
+    this.submitfilterdGroup(this.groupeBy);
+  }
+
+  @observable 
+  dataFilterd :any [] = []
+
   @observable
   isLoading: boolean = false;
 
@@ -134,6 +144,7 @@ export default class FilterStore {
       })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
+    this.submitfilterdGroup(this.groupeBy);
   }
 
   @action
@@ -156,6 +167,17 @@ export default class FilterStore {
           this.dataFilterdByYears = data;
       })
   }
+  @action
+  submitfilterdGroup = (groupName :string ) => {
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupBy(filtermatch, groupName);
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataFilterd= data;
+      })
+  }
+
   getFilterGroupBy = (filterMatch: string, groupName: string) => {
     let filter = "["
       + '{"$match": ' + filterMatch + '}'
@@ -217,7 +239,6 @@ export default class FilterStore {
     console.log(filter)
     return filter;
   }
-
   getfilterInjured = () => {
     let filter: string = '';
     if (this.injTypes[0].checked)

@@ -32,12 +32,12 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
           <div className="p-3 col-md-3"><FilterPanel activeCardKey={1}/></div>
           <div className="col-md-7"><Card><MapAccidents name={cityResult} /></Card></div>
           <div className="col-md-2">
-            <SmallCard title={t('AllCasualtiesInRegion')}>
+{/*             <SmallCard title={t('AllCasualtiesInRegion')}>
                 <GroupByTable type={0} />
             </SmallCard>
             <SmallCard title={t('CasualtiesByFilter')}>
                 <GroupByTable type={1} />
-            </SmallCard>
+            </SmallCard> */}
           </div>
         </div>
         <div className="row">
