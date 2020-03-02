@@ -7,12 +7,13 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
 interface IProps {
+    dataName?:string
   }
-export const GroupByTable:React.FC<IProps> = observer(({ children}) => {
+export const GroupByTable:React.FC<IProps> = observer(({dataName='Year', children}) => {
     const { t } = useTranslation();
     const columns = [{
         dataField: '_id',
-        text: t('Year'),
+        text: t(dataName),
     }, {
         dataField: 'count',
         text: t('Casualties'),

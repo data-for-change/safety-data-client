@@ -73,7 +73,6 @@ export const fetchFilter = async (filter: string): Promise<Array<any> | undefine
 export const fetchGroupBy = async (filter: string): Promise<Array<any> | undefined> => {
   // Default options are marked with *
   const url = "/api/v1/accident/agg"
-  console.log("fetchGroupBy")
   const response = await fetch(url, {
     method: 'POST', 
     mode: 'cors', // no-cors, *cors, same-origin

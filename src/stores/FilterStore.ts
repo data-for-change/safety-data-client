@@ -17,6 +17,12 @@ export default class FilterStore {
     FC.initAgeTypes(this.ageTypes)
     FC.initPopulationTypes(this.populationTypes)
     FC.initRoadTypes(this.roadTypes);
+    this.groupByDict["injured_type_hebrew"] = 'Type';
+    this.groupByDict["vehicle_vehicle_type_hebrew"] = 'Vehicle';
+    this.groupByDict["sex_hebrew"] = 'Gender';
+    this.groupByDict["day_in_week_hebrew"] = 'WeekDay';
+    this.groupByDict["road_type_hebrew"] = 'RoadType';
+    this.groupByDict["accident_type_hebrew"] = 'AccidentType';
     this.appInitialized = false;
   }
 
@@ -111,11 +117,15 @@ export default class FilterStore {
   @observable
   dataFilterdByYears: any[] = []
   @observable 
-  groupeBy:string = "injured_type_hebrew"
+  groupBy:string = "injured_type_hebrew"
+  @observable 
+  groupByText :string = "Type"
+  groupByDict: any ={}
   @action
   updateGroupby = (val: string) => {
-    this.groupeBy = val;
-    this.submitfilterdGroup(this.groupeBy);
+    this.groupBy = val;
+    this.groupByText = this.groupByDict[val];
+    this.submitfilterdGroup(this.groupBy);
   }
 
   @observable 
@@ -144,7 +154,7 @@ export default class FilterStore {
       })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
-    this.submitfilterdGroup(this.groupeBy);
+    this.submitfilterdGroup(this.groupBy);
   }
 
   @action
@@ -236,7 +246,6 @@ export default class FilterStore {
       filter += arrfilter.map((x: string) => `{"${filterKey}" : "${x}"}`).join(',')
       filter += `]}`
     }
-    console.log(filter)
     return filter;
   }
   getfilterInjured = () => {
