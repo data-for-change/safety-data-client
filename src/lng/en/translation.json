@@ -43,6 +43,7 @@
     ,"AllCasualtiesInRegion":"All Casualties In the Region"
     ,"CasualtiesByFilter":"Casualties by Filter"
     ,"Casualties":"Casualties"
+    ,"GroupBy" : "Group By"
     ,"Year":"Year"
     ,"Type" :"Type"
     ,"Street" :"Street"

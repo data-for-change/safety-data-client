@@ -28,16 +28,16 @@ export const AggregatesPanel: React.FC<IProps> = observer(() => {
                 <SmallCard title={t('CasualtiesByFilter')}>
                     <GroupByTable>{reactData2}</GroupByTable>
                 </SmallCard>
-                <SmallCard>
+                <SmallCard styleType={1}>
                     <GroupByTable>{reactData3}</GroupByTable>
                 </SmallCard>
                 <Form>
                     <Form.Group controlId="GrupForm.ControlSelectGroupBy">
                         <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
-                        <Form.Control as="select" defaultValue={store.startYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGroupby(e.target.value); }}>
-                            <option>injured_type_hebrew</option>
-                            <option>vehicle_vehicle_type_hebrew</option>
-                            <option>sex_hebrew</option>
+                        <Form.Control as="select" defaultValue={store.groupeBy} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGroupby(e.target.value); }}>
+                            <option value="injured_type_hebrew">{t('Type')}</option>
+                            <option value="vehicle_vehicle_type_hebrew">{t('Vehicle')}</option>
+                            <option value="sex_hebrew">{t('Gender')}</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>

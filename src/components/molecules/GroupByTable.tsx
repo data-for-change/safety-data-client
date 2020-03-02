@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next';
-import { toJS } from 'mobx'
 import { observer } from "mobx-react"
 // @ts-ignore
 import BootstrapTable from 'react-bootstrap-table-next';
