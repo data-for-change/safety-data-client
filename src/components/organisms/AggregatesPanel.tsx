@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig'
 import { GroupByTable } from '../molecules/GroupByTable'
 import { SmallCard } from '../molecules/SmallCard'
+import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
 
@@ -28,9 +29,7 @@ export const AggregatesPanel: React.FC<IProps> = observer(() => {
                 <SmallCard title={t('CasualtiesByFilter')}>
                     <GroupByTable>{reactData2}</GroupByTable>
                 </SmallCard>
-                <SmallCard styleType={1}>
-                    <GroupByTable dataName={store.groupByText}>{reactData3}</GroupByTable>
-                </SmallCard>
+                <div>
                 <Form>
                     <Form.Group controlId="GrupForm.ControlSelectGroupBy">
                         <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
@@ -44,6 +43,12 @@ export const AggregatesPanel: React.FC<IProps> = observer(() => {
                         </Form.Control>
                     </Form.Group>
                 </Form>
+                <SmallCard styleType={1}>
+                    <GroupByTable dataName={store.groupByText}>{reactData3}</GroupByTable>
+                </SmallCard>
+                </div>
+                <MyBarChart />
+      
             </div>
         )
     }
