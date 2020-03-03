@@ -3,38 +3,28 @@ import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 import { observer } from "mobx-react"
-import { toJS } from 'mobx'
-import { useStore } from '../../stores/storeConfig'
-
 import { useTranslation } from 'react-i18next';
 
-const data = [
-  {
-    name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
-  },
-  {
-    name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
-  },
-  {
-    name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
-  },
-];
+// const data = [
+//   { name: 'Page A', uv: 4000, pv: 2400, amt: 2400,},
+//   { name: 'Page B', uv: 3000, pv: 1398, amt: 2210,},
+//   { name: 'Page C', uv: 2000, pv: 9800, amt: 2290,},
+// ];
 
 interface IProps {
+  data :ReadonlyArray<object>
 }
 
-const MyBarChart:React.FC<IProps>=  observer(() => {
+const MyBarChart:React.FC<IProps>=  observer(({data}) => {
   const { t } = useTranslation();
-  const store = useStore();
-  let reactData1 = toJS(store.dataByYears)
   let colName = t('Casualties')
   return (
     <BarChart
-      width={500}
-      height={300}
-      data={reactData1}
+      width={400}
+      height={250}
+      data={data}
       margin={{
-        top: 5, right: 30, left: 20, bottom: 5,
+        top: 5, right: 5, left: 5, bottom: 5,
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />

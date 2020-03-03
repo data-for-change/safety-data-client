@@ -1,8 +1,7 @@
-import React, { ChangeEvent } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
-import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig'
 import { GroupByTable } from '../molecules/GroupByTable'
 import { SmallCard } from '../atoms/SmallCard'
@@ -34,8 +33,10 @@ export const AggregatesPanel: React.FC<IProps> = observer(() => {
                     <SelectGroupBy/>
                     <GroupByTable dataName={store.groupByText}>{reactData3}</GroupByTable>
                 </SmallCard>
-                <MyBarChart />
-      
+                <SmallCard>
+                <MyBarChart data={reactData1}></MyBarChart>
+                <MyBarChart data={reactData3}></MyBarChart>
+                </SmallCard>
             </div>
         )
     }
