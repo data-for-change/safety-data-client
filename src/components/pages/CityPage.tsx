@@ -1,10 +1,10 @@
 import React from 'react'
-import { CityTemplate } from '../templates/CityTemplate'
+import { TabsTemplate } from '../templates/TabsTemplate'
 
 interface IProps { }
 
 export const CityPage: React.FC<IProps> = () => {
   return (
-    <CityTemplate />
+    <TabsTemplate />
   )
 }
