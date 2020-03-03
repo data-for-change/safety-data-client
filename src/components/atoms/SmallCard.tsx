@@ -9,6 +9,7 @@ export const SmallCard: React.FC<IProps> = ({ title, styleType=0,children }) => 
     const style:any = [
         { width: '15rem'}
         ,{ width: '19rem'}
+        ,{ width: '25rem'}
     ];
     const styleb = {
         padding: "0.2rem"
