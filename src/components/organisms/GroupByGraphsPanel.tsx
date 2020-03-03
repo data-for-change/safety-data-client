@@ -25,13 +25,13 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     let reactData3 = toJS(store.dataFilterd)
     if (reactData1.length > 0) {
         return (
-            <div style={style}>
+            <div className="row" style={style}>
                 <SmallCard styleType={2} title={t('AllCasualtiesInRegion')}>
                     <MyBarChart data={reactData1} />
                 </SmallCard>
-                <SmallCard styleType={2}>
+                <SmallCard styleType={3}>
                     <SelectGroupBy />
-                    <MyBarChart data={reactData3}></MyBarChart>
+                    <MyBarChart data={reactData3} width={600} height={300}></MyBarChart>
                 </SmallCard>
             </div>
         )

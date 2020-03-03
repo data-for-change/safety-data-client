@@ -13,15 +13,17 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
   data :ReadonlyArray<object>
+  width? : number
+  height? : number
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=250}) => {
   const { t } = useTranslation();
   let colName = t('Casualties')
   return (
     <BarChart
-      width={400}
-      height={250}
+      width={width}
+      height={height}
       data={data}
       margin={{
         top: 5, right: 5, left: 5, bottom: 5,
