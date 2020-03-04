@@ -6,9 +6,6 @@ import { useStore } from '../../stores/storeConfig'
 import { GroupByTable } from '../molecules/GroupByTable'
 import { SmallCard } from '../atoms/SmallCard'
 import { SelectGroupBy } from '../atoms/SelectGroupBy'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
-import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
 
