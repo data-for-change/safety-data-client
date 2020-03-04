@@ -34,6 +34,12 @@ export default class FilterStore {
     this.city = name;
   }
   @observable
+  cities: string[] = [];
+  @action
+  updateCities = (names: string[]) => {
+    this.cities = names;
+  }
+  @observable
   cityResult: string = "";
 
   // this belong to root store

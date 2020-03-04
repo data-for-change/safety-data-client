@@ -7,11 +7,9 @@ import Col from 'react-bootstrap/Col'
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
-import { Typeahead } from 'react-bootstrap-typeahead';
-import 'react-bootstrap-typeahead/css/Typeahead.css';
-import citisNamesHeb from "../../assets/cities_names_heb.json";
-import { GroupCheckbox } from '../molecules/GroupCheckBox'
-import { useStore } from '../../stores/storeConfig'
+import { CitySelector } from '../molecules/CitySelector';
+import { GroupCheckbox } from '../molecules/GroupCheckBox';
+import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
   activeCardKey: number
@@ -90,23 +88,7 @@ const CardFilterWhere = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
-          <Form.Group controlId="exampleForm.ControlCity">
-            <Form.Label className="filterLable">{t('City')}:</Form.Label>
-            <Typeahead
-              id="typeaheadCity"
-              //defaultSelected={[store.city]}
-              onChange={(selected: string[]) => {
-                if (selected.length > 0)
-                  store.updateCity(selected[0]);
-                else
-                  store.updateCity("");
-              }}
-              options={citisNamesHeb}
-              //multiple
-              selected={[store.city]}
-              placeholder={t('ChooseCity')}
-            />
-          </Form.Group>
+          <CitySelector isMultiple={false}/>
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
