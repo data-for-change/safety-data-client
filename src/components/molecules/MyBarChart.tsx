@@ -17,10 +17,11 @@ interface IProps {
   height? : number
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=250}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=300}) => {
   const { t } = useTranslation();
   let colName = t('Casualties')
   return (
+    <div style={{direction: "ltr"}}>
     <BarChart
       width={width}
       height={height}
@@ -37,6 +38,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=250}) => 
       <Bar dataKey="count" name={colName} fill="#8884d8" />
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>
+    </div>
   );
 })
 
