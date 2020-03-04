@@ -5,6 +5,7 @@ import './App.css';
 import Card from 'react-bootstrap/Card';
 import { HomePage } from './components/pages/HomePage'
 import {CityPage} from './components/pages/CityPage'
+import {AboutPage} from './components/pages/AboutPage'
 import HeatMap from './components/pages/HeatMap';
 import Header from './components/templates/Headr';
 import Footer from './components/templates/Footer';
@@ -21,7 +22,7 @@ function App() {
           <div className="App">
           <Switch>
             <Route path="/about">
-              <About />
+              <AboutPage />
             </Route>
             <Route path="/heatmap">
                 <HeatMap />
@@ -41,14 +42,5 @@ function App() {
   );
 }
 
-function About() {
-  return (
-    <div className="heb">
-      <div>פרוייקט נתונים על תאונות דרכים</div>
-      <div>מקור הנתונים - פרוייקט Anyway של הסדנא לידע ציבורי.</div>
-      {/* <Footer /> */}
-    </div>
-  )
-}
 
 export default App;
