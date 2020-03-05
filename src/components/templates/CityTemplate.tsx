@@ -16,7 +16,7 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
   const { cityResult } = store;
   if (cityResult === "") {
     let cityName = useCityNamefromQuery();
-    store.updateCity(cityName);
+    store.updateCities(cityName);
     store.submitFilter();
   }
   return (
@@ -43,13 +43,13 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
 //get city name by query by url
 function useCityNamefromQuery() {
   let query = useQuery();
-  let res = "תל אביב -יפו";
+  let res = ["תל אביב -יפו"];
   let name = query.get("name")
   let found = false;
   if (name !== null)
     found = citisNamesHeb.includes(name);
   if (found) {
-    res = citisNamesHeb.find(element => element === name!)!;
+    res = [citisNamesHeb.find(element => element === name!)!];
   }
   return res;
 }

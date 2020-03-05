@@ -33,12 +33,14 @@ export default class FilterStore {
     this.injurySeverity[aType].checked = val;
   }
 
+  // @observable
+  // city: string = "";
+  // @action
+  // updateCity = (name: string) => {
+  //   this.city = name;
+  // }
   @observable
-  city: string = "";
-  @action
-  updateCity = (name: string) => {
-    this.city = name;
-  }
+  isMultipleCities: boolean = false;
   @observable
   cities: string[] = [];
   @action
@@ -150,11 +152,11 @@ export default class FilterStore {
   submitFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
-    let trimCity: string = this.city;
-    trimCity = trimCity.toString().trim();
-    if (trimCity !== "") {
+    if(this.cities.length >= 1)
+    {
+      let city = this.cities[0];
       var srvCity = new CityService();
-      srvCity.getCityByNameHe(this.city, this.updateLocation);
+      srvCity.getCityByNameHe(city, this.updateLocation);
     }
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
@@ -162,7 +164,10 @@ export default class FilterStore {
           this.markers = data;
         }
         this.isLoading = false;
-        this.cityResult = this.city;
+        if(this.cities.length >= 1)
+          this.cityResult = this.cities[0];
+        else
+          this.cityResult = "";  
       })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
@@ -234,9 +239,11 @@ export default class FilterStore {
   }
   getfilterCity = () => {
     let filter: string = '';
-    let trimCity: string = this.city;
-    trimCity = trimCity.toString().trim();
-    if (trimCity !== "") filter += `, {"accident_yishuv_name": "${trimCity}"}`;
+    if (this.cities.length >0) {
+      filter += `,{"$or": [`
+      filter += this.cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',')
+      filter += `]}`
+    }
     return filter;
   }
   getMultiplefilter = (filterKey: string, arr: Array<IFilterChecker>) => {

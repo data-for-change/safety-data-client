@@ -18,7 +18,8 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
   }
   const { t } = useTranslation();
   const store = useStore();
-  store.updateCity("");
+  store.isMultipleCities = true;
+  store.updateCities([]);
   store.submitFilter();
   return (
     <div className="App">

@@ -89,7 +89,7 @@ const CardFilterWhere = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
-          <CitySelector isMultiple={false}/>
+          <CitySelector isMultiple={store.isMultipleCities}/>
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
