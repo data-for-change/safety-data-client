@@ -26,6 +26,11 @@ export enum EnumVehiclePass {
     Others
 }
 
+export const initInjurySeverity = (arr: any) => {
+    arr.push(new FilterChecker('dead', true, ["הרוג"]));
+    arr.push(new FilterChecker('severly-injured', false, ["פצוע קשה"]));
+}
+
 export const initDayNight = (arr: any) => {
     arr.push(new FilterChecker('day', true, ["יום"]));
     arr.push(new FilterChecker('night', true, ["לילה"]));

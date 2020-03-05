@@ -26,6 +26,7 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhere />
         <CardFilterWho />
       </Accordion>
+       <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>

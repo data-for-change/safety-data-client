@@ -11,6 +11,7 @@ export default class FilterStore {
   appInitialized = false
   constructor() {
     // init app data
+    FC.initInjurySeverity(this.injurySeverity)
     FC.initDayNight(this.dayNight)
     FC.initInjTypes(this.injTypes);
     FC.initGenderTypes(this.genderTypes);
@@ -25,7 +26,12 @@ export default class FilterStore {
     this.groupByDict["accident_type_hebrew"] = 'AccidentType';
     this.appInitialized = false;
   }
-
+  @observable
+  injurySeverity: Array<IFilterChecker> = [];
+  @action
+  updateInjurySeverity = (aType: number, val: boolean) => {
+    this.injurySeverity[aType].checked = val;
+  }
 
   @observable
   city: string = "";
@@ -207,6 +213,7 @@ export default class FilterStore {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
     filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
+    filter += this.getMultiplefilter("injury_severity_hebrew", this.injurySeverity);
     filter += this.getfilterCity();
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
