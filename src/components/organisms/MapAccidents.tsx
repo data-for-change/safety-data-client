@@ -8,9 +8,8 @@ import AccidentsMarkers from '../molecules/AccidentsMarkers'
 import { useStore } from '../../stores/storeConfig'
 import 'leaflet-css'
 
-interface IProps {
-}
-const MapAccidents: FunctionComponent<IProps> = observer(({}) => {
+interface IProps {}
+const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const mapRef = useRef<any>();
   const store = useStore();
   const reactMapCenter = toJS(store.mapCenter);
