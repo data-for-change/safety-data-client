@@ -42,6 +42,10 @@ export const AccidentsTable = observer((props: IProps) => {
         text: t('Street'),
         sort: true
     }, {
+        dataField: 'injury_severity_hebrew',
+        text: t('Severity'),
+        sort: true
+    }, {
         dataField: 'injured_type_hebrew',
         text: t('Type'),
         sort: true
