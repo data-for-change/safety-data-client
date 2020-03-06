@@ -66,6 +66,10 @@ export default class FilterStore {
   //this belong to mapstore! need to move
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
+  @observable
+  isReadyToRenderMap: boolean = false;
+
+
   //when
   @observable
   startYear: number = 2015;

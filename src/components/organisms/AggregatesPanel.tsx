@@ -8,7 +8,6 @@ import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
 
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
 

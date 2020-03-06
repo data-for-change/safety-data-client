@@ -1,19 +1,18 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-//import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
-import {TabsTemplate} from './TabsTemplate'
+import Card from 'react-bootstrap/Card';
+import MapAccidents from '../organisms/MapAccidents'
 import { FilterPanel } from '../organisms/FilterPanel'
+import { AggregatesPanel } from '../organisms/AggregatesPanel'
+import { AccidentsTable } from '../organisms/AccidentsTable'
 import { useStore } from '../../stores/storeConfig'
 import citisNamesHeb from "../../assets/cities_names_heb.json";
 
-
 interface IProps { }
 
-export const CityTemplate: React.FC<IProps> = observer(() => {
-  //const { t } = useTranslation();
+export const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
   const store = useStore();
-  store.isMultipleCities = false;
   const { cityResult } = store;
   if (cityResult === "") {
     let cityName = useCityNamefromQuery();
@@ -26,8 +25,14 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
         <div className="row ">
           <div className="p-2 col-md-2"><FilterPanel /></div>
           <div className="col-md-10">
+            <div className="row">
               <h4>{cityResult}</h4>
-              <TabsTemplate defaultKey="map"/>
+            </div>
+            <AggregatesPanel />
+            <Card><MapAccidents /></Card>
+            <div className="row">
+              <div className="col-auto"><AccidentsTable /></div>
+            </div>
           </div>
         </div>
       </div>
