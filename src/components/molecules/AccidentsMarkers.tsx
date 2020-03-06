@@ -7,26 +7,30 @@ import { Marker, Popup } from 'react-leaflet'
 
 import 'leaflet-css'
 import redMarker from '../../assets/marker-icon-2x-red.png'
-import orangeMarker from '../../assets/marker-icon-2x-orange.png'
+import orangeMarker from '../../assets/marker-icon-2x-orange2.png'
 import shadoMarker from '../../assets/marker-shadow.png'
 import { toJS } from 'mobx'
+
+const lIconSizes = {iconSize:[25, 41], iconAnchor:[12, 41],popupAnchor:[1, -34], shadowSize:[41, 41]} 
+const mIconSizes = {iconSize:[19, 31], iconAnchor:[9, 31],popupAnchor:[1, -25], shadowSize:[31, 31]} 
+const iconSize= lIconSizes;
 
 const redIcon = new L.Icon({
     iconUrl: redMarker,
     shadowUrl: shadoMarker,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: L.point(iconSize.iconSize[0],iconSize.iconSize[1]),
+    iconAnchor: L.point(iconSize.iconAnchor[0],iconSize.iconAnchor[1]),
+    popupAnchor: L.point(iconSize.popupAnchor[0],iconSize.popupAnchor[1]),
+    shadowSize:  L.point(iconSize.shadowSize[0],iconSize.shadowSize[1]),
 });
 
 const orangeIcon = new L.Icon({
     iconUrl: orangeMarker,
     shadowUrl: shadoMarker,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    iconSize: L.point(iconSize.iconSize[0],iconSize.iconSize[1]),
+    iconAnchor: L.point(iconSize.iconAnchor[0],iconSize.iconAnchor[1]),
+    popupAnchor: L.point(iconSize.popupAnchor[0],iconSize.popupAnchor[1]),
+    shadowSize:  L.point(iconSize.shadowSize[0],iconSize.shadowSize[1]),
 });
 
 

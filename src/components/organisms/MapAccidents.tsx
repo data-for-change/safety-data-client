@@ -13,7 +13,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const mapRef = useRef<any>();
   const store = useStore();
   const reactMapCenter = toJS(store.mapCenter);
-  const WRAPPER_STYLES = { height: '500px', width: '100vw', maxWidth: '100%' };
+  const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
   const didMountRef = useRef(false) 
   useEffect(() => {
     if (didMountRef.current) { 
