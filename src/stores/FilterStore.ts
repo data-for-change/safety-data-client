@@ -30,22 +30,7 @@ export default class FilterStore {
     this.injurySeverity[aType].checked = val;
   }
 
-  // @observable
-  // city: string = "";
-  // @action
-  // updateCity = (name: string) => {
-  //   this.city = name;
-  // }
-  @observable
-  isMultipleCities: boolean = false;
-  @observable
-  cities: string[] = [];
-  @action
-  updateCities = (names: string[]) => {
-    this.cities = names;
-  }
-  @observable
-  cityResult: string = "";
+  //////////////////////////////////////////////
 
   // this belong to root store
   @observable
@@ -66,8 +51,41 @@ export default class FilterStore {
   @observable
   isReadyToRenderMap: boolean = false;
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  //where
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  isMultipleCities: boolean = false;
+  @observable
+  cities: string[] = [];
+  @action
+  updateCities = (names: string[]) => {
+    this.cities = names;
+    if (this.cities.length === 0)
+      {
+        this.streets=[];
+      }
+  }
+  @observable
+  cityResult: string = "";
 
+  @observable
+  streets: string[] = [];
+  @action
+  updateStreets = (names: string) => {
+    this.streets = names.split(',');
+  }
+
+  @observable
+  roadTypes: Array<IFilterChecker> = [];
+  @action
+  updateRoadType = (aType: number, val: boolean) => {
+    this.roadTypes[aType].checked = val;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   //when
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   startYear: number = 2015;
   @observable
@@ -79,12 +97,9 @@ export default class FilterStore {
     this.dayNight[aType].checked = val;
   }
 
-  @observable
-  roadTypes: Array<IFilterChecker> = [];
-  @action
-  updateRoadType = (aType: number, val: boolean) => {
-    this.roadTypes[aType].checked = val;
-  }
+  //////////////////////////////////////////////
+  // who
+  //////////////////////////////////////////////
 
   @observable
   genderTypes: Array<IFilterChecker> = [];
@@ -125,51 +140,55 @@ export default class FilterStore {
     }
   }
 
+  //////////////////////////////////////////////
+  // data
+  //////////////////////////////////////////////
   @observable
   markers: any[] = []
   @observable
   dataByYears: any[] = []
   @observable
   dataFilterdByYears: any[] = []
+  @observable
+  dataFilterd: any[] = []
 
-  @observable 
-  groupByDict: any ={}
-  initGroupByDict = (dictGroupBy:any) =>{
-    dictGroupBy["Severity"] = new GroupBy('Severity',"injury_severity_hebrew")
-    dictGroupBy["Type"] = new GroupBy ('Type',"injured_type_hebrew");
-    dictGroupBy["Vehicle"] = new GroupBy ('Vehicle',"vehicle_vehicle_type_hebrew");
-    dictGroupBy["Gender"] =new GroupBy ('Gender',"sex_hebrew");
-    dictGroupBy["Age"] = new GroupBy ('Age',"age_group_hebrew");
-    dictGroupBy["DayNight"] =new GroupBy ('DayNight',"day_night_hebrew");
-    dictGroupBy["WeekDay"] = new GroupBy ('WeekDay',"day_in_week_hebrew");
-    dictGroupBy["RoadType"] = new GroupBy ('RoadType',"road_type_hebrew",);
-    dictGroupBy["City"] = new GroupBy ('City',"accident_yishuv_name",10);
-    dictGroupBy["Street"] =new GroupBy ('Street',"street1_hebrew", 10);
-    dictGroupBy["AccidentType"] = new GroupBy ('AccidentType',"accident_type_hebrew");
-  }
-  @observable 
-  groupBy : GroupBy;
-  // groupBy:string = "injured_type_hebrew"
-  // @observable 
-  // groupByText :string = "Type"
- 
+  @observable
+  groupBy: GroupBy;
   @action
   updateGroupby = (key: string) => {
     this.groupBy = this.groupByDict[key];
   }
 
-  @observable 
-  dataFilterd :any [] = []
+  @observable
+  groupByDict: any = {}
+
+  initGroupByDict = (dictGroupBy: any) => {
+    dictGroupBy["Severity"] = new GroupBy('Severity', "injury_severity_hebrew")
+    dictGroupBy["Type"] = new GroupBy('Type', "injured_type_hebrew");
+    dictGroupBy["Vehicle"] = new GroupBy('Vehicle', "vehicle_vehicle_type_hebrew");
+    dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
+    dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
+    dictGroupBy["DayNight"] = new GroupBy('DayNight', "day_night_hebrew");
+    dictGroupBy["WeekDay"] = new GroupBy('WeekDay', "day_in_week_hebrew");
+    dictGroupBy["RoadType"] = new GroupBy('RoadType', "road_type_hebrew");
+    dictGroupBy["City"] = new GroupBy('City', "accident_yishuv_name", 10);
+    dictGroupBy["Street"] = new GroupBy('Street', "street1_hebrew", 10);
+    dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
+  }
+
+
+
 
   @observable
   isLoading: boolean = false;
-
+  //////////////////////////////////////////////
+  // filter actions
+  //////////////////////////////////////////////
   @action
   submitFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
-    if(this.cities.length >= 1)
-    {
+    if (this.cities.length >= 1) {
       let city = this.cities[0];
       var srvCity = new CityService();
       srvCity.getCityByNameHe(city, this.updateLocation);
@@ -180,10 +199,10 @@ export default class FilterStore {
           this.markers = data;
         }
         this.isLoading = false;
-        if(this.cities.length >= 1)
+        if (this.cities.length >= 1)
           this.cityResult = this.cities[0];
         else
-          this.cityResult = "";  
+          this.cityResult = "";
       })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
@@ -211,28 +230,27 @@ export default class FilterStore {
       })
   }
   @action
-  submitfilterdGroup = (aGroupBy :GroupBy ) => {
+  submitfilterdGroup = (aGroupBy: GroupBy) => {
     let filtermatch = this.getFilter();
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, aGroupBy.limit);
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
-          this.dataFilterd= data;
+          this.dataFilterd = data;
       })
   }
 
-  getFilterGroupBy = (filterMatch: string, groupName: string, limit: number =0  ) => {
+  getFilterGroupBy = (filterMatch: string, groupName: string, limit: number = 0) => {
     let filter = "["
       + '{"$match": ' + filterMatch + '}'
       + ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
-      if (limit ===0 )
-        filter+= ',{"$sort": {"_id": 1}}'
-      else
-      {
-        filter += ',{"$sort": {"count": -1}}'
-        + ',{"$limit": '+limit+'}'
-      }
-      filter += ']'
+    if (limit === 0)
+      filter += ',{"$sort": {"_id": 1}}'
+    else {
+      filter += ',{"$sort": {"count": -1}}'
+        + ',{"$limit": ' + limit + '}'
+    }
+    filter += ']'
     return filter;
   }
 
@@ -242,6 +260,7 @@ export default class FilterStore {
     filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getMultiplefilter("injury_severity_hebrew", this.injurySeverity);
     filter += this.getfilterCity();
+    filter += this.getFilterStreets();
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
@@ -261,9 +280,20 @@ export default class FilterStore {
   }
   getfilterCity = () => {
     let filter: string = '';
-    if (this.cities.length >0) {
+    if (this.cities.length > 0) {
       filter += `,{"$or": [`
       filter += this.cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',')
+      filter += `]}`
+    }
+    return filter;
+  }
+  getFilterStreets = () =>{
+    let filter: string = '';
+    if (this.streets.length >0){
+      filter += `,{"$or": [`
+      filter += this.streets.map((x: string) => `{"street1_hebrew" : "${x.trim()}"}`).join(',')
+      filter += `,`
+      filter += this.streets.map((x: string) => `{"street2_hebrew" : "${x.trim()}"}`).join(',')
       filter += `]}`
     }
     return filter;

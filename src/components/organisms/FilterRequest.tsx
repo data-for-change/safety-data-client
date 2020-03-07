@@ -8,6 +8,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { CitySelector } from '../molecules/CitySelector';
+import {StreetSelector} from '../molecules/StreetSelector'
 import { GroupCheckbox } from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 
@@ -90,6 +91,7 @@ const CardFilterWhere = observer(() => {
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
           <CitySelector isMultiple={store.isMultipleCities}/>
+          <StreetSelector/>
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
