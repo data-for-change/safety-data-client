@@ -5,14 +5,16 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig'
 
 
-interface IProps { }
+interface IProps { 
+    id: string 
+}
 
-export const SelectGroupBy: React.FC<IProps> = observer(() => {
+export const SelectGroupBy: React.FC<IProps> = observer((id) => {
     const { t } = useTranslation();
     const store = useStore();
     return (
         <Form className="form-inline">
-            <Form.Group controlId="GrupForm.ControlSelectGroupBy">
+            <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
                 <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
                 <Form.Control as="select" defaultValue={store.groupBy.text} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGroupby(e.target.value); store.submitfilterdGroup(store.groupBy)}}>
