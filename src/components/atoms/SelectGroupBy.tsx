@@ -15,12 +15,10 @@ export const SelectGroupBy: React.FC<IProps> = observer(() => {
             <Form.Group controlId="GrupForm.ControlSelectGroupBy">
                 <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
                 <Form.Control as="select" defaultValue={store.groupBy} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.updateGroupby(e.target.value); }}>
-                    <option value="injured_type_hebrew">{t('Type')}</option>
-                    <option value="vehicle_vehicle_type_hebrew">{t('Vehicle')}</option>
-                    <option value="sex_hebrew">{t('Gender')}</option>
-                    <option value="day_in_week_hebrew">{t('WeekDay')}</option>
-                    <option value="road_type_hebrew">{t('RoadType')}</option>
-                    <option value="accident_type_hebrew">{t('AccidentType')}</option>
+                    { Object.entries(store.groupByDict).map(([key,x]:any[])=>{
+                        console.log(x)
+                         return (<option value={x.text}>{t(x.text)}</option>)
+                    })}
                 </Form.Control>
             </Form.Group>
         </Form>
