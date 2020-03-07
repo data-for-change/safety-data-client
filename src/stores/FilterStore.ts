@@ -3,6 +3,7 @@ import i18n from "../i18n";
 import L from 'leaflet'
 import IFilterChecker from './FilterChecker'
 import * as FC from './FilterChecker'
+import GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
@@ -19,7 +20,7 @@ export default class FilterStore {
     FC.initPopulationTypes(this.populationTypes)
     FC.initRoadTypes(this.roadTypes);
     this.initGroupByDict(this.groupByDict);
-  
+    this.groupBy = this.groupByDict["Type"];
     this.appInitialized = false;
   }
   @observable
@@ -132,28 +133,29 @@ export default class FilterStore {
   dataFilterdByYears: any[] = []
 
   @observable 
-  groupBy:string = "injured_type_hebrew"
-  @observable 
-  groupByText :string = "Type"
   groupByDict: any ={}
   initGroupByDict = (dictGroupBy:any) =>{
-    dictGroupBy["Type"] = {text:'Type',value:"injured_type_hebrew",  limit:0};
-    dictGroupBy["Vehicle"] = {text:'Vehicle',value:"vehicle_vehicle_type_hebrew", limit:0};
-    dictGroupBy["Gender"] = {text:'Gender',value:"sex_hebrew", limit:0};
-    dictGroupBy["Age"] = {text:'Age',value:"age_group_hebrew", limit:0};
-    dictGroupBy["DayNight"] = {text:'DayNight',value:"day_night_hebrew", limit:0};
-    dictGroupBy["WeekDay"] = {text:'WeekDay',value:"day_in_week_hebrew", limit:0};
-    dictGroupBy["RoadType"] = {text:'RoadType',value:"road_type_hebrew", limit:0};
-    dictGroupBy["City"] = {text:'City', value:"accident_yishuv_name", limit:10};
-    dictGroupBy["Street"] = {text:'Street',value:"street1_hebrew", limit:10};
-    dictGroupBy["AccidentType"] = {text:'AccidentType',value:"accident_type_hebrew", limit:0};
+    dictGroupBy["Severity"] = new GroupBy('Severity',"injury_severity_hebrew")
+    dictGroupBy["Type"] = new GroupBy ('Type',"injured_type_hebrew");
+    dictGroupBy["Vehicle"] = new GroupBy ('Vehicle',"vehicle_vehicle_type_hebrew");
+    dictGroupBy["Gender"] =new GroupBy ('Gender',"sex_hebrew");
+    dictGroupBy["Age"] = new GroupBy ('Age',"age_group_hebrew");
+    dictGroupBy["DayNight"] =new GroupBy ('DayNight',"day_night_hebrew");
+    dictGroupBy["WeekDay"] = new GroupBy ('WeekDay',"day_in_week_hebrew");
+    dictGroupBy["RoadType"] = new GroupBy ('RoadType',"road_type_hebrew",);
+    dictGroupBy["City"] = new GroupBy ('City',"accident_yishuv_name",10);
+    dictGroupBy["Street"] =new GroupBy ('Street',"street1_hebrew", 10);
+    dictGroupBy["AccidentType"] = new GroupBy ('AccidentType',"accident_type_hebrew");
   }
+  @observable 
+  groupBy : GroupBy;
+  // groupBy:string = "injured_type_hebrew"
+  // @observable 
+  // groupByText :string = "Type"
+ 
   @action
   updateGroupby = (key: string) => {
-    let aGroup = this.groupByDict[key];
-    this.groupBy = aGroup.value
-    this.groupByText = aGroup.text;
-    this.submitfilterdGroup(this.groupBy,aGroup.limit);
+    this.groupBy = this.groupByDict[key];
   }
 
   @observable 
@@ -185,7 +187,7 @@ export default class FilterStore {
       })
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
-    this.submitfilterdGroup(this.groupBy, 0);
+    this.submitfilterdGroup(this.groupBy);
   }
 
   @action
@@ -209,9 +211,9 @@ export default class FilterStore {
       })
   }
   @action
-  submitfilterdGroup = (groupName :string , limit:number ) => {
+  submitfilterdGroup = (aGroupBy :GroupBy ) => {
     let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, groupName, limit);
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, aGroupBy.limit);
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
@@ -317,6 +319,8 @@ export default class FilterStore {
   }
 
 }
+
+
 
 
 
