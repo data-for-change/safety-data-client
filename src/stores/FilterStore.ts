@@ -151,6 +151,9 @@ export default class FilterStore {
   dataFilterdByYears: any[] = []
   @observable
   dataFilterd: any[] = []
+  @observable
+  dataGroupby2: any[] = []
+  
 
   @observable
   groupBy: GroupBy;
@@ -208,6 +211,7 @@ export default class FilterStore {
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
+    this.submitfilterdGroup2(this.groupBy,"sex_hebrew");
   }
 
   @action
@@ -233,18 +237,34 @@ export default class FilterStore {
   @action
   submitfilterdGroup = (aGroupBy: GroupBy) => {
     let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, aGroupBy.limit);
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,"", aGroupBy.limit);
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
           this.dataFilterd = data;
       })
   }
+  submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2:string ) => {
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,groupName2, aGroupBy.limit);
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataGroupby2 = data;
+          console.log(data)
+      })
+  }
 
-  getFilterGroupBy = (filterMatch: string, groupName: string, limit: number = 0) => {
+  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2:string ="", limit: number = 0) => {
     let filter = "["
-      + '{"$match": ' + filterMatch + '}'
-      + ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
+      + '{"$match": ' + filterMatch + '}';
+    if (groupName2 === "")
+      filter +=  ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
+    else
+      {
+        let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
+        filter +=  ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
+      }  
     if (limit === 0)
       filter += ',{"$sort": {"_id": 1}}'
     else {
@@ -252,6 +272,7 @@ export default class FilterStore {
         + ',{"$limit": ' + limit + '}'
     }
     filter += ']'
+    console.log(filter)
     return filter;
   }
 
