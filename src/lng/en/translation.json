@@ -45,7 +45,16 @@
     ,"arabs":"arabs"
     ,"immigrants":"immigrants"
     ,"unknown":"unknown"
-    ,"What" :"What"
+    ,"What" :"What",
+    "AccidentType": "Accident Type",
+    "hit-ped": "hit pedestrian",
+    "hit-front-side": "front-side",
+    "hit-front-front": "front-front",
+    "hit-front-rear": "front-rear",
+    "hit-side-side": "side-side",
+    "hit-obstacle": "hit obstacle",
+    "hit-turning-over": "turning over",
+    "hit-slip": "slip"
     ,"Submit" :"Submit"
     ,"Loading…" :"Loading…"
     ,"AllCasualtiesInRegion":"Casualties In the Region"
@@ -56,7 +65,6 @@
     ,"Year":"Year"
     ,"Type" :"Type"
     ,"Street" :"Street"
-    ,"AccidentType":"AccidentType"
     ,"Found" : "Found"
     ,"NoResultsFound" :"No results found"
     ,"export-to-csv":"Export to CSV"

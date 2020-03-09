@@ -8,7 +8,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { CitySelector } from '../molecules/CitySelector';
-import {StreetSelector} from '../molecules/StreetSelector'
+import { StreetSelector } from '../molecules/StreetSelector'
 import { GroupCheckbox } from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 
@@ -26,8 +26,9 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhen />
         <CardFilterWhere />
         <CardFilterWho />
+        <CardFilterWhat />
       </Accordion>
-       <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
+      <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
@@ -90,8 +91,8 @@ const CardFilterWhere = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
-          <CitySelector isMultiple={store.isMultipleCities}/>
-          <StreetSelector/>
+          <CitySelector isMultiple={store.isMultipleCities} />
+          <StreetSelector />
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
@@ -119,3 +120,40 @@ const CardFilterWho = observer(() => {
     </Card>
   );
 })
+const CardFilterWhat = observer(() => {
+  const store = useStore();
+  const { t } = useTranslation();
+  return (
+    <Card>
+      <Card.Header>
+        <Accordion.Toggle as={Button} variant="link" eventKey="3">
+          {t('What')}
+        </Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey="3" className="filterControls">
+        <div>
+          <GroupCheckbox formName="exampleForm" groupName='AccidentType' dataArr={store.accidentType} onChange={store.updateAccidentType} />
+        </div>
+      </Accordion.Collapse>
+    </Card>
+  );
+})
+
+// const CardFilterWhatVehicle = observer(() => {
+//   const store = useStore();
+//   const { t } = useTranslation();
+//   return (
+//     <Card>
+//       <Card.Header>
+//         <Accordion.Toggle as={Button} variant="link" eventKey="4">
+//           {t('What')}
+//         </Accordion.Toggle>
+//       </Card.Header>
+//       <Accordion.Collapse eventKey="4" className="filterControls">
+//         <div>
+//           <GroupCheckbox formName="exampleForm" groupName='AccidentType' dataArr={store.accidentType} onChange={store.updateAccidentType} />
+//         </div>
+//       </Accordion.Collapse>
+//     </Card>
+//   );
+// })

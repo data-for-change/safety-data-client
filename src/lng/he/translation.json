@@ -45,7 +45,16 @@
     ,"arabs":"ערבים"
     ,"immigrants":"מהגרים"
     ,"unknown":"לא ידוע"
-    ,"What" :"מה"
+    ,"What" :"מה",
+    "AccidentType": "סוג תאונה",
+    "hit-ped": "פגיעה בהולך רגל",
+    "hit-front-side": "חזית-צד",
+    "hit-front-front": "חזית-חזית",
+    "hit-front-rear": "חזית-אחור",
+    "hit-side-side": "צד-צד",
+    "hit-obstacle": "פגיעה בעצם",
+    "hit-turning-over": "התהפכות",
+    "hit-slip": "החלקה"
     ,"Submit" :"סנן"
     ,"Loading…" :"טוען..."
     ,"AllCasualtiesInRegion":"נפגעים באזור"
@@ -56,7 +65,6 @@
     ,"Year":"שנה"
     ,"Type" :"סוג"
     ,"Street" :"רחוב"
-    ,"AccidentType":"סוג תאונה"
     ,"Found" : "נמצאו"
     ,"NoResultsFound" :"לא נמצאו תוצאות"
     ,"export-to-csv":"יצוא לקובץ CSV"

@@ -19,6 +19,7 @@ export default class FilterStore {
     FC.initAgeTypes(this.ageTypes)
     FC.initPopulationTypes(this.populationTypes)
     FC.initRoadTypes(this.roadTypes);
+    FC.initAccidentType(this.accidentType)
     this.initGroupByDict(this.groupByDict);
     this.groupBy = this.groupByDict["Type"];
     this.appInitialized = false;
@@ -139,7 +140,16 @@ export default class FilterStore {
       this.injTypes[aType].checked = val;
     }
   }
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // what
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+  @observable
+  accidentType: Array<IFilterChecker> = [];
+  @action
+  updateAccidentType = (aType: number, val: boolean) => {
+    this.accidentType[aType].checked = val;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // data
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,15 +289,16 @@ export default class FilterStore {
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
-    filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getMultiplefilter("injury_severity_hebrew", this.injurySeverity);
     filter += this.getfilterCity();
+    filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
     filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
     filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
+    filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
     filter += `]}`
     console.log(filter)
     return filter;
