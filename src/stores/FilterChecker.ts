@@ -76,3 +76,16 @@ export const initRoadTypes = (arr: any) => {
     arr.push(new FilterChecker('non-urban-junction', true, ["לא-עירונית בצומת"]));
     arr.push(new FilterChecker('non-urban-road', true, ["לא-עירונית לא בצומת"]));
 }
+
+export const initAccidentType = (arr: any) => {
+    arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));
+    arr.push(new FilterChecker('hit-front-side', true, ["התנגשות חזית בצד"]));
+    arr.push(new FilterChecker('hit-front-front', true, ["התנגשות חזית בחזית"]));
+    arr.push(new FilterChecker('hit-front-rear', true, ["התנגשות חזית באחור"]));
+    arr.push(new FilterChecker('hit-side-side', true, ["התנגשות צד בצד"]));
+    arr.push(new FilterChecker('hit-obstacle', true, ["התנגשות עם עצם דומם"]));
+    arr.push(new FilterChecker('hit-turning-over', true, ["התהפכות"]));
+    arr.push(new FilterChecker('hit-slip', true, ["החלקה"]));
+}
+
+
