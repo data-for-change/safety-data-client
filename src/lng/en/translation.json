@@ -1,85 +1,90 @@
 {
-    "test": "Test translation"
-    ,"Home":"Home"
-    ,"HeatMap" :"HeatMap"
-    ,"Cities": "Cities"
-    ,"About": "About"
-    ,"Israel": "Israel"
-    ,"Charts" : "Charts"
-    ,"Groups": "Groups"
-    ,"Map": "Map"
-    ,"Table": "Table"
-    ,"Filter Options": "Filter Options"
-    ,"When": "When"
-    ,"FromYear":"From Year"
-    ,"ToYear":"To Year"
-    ,"DayNight": "Day\\Night"
-    ,"day": "Day"
-    ,"night": "Night"
-    ,"Where" : "Where"
-    ,"RoadType":"Road Type"
-    ,"urban-junction": "Urban junction"
-    ,"urban-road": "Urban road"
-    ,"non-urban-junction": "Non-urban junction"
-    ,"non-urban-road" : "Non-urban road"
-    ,"City": "City"
-    ,"Street" :"Street"
-    ,"ChooseCity":"Choose a City..."
-    ,"RoadSegment" :"Road Segment"
-    ,"Who" :"Who"
-    ,"Severity" :"Severity"
-    ,"dead" : "Dead"
-    ,"severly-injured" : "Severly"
-    ,"Vehicle": "Vehicle"
-    ,"all" :"All"
-    ,"pedestrian" : "Pedestrian"
-    ,"cyclist":"Cyclist"
-    ,"motorcycle": "Motorcycle"
-    ,"Wheels4+" : "4+ Wheels"
-    ,"other": "Other"
-    ,"Gender": "Gender"
-    ,"female" :"Female"
-    ,"male" :"Male"
-    ,"Age": "Age"
-    ,"Population": "Population"
-    ,"jews":"jews"
-    ,"arabs":"arabs"
-    ,"immigrants":"immigrants"
-    ,"others": "others"
-    ,"unknown":"unknown"
-    ,"What" :"What",
-    "AccidentType": "Accident Type",
-    "hit-ped": "hit pedestrian",
-    "hit-front-side": "front-side",
-    "hit-front-front": "front-front",
-    "hit-front-rear": "front-rear",
-    "hit-side-side": "side-side",
-    "hit-obstacle": "hit obstacle",
-    "hit-turning-over": "turning over",
-    "hit-slip": "slip"
-    ,"WhatVehicle" : "What Vehicle"
-    ,"mobilityscooter": "mobility scooter"
-    ,"bicycle": "bicycle"
-    ,"e-scooter": "e-scooter"
-    ,"e-bike":"e-bike"
-    ,"car" : "car"
-    ,"taxi": "taxi"
-    ,"bus": "bus"
-    ,"tranzit" : "tranzit"
-    ,"tender" : "tender"
-    ,"truck" : "truck"
-    ,"tractor" : "tractor"
-    ,"train" : "train"
-    ,"Submit" :"Submit"
-    ,"Loading…" :"Loading…"
-    ,"AllCasualtiesInRegion":"Casualties In the Region"
-    ,"CasualtiesByFilter":"Casualties by Filter"
-    ,"Casualties":"Casualties"
-    ,"GroupBy" : "Group By"
-    ,"WeekDay" :"Week Day"
-    ,"Year":"Year"
-    ,"Type" :"Type"
-    ,"Found" : "Found"
-    ,"NoResultsFound" :"No results found"
-    ,"export-to-csv":"Export to CSV"
-  }
+  "test": "Test translation",
+  "Home": "Home",
+  "HeatMap": "HeatMap",
+  "Cities": "Cities",
+  "About": "About",
+  "Israel": "Israel",
+  "Charts": "Charts",
+  "Groups": "Groups",
+  "Map": "Map",
+  "Table": "Table",
+  "Filter Options": "Filter Options",
+  "When": "When",
+  "FromYear": "From Year",
+  "ToYear": "To Year",
+  "DayNight": "Day\\Night",
+  "day": "Day",
+  "night": "Night",
+  "Where": "Where",
+  "RoadType": "Road Type",
+  "urban-junction": "Urban junction",
+  "urban-road": "Urban road",
+  "non-urban-junction": "Non-urban junction",
+  "non-urban-road": "Non-urban road",
+  "City": "City",
+  "Street": "Street",
+  "ChooseCity": "Choose a City...",
+  "RoadSegment": "Road Segment",
+  "Who": "Who",
+  "Severity": "Severity",
+  "dead": "Dead",
+  "severly-injured": "Severly",
+  "Vehicle": "Vehicle",
+  "all": "All",
+  "pedestrian": "Pedestrian",
+  "cyclist": "Cyclist",
+  "motorcycle": "Motorcycle",
+  "Wheels4+": "4+ Wheels",
+  "other": "Other",
+  "Gender": "Gender",
+  "female": "Female",
+  "male": "Male",
+  "Age": "Age",
+  "Population": "Population",
+  "jews": "jews",
+  "arabs": "arabs",
+  "immigrants": "immigrants",
+  "others": "others",
+  "unknown": "unknown",
+  "What": "What",
+  "AccidentType": "Accident Type",
+  "hit-ped": "hit pedestrian",
+  "hit-front-side": "front-side",
+  "hit-front-front": "front-front",
+  "hit-front-rear": "front-rear",
+  "hit-side-side": "side-side",
+  "hit-obstacle": "hit obstacle",
+  "hit-turning-over": "turning over",
+  "hit-slip": "slip",
+  "WhatVehicle": "What Vehicle",
+  "mobilityscooter": "mobility scooter",
+  "bicycle": "bicycle",
+  "e-scooter": "e-scooter",
+  "e-bike": "e-bike",
+  "car": "car",
+  "taxi": "taxi",
+  "bus": "bus",
+  "tranzit": "tranzit",
+  "tender": "tender",
+  "truck": "truck",
+  "tractor": "tractor",
+  "train": "train",
+  "WhatRoad" :"Road",
+  "SpeedLimit": "Speed Limit",
+  "RoadWidth": "Road Width",
+  "MultiLane" : "Multi Lane",
+  "OneLane" : "One Lane",
+  "Submit": "Submit",
+  "Loading…": "Loading…",
+  "AllCasualtiesInRegion": "Casualties In the Region",
+  "CasualtiesByFilter": "Casualties by Filter",
+  "Casualties": "Casualties",
+  "GroupBy": "Group By",
+  "WeekDay": "Week Day",
+  "Year": "Year",
+  "Type": "Type",
+  "Found": "Found",
+  "NoResultsFound": "No results found",
+  "export-to-csv": "Export to CSV"
+}

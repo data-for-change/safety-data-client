@@ -206,6 +206,10 @@ export default class FilterStore {
     dictGroupBy["City"] = new GroupBy('City', "accident_yishuv_name", 10);
     dictGroupBy["Street"] = new GroupBy('Street', "street1_hebrew", 10);
     dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
+    dictGroupBy["SpeedLimit"] = new GroupBy('SpeedLimit', "speed_limit_hebrew");
+    dictGroupBy["RoadWidth"] = new GroupBy('RoadWidth', "road_width_hebrew");
+    dictGroupBy["MultiLane"] = new GroupBy('MultiLane', "multi_lane_hebrew");
+    dictGroupBy["OneLane"] = new GroupBy('OneLane', "one_lane_hebrew");
   }
 
   @observable

@@ -1,86 +1,91 @@
 {
-    "test": "בדיקת תרגום"
-    ,"Home":"דף הבית"
-    ,"HeatMap" :"מפת חום"
-    ,"Cities": "יישובים"
-    ,"About": "אודות"
-    ,"Israel": "ישראל"
-    ,"Charts" : "תרשימים"
-    ,"Groups": "קבוצות"
-    ,"Map": "מפה"
-    ,"Table": "טבלה"
-    ,"Filter Options": "אפשרויות סינון"
-    ,"When": "מתי"
-    ,"FromYear":"משנה"
-    ,"ToYear":"עד שנה"
-    ,"DayNight": "יום\\לילה"
-    ,"day": "יום"
-    ,"night": "לילה"
-    ,"Where" : "איפה"
-    ,"RoadType":"סוג דרך"
-    ,"urban-junction": "צומת עירוני"
-    ,"urban-road": "דרך עירונית"
-    ,"non-urban-junction": "צומת בינעירוני"
-    ,"non-urban-road" : "דרך בינעירונית"
-    ,"City": "יישוב"
-    ,"ChooseCity":"בחרו יישוב..."
-    ,"Street" :"רחוב"
-    ,"RoadSegment" :"קטע כביש"
-    ,"Who" :"מי"
-    ,"Severity" :"חומרה"
-    ,"dead" : "הרוג"
-    ,"severly-injured" : "קשה"
-    ,"Vehicle": "כלי רכב"
-    ,"all" :"כל הסוגים"
-    ,"pedestrian" : "הולך-רגל"
-    ,"cyclist":"אופניים"
-    ,"motorcycle": "אופנוע"
-    ,"wheels4+" : "4+ גלגלים"
-    ,"other": "אחרים"
-    ,"Gender": "מגדר"
-    ,"female" :"נקבות"
-    ,"male" :"זכרים"
-    ,"Age": "גיל"
-    ,"Population": "מוצא"
-    ,"jews":"יהודים"
-    ,"arabs":"ערבים"
-    ,"immigrants":"מהגרים"
-    ,"others": "אחרים"
-    ,"unknown":"לא ידוע"
-    ,"What" :"מה",
-    "AccidentType": "סוג תאונה",
-    "hit-ped": "פגיעה בהולך רגל",
-    "hit-front-side": "חזית-צד",
-    "hit-front-front": "חזית-חזית",
-    "hit-front-rear": "חזית-אחור",
-    "hit-side-side": "צד-צד",
-    "hit-obstacle": "פגיעה בעצם",
-    "hit-turning-over": "התהפכות",
-    "hit-slip": "החלקה"
-    ,"WhatVehicle" : "מה-כלי רכב"
-    ,"VehicleType" :"רכב"
-    ,"mobilityscooter": "קלנועית"
-    ,"bicycle": "אופניים"
-    ,"e-scooter": "קורקינט חשמלי"
-    ,"e-bike":"אופניים חשמליים"
-    ,"car" : "מכונית"
-    ,"taxi": "מונית"
-    ,"bus": "אוטובוס"
-    ,"tranzit" : "טרנזיט"
-    ,"tender" : "טנדר"
-    ,"truck" : "משאית"
-    ,"tractor" : "טרקטור"
-    ,"train" : "רכבת"
-    ,"Submit" :"סנן"
-    ,"Loading…" :"טוען..."
-    ,"AllCasualtiesInRegion":"נפגעים באזור"
-    ,"CasualtiesByFilter":"נפגעים לפי סינון"
-    ,"Casualties":"נפגעים"
-    ,"GroupBy" : "קבץ לפי"
-    ,"WeekDay" :"יום בשבוע"
-    ,"Year":"שנה"
-    ,"Type" :"סוג"
-    ,"Found" : "נמצאו"
-    ,"NoResultsFound" :"לא נמצאו תוצאות"
-    ,"export-to-csv":"יצוא לקובץ CSV"
-  }
+  "test": "בדיקת תרגום",
+  "Home": "דף הבית",
+  "HeatMap": "מפת חום",
+  "Cities": "יישובים",
+  "About": "אודות",
+  "Israel": "ישראל",
+  "Charts": "תרשימים",
+  "Groups": "קבוצות",
+  "Map": "מפה",
+  "Table": "טבלה",
+  "Filter Options": "אפשרויות סינון",
+  "When": "מתי",
+  "FromYear": "משנה",
+  "ToYear": "עד שנה",
+  "DayNight": "יום\\לילה",
+  "day": "יום",
+  "night": "לילה",
+  "Where": "איפה",
+  "RoadType": "סוג דרך",
+  "urban-junction": "צומת עירוני",
+  "urban-road": "דרך עירונית",
+  "non-urban-junction": "צומת בינעירוני",
+  "non-urban-road": "דרך בינעירונית",
+  "City": "יישוב",
+  "ChooseCity": "בחרו יישוב...",
+  "Street": "רחוב",
+  "RoadSegment": "קטע כביש",
+  "Who": "מי",
+  "Severity": "חומרה",
+  "dead": "הרוג",
+  "severly-injured": "קשה",
+  "Vehicle": "כלי רכב",
+  "all": "כל הסוגים",
+  "pedestrian": "הולך-רגל",
+  "cyclist": "אופניים",
+  "motorcycle": "אופנוע",
+  "wheels4+": "4+ גלגלים",
+  "other": "אחרים",
+  "Gender": "מגדר",
+  "female": "נקבות",
+  "male": "זכרים",
+  "Age": "גיל",
+  "Population": "מוצא",
+  "jews": "יהודים",
+  "arabs": "ערבים",
+  "immigrants": "מהגרים",
+  "others": "אחרים",
+  "unknown": "לא ידוע",
+  "What": "מה",
+  "AccidentType": "סוג תאונה",
+  "hit-ped": "פגיעה בהולך רגל",
+  "hit-front-side": "חזית-צד",
+  "hit-front-front": "חזית-חזית",
+  "hit-front-rear": "חזית-אחור",
+  "hit-side-side": "צד-צד",
+  "hit-obstacle": "פגיעה בעצם",
+  "hit-turning-over": "התהפכות",
+  "hit-slip": "החלקה",
+  "WhatVehicle": "מה-כלי רכב",
+  "VehicleType": "רכב",
+  "mobilityscooter": "קלנועית",
+  "bicycle": "אופניים",
+  "e-scooter": "קורקינט חשמלי",
+  "e-bike": "אופניים חשמליים",
+  "car": "מכונית",
+  "taxi": "מונית",
+  "bus": "אוטובוס",
+  "tranzit": "טרנזיט",
+  "tender": "טנדר",
+  "truck": "משאית",
+  "tractor": "טרקטור",
+  "train": "רכבת",
+  "WhatRoad" :"תנאי דרך",
+  "SpeedLimit": "מגבלת מהירות",
+  "RoadWidth": "רוחב דרך",
+  "MultiLane" : "רב-נתיבי",
+  "OneLane" : "נתיב בודד",
+  "Submit": "סנן",
+  "Loading…": "טוען...",
+  "AllCasualtiesInRegion": "נפגעים באזור",
+  "CasualtiesByFilter": "נפגעים לפי סינון",
+  "Casualties": "נפגעים",
+  "GroupBy": "קבץ לפי",
+  "WeekDay": "יום בשבוע",
+  "Year": "שנה",
+  "Type": "סוג",
+  "Found": "נמצאו",
+  "NoResultsFound": "לא נמצאו תוצאות",
+  "export-to-csv": "יצוא לקובץ CSV"
+}
