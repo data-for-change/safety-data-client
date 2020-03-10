@@ -63,10 +63,9 @@ export default class FilterStore {
   @action
   updateCities = (names: string[]) => {
     this.cities = names;
-    if (this.cities.length === 0)
-      {
-        this.streets=[];
-      }
+    if (this.cities.length === 0) {
+      this.streets = [];
+    }
   }
   @observable
   cityResult: string = "";
@@ -182,7 +181,7 @@ export default class FilterStore {
   dataFilterd: any[] = []
   @observable
   dataGroupby2: any[] = []
-  
+
 
   @observable
   groupBy: GroupBy;
@@ -238,7 +237,7 @@ export default class FilterStore {
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
-    this.submitfilterdGroup2(this.groupBy,"sex_hebrew");
+    this.submitfilterdGroup2(this.groupBy, "sex_hebrew");
   }
 
   @action
@@ -264,7 +263,7 @@ export default class FilterStore {
   @action
   submitfilterdGroup = (aGroupBy: GroupBy) => {
     let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,"", aGroupBy.limit);
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, "", aGroupBy.limit);
     console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
@@ -273,27 +272,26 @@ export default class FilterStore {
       })
   }
   @action
-  submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2:string ) => {
+  submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
     let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,groupName2, aGroupBy.limit);
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
           this.dataGroupby2 = data;
-          //console.log(data)
+        //console.log(data)
       })
   }
 
-  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2:string ="", limit: number = 0) => {
+  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2: string = "", limit: number = 0) => {
     let filter = "["
       + '{"$match": ' + filterMatch + '}';
     if (groupName2 === "")
-      filter +=  ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
-    else
-      {
-        let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
-        filter +=  ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
-      }  
+      filter += ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
+    else {
+      let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
+      filter += ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
+    }
     if (limit === 0)
       filter += ',{"$sort": {"_id": 1}}'
     else {
@@ -339,9 +337,9 @@ export default class FilterStore {
     }
     return filter;
   }
-  getFilterStreets = () =>{
+  getFilterStreets = () => {
     let filter: string = '';
-    if (this.streets.length >0){
+    if (this.streets.length > 0 && this.streets[0] !== "") {
       filter += `,{"$or": [`
       filter += this.streets.map((x: string) => `{"street1_hebrew" : "${x.trim()}"}`).join(',')
       filter += `,`
@@ -350,16 +348,16 @@ export default class FilterStore {
     }
     return filter;
   }
-  getFilterFromArray = (arr:string[], filterName:string) =>{
+  getFilterFromArray = (arr: string[], filterName: string) => {
     let filter: string = '';
-    if (arr.length >0){
+    if (arr.length > 0 && arr[0] !== "") {
       filter += `,{"$or": [`
       filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',')
       filter += `]}`
     }
     return filter;
   }
-  
+
 
   getMultiplefilter = (filterKey: string, arr: Array<IFilterChecker>) => {
     let filter: string = '';
@@ -380,7 +378,7 @@ export default class FilterStore {
       filter += `,{"$or": [`
       filter += arrfilter.map((x: string) => {
         if (x === "null")
-         return `{"${filterKey}":`+null+ '}'
+          return `{"${filterKey}":` + null + '}'
         else
           return `{"${filterKey}" : "${x}"}`
       }
