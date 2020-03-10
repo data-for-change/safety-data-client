@@ -13,7 +13,7 @@ export const SelectGroupBy: React.FC<IProps> = observer(() => {
     const {groupByDict, groupBy, updateGroupby} = store;
     const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         updateGroupby(event.target.value)
-      }, [groupBy]);
+      }, [updateGroupby]);
       
     return (
         <Form className="form-inline">

@@ -77,6 +77,14 @@ export default class FilterStore {
   updateStreets = (names: string) => {
     this.streets = names.split(',');
   }
+  @observable
+  roadSegment: string[] = [];
+  @action
+  updateRoadSegment = (names: string) => {
+    this.roadSegment = names.split(',');
+  }
+
+
 
   @observable
   roadTypes: Array<IFilterChecker> = [];
@@ -210,6 +218,7 @@ export default class FilterStore {
   submitFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
+    console.log(filter)
     if (this.cities.length >= 1) {
       let city = this.cities[0];
       var srvCity = new CityService();
@@ -256,6 +265,7 @@ export default class FilterStore {
   submitfilterdGroup = (aGroupBy: GroupBy) => {
     let filtermatch = this.getFilter();
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,"", aGroupBy.limit);
+    console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
@@ -270,7 +280,7 @@ export default class FilterStore {
       .then((data: any[] | undefined) => {
         if (data !== undefined)
           this.dataGroupby2 = data;
-          console.log(data)
+          //console.log(data)
       })
   }
 
@@ -291,7 +301,6 @@ export default class FilterStore {
         + ',{"$limit": ' + limit + '}'
     }
     filter += ']'
-    console.log(filter)
     return filter;
   }
 
@@ -302,6 +311,7 @@ export default class FilterStore {
     filter += this.getfilterCity();
     filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getFilterStreets();
+    filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
@@ -310,7 +320,6 @@ export default class FilterStore {
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
     filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
     filter += `]}`
-    console.log(filter)
     return filter;
   }
 
@@ -341,6 +350,17 @@ export default class FilterStore {
     }
     return filter;
   }
+  getFilterFromArray = (arr:string[], filterName:string) =>{
+    let filter: string = '';
+    if (arr.length >0){
+      filter += `,{"$or": [`
+      filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',')
+      filter += `]}`
+    }
+    return filter;
+  }
+  
+
   getMultiplefilter = (filterKey: string, arr: Array<IFilterChecker>) => {
     let filter: string = '';
     let allChecked: boolean = true;

@@ -50,7 +50,7 @@ const AccidentsMarkers = observer(() => {
                     <div className={'text'+store.language}> 
                         <div><span style={pStyle}>{t('When')}:</span> {x.accident_timestamp}, {x.day_in_week_hebrew}, {x.day_night_hebrew}</div>
                         <div><span style={pStyle}>{t('Who')}:</span> {x.injured_type_hebrew}, {x.injury_severity_hebrew}, {x.vehicle_vehicle_type_hebrew? x.vehicle_vehicle_type_hebrew +", ": ""} {x.sex_hebrew}, {x.age_group_hebrew}, {x.population_type_hebrew}</div>
-                        <div><span style={pStyle}>{t('Where')}:</span> {x.accident_yishuv_name?x.accident_yishuv_name+", ":""}{x.street1_hebrew?x.street1_hebrew+", ":""}{x.street2_hebrew?x.street2_hebrew+", ":""} {x.road_type_hebrew}</div>
+                        <div><span style={pStyle}>{t('Where')}:</span> {x.accident_yishuv_name?x.accident_yishuv_name+", ":""}{x.street1_hebrew?x.street1_hebrew+", ":""}{x.street2_hebrew?x.street2_hebrew+", ":""}{x.road_segment_name?x.road_segment_name+", ":""}{x.road_type_hebrew}</div>
                         <div><span style={pStyle}>{t('What')}:</span> {x.accident_type_hebrew}</div>
                     </div>
                 </Popup>}

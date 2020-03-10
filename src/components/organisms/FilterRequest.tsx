@@ -9,6 +9,7 @@ import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { CitySelector } from '../molecules/CitySelector';
 import { StreetSelector } from '../molecules/StreetSelector'
+import { RoadSegmentSelector } from '../molecules/RoadSegmentSelector'
 import { GroupCheckbox } from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 
@@ -94,6 +95,7 @@ const CardFilterWhere = observer(() => {
         <div>
           <CitySelector isMultiple={store.isMultipleCities} />
           <StreetSelector />
+          <RoadSegmentSelector />
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
