@@ -47,7 +47,7 @@ export const initInjTypes = (arr: IFilterChecker[]) => {
 
 export const initVehicleTypes = (arr: IFilterChecker[]) => {
     //arr.push(new FilterChecker('all', true, []));
-    arr.push(new FilterChecker('pedestrian', true, ["הולך רגל"]));
+    arr.push(new FilterChecker('pedestrian', true, ["null"]));
     arr.push(new FilterChecker('mobilityscooter', true, ["קלנועית חשמלית"]));
     arr.push(new FilterChecker('bicycle', true, ["אופניים"]));
     arr.push(new FilterChecker('e-scooter', true, ["קורקינט חשמלי"]));
@@ -87,7 +87,7 @@ export const initPopulationTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('jews', true, ["יהודים"]));
     arr.push(new FilterChecker('arabs', true, ["ערבים"]));
     arr.push(new FilterChecker('immigrants', true, ["זרים"]));
-    arr.push(new FilterChecker('unknown', true, ["לא ידוע"]));
+    arr.push(new FilterChecker('others', true, ["אחרים"]));
 }
 
 export const initRoadTypes = (arr: IFilterChecker[]) => {

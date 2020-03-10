@@ -358,7 +358,13 @@ export default class FilterStore {
       filter = '';
     else {
       filter += `,{"$or": [`
-      filter += arrfilter.map((x: string) => `{"${filterKey}" : "${x}"}`).join(',')
+      filter += arrfilter.map((x: string) => {
+        if (x === "null")
+         return `{"${filterKey}":`+null+ '}'
+        else
+          return `{"${filterKey}" : "${x}"}`
+      }
+      ).join(',')
       filter += `]}`
     }
     return filter;
