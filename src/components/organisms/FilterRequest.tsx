@@ -27,6 +27,7 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhere />
         <CardFilterWho />
         <CardFilterWhat />
+        <CardFilterWhatVehicle />
       </Accordion>
       <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
@@ -139,21 +140,21 @@ const CardFilterWhat = observer(() => {
   );
 })
 
-// const CardFilterWhatVehicle = observer(() => {
-//   const store = useStore();
-//   const { t } = useTranslation();
-//   return (
-//     <Card>
-//       <Card.Header>
-//         <Accordion.Toggle as={Button} variant="link" eventKey="4">
-//           {t('What')}
-//         </Accordion.Toggle>
-//       </Card.Header>
-//       <Accordion.Collapse eventKey="4" className="filterControls">
-//         <div>
-//           <GroupCheckbox formName="exampleForm" groupName='AccidentType' dataArr={store.accidentType} onChange={store.updateAccidentType} />
-//         </div>
-//       </Accordion.Collapse>
-//     </Card>
-//   );
-// })
+const CardFilterWhatVehicle = observer(() => {
+  const store = useStore();
+  const { t } = useTranslation();
+  return (
+    <Card>
+      <Card.Header>
+        <Accordion.Toggle as={Button} variant="link" eventKey="4">
+          {t('WhatVehicle')}
+        </Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey="4" className="filterControls">
+        <div>
+          <GroupCheckbox formName="exampleForm" groupName='VehicleType' dataArr={store.vehicleType} onChange={store.updateVehicleType} />
+        </div>
+      </Accordion.Collapse>
+    </Card>
+  );
+})

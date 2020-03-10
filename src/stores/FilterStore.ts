@@ -20,6 +20,7 @@ export default class FilterStore {
     FC.initPopulationTypes(this.populationTypes)
     FC.initRoadTypes(this.roadTypes);
     FC.initAccidentType(this.accidentType)
+    FC.initVehicleTypes(this.vehicleType)
     this.initGroupByDict(this.groupByDict);
     this.groupBy = this.groupByDict["Type"];
     this.appInitialized = false;
@@ -150,6 +151,16 @@ export default class FilterStore {
   updateAccidentType = (aType: number, val: boolean) => {
     this.accidentType[aType].checked = val;
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // what Vehicle
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  vehicleType: Array<IFilterChecker> = [];
+  @action
+  updateVehicleType = (aType: number, val: boolean) => {
+    this.vehicleType[aType].checked = val;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // data
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,9 +200,6 @@ export default class FilterStore {
     dictGroupBy["Street"] = new GroupBy('Street', "street1_hebrew", 10);
     dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
   }
-
-
-
 
   @observable
   isLoading: boolean = false;
@@ -254,6 +262,7 @@ export default class FilterStore {
           this.dataFilterd = data;
       })
   }
+  @action
   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2:string ) => {
     let filtermatch = this.getFilter();
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value,groupName2, aGroupBy.limit);
@@ -299,6 +308,7 @@ export default class FilterStore {
     filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
     filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
+    filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
     filter += `]}`
     console.log(filter)
     return filter;
