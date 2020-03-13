@@ -295,11 +295,12 @@ export default class FilterStore {
       let arr= x.count.map((y:any) => {
         let enggrp2 = (y.grp2 === 'זכר')? 'male': 'female';
         return('"'+enggrp2 +'":'+y.count)}).join(',')
-
-      //console.log(arr)
-      let temp = `{"_id":"${x._id}",${arr}}`
-      temp = JSON.parse(temp)
-      return (temp)
+      let xId = x._id;
+      if (xId !== null && xId !== undefined)
+        xId= xId.replace('"', '\\"')
+      let sObject = `{"_id":"${xId}",${arr}}`
+      sObject = JSON.parse(sObject)
+      return (sObject)
     });
     //console.log(res)
     return res;
