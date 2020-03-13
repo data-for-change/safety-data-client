@@ -20,7 +20,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     let reactData1 = toJS(store.dataByYears)
     let reactData2 = toJS(store.dataFilterdByYears)
     let reactData3 = toJS(store.dataFilterd)
-    let barsGrp2 = [{key:"male",color:"#8884d8"},{key:"female",color:"#82ca9d"}]
+    let barsGrp2 = store.groupBy2.getBars();
     let reactDataGrp2 = toJS(store.dataGroupby2)
     if (reactData1.length > 0) {
         return (

@@ -63,8 +63,19 @@ export class GroupBy2 {
     //console.log(res)
     return res;
   }
-
+  getBars = () => {
+    //[{key:"male",color:"#8884d8"},{key:"female",color:"#82ca9d"}]
+    let res = Object.entries(this.vals).map(([key, x]: any[]) => { return ({ key: x.name, color: x.color }) })
+    return res;
+  }
+  getColumns= () => {
+    let res = Object.entries(this.vals).map(([key, x]: any[]) => { return (x.name) })
+    res.unshift('_id')
+    return res;
+  }
 }
+
+
 export class GroupBy2Val {
   name: string;
   color: string;

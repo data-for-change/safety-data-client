@@ -20,16 +20,7 @@ export const GroupByTablesPanel: React.FC<IProps> = observer(() => {
     let reactData1 = toJS(store.dataByYears)
     let reactData2 = toJS(store.dataFilterdByYears)
     let reactData3 = toJS(store.dataFilterd)
-    let columnsGrp2 = [{
-        dataField: '_id',
-        text: t('_id'),
-    }, {
-        dataField: 'male',
-        text: t('male'),
-    }, {
-        dataField: 'female',
-        text: t('female'),
-    }];
+    let columnsGrp2 = store.groupBy2.getColumns().map((x)=>{return({dataField:x,text:t(x)})} )
     let reactDataGrp2 = toJS(store.dataGroupby2)
     if (reactData1.length > 0) {
         return (

@@ -24,6 +24,8 @@ export default class FilterStore {
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["Type"];
+    this.groupBy2 = this.group2Dict["Gender"];
+    //this.groupBy2 = this.group2Dict["Severity"];
     this.appInitialized = false;
   }
   @observable
@@ -195,7 +197,7 @@ export default class FilterStore {
   updateGroupby = (key: string) => {
     this.groupBy = this.groupByDict[key];
     this.submitfilterdGroup(this.groupBy)
-    this.submitfilterdGroup2(this.groupBy, "sex_hebrew");
+    this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
 
   @observable
@@ -241,11 +243,18 @@ export default class FilterStore {
       .then((data: any[] | undefined) => {
         if (data !== undefined)
         {
-          let fixData = this.group2Dict["Gender"].fixStrcutTable(data)
+          let fixData = this.groupBy2.fixStrcutTable(data)
           //let fixData = this.fixStrcutTable(data)
           this.dataGroupby2 = fixData;
         }
       })
+  }
+  @observable
+  groupBy2 :GroupBy.GroupBy2;
+  @action
+  updateGroupBy2(key:string)
+  {
+    this.groupBy2 = this.group2Dict[key]
   }
   group2Dict: any = {}
 
@@ -298,7 +307,7 @@ export default class FilterStore {
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
-    this.submitfilterdGroup2(this.groupBy, "sex_hebrew");
+    this.submitfilterdGroup2(this.groupBy,  this.groupBy2.name);
   }
   getFilter = () => {
     let filter = `{"$and" : [`
