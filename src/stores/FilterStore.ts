@@ -284,8 +284,8 @@ export default class FilterStore {
       .then((data: any[] | undefined) => {
         if (data !== undefined)
         {
-          this.fixStrcutTable(data)
-          this.dataGroupby2 = data;
+          let fixData = this.fixStrcutTable(data)
+          this.dataGroupby2 = fixData;
         }
       })
   }
@@ -293,7 +293,7 @@ export default class FilterStore {
     //console.log(data)
     let res= data.map((x)=>{ 
       let arr= x.count.map((y:any) => {
-        let enggrp2 = (y.grp2 === 'זכר')? 'mail': 'femail';
+        let enggrp2 = (y.grp2 === 'זכר')? 'male': 'female';
         return('"'+enggrp2 +'":'+y.count)}).join(',')
 
       //console.log(arr)
@@ -302,7 +302,7 @@ export default class FilterStore {
       return (temp)
     });
     console.log(res)
-    res = res.filter(x => x.length >= 3)
+    //res = res.filter(x => x.length >= 3)
     //console.log(res)
     return res;
   }

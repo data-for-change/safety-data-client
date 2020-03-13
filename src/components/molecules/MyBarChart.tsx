@@ -13,13 +13,22 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
   data :ReadonlyArray<object>
+  bars ?: any 
   width? : number
   height? : number
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=300}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}) => {
   const { t } = useTranslation();
   let colName = t('Casualties')
+  if (bars === undefined){
+    bars = <Bar dataKey="count" name={colName} fill="#8884d8" />
+  }
+  else
+    bars = [<Bar dataKey="male" name="male" fill="#82ca9d" /> 
+            ,<Bar dataKey="female" name="female" fill="#8884d8" />]
+            //JSON.parse(bars)
+
   return (
     <div style={{direction: "ltr"}}>
     <BarChart
@@ -35,7 +44,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data, width=400, height=300}) => 
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="count" name={colName} fill="#8884d8" />
+      {bars}
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>
     </div>

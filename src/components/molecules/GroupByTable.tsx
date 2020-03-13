@@ -8,16 +8,20 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
 interface IProps {
     dataName?:string
+    columns? :any[]
   }
-export const GroupByTable:React.FC<IProps> = observer(({dataName='Year', children}) => {
+export const GroupByTable:React.FC<IProps> = observer(({dataName='Year', columns ,children}) => {
     const { t } = useTranslation();
-    const columns = [{
-        dataField: '_id',
-        text: t(dataName),
-    }, {
-        dataField: 'count',
-        text: t('Casualties'),
-    }];
+    if (columns === undefined)
+    {
+        columns = [{
+            dataField: '_id',
+            text: t(dataName),
+        }, {
+            dataField: 'count',
+            text: t('Casualties'),
+        }];
+    }
     if (children!= null ){
         return (<div className="groupByTable">
             <BootstrapTable keyField='_id' data={children} columns={columns} headerClasses="table-header" />
