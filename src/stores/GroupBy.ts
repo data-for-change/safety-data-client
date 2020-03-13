@@ -1,19 +1,88 @@
-import { observable} from "mobx"
+import { observable } from "mobx"
 
 export interface IGroupBy {
-    text: string;
-    value: string;
-    limit: number;
+  text: string;
+  value: string;
+  limit: number;
+}
+
+export default class GroupBy implements IGroupBy {
+  @observable
+  text: string;
+  value: string;
+  limit: number;
+  constructor(text: string, value: string, limit: number = 0) {
+    this.text = text;
+    this.value = value;
+    this.limit = limit;
   }
-  
-  export default class GroupBy implements IGroupBy {
-    @observable
-    text: string;
-    value: string;
-    limit: number;
-    constructor(text: string, value: string, limit: number=0) {
-        this.text = text;
-        this.value = value;
-        this.limit = limit;
-    }
+}
+
+export const initGroupByDict = (dictGroupBy: any) => {
+  dictGroupBy["Severity"] = new GroupBy('Severity', "injury_severity_hebrew")
+  dictGroupBy["Type"] = new GroupBy('Type', "injured_type_hebrew");
+  dictGroupBy["Vehicle"] = new GroupBy('Vehicle', "vehicle_vehicle_type_hebrew");
+  dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
+  dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
+  dictGroupBy["DayNight"] = new GroupBy('DayNight', "day_night_hebrew");
+  dictGroupBy["WeekDay"] = new GroupBy('WeekDay', "day_in_week_hebrew");
+  dictGroupBy["RoadType"] = new GroupBy('RoadType', "road_type_hebrew");
+  dictGroupBy["City"] = new GroupBy('City', "accident_yishuv_name", 10);
+  dictGroupBy["Street"] = new GroupBy('Street', "street1_hebrew", 10);
+  dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
+  dictGroupBy["SpeedLimit"] = new GroupBy('SpeedLimit', "speed_limit_hebrew");
+  dictGroupBy["RoadWidth"] = new GroupBy('RoadWidth', "road_width_hebrew");
+  dictGroupBy["MultiLane"] = new GroupBy('MultiLane', "multi_lane_hebrew");
+  dictGroupBy["OneLane"] = new GroupBy('OneLane', "one_lane_hebrew");
+}
+
+export class GroupBy2 {
+  name: string;
+  vals: any;
+  constructor(name: string) {
+    this.name = name;
+    this.vals = {};
   }
+  revTrnas = (key: string) => {
+    let res = this.vals[key].name;
+    return res;
+  }
+  fixStrcutTable = (data: any[]) => {
+    let res = data.map((x) => {
+      let arr = x.count.map((y: any) => {
+        let engVal = this.revTrnas(y.grp2)
+        return ('"' + engVal + '":' + y.count)
+      }).join(',')
+      let xId = x._id;
+      if (xId !== null && xId !== undefined)
+        xId = xId.replace('"', '\\"')
+      let sObject = `{"_id":"${xId}",${arr}}`
+      sObject = JSON.parse(sObject)
+      return (sObject)
+    });
+    //console.log(res)
+    return res;
+  }
+
+}
+export class GroupBy2Val {
+  name: string;
+  color: string;
+  constructor(name: string, color: string) {
+    this.name = name;
+    this.color = color;
+  }
+}
+
+export const initGroup2Dict = (dict: any) => {
+  dict["Gender"] = new GroupBy2("sex_hebrew");
+  dict["Gender"].vals["זכר"] = new GroupBy2Val("male", "#8884d8")
+  dict["Gender"].vals["נקבה"] = new GroupBy2Val("female", "#82ca9d")
+
+  dict["Severity"] = new GroupBy2("injury_severity_hebrew")
+  dict["Severity"].vals["הרוג"] = new GroupBy2Val("dead", "#8884d8")
+  dict["Severity"].vals["פצוע קשה"] = new GroupBy2Val("severly-injured", "#82ca9d")
+}
+
+
+

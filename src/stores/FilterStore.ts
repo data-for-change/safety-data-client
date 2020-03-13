@@ -3,7 +3,7 @@ import i18n from "../i18n";
 import L from 'leaflet'
 import IFilterChecker from './FilterChecker'
 import * as FC from './FilterChecker'
-import GroupBy from './GroupBy'
+import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import autorun  from "mobx"
@@ -21,7 +21,8 @@ export default class FilterStore {
     FC.initRoadTypes(this.roadTypes);
     FC.initAccidentType(this.accidentType)
     FC.initVehicleTypes(this.vehicleType)
-    this.initGroupByDict(this.groupByDict);
+    GroupBy.initGroupByDict(this.groupByDict);
+    GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["Type"];
     this.appInitialized = false;
   }
@@ -182,9 +183,14 @@ export default class FilterStore {
   @observable
   dataGroupby2: any[] = []
 
-
   @observable
-  groupBy: GroupBy;
+  isLoading: boolean = false;
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // group by
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  groupBy: GroupBy.default;
   @action
   updateGroupby = (key: string) => {
     this.groupBy = this.groupByDict[key];
@@ -195,26 +201,76 @@ export default class FilterStore {
   @observable
   groupByDict: any = {}
 
-  initGroupByDict = (dictGroupBy: any) => {
-    dictGroupBy["Severity"] = new GroupBy('Severity', "injury_severity_hebrew")
-    dictGroupBy["Type"] = new GroupBy('Type', "injured_type_hebrew");
-    dictGroupBy["Vehicle"] = new GroupBy('Vehicle', "vehicle_vehicle_type_hebrew");
-    dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
-    dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
-    dictGroupBy["DayNight"] = new GroupBy('DayNight', "day_night_hebrew");
-    dictGroupBy["WeekDay"] = new GroupBy('WeekDay', "day_in_week_hebrew");
-    dictGroupBy["RoadType"] = new GroupBy('RoadType', "road_type_hebrew");
-    dictGroupBy["City"] = new GroupBy('City', "accident_yishuv_name", 10);
-    dictGroupBy["Street"] = new GroupBy('Street', "street1_hebrew", 10);
-    dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
-    dictGroupBy["SpeedLimit"] = new GroupBy('SpeedLimit', "speed_limit_hebrew");
-    dictGroupBy["RoadWidth"] = new GroupBy('RoadWidth', "road_width_hebrew");
-    dictGroupBy["MultiLane"] = new GroupBy('MultiLane', "multi_lane_hebrew");
-    dictGroupBy["OneLane"] = new GroupBy('OneLane', "one_lane_hebrew");
+  @action
+  submitGroupByYears = () => {
+    let filtermatch = this.getfilterForCityOnly();
+    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataByYears = data;
+      })
+  }
+  @action
+  submitfilterdGroupByYears = () => {
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataFilterdByYears = data;
+      })
+  }
+  @action
+  submitfilterdGroup = (aGroupBy: GroupBy.default) => {
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, "", aGroupBy.limit);
+    console.log(filter)
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+          this.dataFilterd = data;
+      })
+  }
+  @action
+  submitfilterdGroup2 = (aGroupBy: GroupBy.default, groupName2: string) => {
+    let filtermatch = this.getFilter();
+    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
+    //console.log(filter)
+    fetchGroupBy(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined)
+        {
+          let fixData = this.group2Dict["Gender"].fixStrcutTable(data)
+          //let fixData = this.fixStrcutTable(data)
+          this.dataGroupby2 = fixData;
+        }
+      })
+  }
+  group2Dict: any = {}
+
+
+  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2: string = "", limit: number = 0) => {
+    let filter = "["
+      + '{"$match": ' + filterMatch + '}';
+    if (groupName2 === "")
+      filter += ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
+    else {
+      filter +=', { "$match" : { "'+groupName2+'" : { "$exists" : true, "$ne" : null}}}'
+      let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
+      filter += ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
+      filter += ',{"$group": { "_id": "$_id.grp1" , "count": { "$push": {"grp2" : "$_id.grp2","count" : "$count" } }}}';
+    }
+    if (limit === 0)
+      filter += ',{"$sort": {"_id": 1}}'
+    else {
+      filter += ',{"$sort": {"count": -1}}'
+        + ',{"$limit": ' + limit + '}'
+    }
+    filter += ']'
+    return filter;
   }
 
-  @observable
-  isLoading: boolean = false;
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // filter actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,89 +300,6 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, "sex_hebrew");
   }
-
-  @action
-  submitGroupByYears = () => {
-    let filtermatch = this.getfilterForCityOnly();
-    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
-    fetchGroupBy(filter)
-      .then((data: any[] | undefined) => {
-        if (data !== undefined)
-          this.dataByYears = data;
-      })
-  }
-  @action
-  submitfilterdGroupByYears = () => {
-    let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, "accident_year");
-    fetchGroupBy(filter)
-      .then((data: any[] | undefined) => {
-        if (data !== undefined)
-          this.dataFilterdByYears = data;
-      })
-  }
-  @action
-  submitfilterdGroup = (aGroupBy: GroupBy) => {
-    let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, "", aGroupBy.limit);
-    console.log(filter)
-    fetchGroupBy(filter)
-      .then((data: any[] | undefined) => {
-        if (data !== undefined)
-          this.dataFilterd = data;
-      })
-  }
-  @action
-  submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
-    let filtermatch = this.getFilter();
-    let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
-    //console.log(filter)
-    fetchGroupBy(filter)
-      .then((data: any[] | undefined) => {
-        if (data !== undefined)
-        {
-          let fixData = this.fixStrcutTable(data)
-          this.dataGroupby2 = fixData;
-        }
-      })
-  }
-  fixStrcutTable= (data: any[]) => {
-    let res= data.map((x)=>{ 
-      let arr= x.count.map((y:any) => {
-        let enggrp2 = (y.grp2 === 'זכר')? 'male': 'female';
-        return('"'+enggrp2 +'":'+y.count)}).join(',')
-      let xId = x._id;
-      if (xId !== null && xId !== undefined)
-        xId= xId.replace('"', '\\"')
-      let sObject = `{"_id":"${xId}",${arr}}`
-      sObject = JSON.parse(sObject)
-      return (sObject)
-    });
-    //console.log(res)
-    return res;
-  }
-
-  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2: string = "", limit: number = 0) => {
-    let filter = "["
-      + '{"$match": ' + filterMatch + '}';
-    if (groupName2 === "")
-      filter += ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
-    else {
-      filter +=', { "$match" : { "'+groupName2+'" : { "$exists" : true, "$ne" : null}}}'
-      let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
-      filter += ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
-      filter += ',{"$group": { "_id": "$_id.grp1" , "count": { "$push": {"grp2" : "$_id.grp2","count" : "$count" } }}}';
-    }
-    if (limit === 0)
-      filter += ',{"$sort": {"_id": 1}}'
-    else {
-      filter += ',{"$sort": {"count": -1}}'
-        + ',{"$limit": ' + limit + '}'
-    }
-    filter += ']'
-    return filter;
-  }
-
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
