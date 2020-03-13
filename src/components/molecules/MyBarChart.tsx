@@ -25,9 +25,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}
     bars = <Bar dataKey="count" name={colName} fill="#8884d8" />
   }
   else
-    bars = [<Bar dataKey="male" name="male" fill="#82ca9d" /> 
-            ,<Bar dataKey="female" name="female" fill="#8884d8" />]
-            //JSON.parse(bars)
+    bars = bars.map((x:any)=><Bar dataKey={x.key} name={x.key} fill={x.color}/>)
 
   return (
     <div style={{direction: "ltr"}}>

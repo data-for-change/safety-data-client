@@ -189,6 +189,7 @@ export default class FilterStore {
   updateGroupby = (key: string) => {
     this.groupBy = this.groupByDict[key];
     this.submitfilterdGroup(this.groupBy)
+    this.submitfilterdGroup2(this.groupBy, "sex_hebrew");
   }
 
   @observable
@@ -279,7 +280,7 @@ export default class FilterStore {
   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
     let filtermatch = this.getFilter();
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
-    console.log(filter)
+    //console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
@@ -290,7 +291,6 @@ export default class FilterStore {
       })
   }
   fixStrcutTable= (data: any[]) => {
-    //console.log(data)
     let res= data.map((x)=>{ 
       let arr= x.count.map((y:any) => {
         let enggrp2 = (y.grp2 === 'זכר')? 'male': 'female';
@@ -301,8 +301,6 @@ export default class FilterStore {
       temp = JSON.parse(temp)
       return (temp)
     });
-    console.log(res)
-    //res = res.filter(x => x.length >= 3)
     //console.log(res)
     return res;
   }
