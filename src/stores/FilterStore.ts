@@ -279,12 +279,32 @@ export default class FilterStore {
   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
     let filtermatch = this.getFilter();
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
+    console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
+        {
+          this.fixStrcutTable(data)
           this.dataGroupby2 = data;
-        //console.log(data)
+        }
       })
+  }
+  fixStrcutTable= (data: any[]) => {
+    //console.log(data)
+    let res= data.map((x)=>{ 
+      let arr= x.count.map((y:any) => {
+        let enggrp2 = (y.grp2 === 'זכר')? 'mail': 'femail';
+        return('"'+enggrp2 +'":'+y.count)}).join(',')
+
+      //console.log(arr)
+      let temp = `{"_id":"${x._id}",${arr}}`
+      temp = JSON.parse(temp)
+      return (temp)
+    });
+    console.log(res)
+    res = res.filter(x => x.length >= 3)
+    //console.log(res)
+    return res;
   }
 
   getFilterGroupBy = (filterMatch: string, groupName: string, groupName2: string = "", limit: number = 0) => {
@@ -293,8 +313,10 @@ export default class FilterStore {
     if (groupName2 === "")
       filter += ',{"$group": { "_id": "$' + groupName + '", "count": { "$sum": 1 }}}';
     else {
+      filter +=', { "$match" : { "'+groupName2+'" : { "$exists" : true, "$ne" : null}}}'
       let grpids = '{ "grp1": "$' + groupName + '", "grp2": "$' + groupName2 + '"}'
       filter += ',{"$group": { "_id":' + grpids + ', "count": { "$sum": 1 }}}';
+      filter += ',{"$group": { "_id": "$_id.grp1" , "count": { "$push": {"grp2" : "$_id.grp2","count" : "$count" } }}}';
     }
     if (limit === 0)
       filter += ',{"$sort": {"_id": 1}}'
