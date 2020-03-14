@@ -18,9 +18,10 @@ export default class FilterStore {
     FC.initGenderTypes(this.genderTypes);
     FC.initAgeTypes(this.ageTypes)
     FC.initPopulationTypes(this.populationTypes)
-    FC.initRoadTypes(this.roadTypes);
     FC.initAccidentType(this.accidentType)
     FC.initVehicleTypes(this.vehicleType)
+    FC.initRoadTypes(this.roadTypes);
+    FC.initSpeedLimit(this.SpeedLimit)
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["TypeInjured"];
@@ -85,15 +86,6 @@ export default class FilterStore {
     this.roadSegment = names.split(',');
   }
 
-
-
-  @observable
-  roadTypes: Array<IFilterChecker> = [];
-  @action
-  updateRoadType = (aType: number, val: boolean) => {
-    this.roadTypes[aType].checked = val;
-  }
-
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //when
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +143,7 @@ export default class FilterStore {
     }
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // what
+  // What
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   @observable
@@ -162,7 +154,7 @@ export default class FilterStore {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // what Vehicle
+  // What Vehicle
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   vehicleType: Array<IFilterChecker> = [];
@@ -170,6 +162,23 @@ export default class FilterStore {
   updateVehicleType = (aType: number, val: boolean) => {
     this.vehicleType[aType].checked = val;
   }
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // What Road
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  roadTypes: Array<IFilterChecker> = [];
+  @action
+  updateRoadType = (aType: number, val: boolean) => {
+    this.roadTypes[aType].checked = val;
+  }
+
+  @observable
+  SpeedLimit: Array<IFilterChecker> = [];
+  @action
+  updateSpeedLimit = (aType: number, val: boolean) => {
+    this.SpeedLimit[aType].checked = val;
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // data
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,13 +325,14 @@ export default class FilterStore {
     filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
-    filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getfilterInjured();
     filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
     filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
     filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
     filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
+    filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
+    filter += this.getMultiplefilter("speed_limit_hebrew",this.SpeedLimit);
     filter += `]}`
     return filter;
   }
@@ -386,7 +396,11 @@ export default class FilterStore {
         if (x === "null")
           return `{"${filterKey}":` + null + '}'
         else
-          return `{"${filterKey}" : "${x}"}`
+          {
+            let xSafe = x.replace('"', '\\"')
+            return `{"${filterKey}" : "${xSafe}"}`
+          }
+         
       }
       ).join(',')
       filter += `]}`
