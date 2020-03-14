@@ -33,13 +33,13 @@ export const GroupByTablesPanel: React.FC<IProps> = observer(() => {
                     <GroupByTable>{reactData2}</GroupByTable>
                 </SmallCard>
                 <SmallCard styleType={1}>
-                    <SelectGroupBy />
+                    <SelectGroupBy id="Tables.Main"/>
                     <GroupByTable dataName={store.groupBy.text}>{reactData3}</GroupByTable>
                 </SmallCard>
                 <SmallCard styleType={2}>
                     <div className="row">
-                        <SelectGroupBy />
-                        <SelectGroupBy2 /></div>
+                        <SelectGroupBy  id="Tables.Grp2"/>
+                        <SelectGroupBy2 id="Tables"/></div>
                     <GroupByTable dataName={store.groupBy.text} columns={columnsGrp2}>{reactDataGrp2}</GroupByTable>
                 </SmallCard>
             </div>

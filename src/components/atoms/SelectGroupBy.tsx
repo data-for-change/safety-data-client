@@ -5,9 +5,9 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig'
 
 
-interface IProps { }
+interface IProps { id:string }
 
-export const SelectGroupBy: React.FC<IProps> = observer(() => {
+export const SelectGroupBy: React.FC<IProps> = observer(({id}) => {
     const { t } = useTranslation();
     const store = useStore();
     const {groupByDict, groupBy, updateGroupby} = store;
@@ -17,9 +17,9 @@ export const SelectGroupBy: React.FC<IProps> = observer(() => {
       
     return (
         <Form className="form-inline">
-            <Form.Group controlId={`GrupForm.SelectGroupBy`}>
+            <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
                 <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
-                <Form.Control as="select" defaultValue={groupBy.text} 
+                <Form.Control as="select" defaultValue={groupBy.text} value={groupBy.text}
                     onChange={onSelectChange}
                     >
                     { Object.entries(groupByDict).map(([key,x]:any[])=>{

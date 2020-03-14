@@ -13,9 +13,10 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'he',
+    lng : 'he',
     debug: true,
-    // I'm hardcoding the translations here for the sake of simplicity,
-    // but in a real-world application you would get these from a backend.
+    // hardcoding translations for the sake of simplicity,
+    // id more complex - get it from backend.
     // i18next has a small plugin that makes it easy.
     // learn more: https://github.com/i18next/i18next-xhr-backend
     resources: {
