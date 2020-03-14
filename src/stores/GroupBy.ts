@@ -36,10 +36,18 @@ export const initGroupByDict = (dictGroupBy: any) => {
   dictGroupBy["OneLane"] = new GroupBy('OneLane', "one_lane_hebrew");
 }
 
-export class GroupBy2 {
+export interface IGroupBy2 {
+  text: string;
   name: string;
   vals: any;
-  constructor(name: string) {
+}
+export class GroupBy2  implements IGroupBy2 {
+  @observable
+  text:string;
+  name: string;
+  vals: any;
+  constructor( text:string, name: string) {
+    this.text =  text;
     this.name = name;
     this.vals = {};
   }
@@ -86,11 +94,11 @@ export class GroupBy2Val {
 }
 
 export const initGroup2Dict = (dict: any) => {
-  dict["Gender"] = new GroupBy2("sex_hebrew");
+  dict["Gender"] = new GroupBy2("Gender","sex_hebrew");
   dict["Gender"].vals["זכר"] = new GroupBy2Val("male", "#8884d8")
   dict["Gender"].vals["נקבה"] = new GroupBy2Val("female", "#82ca9d")
 
-  dict["Severity"] = new GroupBy2("injury_severity_hebrew")
+  dict["Severity"] = new GroupBy2("Severity","injury_severity_hebrew")
   dict["Severity"].vals["הרוג"] = new GroupBy2Val("dead", "#8884d8")
   dict["Severity"].vals["פצוע קשה"] = new GroupBy2Val("severly-injured", "#82ca9d")
 }

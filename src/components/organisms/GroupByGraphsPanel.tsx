@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import { useStore } from '../../stores/storeConfig'
 import { SmallCard } from '../atoms/SmallCard'
 import { SelectGroupBy } from '../atoms/SelectGroupBy'
+import { SelectGroupBy2 } from '../atoms/SelectGroupBy2'
 import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
@@ -33,9 +34,11 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                     <MyBarChart data={reactData3} width={600} height={300}></MyBarChart>
                 </SmallCard>
                 <SmallCard styleType={3}>
-                    <SelectGroupBy />
+                    <div className="row"> 
+                        <SelectGroupBy />
+                        <SelectGroupBy2 /></div>
                     <MyBarChart data={reactDataGrp2} bars={barsGrp2} width={600} height={300}></MyBarChart>
-                </SmallCard> 
+                </SmallCard>
             </div>
         )
     }

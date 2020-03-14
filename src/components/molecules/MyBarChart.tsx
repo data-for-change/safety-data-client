@@ -25,8 +25,12 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}
     bars = <Bar dataKey="count" name={colName} fill="#8884d8" />
   }
   else
-    bars = bars.map((x:any)=><Bar dataKey={x.key} name={x.key} fill={x.color}/>)
-
+  {
+    bars = bars.map((x:any)=>{
+      let aName = t(x.key)
+      return(<Bar dataKey={x.key} name={aName} fill={x.color}/>)
+    })
+  }
   return (
     <div style={{direction: "ltr"}}>
     <BarChart

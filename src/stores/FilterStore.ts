@@ -25,7 +25,6 @@ export default class FilterStore {
     GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["Type"];
     this.groupBy2 = this.group2Dict["Gender"];
-    //this.groupBy2 = this.group2Dict["Severity"];
     this.appInitialized = false;
   }
   @observable
@@ -34,8 +33,8 @@ export default class FilterStore {
   updateInjurySeverity = (aType: number, val: boolean) => {
     this.injurySeverity[aType].checked = val;
   }
-
-  //////////////////////////////////////////////
+//////////////////////////////////////////////
+  
 
   // this belong to root store
   @observable
@@ -199,7 +198,6 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy)
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
-
   @observable
   groupByDict: any = {}
 
@@ -252,10 +250,11 @@ export default class FilterStore {
   @observable
   groupBy2 :GroupBy.GroupBy2;
   @action
-  updateGroupBy2(key:string)
-  {
+  updateGroupBy2 =(key:string) =>{
     this.groupBy2 = this.group2Dict[key]
+    this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
+  @observable
   group2Dict: any = {}
 
 
