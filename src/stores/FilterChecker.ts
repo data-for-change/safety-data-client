@@ -96,6 +96,17 @@ export const initRoadTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('non-urban-junction', true, ["לא-עירונית בצומת"]));
     arr.push(new FilterChecker('non-urban-road', true, ["לא-עירונית לא בצומת"]));
 }
+export const initSpeedLimit = (arr: IFilterChecker[]) =>{
+    arr.push(new FilterChecker('speed50', true, ['עד 50 קמ"ש']));
+    arr.push(new FilterChecker('speed60', true, ['60 קמ"ש']));
+    arr.push(new FilterChecker('speed70', true, ['70 קמ"ש']));
+    arr.push(new FilterChecker('speed80', true, ['80 קמ"ש']));
+    arr.push(new FilterChecker('speed90', true, ['90 קמ"ש']));
+    arr.push(new FilterChecker('speed100', true, ['100 קמ"ש']));
+    arr.push(new FilterChecker('speed110', true, ['110 קמ"ש']));
+    arr.push(new FilterChecker('speed120', true, ['120 קמ"ש']));
+    arr.push(new FilterChecker('speed-unknown', true, ['לא ידוע']));
+}
 
 export const initAccidentType = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));

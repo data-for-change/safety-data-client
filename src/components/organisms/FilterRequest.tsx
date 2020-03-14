@@ -29,6 +29,7 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWho />
         <CardFilterWhat />
         <CardFilterWhatVehicle />
+        <CardFilterWhatRoad />
       </Accordion>
       <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
@@ -96,7 +97,6 @@ const CardFilterWhere = observer(() => {
           <CitySelector isMultiple={store.isMultipleCities} />
           <StreetSelector />
           <RoadSegmentSelector />
-          <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -155,6 +155,25 @@ const CardFilterWhatVehicle = observer(() => {
       <Accordion.Collapse eventKey="4" className="filterControls">
         <div>
           <GroupCheckbox formName="exampleForm" groupName='VehicleType' dataArr={store.vehicleType} onChange={store.updateVehicleType} />
+        </div>
+      </Accordion.Collapse>
+    </Card>
+  );
+})
+const CardFilterWhatRoad = observer(() => {
+  const store = useStore();
+  const { t } = useTranslation();
+  return (
+    <Card>
+      <Card.Header>
+        <Accordion.Toggle as={Button} variant="link" eventKey="5">
+          {t('WhatRoad')}
+        </Accordion.Toggle>
+      </Card.Header>
+      <Accordion.Collapse eventKey="5" className="filterControls">
+        <div>
+          <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
+          <GroupCheckbox formName="exampleForm" groupName='SpeedLimit' dataArr={store.SpeedLimit} onChange={store.updateSpeedLimit} />
         </div>
       </Accordion.Collapse>
     </Card>
