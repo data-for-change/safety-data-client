@@ -21,7 +21,8 @@ export default class FilterStore {
     FC.initAccidentType(this.accidentType)
     FC.initVehicleTypes(this.vehicleType)
     FC.initRoadTypes(this.roadTypes);
-    FC.initSpeedLimit(this.SpeedLimit)
+    FC.initRoadWidth(this.roadWidth);
+    FC.initSpeedLimit(this.speedLimit)
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["TypeInjured"];
@@ -173,11 +174,19 @@ export default class FilterStore {
   }
 
   @observable
-  SpeedLimit: Array<IFilterChecker> = [];
+  speedLimit: Array<IFilterChecker> = [];
   @action
   updateSpeedLimit = (aType: number, val: boolean) => {
-    this.SpeedLimit[aType].checked = val;
+    this.speedLimit[aType].checked = val;
   }
+
+  @observable
+  roadWidth: Array<IFilterChecker> = [];
+  @action
+  updateRoadWidth = (aType: number, val: boolean) => {
+    this.roadWidth[aType].checked = val;
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // data
@@ -332,7 +341,8 @@ export default class FilterStore {
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
     filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
-    filter += this.getMultiplefilter("speed_limit_hebrew",this.SpeedLimit);
+    filter += this.getMultiplefilter("speed_limit_hebrew",this.speedLimit);
+    filter += this.getMultiplefilter("road_width_hebrew",this.roadWidth);
     filter += `]}`
     return filter;
   }

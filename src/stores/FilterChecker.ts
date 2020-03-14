@@ -107,6 +107,14 @@ export const initSpeedLimit = (arr: IFilterChecker[]) =>{
     arr.push(new FilterChecker('speed120', true, ['120 קמ"ש']));
     arr.push(new FilterChecker('speed-unknown', true, ['לא ידוע']));
 }
+export const initRoadWidth = (arr: IFilterChecker[]) =>{
+    arr.push(new FilterChecker('road-width-5', true, ['עד 5 מטר']));
+    arr.push(new FilterChecker('road-width-7', true, ['5 עד 7 מטר']));
+    arr.push(new FilterChecker('road-width-10', true, ['7 עד 10.5 מטר']));
+    arr.push(new FilterChecker('road-width-14', true, ['10.5 עד 14 מטר']));
+    arr.push(new FilterChecker('road-width-14+', true, ['יותר מ- 14 מטר']));
+    arr.push(new FilterChecker('unknown', true, ['לא ידוע']));
+}
 
 export const initAccidentType = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));

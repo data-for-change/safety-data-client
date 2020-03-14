@@ -173,7 +173,8 @@ const CardFilterWhatRoad = observer(() => {
       <Accordion.Collapse eventKey="5" className="filterControls">
         <div>
           <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
-          <GroupCheckbox formName="exampleForm" groupName='SpeedLimit' dataArr={store.SpeedLimit} onChange={store.updateSpeedLimit} />
+          <GroupCheckbox formName="exampleForm" groupName='SpeedLimit' dataArr={store.speedLimit} onChange={store.updateSpeedLimit} />
+          <GroupCheckbox formName="exampleForm" groupName='RoadWidth' dataArr={store.roadWidth} onChange={store.updateRoadWidth} />
         </div>
       </Accordion.Collapse>
     </Card>
