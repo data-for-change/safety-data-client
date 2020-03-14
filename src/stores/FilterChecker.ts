@@ -115,6 +115,14 @@ export const initRoadWidth = (arr: IFilterChecker[]) =>{
     arr.push(new FilterChecker('road-width-14+', true, ['יותר מ- 14 מטר']));
     arr.push(new FilterChecker('unknown', true, ['לא ידוע']));
 }
+export const initSeparator = (arr: IFilterChecker[]) =>{
+    arr.push(new FilterChecker('separator-fence', true, ['מיפרדה עם גדר בטיחות']));
+    arr.push(new FilterChecker('separator-built', true, ['מיפרדה בנויה ללא גדר בטיחות']));
+    arr.push(new FilterChecker('separator-not-built', true, ['מיפרדה לא בנויה']));
+    arr.push(new FilterChecker('separator-paint', true, ['מיפרדה מסומנת בצבע']));
+    arr.push(new FilterChecker('separator-ohter', true, ['אחר']));
+    arr.push(new FilterChecker('separator-not-relevant', true, ['null']));
+}
 
 export const initAccidentType = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));

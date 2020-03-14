@@ -32,7 +32,7 @@ export const initGroupByDict = (dictGroupBy: any) => {
   dictGroupBy["AccidentType"] = new GroupBy('AccidentType', "accident_type_hebrew");
   dictGroupBy["SpeedLimit"] = new GroupBy('SpeedLimit', "speed_limit_hebrew");
   dictGroupBy["RoadWidth"] = new GroupBy('RoadWidth', "road_width_hebrew");
-  dictGroupBy["MultiLane"] = new GroupBy('MultiLane', "multi_lane_hebrew");
+  dictGroupBy["Separator"] = new GroupBy('Separator', "multi_lane_hebrew");
   dictGroupBy["OneLane"] = new GroupBy('OneLane', "one_lane_hebrew");
 }
 
@@ -103,11 +103,10 @@ export const initGroup2Dict = (dict: any) => {
   dict["Gender"].vals["נקבה"] = new GroupBy2Val("female", "#82ca9d")
 
   dict["RoadType"] = new GroupBy2('RoadType', "road_type_hebrew");
-  dict["RoadType"].vals["עירונית בצומת"] = new GroupBy2Val("urban-junction", "#8884d8")
-  dict["RoadType"].vals["עירונית לא בצומת"] = new GroupBy2Val("urban-road", "#82ca9d")
-  dict["RoadType"].vals["לא-עירונית בצומת"] = new GroupBy2Val("non-urban-junction", "#8884d8")
-  dict["RoadType"].vals["לא-עירונית לא בצומת"] = new GroupBy2Val("non-urban-road", "#8884d8")
+  dict["RoadType"].vals["עירונית בצומת"] = new GroupBy2Val("urban-junction", "#559E54")
+  dict["RoadType"].vals["עירונית לא בצומת"] = new GroupBy2Val("urban-road", "#305A30")
+  dict["RoadType"].vals["לא-עירונית בצומת"] = new GroupBy2Val("non-urban-junction", "#1258DC")
+  dict["RoadType"].vals["לא-עירונית לא בצומת"] = new GroupBy2Val("non-urban-road", "#0A337F")
 }
-
 
 
