@@ -97,6 +97,7 @@ const CardFilterWhere = observer(() => {
           <CitySelector isMultiple={store.isMultipleCities} />
           <StreetSelector />
           <RoadSegmentSelector />
+          <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -172,10 +173,10 @@ const CardFilterWhatRoad = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="5" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName='RoadType' dataArr={store.roadTypes} onChange={store.updateRoadType} />
           <GroupCheckbox formName="exampleForm" groupName='SpeedLimit' dataArr={store.speedLimit} onChange={store.updateSpeedLimit} />
           <GroupCheckbox formName="exampleForm" groupName='RoadWidth' dataArr={store.roadWidth} onChange={store.updateRoadWidth} />
           <GroupCheckbox formName="exampleForm" groupName='Separator' dataArr={store.separator} onChange={store.updateSeparator} />
+          <GroupCheckbox formName="exampleForm" groupName='OneLane' dataArr={store.oneLane} onChange={store.updateOneLane} />
         </div>
       </Accordion.Collapse>
     </Card>

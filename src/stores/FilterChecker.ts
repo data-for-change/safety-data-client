@@ -124,6 +124,15 @@ export const initSeparator = (arr: IFilterChecker[]) =>{
     arr.push(new FilterChecker('separator-not-relevant', true, ['null']));
 }
 
+export const initOneLane = (arr: IFilterChecker[]) =>{
+    arr.push(new FilterChecker('onelane-twoway-line', true, ['דו סיטרי + קו הפרדה רצוף']));
+    arr.push(new FilterChecker('onelane-twoway-noline', true, ['דו סיטרי אין קו הפרדה רצוף']));
+    arr.push(new FilterChecker('onelane-oneway', true, ['חד סיטרי']));
+    arr.push(new FilterChecker('onelane-unknown', true, ['לא ידוע מס מסלולים']));
+    arr.push(new FilterChecker('onelane-not-relevant', true, ['null']));
+}
+
+
 export const initAccidentType = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));
     arr.push(new FilterChecker('hit-front-side', true, ["התנגשות חזית בצד"]));

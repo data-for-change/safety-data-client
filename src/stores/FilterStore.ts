@@ -24,6 +24,7 @@ export default class FilterStore {
     FC.initSpeedLimit(this.speedLimit)
     FC.initRoadWidth(this.roadWidth);
     FC.initSeparator(this.separator);
+    FC.initOneLane(this.oneLane);
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict (this.group2Dict)
     this.groupBy = this.groupByDict["TypeInjured"];
@@ -195,6 +196,12 @@ export default class FilterStore {
     this.separator[aType].checked = val;
   }
 
+  @observable
+  oneLane: Array<IFilterChecker> = [];
+  @action
+  updateOneLane = (aType: number, val: boolean) => {
+    this.oneLane[aType].checked = val;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -353,6 +360,7 @@ export default class FilterStore {
     filter += this.getMultiplefilter("speed_limit_hebrew",this.speedLimit);
     filter += this.getMultiplefilter("road_width_hebrew",this.roadWidth);
     filter += this.getMultiplefilter("multi_lane_hebrew",this.separator);
+    filter += this.getMultiplefilter("one_lane_hebrew",this.oneLane);
     filter += `]}`
     return filter;
   }
