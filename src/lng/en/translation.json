@@ -31,6 +31,7 @@
   "dead": "Dead",
   "severly-injured": "Severly",
   "Vehicle": "Vehicle",
+  "TypeInjured": "Type Injured",
   "all": "All",
   "pedestrian": "Pedestrian",
   "cyclist": "Cyclist",
@@ -83,7 +84,6 @@
   "GroupBy": "Group By",
   "WeekDay": "Week Day",
   "Year": "Year",
-  "Type": "Type",
   "Found": "Found",
   "NoResultsFound": "No results found",
   "export-to-csv": "Export to CSV"

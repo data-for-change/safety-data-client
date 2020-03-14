@@ -31,6 +31,7 @@
   "dead": "הרוג",
   "severly-injured": "קשה",
   "Vehicle": "כלי רכב",
+  "TypeInjured": "סוג נפגע",
   "all": "כל הסוגים",
   "pedestrian": "הולך-רגל",
   "cyclist": "אופניים",
@@ -84,7 +85,7 @@
   "GroupBy": "קבץ לפי",
   "WeekDay": "יום בשבוע",
   "Year": "שנה",
-  "Type": "סוג",
+
   "Found": "נמצאו",
   "NoResultsFound": "לא נמצאו תוצאות",
   "export-to-csv": "יצוא לקובץ CSV"

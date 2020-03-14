@@ -20,7 +20,7 @@ export default class GroupBy implements IGroupBy {
 
 export const initGroupByDict = (dictGroupBy: any) => {
   dictGroupBy["Severity"] = new GroupBy('Severity', "injury_severity_hebrew")
-  dictGroupBy["Type"] = new GroupBy('Type', "injured_type_hebrew");
+  dictGroupBy["TypeInjured"] = new GroupBy('TypeInjured', "injured_type_hebrew");
   dictGroupBy["Vehicle"] = new GroupBy('Vehicle', "vehicle_vehicle_type_hebrew");
   dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
   dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
@@ -94,13 +94,19 @@ export class GroupBy2Val {
 }
 
 export const initGroup2Dict = (dict: any) => {
+  dict["Severity"] = new GroupBy2("Severity","injury_severity_hebrew")
+  dict["Severity"].vals["הרוג"] = new GroupBy2Val("dead", "#8884d8")
+  dict["Severity"].vals["פצוע קשה"] = new GroupBy2Val("severly-injured", "#82ca9d")
+
   dict["Gender"] = new GroupBy2("Gender","sex_hebrew");
   dict["Gender"].vals["זכר"] = new GroupBy2Val("male", "#8884d8")
   dict["Gender"].vals["נקבה"] = new GroupBy2Val("female", "#82ca9d")
 
-  dict["Severity"] = new GroupBy2("Severity","injury_severity_hebrew")
-  dict["Severity"].vals["הרוג"] = new GroupBy2Val("dead", "#8884d8")
-  dict["Severity"].vals["פצוע קשה"] = new GroupBy2Val("severly-injured", "#82ca9d")
+  dict["RoadType"] = new GroupBy2('RoadType', "road_type_hebrew");
+  dict["RoadType"].vals["עירונית בצומת"] = new GroupBy2Val("urban-junction", "#8884d8")
+  dict["RoadType"].vals["עירונית לא בצומת"] = new GroupBy2Val("urban-road", "#82ca9d")
+  dict["RoadType"].vals["לא-עירונית בצומת"] = new GroupBy2Val("non-urban-junction", "#8884d8")
+  dict["RoadType"].vals["לא-עירונית לא בצומת"] = new GroupBy2Val("non-urban-road", "#8884d8")
 }
 
 

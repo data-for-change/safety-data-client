@@ -23,7 +23,7 @@ export default class FilterStore {
     FC.initVehicleTypes(this.vehicleType)
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict (this.group2Dict)
-    this.groupBy = this.groupByDict["Type"];
+    this.groupBy = this.groupByDict["TypeInjured"];
     this.groupBy2 = this.group2Dict["Gender"];
     this.appInitialized = false;
   }
