@@ -36,8 +36,10 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                 <SmallCard styleType={3}>
                     <div className="row"> 
                         <SelectGroupBy id="Graphs.Grp2"/>
-                        <SelectGroupBy2 id="Graphs"/></div>
-                    <MyBarChart data={reactDataGrp2} bars={barsGrp2} width={600} height={300}></MyBarChart>
+                        <SelectGroupBy2 id="Graphs"/>
+                        
+                    </div>
+                    <MyBarChart data={reactDataGrp2} bars={barsGrp2} width={600} height={400}></MyBarChart>
                 </SmallCard>
             </div>
         )
