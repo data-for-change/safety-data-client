@@ -36,7 +36,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                 size= 700;
               break;
             case (size <= 100):
-                size= 850;
+                size= 900;
               break;
             default:
                 size= 500;
