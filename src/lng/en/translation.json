@@ -131,6 +131,7 @@
   "Casualties": "Casualties",
   "GroupBy": "Group By",
   "Found": "Found",
+  "resize": "Resize",
   "NoResultsFound": "No results found",
   "export-to-csv": "Export to CSV"
 }
