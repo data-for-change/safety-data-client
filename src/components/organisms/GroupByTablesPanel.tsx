@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{ FunctionComponent } from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
@@ -10,7 +10,7 @@ import { SelectGroupBy2 } from '../atoms/SelectGroupBy2'
 
 interface IProps { }
 
-export const GroupByTablesPanel: React.FC<IProps> = observer(() => {
+export const GroupByTablesPanel: FunctionComponent<IProps> = observer(() => {
     const { t } = useTranslation();
     const store = useStore();
     const style = {
@@ -27,20 +27,20 @@ export const GroupByTablesPanel: React.FC<IProps> = observer(() => {
         return (
             <div className="row" style={style}>
                 <SmallCard title={t('AllCasualtiesInRegion')}>
-                    <GroupByTable>{reactData1}</GroupByTable>
+                    <GroupByTable data={reactData1} />
                 </SmallCard>
                 <SmallCard title={t('CasualtiesByFilter')}>
-                    <GroupByTable>{reactData2}</GroupByTable>
+                    <GroupByTable data={reactData2} />
                 </SmallCard>
                 <SmallCard styleType={1}>
                     <SelectGroupBy id="Tables.Main"/>
-                    <GroupByTable dataName={store.groupBy.text}>{reactData3}</GroupByTable>
+                    <GroupByTable data={reactData3} dataName={store.groupBy.text} />
                 </SmallCard>
                 <SmallCard styleType={2}>
                     <div className="row">
                         <SelectGroupBy  id="Tables.Grp2"/>
                         <SelectGroupBy2 id="Tables"/></div>
-                    <GroupByTable dataName={store.groupBy.text} columns={columnsGrp2}>{reactDataGrp2}</GroupByTable>
+                    <GroupByTable data={reactDataGrp2} dataName={store.groupBy.text} columns={columnsGrp2} />
                 </SmallCard>
             </div>
         )
