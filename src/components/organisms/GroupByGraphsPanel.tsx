@@ -23,20 +23,20 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     const onSizeSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
         let size:number = parseInt(event.target.value)
         switch(true) {
-            case (size <= 25):
+            case (size <= 20):
                 size= 300;
                 break;
-            case (size <= 50):
+            case (size <= 40):
                 size= 500;
               break;
-            case (size <= 70):
+            case (size <= 60):
                 size= 600;
               break;
             case (size <= 80):
-                size= 700;
+                size= 800;
               break;
             case (size <= 100):
-                size= 900;
+                size= 1200;
               break;
             default:
                 size= 500;
