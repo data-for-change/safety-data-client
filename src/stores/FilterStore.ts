@@ -6,6 +6,7 @@ import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
+import {demoIDb} from '../services/Injured.idb.Service'
 //import autorun  from "mobx"
 
 export default class FilterStore {
@@ -341,6 +342,7 @@ export default class FilterStore {
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy,  this.groupBy2.name);
+    demoIDb(); 
   }
   getFilter = () => {
     let filter = `{"$and" : [`
