@@ -28,7 +28,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}
   {
     bars = bars.map((x:any)=>{
       let aName = t(x.key)
-      return(<Bar dataKey={x.key} name={aName} fill={x.color}/>)
+      return(<Bar key={`bar-${x.key}`} dataKey={x.key} name={aName} fill={x.color}/>)
     })
   }
   return (
