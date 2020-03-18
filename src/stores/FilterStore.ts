@@ -6,7 +6,8 @@ import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
-import { idbSetMulti, idbFetchFilter } from '../services/Injured.idb.Service'
+//import { idbSetMulti, idbFetchFilter } from '../services/Injured.idb.Service'
+import {insertToDexie ,getFromDexie } from '../services/Dexie.Injured.Service'
 //import autorun  from "mobx"
 
 export default class FilterStore {
@@ -336,7 +337,8 @@ export default class FilterStore {
     this.isLoading = true;
     let filter = this.getFilterIDB();
     console.log(filter)
-    idbFetchFilter(filter)
+    //idbFetchFilter(filter)
+    getFromDexie ('sex_hebrew' , filter)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.markers = data;
@@ -353,8 +355,9 @@ export default class FilterStore {
         if (data !== null && data !== undefined) {
           this.markers = data;
           //write Data to local db
-          if (this.useLocalDb >0 )
-            idbSetMulti(data);
+          if (this.useLocalDb === 1 )
+            insertToDexie(data);
+             //idbSetMulti(data);
         }
         this.isLoading = false;
       })
