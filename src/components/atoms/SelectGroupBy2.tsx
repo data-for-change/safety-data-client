@@ -18,7 +18,7 @@ export const SelectGroupBy2: React.FC<IProps> = observer(({id}) => {
         <Form className="form-inline">
             <Form.Group controlId={`GrupForm.${id}.SelectGroupBy2`}>
                 {/* <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label> */}
-                <Form.Control as="select" defaultValue={groupBy2.text}  value={groupBy2.text}
+                <Form.Control as="select" value={groupBy2.text}
                     onChange={onSelectChange}
                     >
                     { Object.entries(group2Dict).map(([key,x]:any[])=>{

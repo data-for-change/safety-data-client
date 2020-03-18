@@ -19,7 +19,7 @@ export const SelectGroupBy: React.FC<IProps> = observer(({id}) => {
         <Form className="form-inline">
             <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
                 <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
-                <Form.Control as="select" defaultValue={groupBy.text} value={groupBy.text}
+                <Form.Control as="select" value={groupBy.text}
                     onChange={onSelectChange}
                     >
                     { Object.entries(groupByDict).map(([key,x]:any[])=>{
