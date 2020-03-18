@@ -93,10 +93,10 @@ export const injuerdDb = {
 
 //////////////////////////////
 export async function openDb() {
-    if (!('indexedDB' in window)) {
-        console.log('This browser doesn\'t support IndexedDB');
-        return;
-    }
+    // if (!('indexedDB' in window)) {
+    //     console.log('This browser doesn\'t support IndexedDB');
+    //     return;
+    // }
     const db = await openDB('SaftyData', 1, {
         upgrade(db) {
             if (!db.objectStoreNames.contains('injuerd')) {
@@ -116,15 +116,30 @@ export async function openDb() {
     return db;
 }
 
-export async function getAll() {
+export async function idbGetAll() {
+    const db: IDBPDatabase = await openDb();
+    if (db !== undefined) {
+        return await db.getAllFromIndex('injuerd', 'accident_year');
+    }
 }
-export async function setMulti(data: any[]) {
+
+export async function idbFetchFilter(filter: string) {
+    const db: IDBPDatabase = await openDb();
+    if (db !== undefined) {
+        if (filter !== '')
+            return await db.getAllFromIndex('injuerd', 'sex_hebrew', filter);
+        else
+            return await db.getAllFromIndex('injuerd', 'accident_year');
+    }
+}
+
+export async function idbSetMulti(data: any[]) {
     const db: any = await openDb();
     if (db !== undefined) {
         let tx = db.transaction('injuerd', 'readwrite')
         let store = tx.objectStore('injuerd')
         data.map((x: any) => {
-           return store.put(x);
+            return store.put(x);
         })
         await tx.done;
         db.close()

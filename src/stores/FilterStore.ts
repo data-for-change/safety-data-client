@@ -6,7 +6,7 @@ import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
-import { setMulti } from '../services/Injured.idb.Service'
+import { idbSetMulti, idbFetchFilter } from '../services/Injured.idb.Service'
 //import autorun  from "mobx"
 
 export default class FilterStore {
@@ -317,16 +317,32 @@ export default class FilterStore {
   // filter actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  useLocalDb = true;
+  useLocalDb = 0;
 
   @action
   submitFilter = () => {
-    this.submintMainDataFilter();
+    if (this.useLocalDb ===2 )
+      this.submitMainDataFilterLocalDb();
+    else
+      this.submintMainDataFilter();
+
     this.submitCityNameAndLocation();
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+  }
+  submitMainDataFilterLocalDb = () => {
+    this.isLoading = true;
+    let filter = this.getFilterIDB();
+    console.log(filter)
+    idbFetchFilter(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.markers = data;
+        }
+        this.isLoading = false;
+      })
   }
   submintMainDataFilter = () => {
     this.isLoading = true;
@@ -337,7 +353,8 @@ export default class FilterStore {
         if (data !== null && data !== undefined) {
           this.markers = data;
           //write Data to local db
-          setMulti(data);
+          if (this.useLocalDb >0 )
+            idbSetMulti(data);
         }
         this.isLoading = false;
       })
@@ -351,6 +368,11 @@ export default class FilterStore {
     }
     else
       this.cityResult = "";
+  }
+  getFilterIDB = () => {
+    let filter = ``
+    filter += this.getMultiplefilterIDB("sex_hebrew", this.genderTypes);
+    return filter;
   }
 
   getFilter = () => {
@@ -443,6 +465,29 @@ export default class FilterStore {
       ).join(',')
       filter += `]}`
     }
+    return filter;
+  }
+  getMultiplefilterIDB = (filterKey: string, arr: Array<IFilterChecker>) => {
+    let filter: string = '';
+    let allChecked: boolean = true;
+    let arrfilter: string[] = [];
+    const iterator = arr.values();
+    for (const filterCheck of iterator) {
+      if (filterCheck.checked) {
+        arrfilter = [...arrfilter, ...filterCheck.filters]
+      }
+      else {
+        allChecked = false;
+      }
+    }
+    if (allChecked)
+      filter = '';
+    else {
+      filter += arrfilter.map((x: string) => {
+          let xSafe = x.replace('"', '\\"')
+          return xSafe
+        })
+      }
     return filter;
   }
   getfilterInjured = () => {
