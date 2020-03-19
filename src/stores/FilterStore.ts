@@ -275,9 +275,8 @@ export default class FilterStore {
     //console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
-        if (data !== undefined) {
+        if (data !== undefined && data.length > 0)  {
           let fixData = this.groupBy2.fixStrcutTable(data)
-          //let fixData = this.fixStrcutTable(data)
           this.dataGroupby2 = fixData;
         }
       })
@@ -318,7 +317,7 @@ export default class FilterStore {
   // filter actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  useLocalDb = 0;
+  useLocalDb = 2;
 
   @action
   submitFilter = () => {
