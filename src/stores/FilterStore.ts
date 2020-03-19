@@ -55,11 +55,7 @@ export default class FilterStore {
       i18n.changeLanguage(locale);
     }
   )
-  //this belong to mapstore! need to move
-  @observable
-  mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
-  @observable
-  isReadyToRenderMap: boolean = false;
+
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //where
@@ -314,10 +310,9 @@ export default class FilterStore {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // filter actions
+  // filters actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  @observable
-  useLocalDb = 2;
+
 
   @action
   submitFilter = () => {
@@ -370,14 +365,7 @@ export default class FilterStore {
     else
       this.cityResult = "";
   }
-  getFilterIDB = () => {
-    let arrFilters:any[] = []
-    let years = {filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString()}
-    arrFilters.push (years)
-    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
-    this.getMultiplefilterIDB(arrFilters,"road_type_hebrew", this.roadTypes);
-    return arrFilters;
-  }
+
 
   getFilter = () => {
     let filter = `{"$and" : [`
@@ -418,6 +406,7 @@ export default class FilterStore {
     }
     return filter;
   }
+  
   getFilterStreets = () => {
     let filter: string = '';
     if (this.streets.length > 0 && this.streets[0] !== "") {
@@ -471,6 +460,43 @@ export default class FilterStore {
     }
     return filter;
   }
+
+  getfilterInjured = () => {
+    let filter: string = '';
+    if (this.injTypes[0].checked)
+      filter = '';
+    else {
+      let arrfilter: string[] = [];
+      const iterator = this.injTypes.values();
+      for (const injType of iterator) {
+        if (injType.checked) {
+          arrfilter = [...arrfilter, ...injType.filters]
+        }
+      }
+      filter += `,{"$or": [`
+      filter += arrfilter.map((x: string) => `{"injured_type_hebrew" : "${x}"}`).join(',')
+      filter += `]}`
+    }
+    return filter;
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // local db filters - idb using Dexie.js
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  useLocalDb = 2;
+
+  getFilterIDB = () => {
+    let arrFilters:any[] = []
+    let years = {filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString()}
+    arrFilters.push (years)
+    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
+    this.getMultiplefilterIDB(arrFilters,"road_type_hebrew", this.roadTypes);
+    this.getfilterCityIDB(arrFilters);
+    return arrFilters;
+  }
+
   getMultiplefilterIDB = (arrFilters:any[], filterKey: string, arr: Array<IFilterChecker>) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
@@ -492,24 +518,23 @@ export default class FilterStore {
       arrFilters.push(filter)
     }
   }
-  getfilterInjured = () => {
-    let filter: string = '';
-    if (this.injTypes[0].checked)
-      filter = '';
-    else {
-      let arrfilter: string[] = [];
-      const iterator = this.injTypes.values();
-      for (const injType of iterator) {
-        if (injType.checked) {
-          arrfilter = [...arrfilter, ...injType.filters]
-        }
-      }
-      filter += `,{"$or": [`
-      filter += arrfilter.map((x: string) => `{"injured_type_hebrew" : "${x}"}`).join(',')
-      filter += `]}`
+
+  getfilterCityIDB = (arrFilters:any[]) => {
+    if (this.cities.length > 0) {
+      let filter = {filterName:"accident_yishuv_name", values:this.cities}
+      arrFilters.push(filter)
     }
-    return filter;
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  // map store
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+  //this belong to mapstore! need to move
+  @observable
+  mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
+  @observable
+  isReadyToRenderMap: boolean = false;
 
   @action
   updateLocation = (res: any[]) => {
