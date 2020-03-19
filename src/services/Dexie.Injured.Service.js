@@ -18,11 +18,17 @@ export async function getFromDexie(arrFilters) {
     else
     {
         let years = arrFilters.shift()
-        console.log(years)
         let collection = await db.injuerd.where('accident_year').between(years.startYear,years.endYear,true,true);
         arrFilters.forEach(element => {
             collection= collection.and((function (x) {
-                return x[element.filterName] === element.values[0];
+                if(element.values.length ===1)
+                    return x[element.filterName] === element.values[0];
+                else
+                    {
+                        let orlist = false;
+                        element.values.forEach(val => orlist = orlist || x[element.filterName] === val);
+                        return orlist
+                    }    
             }))
         });
         data = collection.toArray();
