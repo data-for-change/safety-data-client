@@ -11,27 +11,24 @@ export async function insertToDexie(data) {
 }
 
 export async function getFromDexie(arrFilters) {
-    console.log(arrFilters)
     let data;
     if (arrFilters.length === 0)
         data = await db.injuerd.toArray();
-    else
-    {
+    else {
         let years = arrFilters.shift()
-        let collection = await db.injuerd.where('accident_year').between(years.startYear,years.endYear,true,true);
+        let collection = await db.injuerd.where(years.filterName).between(years.startYear, years.endYear, true, true);
         arrFilters.forEach(element => {
-            collection= collection.and((function (x) {
-                if(element.values.length ===1)
+            collection = collection.and((function (x) {
+                if (element.values.length === 1)
                     return x[element.filterName] === element.values[0];
-                else
-                    {
-                        let orlist = false;
-                        element.values.forEach(val => orlist = orlist || x[element.filterName] === val);
-                        return orlist
-                    }    
+                else {
+                    let orFilter = false;
+                    element.values.forEach(val => orFilter = orFilter || x[element.filterName] === val);
+                    return orFilter
+                }
             }))
         });
-        data = collection.toArray();
+        data = await collection.toArray();
     }
     return data
 }

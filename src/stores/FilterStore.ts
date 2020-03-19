@@ -372,7 +372,7 @@ export default class FilterStore {
   }
   getFilterIDB = () => {
     let arrFilters:any[] = []
-    let years = {startYear: this.startYear.toString(), endYear: this.endYear.toString()}
+    let years = {filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString()}
     arrFilters.push (years)
     this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
     this.getMultiplefilterIDB(arrFilters,"road_type_hebrew", this.roadTypes);
