@@ -334,10 +334,9 @@ export default class FilterStore {
   }
   submitMainDataFilterLocalDb = () => {
     this.isLoading = true;
-    let filter = this.getFilterIDB();
-    console.log(filter)
-    //idbFetchFilter(filter)
-    getFromDexie ('sex_hebrew' , filter)
+    let arrFilters = this.getFilterIDB();
+    console.log(arrFilters)
+    getFromDexie (arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.markers = data;
@@ -348,7 +347,7 @@ export default class FilterStore {
   submintMainDataFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
-    console.log(filter)
+    //console.log(filter)
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
@@ -372,9 +371,11 @@ export default class FilterStore {
       this.cityResult = "";
   }
   getFilterIDB = () => {
-    let filter = ``
-    filter += this.getMultiplefilterIDB("sex_hebrew", this.genderTypes);
-    return filter;
+    let arrFilters:any[] = []
+    let years = {startYear: this.startYear.toString(), endYear: this.endYear.toString()}
+    arrFilters.push (years)
+    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
+    return arrFilters;
   }
 
   getFilter = () => {
@@ -469,8 +470,7 @@ export default class FilterStore {
     }
     return filter;
   }
-  getMultiplefilterIDB = (filterKey: string, arr: Array<IFilterChecker>) => {
-    let filter: string = '';
+  getMultiplefilterIDB = (arrFilters:any[], filterKey: string, arr: Array<IFilterChecker>) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = arr.values();
@@ -482,15 +482,14 @@ export default class FilterStore {
         allChecked = false;
       }
     }
-    if (allChecked)
-      filter = '';
-    else {
-      filter += arrfilter.map((x: string) => {
-          let xSafe = x.replace('"', '\\"')
-          return xSafe
+    if (!allChecked)
+    { 
+      let filterVals = arrfilter.map((x: string) => {
+          return x.replace('"', '\\"')
         })
-      }
-    return filter;
+      let filter = {filterName:filterKey, values:filterVals}
+      arrFilters.push(filter)
+    }
   }
   getfilterInjured = () => {
     let filter: string = '';

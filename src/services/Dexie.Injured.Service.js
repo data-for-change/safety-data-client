@@ -6,15 +6,27 @@ db.version(1).stores({
 });
 
 export async function insertToDexie(data) {
+    //console.log("insertToDexie")
     await db.injuerd.bulkPut(data);
 }
 
-export async function getFromDexie(filtername,value) {
-    console.log(value)
-    if (value === ``)
-        var data = await db.injuerd.toArray();
+export async function getFromDexie(arrFilters) {
+    console.log(arrFilters)
+    let data;
+    if (arrFilters.length === 0)
+        data = await db.injuerd.toArray();
     else
-        var data = await db.injuerd.where(filtername).equals(value).toArray();
+    {
+        let years = arrFilters.shift()
+        console.log(years)
+        let collection = await db.injuerd.where('accident_year').between(years.startYear,years.endYear,true,true);
+        arrFilters.forEach(element => {
+            collection= collection.and((function (x) {
+                return x[element.filterName] === element.values[0];
+            }))
+        });
+        data = collection.toArray();
+    }
     return data
 }
 
