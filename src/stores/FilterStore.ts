@@ -7,7 +7,7 @@ import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 //import { idbSetMulti, idbFetchFilter } from '../services/Injured.idb.Service'
-import {insertToDexie ,getFromDexie } from '../services/Dexie.Injured.Service'
+import { insertToDexie, getFromDexie } from '../services/Dexie.Injured.Service'
 //import autorun  from "mobx"
 
 export default class FilterStore {
@@ -271,7 +271,7 @@ export default class FilterStore {
     //console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
-        if (data !== undefined && data.length > 0)  {
+        if (data !== undefined && data.length > 0) {
           let fixData = this.groupBy2.fixStrcutTable(data)
           this.dataGroupby2 = fixData;
         }
@@ -313,10 +313,9 @@ export default class FilterStore {
   // filters actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-
   @action
   submitFilter = () => {
-    if (this.useLocalDb ===2 )
+    if (this.useLocalDb === 2)
       this.submitMainDataFilterLocalDb();
     else
       this.submintMainDataFilter();
@@ -327,30 +326,19 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
-  submitMainDataFilterLocalDb = () => {
-    this.isLoading = true;
-    let arrFilters = this.getFilterIDB();
-    console.log(arrFilters)
-    getFromDexie (arrFilters)
-      .then((data: any[] | undefined) => {
-        if (data !== null && data !== undefined) {
-          this.markers = data;
-        }
-        this.isLoading = false;
-      })
-  }
+  
   submintMainDataFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
-    //console.log(filter)
+    console.log(filter)
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.markers = data;
           //write Data to local db
-          if (this.useLocalDb === 1 )
+          if (this.useLocalDb === 1)
             insertToDexie(data);
-             //idbSetMulti(data);
+          //idbSetMulti(data);
         }
         this.isLoading = false;
       })
@@ -365,7 +353,6 @@ export default class FilterStore {
     else
       this.cityResult = "";
   }
-
 
   getFilter = () => {
     let filter = `{"$and" : [`
@@ -406,7 +393,7 @@ export default class FilterStore {
     }
     return filter;
   }
-  
+
   getFilterStreets = () => {
     let filter: string = '';
     if (this.streets.length > 0 && this.streets[0] !== "") {
@@ -487,17 +474,39 @@ export default class FilterStore {
   @observable
   useLocalDb = 2;
 
+  submitMainDataFilterLocalDb = () => {
+    this.isLoading = true;
+    let arrFilters = this.getFilterIDB();
+    console.log(arrFilters)
+    getFromDexie(arrFilters)
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.markers = data;
+        }
+        this.isLoading = false;
+      })
+  }
+
   getFilterIDB = () => {
-    let arrFilters:any[] = []
-    let years = {filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString()}
-    arrFilters.push (years)
-    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
-    this.getMultiplefilterIDB(arrFilters,"road_type_hebrew", this.roadTypes);
+    let arrFilters: any[] = []
+    let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
+    arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
+    this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
+    this.getMultiplefilterIDB(arrFilters, "age_group_hebrew", this.ageTypes);
+    this.getMultiplefilterIDB(arrFilters, "population_type_hebrew", this.populationTypes);
+    this.getMultiplefilterIDB(arrFilters, "accident_type_hebrew", this.accidentType);
+    this.getMultiplefilterIDB(arrFilters, "vehicle_vehicle_type_hebrew", this.vehicleType);
+    this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, "speed_limit_hebrew", this.speedLimit);
+    this.getMultiplefilterIDB(arrFilters, "road_width_hebrew", this.roadWidth);
+    this.getMultiplefilterIDB(arrFilters, "multi_lane_hebrew", this.separator);
+    this.getMultiplefilterIDB(arrFilters, "one_lane_hebrew", this.oneLane);
     return arrFilters;
   }
 
-  getMultiplefilterIDB = (arrFilters:any[], filterKey: string, arr: Array<IFilterChecker>) => {
+  getMultiplefilterIDB = (arrFilters: any[], filterKey: string, arr: Array<IFilterChecker>) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = arr.values();
@@ -509,19 +518,21 @@ export default class FilterStore {
         allChecked = false;
       }
     }
-    if (!allChecked)
-    { 
+    if (!allChecked) {
       let filterVals = arrfilter.map((x: string) => {
-          return x.replace('"', '\\"')
-        })
-      let filter = {filterName:filterKey, values:filterVals}
+        //let res = x.replace('"', '\\"')
+        if (x === "null")
+          return null;
+        return x;
+      })
+      let filter = { filterName: filterKey, values: filterVals }
       arrFilters.push(filter)
     }
   }
 
-  getfilterCityIDB = (arrFilters:any[]) => {
+  getfilterCityIDB = (arrFilters: any[]) => {
     if (this.cities.length > 0) {
-      let filter = {filterName:"accident_yishuv_name", values:this.cities}
+      let filter = { filterName: "accident_yishuv_name", values: this.cities }
       arrFilters.push(filter)
     }
   }
