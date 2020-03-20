@@ -57,7 +57,7 @@ export const initVehicleTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('taxi', true, ["מונית"]));
     arr.push(new FilterChecker('bus', true, ["אוטובוס זעיר","אוטובוס"]));
     arr.push(new FilterChecker('tranzit', true, ["משא עד 3.5 טון - אחוד (טרנזיט)"]));
-    arr.push(new FilterChecker('tender', true, ["משא עד 3.5 טון - לא אחוד (טנדר)"]));
+    arr.push(new FilterChecker('tender', true, ["משא עד 3.5  טון - לא אחוד (טנדר)"]));
     arr.push(new FilterChecker('truck', true, ['משא 3.6 עד 9.9 טון','משא 10.0 עד 12.0 טון', 'משא 12.1 עד 15.9 טון', 'משא 16.0 עד 33.9 טון','משא 34.0+ טון',]));
     arr.push(new FilterChecker('tractor', true, ["טרקטור"]));
     arr.push(new FilterChecker('train', true, ["רכבת"]));
