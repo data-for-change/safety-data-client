@@ -24,6 +24,8 @@ export const initGroupByDict = (dictGroupBy: any) => {
   dictGroupBy["Vehicle"] = new GroupBy('Vehicle', "vehicle_vehicle_type_hebrew");
   dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
   dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
+  dictGroupBy["Year"] = new GroupBy('Year', "accident_year");
+  dictGroupBy["Month"] = new GroupBy('Month', "accident_month");
   dictGroupBy["DayNight"] = new GroupBy('DayNight', "day_night_hebrew");
   dictGroupBy["WeekDay"] = new GroupBy('WeekDay', "day_in_week_hebrew");
   dictGroupBy["RoadType"] = new GroupBy('RoadType', "road_type_hebrew");

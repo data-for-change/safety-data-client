@@ -36,6 +36,22 @@ export const initDayNight = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('night', true, ["לילה"]));
 }
 
+export const initMonth = (arr: IFilterChecker[]) => {
+    arr.push(new FilterChecker('1', true, ["1"]));
+    arr.push(new FilterChecker('2', true, ["2"]));
+    arr.push(new FilterChecker('3', true, ["3"]));
+    arr.push(new FilterChecker('4', true, ["4"]));
+    arr.push(new FilterChecker('5', true, ["5"]));
+    arr.push(new FilterChecker('6', true, ["6"]));
+    arr.push(new FilterChecker('7', true, ["7"]));
+    arr.push(new FilterChecker('8', true, ["8"]));
+    arr.push(new FilterChecker('9', true, ["9"]));
+    arr.push(new FilterChecker('10', true, ["10"]));
+    arr.push(new FilterChecker('11', true, ["11"]));
+    arr.push(new FilterChecker('12', true, ["12"]));
+}
+
+
 export const initInjTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('all', true, []));
     arr.push(new FilterChecker('pedestrian', false, ["הולך רגל"]));
