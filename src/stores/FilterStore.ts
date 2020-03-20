@@ -326,7 +326,7 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
-  
+
   submintMainDataFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
@@ -492,7 +492,11 @@ export default class FilterStore {
     let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
     arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
+    this.getFilterStreetsIDB(arrFilters);
+    this.getMultiplefilterIDB(arrFilters, "day_night_hebrew", this.dayNight);
+    this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
+    this.getfilterInjuredIdb(arrFilters);
     this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
     this.getMultiplefilterIDB(arrFilters, "age_group_hebrew", this.ageTypes);
     this.getMultiplefilterIDB(arrFilters, "population_type_hebrew", this.populationTypes);
@@ -534,6 +538,27 @@ export default class FilterStore {
     if (this.cities.length > 0) {
       let filter = { filterName: "accident_yishuv_name", values: this.cities }
       arrFilters.push(filter)
+    }
+  }
+  getFilterStreetsIDB = (arrFilters: any[]) => {
+    if (this.streets.length > 0 && this.streets[0] !== "") {
+      const filter1 = { filterName: "street1_hebrew", values: this.streets.map((x: string) => { return x.trim() }) }
+      arrFilters.push(filter1)
+      //const filter2 = { filterName: "street2_hebrew", values: this.streets.map((x: string) => {x.trim()}) } 
+      //arrFilters.push(filter2)
+    }
+  }
+  getFilterFromArrayIDb = (arrFilters: any[], filterName: string, arr: string[]) => {
+    if (arr.length > 0 && arr[0] !== "") {
+      let filter = { filterName: filterName, values: arr.map((x: string) => { return x.trim() }) }
+      arrFilters.push(filter)
+    }
+  }
+  getfilterInjuredIdb = (arrFilters: any[]) => {
+    if (this.injTypes[0].checked) //all
+      return;
+    else {
+      this.getMultiplefilterIDB(arrFilters, "injured_type_hebrew", this.injTypes);
     }
   }
 
