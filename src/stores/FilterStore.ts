@@ -207,6 +207,16 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   markers: any[] = []
+  @action 
+  updateMarkers= (data: any[]) =>{
+    this.markers = data;
+    if (this.isSetBounds)
+      {
+        this.mapBounds = this.setBounds(this.markers)
+        this.isSetBounds = false;
+      }
+  }
+
   @observable
   dataByYears: any[] = []
   @observable
@@ -330,15 +340,15 @@ export default class FilterStore {
   submintMainDataFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
+    this.updateIsSetBounds(this.cities,this.roadSegment);
     console.log(filter)
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.markers = data;
+          this.updateMarkers(data);
           //write Data to local db
           if (this.useLocalDb === 1)
             insertToDexie(data);
-          //idbSetMulti(data);
         }
         this.isLoading = false;
       })
@@ -477,11 +487,12 @@ export default class FilterStore {
   submitMainDataFilterLocalDb = () => {
     this.isLoading = true;
     let arrFilters = this.getFilterIDB();
+    this.updateIsSetBounds(this.cities,this.roadSegment);
     console.log(arrFilters)
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.markers = data;
+          this.updateMarkers(data);
         }
         this.isLoading = false;
       })
@@ -570,6 +581,19 @@ export default class FilterStore {
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
   @observable
+  isSetBounds :boolean = false;
+  @action
+  updateIsSetBounds = (citisArr:any[], roadSegArr:any[]) =>{
+    if(citisArr.length >0  && citisArr[0] !== "")
+      this.isSetBounds = true;
+    else if (roadSegArr.length >0 && roadSegArr[0] !== "") 
+      this.isSetBounds = true; 
+  }
+
+  @observable
+  mapBounds: L.LatLngBounds =  L.latLngBounds([ L.latLng(32.032,34.739), L.latLng(32.115,34.949)])
+
+  @observable
   isReadyToRenderMap: boolean = false;
 
   @action
@@ -579,6 +603,35 @@ export default class FilterStore {
       if (city.lat !== null && city.lon !== null)
         this.mapCenter = new L.LatLng(city.lat, city.lon);
     }
+  }
+
+  @action
+  setBounds = (data: any[]) => {
+    const corner1 = L.latLng(29.50, 34.22)
+    const corner2 = L.latLng(33.271, 35.946)
+    let arr: L.LatLng[] = [];
+    let lastPoint: L.LatLng = L.latLng(0, 0);
+    data.forEach(x => {
+        if (x.latitude !== null && x.longitude !== null) {
+            let p = new L.LatLng(x.latitude, x.longitude);
+            if ((lastPoint.lat === 0 && lastPoint.lng === 0) || x.latitude !== lastPoint.lat || x.longitude !== lastPoint.lng) {
+                arr.push(p)
+                //prevent insertion of duplicate same point
+                lastPoint = p;
+            }
+        }
+    });
+    //bounds for single point
+    if (arr.length === 1) {
+        arr.length = 0; //clean tha array
+        arr.push(L.latLng(lastPoint.lat + 0.01, lastPoint.lng + 0.01))
+        arr.push(L.latLng(lastPoint.lat - 0.01, lastPoint.lng - 0.01))
+    }
+    //in case no lat/lon info 
+    if (arr.length < 2)
+        arr = [corner1, corner2];
+    const bounds = L.latLngBounds(arr)
+    return bounds;
   }
 
 }

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useRef ,useEffect} from 'react'
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 
-//import L from 'leaflet'
+import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet'
 import AccidentsMarkers from '../molecules/AccidentsMarkers'
 import { useStore } from '../../stores/storeConfig'
@@ -14,6 +14,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const store = useStore();
   const reactMapCenter = toJS(store.mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
+  const bounds = store.mapBounds;
   const didMountRef = useRef(false) 
   useEffect(() => {
     if (didMountRef.current) { 
@@ -31,6 +32,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         <Map ref={mapRef}
           center={reactMapCenter}
           zoom={13}
+          bounds ={bounds}
           style={WRAPPER_STYLES}
         >
           <TileLayer
@@ -43,6 +45,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     </div>
   )
 })
+
 
 
 export default MapAccidents
