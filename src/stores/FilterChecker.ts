@@ -17,26 +17,28 @@ export default class FilterChecker implements IFilterChecker {
     }
 }
 export interface IFilterGroup {
-    label: string;
+    name: string;
     dbColName: string;
     arrFilters: IFilterChecker[]
 }
 export class FilterGroup implements IFilterGroup {
-    label: string;
+    name: string;
     dbColName: string;
     @observable
     arrFilters: IFilterChecker[];
-    constructor(label: string, dbColName: string) {
-        this.label = label;
+    constructor(name: string, dbColName: string) {
+        this.name = name;
         this.dbColName = dbColName;
         this.arrFilters = [];
     }
-    @action
-    updateFilters = (aType: number, val: boolean) => {
-      this.arrFilters[aType].checked = val;
-    }
 }
 
+export const initGenderTypesNew = () => {
+    const group : IFilterGroup = new FilterGroup('Gender','sex_hebrew')
+    group.arrFilters.push(new FilterChecker('female', true, ["נקבה"]));
+    group.arrFilters.push(new FilterChecker('male', true, ["זכר"]));
+    return group;
+}
 
 export const initInjurySeverity = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('dead', true, ["הרוג"]));

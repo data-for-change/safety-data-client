@@ -1,7 +1,7 @@
 import { observable, action, reaction } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
-import IFilterChecker from './FilterChecker'
+import IFilterChecker ,{IFilterGroup} from './FilterChecker'
 import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
@@ -17,7 +17,8 @@ export default class FilterStore {
     FC.initInjurySeverity(this.injurySeverity)
     FC.initDayNight(this.dayNight)
     FC.initInjTypes(this.injTypes);
-    FC.initGenderTypes(this.genderTypes);
+    this.genderTypesGroup = FC.initGenderTypesNew()
+    //FC.initGenderTypes(this.genderTypes);
     FC.initAgeTypes(this.ageTypes)
     FC.initPopulationTypes(this.populationTypes)
     FC.initAccidentType(this.accidentType)
@@ -105,11 +106,15 @@ export default class FilterStore {
   // who
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-  @observable
-  genderTypes: Array<IFilterChecker> = [];
+  //@observable
+  //genderTypes: Array<IFilterChecker> = [];
+ @observable
+ genderTypesGroup  : IFilterGroup
+
   @action
   updateGenderType = (aType: number, val: boolean) => {
-    this.genderTypes[aType].checked = val;
+    this.updateFilters(this.genderTypesGroup,aType, val)
+    //this.genderTypes[aType].checked = val;
   }
 
   @observable
@@ -373,7 +378,7 @@ export default class FilterStore {
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
     filter += this.getfilterInjured();
-    filter += this.getMultiplefilter("sex_hebrew", this.genderTypes);
+    filter += this.getMultiplefilterNew(this.genderTypesGroup)
     filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
     filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
@@ -385,6 +390,11 @@ export default class FilterStore {
     filter += this.getMultiplefilter("one_lane_hebrew", this.oneLane);
     filter += `]}`
     return filter;
+  }
+
+  @action
+  updateFilters = (FilterGroup:IFilterGroup ,aType: number, val: boolean) => {
+    FilterGroup.arrFilters[aType].checked = val;
   }
 
   getfilterForCityOnly = () => {
@@ -457,6 +467,37 @@ export default class FilterStore {
     }
     return filter;
   }
+  getMultiplefilterNew = (filterGroup: IFilterGroup) => {
+    let filter: string = '';
+    let allChecked: boolean = true;
+    let arrfilter: string[] = [];
+    const iterator = filterGroup.arrFilters.values();
+    for (const filterCheck of iterator) {
+      if (filterCheck.checked) {
+        arrfilter = [...arrfilter, ...filterCheck.filters]
+      }
+      else {
+        allChecked = false;
+      }
+    }
+    if (allChecked)
+      filter = '';
+    else {
+      filter += `,{"$or": [`
+      filter += arrfilter.map((x: string) => {
+        if (x === "null")
+          return `{"${filterGroup.dbColName}":` + null + '}'
+        else {
+          let xSafe = x.replace('"', '\\"')
+          return `{"${filterGroup.dbColName}" : "${xSafe}"}`
+        }
+
+      }
+      ).join(',')
+      filter += `]}`
+    }
+    return filter;
+  }
 
   getfilterInjured = () => {
     let filter: string = '';
@@ -508,7 +549,8 @@ export default class FilterStore {
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
     this.getfilterInjuredIdb(arrFilters);
-    this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
+    //this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
+    this.getMultiplefilterIDBNew(arrFilters, this.genderTypesGroup)
     this.getMultiplefilterIDB(arrFilters, "age_group_hebrew", this.ageTypes);
     this.getMultiplefilterIDB(arrFilters, "population_type_hebrew", this.populationTypes);
     this.getMultiplefilterIDB(arrFilters, "accident_type_hebrew", this.accidentType);
@@ -521,6 +563,28 @@ export default class FilterStore {
     return arrFilters;
   }
 
+  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IFilterGroup) => {
+    let allChecked: boolean = true;
+    let arrfilter: string[] = [];
+    const iterator = filterGroup.arrFilters.values();
+    for (const filterCheck of iterator) {
+      if (filterCheck.checked) {
+        arrfilter = [...arrfilter, ...filterCheck.filters]
+      }
+      else {
+        allChecked = false;
+      }
+    }
+    if (!allChecked) {
+      let filterVals = arrfilter.map((x: string) => {
+        if (x === "null")
+          return null;
+        return x;
+      })
+      let filter = { filterName: filterGroup.dbColName, values: filterVals }
+      arrFilters.push(filter)
+    }
+  }
   getMultiplefilterIDB = (arrFilters: any[], filterKey: string, arr: Array<IFilterChecker>) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
