@@ -115,7 +115,7 @@ const CardFilterWho = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="2" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName='Vehicle' dataArr={store.injTypes} onChange={store.updateInjuerdType} />
+          <GroupCheckbox formName="exampleForm" groupName={store.injTypes.name} dataArr={store.injTypes.arrTypes} onChange={store.updateInjuerdType} />
           <GroupCheckbox formName="exampleForm" groupName={store.genderTypes.name} dataArr={store.genderTypes.arrTypes} onChange={store.updateGenderType} />
           <GroupCheckbox formName="exampleForm" groupName={store.ageTypes.name} dataArr={store.ageTypes.arrTypes} onChange={store.updateAgeType} />
           <GroupCheckbox formName="exampleForm" groupName={store.populationTypes.name} dataArr={store.populationTypes.arrTypes} onChange={store.updatePopulationType} />

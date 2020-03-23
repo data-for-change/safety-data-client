@@ -16,7 +16,7 @@ export default class FilterStore {
     // init app data
     this.injurySeverity = FC.initInjurySeverity()
     this.dayNight = FC.initDayNight()
-    FC.initInjTypes(this.injTypes);
+    this.injTypes = FC.initInjTypes();
     this.genderTypes = FC.initGenderTypes()
     this.ageTypes= FC.initAgeTypes()
     this.populationTypes = FC.initPopulationTypes()
@@ -114,13 +114,13 @@ export default class FilterStore {
     this.updateFilters(this.genderTypes, aType, val)
   }
   @observable
-  ageTypes: IColumnFilter
+  ageTypes: IColumnFilter;
   @action
   updateAgeType = (aType: number, val: boolean) => {
     this.updateFilters(this.ageTypes, aType, val)
   }
   @observable
-  populationTypes: IColumnFilter
+  populationTypes: IColumnFilter;
   @action
   updatePopulationType = (aType: number, val: boolean) => {
     this.updateFilters(this.populationTypes, aType, val)
@@ -128,21 +128,10 @@ export default class FilterStore {
 
   //injTypes
   @observable
-  injTypes: Array<IFilterChecker> = [];
+  injTypes: IColumnFilter;
   @action
   updateInjuerdType = (aType: number, val: boolean) => {
-    if (aType === 0) {
-      this.injTypes[0].checked = val;
-      this.injTypes[1].checked = !val;
-      this.injTypes[2].checked = !val;
-      this.injTypes[3].checked = !val;
-      this.injTypes[4].checked = !val;
-      this.injTypes[5].checked = !val;
-    }
-    else {
-      this.injTypes[0].checked = false;
-      this.injTypes[aType].checked = val;
-    }
+    this.updateFilters(this.injTypes, aType, val)
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What
@@ -371,7 +360,7 @@ export default class FilterStore {
     filter += this.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
-    filter += this.getfilterInjured();
+    filter += this.getMultiplefilter(this.injTypes)
     filter += this.getMultiplefilter(this.genderTypes)
     filter += this.getMultiplefilter(this.ageTypes)
     filter += this.getMultiplefilter(this.populationTypes)
@@ -481,26 +470,6 @@ export default class FilterStore {
     return filter;
   }
 
-  getfilterInjured = () => {
-    let filter: string = '';
-    if (this.injTypes[0].checked)
-      filter = '';
-    else {
-      let arrfilter: string[] = [];
-      const iterator = this.injTypes.values();
-      for (const injType of iterator) {
-        if (injType.checked) {
-          arrfilter = [...arrfilter, ...injType.filters]
-        }
-      }
-      filter += `,{"$or": [`
-      filter += arrfilter.map((x: string) => `{"injured_type_hebrew" : "${x}"}`).join(',')
-      filter += `]}`
-    }
-    return filter;
-  }
-
-
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // local db filters - idb using Dexie.js
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +499,7 @@ export default class FilterStore {
     this.getMultiplefilterIDB(arrFilters, this.dayNight);
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
     this.getMultiplefilterIDB(arrFilters, this.roadTypes);
-    this.getfilterInjuredIdb(arrFilters);
+    this.getMultiplefilterIDB(arrFilters, this.injTypes);
     this.getMultiplefilterIDB(arrFilters, this.genderTypes)
     this.getMultiplefilterIDB(arrFilters, this.ageTypes);
     this.getMultiplefilterIDB(arrFilters, this.populationTypes);
@@ -544,10 +513,12 @@ export default class FilterStore {
     return arrFilters;
   }
 
-  getMultiplefilterIDB = (arrFilters: any[], filterGroup: IColumnFilter) => {
+  getMultiplefilterIDB = (arrFilters: any[], colFilter: IColumnFilter) => {
+    if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) //all
+      return;
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    const iterator = filterGroup.arrTypes.values();
+    const iterator = colFilter.arrTypes.values();
     for (const filterCheck of iterator) {
       if (filterCheck.checked) {
         arrfilter = [...arrfilter, ...filterCheck.filters]
@@ -562,30 +533,7 @@ export default class FilterStore {
           return null;
         return x;
       })
-      let filter = { filterName: filterGroup.dbColName, values: filterVals }
-      arrFilters.push(filter)
-    }
-  }
-  getMultiplefilterIDBold = (arrFilters: any[], filterKey: string, arr: Array<IFilterChecker>) => {
-    let allChecked: boolean = true;
-    let arrfilter: string[] = [];
-    const iterator = arr.values();
-    for (const filterCheck of iterator) {
-      if (filterCheck.checked) {
-        arrfilter = [...arrfilter, ...filterCheck.filters]
-      }
-      else {
-        allChecked = false;
-      }
-    }
-    if (!allChecked) {
-      let filterVals = arrfilter.map((x: string) => {
-        //let res = x.replace('"', '\\"')
-        if (x === "null")
-          return null;
-        return x;
-      })
-      let filter = { filterName: filterKey, values: filterVals }
+      let filter = { filterName: colFilter.dbColName, values: filterVals }
       arrFilters.push(filter)
     }
   }
@@ -610,14 +558,7 @@ export default class FilterStore {
       arrFilters.push(filter)
     }
   }
-  getfilterInjuredIdb = (arrFilters: any[]) => {
-    if (this.injTypes[0].checked) //all
-      return;
-    else {
-      this.getMultiplefilterIDBold(arrFilters, "injured_type_hebrew", this.injTypes);
-    }
-  }
-
+  
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // map store
   ///////////////////////////////////////////////////////////////////////////////////////////////////

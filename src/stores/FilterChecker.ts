@@ -65,14 +65,15 @@ export const initMonth = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('12', true, ["12"]));
 }
 
-
-export const initInjTypes = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('all', true, []));
-    arr.push(new FilterChecker('pedestrian', false, ["הולך רגל"]));
-    arr.push(new FilterChecker('cyclist', false, ["נהג - אופניים", "נוסע - אופניים (לא נהג)"]));
-    arr.push(new FilterChecker('motorcycle', false, ["נהג - אופנוע", "נוסע - אופנוע (לא נהג)"]));
-    arr.push(new FilterChecker('wheels4+', false, ["נהג - רכב בעל 4 גלגלים ויותר", "נוסע - רכב בעל 4 גלגלים ויותר"]));
-    arr.push(new FilterChecker('other', false, ["נהג - רכב לא ידוע", "נוסע - רכב לא ידוע"]));
+export const initInjTypes = () => {
+    const col : IColumnFilter = new ColumnFilter('Vehicle','injured_type_hebrew',0)
+    col.arrTypes.push(new FilterChecker('all', true, []));
+    col.arrTypes.push(new FilterChecker('pedestrian', false, ["הולך רגל"]));
+    col.arrTypes.push(new FilterChecker('cyclist', false, ["נהג - אופניים", "נוסע - אופניים (לא נהג)"]));
+    col.arrTypes.push(new FilterChecker('motorcycle', false, ["נהג - אופנוע", "נוסע - אופנוע (לא נהג)"]));
+    col.arrTypes.push(new FilterChecker('wheels4+', false, ["נהג - רכב בעל 4 גלגלים ויותר", "נוסע - רכב בעל 4 גלגלים ויותר"]));
+    col.arrTypes.push(new FilterChecker('other', false, ["נהג - רכב לא ידוע", "נוסע - רכב לא ידוע"]));
+    return col;
 }
 
 export const initVehicleTypes = () => {
