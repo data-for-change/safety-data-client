@@ -1,7 +1,7 @@
 import { observable, action, reaction } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
-import IFilterChecker ,{IFilterGroup} from './FilterChecker'
+import IFilterChecker, { IFilterColumn } from './FilterChecker'
 import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
@@ -17,10 +17,9 @@ export default class FilterStore {
     FC.initInjurySeverity(this.injurySeverity)
     FC.initDayNight(this.dayNight)
     FC.initInjTypes(this.injTypes);
-    this.genderTypesGroup = FC.initGenderTypesNew()
-    //FC.initGenderTypes(this.genderTypes);
-    FC.initAgeTypes(this.ageTypes)
-    FC.initPopulationTypes(this.populationTypes)
+    this.genderTypesGroup = FC.initGenderTypes()
+    this.ageTypes= FC.initAgeTypes()
+    this.populationTypes = FC.initPopulationTypes()
     FC.initAccidentType(this.accidentType)
     FC.initVehicleTypes(this.vehicleType)
     FC.initRoadTypes(this.roadTypes);
@@ -108,26 +107,23 @@ export default class FilterStore {
 
   //@observable
   //genderTypes: Array<IFilterChecker> = [];
- @observable
- genderTypesGroup  : IFilterGroup
-
+  @observable
+  genderTypesGroup: IFilterColumn
   @action
   updateGenderType = (aType: number, val: boolean) => {
-    this.updateFilters(this.genderTypesGroup,aType, val)
-    //this.genderTypes[aType].checked = val;
+    this.updateFilters(this.genderTypesGroup, aType, val)
   }
-
   @observable
-  ageTypes: Array<IFilterChecker> = [];
+  ageTypes: IFilterColumn
   @action
   updateAgeType = (aType: number, val: boolean) => {
-    this.ageTypes[aType].checked = val;
+    this.updateFilters(this.ageTypes, aType, val)
   }
   @observable
-  populationTypes: Array<IFilterChecker> = [];
+  populationTypes: IFilterColumn
   @action
   updatePopulationType = (aType: number, val: boolean) => {
-    this.populationTypes[aType].checked = val;
+    this.updateFilters(this.populationTypes, aType, val)
   }
 
   //injTypes
@@ -212,14 +208,13 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   markers: any[] = []
-  @action 
-  updateMarkers= (data: any[]) =>{
+  @action
+  updateMarkers = (data: any[]) => {
     this.markers = data;
-    if (this.isSetBounds)
-      {
-        this.mapBounds = this.setBounds(this.markers)
-        this.isSetBounds = false;
-      }
+    if (this.isSetBounds) {
+      this.mapBounds = this.setBounds(this.markers)
+      this.isSetBounds = false;
+    }
   }
 
   @observable
@@ -345,7 +340,7 @@ export default class FilterStore {
   submintMainDataFilter = () => {
     this.isLoading = true;
     let filter = this.getFilter();
-    this.updateIsSetBounds(this.cities,this.roadSegment);
+    this.updateIsSetBounds(this.cities, this.roadSegment);
     console.log(filter)
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
@@ -379,8 +374,8 @@ export default class FilterStore {
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
     filter += this.getfilterInjured();
     filter += this.getMultiplefilterNew(this.genderTypesGroup)
-    filter += this.getMultiplefilter("age_group_hebrew", this.ageTypes);
-    filter += this.getMultiplefilter("population_type_hebrew", this.populationTypes);
+    filter += this.getMultiplefilterNew(this.ageTypes)
+    filter += this.getMultiplefilterNew(this.populationTypes)
     filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
     filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
@@ -393,8 +388,8 @@ export default class FilterStore {
   }
 
   @action
-  updateFilters = (FilterGroup:IFilterGroup ,aType: number, val: boolean) => {
-    FilterGroup.arrFilters[aType].checked = val;
+  updateFilters = (FilterGroup: IFilterColumn, aType: number, val: boolean) => {
+    FilterGroup.arrGruops[aType].checked = val;
   }
 
   getfilterForCityOnly = () => {
@@ -467,11 +462,11 @@ export default class FilterStore {
     }
     return filter;
   }
-  getMultiplefilterNew = (filterGroup: IFilterGroup) => {
+  getMultiplefilterNew = (filterGroup: IFilterColumn) => {
     let filter: string = '';
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    const iterator = filterGroup.arrFilters.values();
+    const iterator = filterGroup.arrGruops.values();
     for (const filterCheck of iterator) {
       if (filterCheck.checked) {
         arrfilter = [...arrfilter, ...filterCheck.filters]
@@ -528,7 +523,7 @@ export default class FilterStore {
   submitMainDataFilterLocalDb = () => {
     this.isLoading = true;
     let arrFilters = this.getFilterIDB();
-    this.updateIsSetBounds(this.cities,this.roadSegment);
+    this.updateIsSetBounds(this.cities, this.roadSegment);
     console.log(arrFilters)
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
@@ -549,10 +544,9 @@ export default class FilterStore {
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
     this.getfilterInjuredIdb(arrFilters);
-    //this.getMultiplefilterIDB(arrFilters, "sex_hebrew", this.genderTypes);
     this.getMultiplefilterIDBNew(arrFilters, this.genderTypesGroup)
-    this.getMultiplefilterIDB(arrFilters, "age_group_hebrew", this.ageTypes);
-    this.getMultiplefilterIDB(arrFilters, "population_type_hebrew", this.populationTypes);
+    this.getMultiplefilterIDBNew(arrFilters, this.ageTypes);
+    this.getMultiplefilterIDBNew(arrFilters, this.populationTypes);
     this.getMultiplefilterIDB(arrFilters, "accident_type_hebrew", this.accidentType);
     this.getMultiplefilterIDB(arrFilters, "vehicle_vehicle_type_hebrew", this.vehicleType);
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
@@ -563,10 +557,10 @@ export default class FilterStore {
     return arrFilters;
   }
 
-  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IFilterGroup) => {
+  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IFilterColumn) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    const iterator = filterGroup.arrFilters.values();
+    const iterator = filterGroup.arrGruops.values();
     for (const filterCheck of iterator) {
       if (filterCheck.checked) {
         arrfilter = [...arrfilter, ...filterCheck.filters]
@@ -645,17 +639,17 @@ export default class FilterStore {
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
   @observable
-  isSetBounds :boolean = false;
+  isSetBounds: boolean = false;
   @action
-  updateIsSetBounds = (citisArr:any[], roadSegArr:any[]) =>{
-    if(citisArr.length >0  && citisArr[0] !== "")
+  updateIsSetBounds = (citisArr: any[], roadSegArr: any[]) => {
+    if (citisArr.length > 0 && citisArr[0] !== "")
       this.isSetBounds = true;
-    else if (roadSegArr.length >0 && roadSegArr[0] !== "") 
-      this.isSetBounds = true; 
+    else if (roadSegArr.length > 0 && roadSegArr[0] !== "")
+      this.isSetBounds = true;
   }
 
   @observable
-  mapBounds: L.LatLngBounds =  L.latLngBounds([ L.latLng(32.032,34.739), L.latLng(32.115,34.949)])
+  mapBounds: L.LatLngBounds = L.latLngBounds([L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)])
 
   @observable
   isReadyToRenderMap: boolean = false;
@@ -676,24 +670,24 @@ export default class FilterStore {
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);
     data.forEach(x => {
-        if (x.latitude !== null && x.longitude !== null) {
-            let p = new L.LatLng(x.latitude, x.longitude);
-            if ((lastPoint.lat === 0 && lastPoint.lng === 0) || x.latitude !== lastPoint.lat || x.longitude !== lastPoint.lng) {
-                arr.push(p)
-                //prevent insertion of duplicate same point
-                lastPoint = p;
-            }
+      if (x.latitude !== null && x.longitude !== null) {
+        let p = new L.LatLng(x.latitude, x.longitude);
+        if ((lastPoint.lat === 0 && lastPoint.lng === 0) || x.latitude !== lastPoint.lat || x.longitude !== lastPoint.lng) {
+          arr.push(p)
+          //prevent insertion of duplicate same point
+          lastPoint = p;
         }
+      }
     });
     //bounds for single point
     if (arr.length === 1) {
-        arr.length = 0; //clean tha array
-        arr.push(L.latLng(lastPoint.lat + 0.01, lastPoint.lng + 0.01))
-        arr.push(L.latLng(lastPoint.lat - 0.01, lastPoint.lng - 0.01))
+      arr.length = 0; //clean tha array
+      arr.push(L.latLng(lastPoint.lat + 0.01, lastPoint.lng + 0.01))
+      arr.push(L.latLng(lastPoint.lat - 0.01, lastPoint.lng - 0.01))
     }
     //in case no lat/lon info 
     if (arr.length < 2)
-        arr = [corner1, corner2];
+      arr = [corner1, corner2];
     const bounds = L.latLngBounds(arr)
     return bounds;
   }

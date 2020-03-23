@@ -16,28 +16,21 @@ export default class FilterChecker implements IFilterChecker {
         this.filters = filters;
     }
 }
-export interface IFilterGroup {
+export interface IFilterColumn {
     name: string;
     dbColName: string;
-    arrFilters: IFilterChecker[]
+    arrGruops: IFilterChecker[]
 }
-export class FilterGroup implements IFilterGroup {
+export class FilterColumn implements IFilterColumn {
     name: string;
     dbColName: string;
     @observable
-    arrFilters: IFilterChecker[];
+    arrGruops: IFilterChecker[];
     constructor(name: string, dbColName: string) {
         this.name = name;
         this.dbColName = dbColName;
-        this.arrFilters = [];
+        this.arrGruops = [];
     }
-}
-
-export const initGenderTypesNew = () => {
-    const group : IFilterGroup = new FilterGroup('Gender','sex_hebrew')
-    group.arrFilters.push(new FilterChecker('female', true, ["נקבה"]));
-    group.arrFilters.push(new FilterChecker('male', true, ["זכר"]));
-    return group;
 }
 
 export const initInjurySeverity = (arr: IFilterChecker[]) => {
@@ -94,30 +87,36 @@ export const initVehicleTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('other', true, ["אחר ולא ידוע"]));
 }
 
-export const initGenderTypes = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('female', true, ["נקבה"]));
-    arr.push(new FilterChecker('male', true, ["זכר"]));
-    //arr.push(new FilterChecker2(true, ["לא ידוע"]));
+export const initGenderTypes = () => {
+    const col : IFilterColumn = new FilterColumn('Gender','sex_hebrew')
+    col.arrGruops.push(new FilterChecker('female', true, ["נקבה"]));
+    col.arrGruops.push(new FilterChecker('male', true, ["זכר"]));
+    return col;
 }
-export const initAgeTypes = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('00-04', true, ["00-04"]));
-    arr.push(new FilterChecker('05-09', true, ["05-09"]));
-    arr.push(new FilterChecker('10-14', true, ["10-14"]));
-    arr.push(new FilterChecker('15-19', true, ["15-19"]));
-    arr.push(new FilterChecker('20-29', true, ["20-24", "25-29"]));
-    arr.push(new FilterChecker('30-39', true, ["30-34", "35-39"]));
-    arr.push(new FilterChecker('40-49', true, ["40-44", "45-49"]));
-    arr.push(new FilterChecker('50-59', true, ["50-54", "55-59"]));
-    arr.push(new FilterChecker('60-69', true, ["60-64", "65-69"]));
-    arr.push(new FilterChecker('70-79', true, ["70-74", "75-79"]));
-    arr.push(new FilterChecker('80+', true, ["80-84", "85+"]));
-    arr.push(new FilterChecker('unknown', true, ["לא ידוע"]));
+
+export const initAgeTypes = () => {
+    const col : IFilterColumn = new FilterColumn('Age','age_group_hebrew')
+    col.arrGruops.push(new FilterChecker('00-04', true, ["00-04"]));
+    col.arrGruops.push(new FilterChecker('05-09', true, ["05-09"]));
+    col.arrGruops.push(new FilterChecker('10-14', true, ["10-14"]));
+    col.arrGruops.push(new FilterChecker('15-19', true, ["15-19"]));
+    col.arrGruops.push(new FilterChecker('20-29', true, ["20-24", "25-29"]));
+    col.arrGruops.push(new FilterChecker('30-39', true, ["30-34", "35-39"]));
+    col.arrGruops.push(new FilterChecker('40-49', true, ["40-44", "45-49"]));
+    col.arrGruops.push(new FilterChecker('50-59', true, ["50-54", "55-59"]));
+    col.arrGruops.push(new FilterChecker('60-69', true, ["60-64", "65-69"]));
+    col.arrGruops.push(new FilterChecker('70-79', true, ["70-74", "75-79"]));
+    col.arrGruops.push(new FilterChecker('80+', true, ["80-84", "85+"]));
+    col.arrGruops.push(new FilterChecker('unknown', true, ["לא ידוע"]));
+    return col;
 }
-export const initPopulationTypes = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('jews', true, ["יהודים"]));
-    arr.push(new FilterChecker('arabs', true, ["ערבים"]));
-    arr.push(new FilterChecker('immigrants', true, ["זרים"]));
-    arr.push(new FilterChecker('others', true, ["אחרים"]));
+export const initPopulationTypes = () => {
+    const col : IFilterColumn = new FilterColumn('Population','population_type_hebrew')
+    col.arrGruops.push(new FilterChecker('jews', true, ["יהודים"]));
+    col.arrGruops.push(new FilterChecker('arabs', true, ["ערבים"]));
+    col.arrGruops.push(new FilterChecker('immigrants', true, ["זרים"]));
+    col.arrGruops.push(new FilterChecker('others', true, ["אחרים"]));
+    return col;
 }
 
 export const initRoadTypes = (arr: IFilterChecker[]) => {
