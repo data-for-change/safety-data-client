@@ -1,13 +1,15 @@
 import Dexie from 'dexie';
 
-const db = new Dexie('saftyData1');
+const db = new Dexie('saftyData');
 db.version(1).stores({
-    injuerd: '_id, accident_id, accident_year, accident_timestamp, sex_hebrew, accident_yishuv_name ,road_type_hebrew'
+    injuerd: 'id++,_id, accident_id, accident_year, accident_timestamp, sex_hebrew, accident_yishuv_name ,road_type_hebrew'
 });
 
 export async function insertToDexie(data) {
     //console.log("insertToDexie")
+    //console.log(data)
     await db.injuerd.bulkPut(data);
+    //testInsertDexie() 
 }
 
 export async function getFromDexie(arrFilters) {
@@ -33,15 +35,23 @@ export async function getFromDexie(arrFilters) {
     return data
 }
 
-/* export async function testInsertDexie() {
-    var id = await db.tasks.put({date: Date.now(), description: 'Test Dexie', done: 0});
-    console.log("Got id " + id);
-    // Now lets add a bunch of tasks
-    await db.tasks.bulkPut([
-        {date: Date.now(), description: 'Test Dexie bulkPut()', done: 1},
-        {date: Date.now(), description: 'Finish testing Dexie bulkPut()', done: 1}
-    ]);
-} */
+
+
+// var db1 = new Dexie('hellodb');
+// db1.version(1).stores({
+//     tasks: '++id,date,description,done'
+// });
+
+
+// export async function testInsertDexie() {
+//     var id = await db1.tasks.put({date: Date.now(), description: 'Test Dexie', done: 0});
+//     console.log("Got id " + id);
+//     // Now lets add a bunch of tasks
+//     await db1.tasks.bulkPut([
+//         {date: Date.now(), description: 'Test Dexie bulkPut()', done: 1},
+//         {date: Date.now(), description: 'Finish testing Dexie bulkPut()', done: 1}
+//     ]);
+// } 
 
 
 export default db;
