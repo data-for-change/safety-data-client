@@ -2,7 +2,7 @@ import React, { FunctionComponent, useRef ,useEffect} from 'react'
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 
-import L from 'leaflet'
+//import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet'
 import AccidentsMarkers from '../molecules/AccidentsMarkers'
 import { useStore } from '../../stores/storeConfig'
