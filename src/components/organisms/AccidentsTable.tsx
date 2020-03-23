@@ -23,7 +23,7 @@ export const AccidentsTable = observer((props: IProps) => {
         display: 'flex',
         justifyContent: 'flex-end'
       };
-    const reactMarkers = toJS(store.markers)
+    const reactMarkers = toJS(store.dataAllInjuries)
     const { ExportCSVButton } = CSVExport;
     const columns = [{
         dataField: '_id',

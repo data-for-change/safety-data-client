@@ -40,7 +40,11 @@ const AccidentsMarkers = observer(() => {
        };
     const store = useStore();
     const { t } = useTranslation();
-    const reactMarkers = toJS(store.markers);
+    let reactMarkers;
+    if (store.isDynamicMarkers)
+        reactMarkers = toJS(store.dataMarkersInBounds);
+    else    
+        reactMarkers = toJS(store.dataAllInjuries);
     //console.log(reactMarkers);
     const markersArr = reactMarkers.map((x) => {
         if (x.latitude !== null && x.longitude !== null) {

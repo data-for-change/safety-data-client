@@ -27,6 +27,13 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     } 
     else didMountRef.current = true
   })
+  const updateMarkers= (()=>{
+    //console.log("updateMarkers")
+    if (store.isDynamicMarkers){
+      const b = mapRef.current.leafletElement.getBounds()
+      store.submintGetMarkersBBox(b);
+    }
+  })
   return (
     <div>
         <Map ref={mapRef}
@@ -34,6 +41,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
           zoom={13}
           bounds ={bounds}
           style={WRAPPER_STYLES}
+          onmoveend ={updateMarkers}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

@@ -1,7 +1,7 @@
 import { observable, action, reaction } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
-import IFilterChecker, { IColumnFilter } from './FilterChecker'
+import { IColumnFilter } from './FilterChecker'
 import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
@@ -195,14 +195,21 @@ export default class FilterStore {
   // data
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  markers: any[] = []
+  dataAllInjuries: any[] = []
   @action
-  updateMarkers = (data: any[]) => {
-    this.markers = data;
+  updateAllInjuries = (data: any[]) => {
+    this.dataAllInjuries = data;
     if (this.isSetBounds) {
-      this.mapBounds = this.setBounds(this.markers)
+      this.mapBounds = this.setBounds(this.dataAllInjuries)
       this.isSetBounds = false;
     }
+  }
+
+  @observable
+  dataMarkersInBounds: any[] = []
+  @action
+  updateDataMarkersInBounds = (data: any[]) => {
+    this.dataMarkersInBounds = data;
   }
 
   @observable
@@ -243,7 +250,7 @@ export default class FilterStore {
   }
   @action
   submitfilterdGroupByYears = () => {
-    let filtermatch = this.getFilter();
+    let filtermatch = this.getFilter(null);
     let filter = this.getFilterGroupBy(filtermatch, "accident_year");
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
@@ -253,9 +260,9 @@ export default class FilterStore {
   }
   @action
   submitfilterdGroup = (aGroupBy: GroupBy.default) => {
-    let filtermatch = this.getFilter();
+    let filtermatch = this.getFilter(null);
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, "", aGroupBy.limit);
-    console.log(filter)
+    //console.log(filter)
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined)
@@ -264,7 +271,7 @@ export default class FilterStore {
   }
   @action
   submitfilterdGroup2 = (aGroupBy: GroupBy.default, groupName2: string) => {
-    let filtermatch = this.getFilter();
+    let filtermatch = this.getFilter(null);
     let filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
     //console.log(filter)
     fetchGroupBy(filter)
@@ -314,10 +321,14 @@ export default class FilterStore {
   @action
   submitFilter = () => {
     if (this.useLocalDb === 2)
-      this.submitMainDataFilterLocalDb();
+      {
+        this.submitMainDataFilterLocalDb();
+      }
     else
+    {
+      this.submintGetMarkersBBox(this.mapBounds);
       this.submintMainDataFilter();
-
+    }
     this.submitCityNameAndLocation();
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
@@ -327,18 +338,27 @@ export default class FilterStore {
 
   submintMainDataFilter = () => {
     this.isLoading = true;
-    let filter = this.getFilter();
+    let filter = this.getFilter(null);
     this.updateIsSetBounds(this.cities, this.roadSegment);
     console.log(filter)
     fetchFilter(filter)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.updateMarkers(data);
+          this.updateAllInjuries(data);
           //write Data to local db
           if (this.useLocalDb === 1)
             insertToDexie(data);
         }
         this.isLoading = false;
+      })
+  }
+  submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
+    let filter = this.getFilter(mapBounds, true)
+    fetchFilter(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.updateDataMarkersInBounds(data);
+        }
       })
   }
   submitCityNameAndLocation = () => {
@@ -352,11 +372,13 @@ export default class FilterStore {
       this.cityResult = "";
   }
 
-  getFilter = () => {
+  getFilter = ( bounds: any, useBounds :boolean = false) => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
     filter += this.getMultiplefilter(this.injurySeverity)
     filter += this.getfilterCity();
+    if(useBounds && bounds !=null)
+      filter += this.getfilterBounds(bounds);
     filter += this.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
@@ -392,7 +414,12 @@ export default class FilterStore {
       }
     }  
   }
-
+  getfilterBounds = (mapBounds: L.LatLngBounds) => {
+    let filter: string = '';
+    filter += `,{"latitude":  { "$gte" : "${mapBounds.getSouth()}","$lte": "${mapBounds.getNorth()}"}}`;
+    filter += `,{"longitude":  { "$gte" : "${mapBounds.getWest()}","$lte": "${mapBounds.getEast()}"}}`;
+    return filter;
+  }
   getfilterForCityOnly = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":{"$gte":"2015"}}`;
@@ -409,7 +436,6 @@ export default class FilterStore {
     }
     return filter;
   }
-
   getFilterStreets = () => {
     let filter: string = '';
     if (this.streets.length > 0 && this.streets[0] !== "") {
@@ -484,7 +510,7 @@ export default class FilterStore {
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.updateMarkers(data);
+          this.updateAllInjuries(data);
         }
         this.isLoading = false;
       })
@@ -562,8 +588,10 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // map store
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+  
   //this belong to mapstore! need to move
+  @observable
+  isDynamicMarkers :boolean = false;
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
   @observable
@@ -578,7 +606,8 @@ export default class FilterStore {
 
   @observable
   mapBounds: L.LatLngBounds = L.latLngBounds([L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)])
-
+  
+ 
   @observable
   isReadyToRenderMap: boolean = false;
 
@@ -593,6 +622,7 @@ export default class FilterStore {
 
   @action
   setBounds = (data: any[]) => {
+    console.log("setBounds!")
     const corner1 = L.latLng(29.50, 34.22)
     const corner2 = L.latLng(33.271, 35.946)
     let arr: L.LatLng[] = [];
