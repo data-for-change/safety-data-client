@@ -22,11 +22,11 @@ export default class FilterStore {
     this.populationTypes = FC.initPopulationTypes()
     this.accidentType = FC.initAccidentType()
     this.vehicleType = FC.initVehicleTypes()
-    FC.initRoadTypes(this.roadTypes);
-    FC.initSpeedLimit(this.speedLimit)
-    FC.initRoadWidth(this.roadWidth);
-    FC.initSeparator(this.separator);
-    FC.initOneLane(this.oneLane);
+    this.roadTypes = FC.initRoadTypes();
+    this.speedLimit = FC.initSpeedLimit()
+    this.roadWidth = FC.initRoadWidth();
+    this.separator = FC.initSeparator();
+    this.oneLane = FC.initOneLane();
     GroupBy.initGroupByDict(this.groupByDict);
     GroupBy.initGroup2Dict(this.group2Dict)
     this.groupBy = this.groupByDict["TypeInjured"];
@@ -168,38 +168,37 @@ export default class FilterStore {
   // What Road
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  roadTypes: Array<IFilterChecker> = [];
+  roadTypes: IColumnFilter;
   @action
   updateRoadType = (aType: number, val: boolean) => {
-    this.roadTypes[aType].checked = val;
+    this.updateFilters(this.roadTypes, aType,val)
   }
 
   @observable
-  speedLimit: Array<IFilterChecker> = [];
-  @action
+  speedLimit:  IColumnFilter;
   updateSpeedLimit = (aType: number, val: boolean) => {
-    this.speedLimit[aType].checked = val;
+    this.updateFilters(this.speedLimit, aType,val)
   }
 
   @observable
-  roadWidth: Array<IFilterChecker> = [];
+  roadWidth:  IColumnFilter;
   @action
   updateRoadWidth = (aType: number, val: boolean) => {
-    this.roadWidth[aType].checked = val;
+    this.updateFilters(this.roadWidth, aType,val)
   }
 
   @observable
-  separator: Array<IFilterChecker> = [];
+  separator: IColumnFilter;
   @action
   updateSeparator = (aType: number, val: boolean) => {
-    this.separator[aType].checked = val;
+    this.updateFilters(this.separator, aType,val)
   }
 
   @observable
-  oneLane: Array<IFilterChecker> = [];
+  oneLane: IColumnFilter;
   @action
   updateOneLane = (aType: number, val: boolean) => {
-    this.oneLane[aType].checked = val;
+    this.updateFilters(this.oneLane, aType,val)
   }
 
 
@@ -367,22 +366,22 @@ export default class FilterStore {
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
-    filter += this.getMultiplefilterNew(this.injurySeverity)
+    filter += this.getMultiplefilter(this.injurySeverity)
     filter += this.getfilterCity();
-    filter += this.getMultiplefilterNew(this.dayNight);
+    filter += this.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
     filter += this.getfilterInjured();
-    filter += this.getMultiplefilterNew(this.genderTypes)
-    filter += this.getMultiplefilterNew(this.ageTypes)
-    filter += this.getMultiplefilterNew(this.populationTypes)
-    filter += this.getMultiplefilterNew(this.accidentType);
-    filter += this.getMultiplefilterNew(this.vehicleType);
-    filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
-    filter += this.getMultiplefilter("speed_limit_hebrew", this.speedLimit);
-    filter += this.getMultiplefilter("road_width_hebrew", this.roadWidth);
-    filter += this.getMultiplefilter("multi_lane_hebrew", this.separator);
-    filter += this.getMultiplefilter("one_lane_hebrew", this.oneLane);
+    filter += this.getMultiplefilter(this.genderTypes)
+    filter += this.getMultiplefilter(this.ageTypes)
+    filter += this.getMultiplefilter(this.populationTypes)
+    filter += this.getMultiplefilter(this.accidentType);
+    filter += this.getMultiplefilter(this.vehicleType);
+    filter += this.getMultiplefilter(this.roadTypes);
+    filter += this.getMultiplefilter( this.speedLimit);
+    filter += this.getMultiplefilter( this.roadWidth);
+    filter += this.getMultiplefilter( this.separator);
+    filter += this.getMultiplefilter( this.oneLane);
     filter += `]}`
     return filter;
   }
@@ -430,39 +429,7 @@ export default class FilterStore {
     return filter;
   }
 
-
-  getMultiplefilter = (filterKey: string, arr: Array<IFilterChecker>) => {
-    let filter: string = '';
-    let allChecked: boolean = true;
-    let arrfilter: string[] = [];
-    const iterator = arr.values();
-    for (const filterCheck of iterator) {
-      if (filterCheck.checked) {
-        arrfilter = [...arrfilter, ...filterCheck.filters]
-      }
-      else {
-        allChecked = false;
-      }
-    }
-    if (allChecked)
-      filter = '';
-    else {
-      filter += `,{"$or": [`
-      filter += arrfilter.map((x: string) => {
-        if (x === "null")
-          return `{"${filterKey}":` + null + '}'
-        else {
-          let xSafe = x.replace('"', '\\"')
-          return `{"${filterKey}" : "${xSafe}"}`
-        }
-
-      }
-      ).join(',')
-      filter += `]}`
-    }
-    return filter;
-  }
-  getMultiplefilterNew = (filterGroup: IColumnFilter) => {
+  getMultiplefilter = (filterGroup: IColumnFilter) => {
     let filter: string = '';
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
@@ -540,24 +507,24 @@ export default class FilterStore {
     arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
     this.getFilterStreetsIDB(arrFilters);
-    this.getMultiplefilterIDBNew(arrFilters, this.dayNight);
+    this.getMultiplefilterIDB(arrFilters, this.dayNight);
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
-    this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, this.roadTypes);
     this.getfilterInjuredIdb(arrFilters);
-    this.getMultiplefilterIDBNew(arrFilters, this.genderTypes)
-    this.getMultiplefilterIDBNew(arrFilters, this.ageTypes);
-    this.getMultiplefilterIDBNew(arrFilters, this.populationTypes);
-    this.getMultiplefilterIDBNew(arrFilters, this.accidentType);
-    this.getMultiplefilterIDBNew(arrFilters, this.vehicleType);
-    this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
-    this.getMultiplefilterIDB(arrFilters, "speed_limit_hebrew", this.speedLimit);
-    this.getMultiplefilterIDB(arrFilters, "road_width_hebrew", this.roadWidth);
-    this.getMultiplefilterIDB(arrFilters, "multi_lane_hebrew", this.separator);
-    this.getMultiplefilterIDB(arrFilters, "one_lane_hebrew", this.oneLane);
+    this.getMultiplefilterIDB(arrFilters, this.genderTypes)
+    this.getMultiplefilterIDB(arrFilters, this.ageTypes);
+    this.getMultiplefilterIDB(arrFilters, this.populationTypes);
+    this.getMultiplefilterIDB(arrFilters, this.accidentType);
+    this.getMultiplefilterIDB(arrFilters, this.vehicleType);
+    this.getMultiplefilterIDB(arrFilters, this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, this.speedLimit);
+    this.getMultiplefilterIDB(arrFilters, this.roadWidth);
+    this.getMultiplefilterIDB(arrFilters, this.separator);
+    this.getMultiplefilterIDB(arrFilters, this.oneLane);
     return arrFilters;
   }
 
-  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IColumnFilter) => {
+  getMultiplefilterIDB = (arrFilters: any[], filterGroup: IColumnFilter) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = filterGroup.arrGruops.values();
@@ -579,7 +546,7 @@ export default class FilterStore {
       arrFilters.push(filter)
     }
   }
-  getMultiplefilterIDB = (arrFilters: any[], filterKey: string, arr: Array<IFilterChecker>) => {
+  getMultiplefilterIDBold = (arrFilters: any[], filterKey: string, arr: Array<IFilterChecker>) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = arr.values();
@@ -627,7 +594,7 @@ export default class FilterStore {
     if (this.injTypes[0].checked) //all
       return;
     else {
-      this.getMultiplefilterIDB(arrFilters, "injured_type_hebrew", this.injTypes);
+      this.getMultiplefilterIDBold(arrFilters, "injured_type_hebrew", this.injTypes);
     }
   }
 

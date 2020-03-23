@@ -125,49 +125,56 @@ export const initPopulationTypes = () => {
     return col;
 }
 
-export const initRoadTypes = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('urban-junction', true, ["עירונית בצומת"]));
-    arr.push(new FilterChecker('urban-road', true, ["עירונית לא בצומת"]));
-    arr.push(new FilterChecker('non-urban-junction', true, ["לא-עירונית בצומת"]));
-    arr.push(new FilterChecker('non-urban-road', true, ["לא-עירונית לא בצומת"]));
+export const initRoadTypes = () => {
+    const col : IColumnFilter = new ColumnFilter('RoadType','road_type_hebrew')
+    col.arrGruops.push(new FilterChecker('urban-junction', true, ["עירונית בצומת"]));
+    col.arrGruops.push(new FilterChecker('urban-road', true, ["עירונית לא בצומת"]));
+    col.arrGruops.push(new FilterChecker('non-urban-junction', true, ["לא-עירונית בצומת"]));
+    col.arrGruops.push(new FilterChecker('non-urban-road', true, ["לא-עירונית לא בצומת"]));
+    return col;
 }
-export const initSpeedLimit = (arr: IFilterChecker[]) =>{
-    arr.push(new FilterChecker('speed50', true, ['עד 50 קמ"ש']));
-    arr.push(new FilterChecker('speed60', true, ['60 קמ"ש']));
-    arr.push(new FilterChecker('speed70', true, ['70 קמ"ש']));
-    arr.push(new FilterChecker('speed80', true, ['80 קמ"ש']));
-    arr.push(new FilterChecker('speed90', true, ['90 קמ"ש']));
-    arr.push(new FilterChecker('speed100', true, ['100 קמ"ש']));
-    arr.push(new FilterChecker('speed110', true, ['110 קמ"ש']));
-    arr.push(new FilterChecker('speed120', true, ['120 קמ"ש']));
-    arr.push(new FilterChecker('speed-unknown', true, ['לא ידוע']));
+export const initSpeedLimit = () =>{
+    const col : IColumnFilter = new ColumnFilter('SpeedLimit','speed_limit_hebrew')
+    col.arrGruops.push(new FilterChecker('speed50', true, ['עד 50 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed60', true, ['60 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed70', true, ['70 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed80', true, ['80 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed90', true, ['90 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed100', true, ['100 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed110', true, ['110 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed120', true, ['120 קמ"ש']));
+    col.arrGruops.push(new FilterChecker('speed-unknown', true, ['לא ידוע']));
+    return col;
 }
-export const initRoadWidth = (arr: IFilterChecker[]) =>{
-    arr.push(new FilterChecker('road-width-5', true, ['עד 5 מטר']));
-    arr.push(new FilterChecker('road-width-7', true, ['5 עד 7 מטר']));
-    arr.push(new FilterChecker('road-width-10', true, ['7 עד 10.5 מטר']));
-    arr.push(new FilterChecker('road-width-14', true, ['10.5 עד 14 מטר']));
-    arr.push(new FilterChecker('road-width-14+', true, ['יותר מ- 14 מטר']));
-    arr.push(new FilterChecker('unknown', true, ['לא ידוע']));
+export const initRoadWidth = () =>{
+    const col : IColumnFilter = new ColumnFilter('RoadWidth','road_width_hebrew')
+    col.arrGruops.push(new FilterChecker('road-width-5', true, ['עד 5 מטר']));
+    col.arrGruops.push(new FilterChecker('road-width-7', true, ['5 עד 7 מטר']));
+    col.arrGruops.push(new FilterChecker('road-width-10', true, ['7 עד 10.5 מטר']));
+    col.arrGruops.push(new FilterChecker('road-width-14', true, ['10.5 עד 14 מטר']));
+    col.arrGruops.push(new FilterChecker('road-width-14+', true, ['יותר מ- 14 מטר']));
+    col.arrGruops.push(new FilterChecker('unknown', true, ['לא ידוע']));
+    return col;
 }
-export const initSeparator = (arr: IFilterChecker[]) =>{
-    arr.push(new FilterChecker('separator-fence', true, ['מיפרדה עם גדר בטיחות']));
-    arr.push(new FilterChecker('separator-built', true, ['מיפרדה בנויה ללא גדר בטיחות']));
-    arr.push(new FilterChecker('separator-not-built', true, ['מיפרדה לא בנויה']));
-    arr.push(new FilterChecker('separator-paint', true, ['מיפרדה מסומנת בצבע']));
-    arr.push(new FilterChecker('separator-ohter', true, ['אחר']));
-    arr.push(new FilterChecker('separator-not-relevant', true, ['null']));
+export const initSeparator = () =>{
+    const col : IColumnFilter = new ColumnFilter('Separator','multi_lane_hebrew')
+    col.arrGruops.push(new FilterChecker('separator-fence', true, ['מיפרדה עם גדר בטיחות']));
+    col.arrGruops.push(new FilterChecker('separator-built', true, ['מיפרדה בנויה ללא גדר בטיחות']));
+    col.arrGruops.push(new FilterChecker('separator-not-built', true, ['מיפרדה לא בנויה']));
+    col.arrGruops.push(new FilterChecker('separator-paint', true, ['מיפרדה מסומנת בצבע']));
+    col.arrGruops.push(new FilterChecker('separator-ohter', true, ['אחר']));
+    col.arrGruops.push(new FilterChecker('separator-not-relevant', true, ['null']));
+    return col;
 }
-
-export const initOneLane = (arr: IFilterChecker[]) =>{
-    arr.push(new FilterChecker('onelane-twoway-line', true, ['דו סיטרי + קו הפרדה רצוף']));
-    arr.push(new FilterChecker('onelane-twoway-noline', true, ['דו סיטרי אין קו הפרדה רצוף']));
-    arr.push(new FilterChecker('onelane-oneway', true, ['חד סיטרי']));
-    arr.push(new FilterChecker('onelane-unknown', true, ['לא ידוע מס מסלולים']));
-    arr.push(new FilterChecker('onelane-not-relevant', true, ['null']));
+export const initOneLane = () =>{
+    const col : IColumnFilter = new ColumnFilter('OneLane','one_lane_hebrew')
+    col.arrGruops.push(new FilterChecker('onelane-twoway-line', true, ['דו סיטרי + קו הפרדה רצוף']));
+    col.arrGruops.push(new FilterChecker('onelane-twoway-noline', true, ['דו סיטרי אין קו הפרדה רצוף']));
+    col.arrGruops.push(new FilterChecker('onelane-oneway', true, ['חד סיטרי']));
+    col.arrGruops.push(new FilterChecker('onelane-unknown', true, ['לא ידוע מס מסלולים']));
+    col.arrGruops.push(new FilterChecker('onelane-not-relevant', true, ['null']));
+    return col;
 }
-
-
 export const initAccidentType = () => {
     const col : IColumnFilter = new ColumnFilter('AccidentType','accident_type_hebrew')
     col.arrGruops.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));
