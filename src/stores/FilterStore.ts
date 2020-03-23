@@ -1,7 +1,7 @@
 import { observable, action, reaction } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
-import IFilterChecker, { IFilterColumn } from './FilterChecker'
+import IFilterChecker, { IColumnFilter } from './FilterChecker'
 import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
@@ -14,14 +14,14 @@ export default class FilterStore {
   appInitialized = false
   constructor() {
     // init app data
-    FC.initInjurySeverity(this.injurySeverity)
-    FC.initDayNight(this.dayNight)
+    this.injurySeverity = FC.initInjurySeverity()
+    this.dayNight = FC.initDayNight()
     FC.initInjTypes(this.injTypes);
-    this.genderTypesGroup = FC.initGenderTypes()
+    this.genderTypes = FC.initGenderTypes()
     this.ageTypes= FC.initAgeTypes()
     this.populationTypes = FC.initPopulationTypes()
-    FC.initAccidentType(this.accidentType)
-    FC.initVehicleTypes(this.vehicleType)
+    this.accidentType = FC.initAccidentType()
+    this.vehicleType = FC.initVehicleTypes()
     FC.initRoadTypes(this.roadTypes);
     FC.initSpeedLimit(this.speedLimit)
     FC.initRoadWidth(this.roadWidth);
@@ -34,10 +34,10 @@ export default class FilterStore {
     this.appInitialized = false;
   }
   @observable
-  injurySeverity: Array<IFilterChecker> = [];
+  injurySeverity: IColumnFilter
   @action
   updateInjurySeverity = (aType: number, val: boolean) => {
-    this.injurySeverity[aType].checked = val;
+    this.updateFilters(this.injurySeverity, aType, val)
   }
   //////////////////////////////////////////////
 
@@ -95,10 +95,10 @@ export default class FilterStore {
   @observable
   endYear: number = 2019;
   @observable
-  dayNight: Array<IFilterChecker> = [];
+  dayNight: IColumnFilter;
   @action
   updateDayNight = (aType: number, val: boolean) => {
-    this.dayNight[aType].checked = val;
+    this.updateFilters(this.dayNight, aType, val)
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,19 +108,19 @@ export default class FilterStore {
   //@observable
   //genderTypes: Array<IFilterChecker> = [];
   @observable
-  genderTypesGroup: IFilterColumn
+  genderTypes: IColumnFilter
   @action
   updateGenderType = (aType: number, val: boolean) => {
-    this.updateFilters(this.genderTypesGroup, aType, val)
+    this.updateFilters(this.genderTypes, aType, val)
   }
   @observable
-  ageTypes: IFilterColumn
+  ageTypes: IColumnFilter
   @action
   updateAgeType = (aType: number, val: boolean) => {
     this.updateFilters(this.ageTypes, aType, val)
   }
   @observable
-  populationTypes: IFilterColumn
+  populationTypes: IColumnFilter
   @action
   updatePopulationType = (aType: number, val: boolean) => {
     this.updateFilters(this.populationTypes, aType, val)
@@ -149,20 +149,20 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   @observable
-  accidentType: Array<IFilterChecker> = [];
+  accidentType: IColumnFilter;
   @action
   updateAccidentType = (aType: number, val: boolean) => {
-    this.accidentType[aType].checked = val;
+    this.updateFilters(this.accidentType, aType,val)
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What Vehicle
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  vehicleType: Array<IFilterChecker> = [];
+  vehicleType: IColumnFilter;
   @action
   updateVehicleType = (aType: number, val: boolean) => {
-    this.vehicleType[aType].checked = val;
+    this.updateFilters(this.vehicleType, aType,val)
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What Road
@@ -367,17 +367,17 @@ export default class FilterStore {
   getFilter = () => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
-    filter += this.getMultiplefilter("injury_severity_hebrew", this.injurySeverity);
+    filter += this.getMultiplefilterNew(this.injurySeverity)
     filter += this.getfilterCity();
-    filter += this.getMultiplefilter("day_night_hebrew", this.dayNight);
+    filter += this.getMultiplefilterNew(this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, "road_segment_name");
     filter += this.getfilterInjured();
-    filter += this.getMultiplefilterNew(this.genderTypesGroup)
+    filter += this.getMultiplefilterNew(this.genderTypes)
     filter += this.getMultiplefilterNew(this.ageTypes)
     filter += this.getMultiplefilterNew(this.populationTypes)
-    filter += this.getMultiplefilter("accident_type_hebrew", this.accidentType);
-    filter += this.getMultiplefilter("vehicle_vehicle_type_hebrew", this.vehicleType);
+    filter += this.getMultiplefilterNew(this.accidentType);
+    filter += this.getMultiplefilterNew(this.vehicleType);
     filter += this.getMultiplefilter("road_type_hebrew", this.roadTypes);
     filter += this.getMultiplefilter("speed_limit_hebrew", this.speedLimit);
     filter += this.getMultiplefilter("road_width_hebrew", this.roadWidth);
@@ -388,7 +388,7 @@ export default class FilterStore {
   }
 
   @action
-  updateFilters = (FilterGroup: IFilterColumn, aType: number, val: boolean) => {
+  updateFilters = (FilterGroup: IColumnFilter, aType: number, val: boolean) => {
     FilterGroup.arrGruops[aType].checked = val;
   }
 
@@ -462,7 +462,7 @@ export default class FilterStore {
     }
     return filter;
   }
-  getMultiplefilterNew = (filterGroup: IFilterColumn) => {
+  getMultiplefilterNew = (filterGroup: IColumnFilter) => {
     let filter: string = '';
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
@@ -540,15 +540,15 @@ export default class FilterStore {
     arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
     this.getFilterStreetsIDB(arrFilters);
-    this.getMultiplefilterIDB(arrFilters, "day_night_hebrew", this.dayNight);
+    this.getMultiplefilterIDBNew(arrFilters, this.dayNight);
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
     this.getfilterInjuredIdb(arrFilters);
-    this.getMultiplefilterIDBNew(arrFilters, this.genderTypesGroup)
+    this.getMultiplefilterIDBNew(arrFilters, this.genderTypes)
     this.getMultiplefilterIDBNew(arrFilters, this.ageTypes);
     this.getMultiplefilterIDBNew(arrFilters, this.populationTypes);
-    this.getMultiplefilterIDB(arrFilters, "accident_type_hebrew", this.accidentType);
-    this.getMultiplefilterIDB(arrFilters, "vehicle_vehicle_type_hebrew", this.vehicleType);
+    this.getMultiplefilterIDBNew(arrFilters, this.accidentType);
+    this.getMultiplefilterIDBNew(arrFilters, this.vehicleType);
     this.getMultiplefilterIDB(arrFilters, "road_type_hebrew", this.roadTypes);
     this.getMultiplefilterIDB(arrFilters, "speed_limit_hebrew", this.speedLimit);
     this.getMultiplefilterIDB(arrFilters, "road_width_hebrew", this.roadWidth);
@@ -557,7 +557,7 @@ export default class FilterStore {
     return arrFilters;
   }
 
-  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IFilterColumn) => {
+  getMultiplefilterIDBNew = (arrFilters: any[], filterGroup: IColumnFilter) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = filterGroup.arrGruops.values();

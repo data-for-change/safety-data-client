@@ -31,7 +31,7 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhatVehicle />
         <CardFilterWhatRoad />
       </Accordion>
-      <GroupCheckbox formName="exampleForm" groupName='Severity' dataArr={store.injurySeverity} onChange={store.updateInjurySeverity} />
+      <GroupCheckbox formName="exampleForm" groupName={store.injurySeverity.name} dataArr={store.injurySeverity.arrGruops} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
@@ -75,7 +75,7 @@ const CardFilterWhen = observer(() => {
                 </Form.Control>
               </Form.Group>
             </Form.Row>
-            <GroupCheckbox formName="exampleForm" groupName='DayNight' dataArr={store.dayNight} onChange={store.updateDayNight} />
+            <GroupCheckbox formName="exampleForm" groupName={store.dayNight.name} dataArr={store.dayNight.arrGruops} onChange={store.updateDayNight} />
           </div>
         </Card.Body>
       </Accordion.Collapse>
@@ -116,7 +116,7 @@ const CardFilterWho = observer(() => {
       <Accordion.Collapse eventKey="2" className="filterControls">
         <div>
           <GroupCheckbox formName="exampleForm" groupName='Vehicle' dataArr={store.injTypes} onChange={store.updateInjuerdType} />
-          <GroupCheckbox formName="exampleForm" groupName={store.genderTypesGroup.name} dataArr={store.genderTypesGroup.arrGruops} onChange={store.updateGenderType} />
+          <GroupCheckbox formName="exampleForm" groupName={store.genderTypes.name} dataArr={store.genderTypes.arrGruops} onChange={store.updateGenderType} />
           <GroupCheckbox formName="exampleForm" groupName={store.ageTypes.name} dataArr={store.ageTypes.arrGruops} onChange={store.updateAgeType} />
           <GroupCheckbox formName="exampleForm" groupName={store.populationTypes.name} dataArr={store.populationTypes.arrGruops} onChange={store.updatePopulationType} />
         </div>
@@ -136,7 +136,7 @@ const CardFilterWhat = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="3" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName='AccidentType' dataArr={store.accidentType} onChange={store.updateAccidentType} />
+          <GroupCheckbox formName="exampleForm" groupName={store.accidentType.name} dataArr={store.accidentType.arrGruops} onChange={store.updateAccidentType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -155,7 +155,7 @@ const CardFilterWhatVehicle = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="4" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName='VehicleType' dataArr={store.vehicleType} onChange={store.updateVehicleType} />
+          <GroupCheckbox formName="exampleForm" groupName={store.vehicleType.name} dataArr={store.vehicleType.arrGruops} onChange={store.updateVehicleType} />
         </div>
       </Accordion.Collapse>
     </Card>

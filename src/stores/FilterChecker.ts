@@ -16,12 +16,12 @@ export default class FilterChecker implements IFilterChecker {
         this.filters = filters;
     }
 }
-export interface IFilterColumn {
+export interface IColumnFilter {
     name: string;
     dbColName: string;
     arrGruops: IFilterChecker[]
 }
-export class FilterColumn implements IFilterColumn {
+export class ColumnFilter implements IColumnFilter {
     name: string;
     dbColName: string;
     @observable
@@ -33,14 +33,18 @@ export class FilterColumn implements IFilterColumn {
     }
 }
 
-export const initInjurySeverity = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('dead', true, ["הרוג"]));
-    arr.push(new FilterChecker('severly-injured', false, ["פצוע קשה"]));
+export const initInjurySeverity = () => {
+    const col : IColumnFilter = new ColumnFilter('Severity','injury_severity_hebrew')
+    col.arrGruops.push(new FilterChecker('dead', true, ["הרוג"]));
+    col.arrGruops.push(new FilterChecker('severly-injured', false, ["פצוע קשה"]));
+    return col;
 }
 
-export const initDayNight = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('day', true, ["יום"]));
-    arr.push(new FilterChecker('night', true, ["לילה"]));
+export const initDayNight = () => {
+    const col : IColumnFilter = new ColumnFilter('DayNight','day_night_hebrew')
+    col.arrGruops.push(new FilterChecker('day', true, ["יום"]));
+    col.arrGruops.push(new FilterChecker('night', true, ["לילה"]));
+    return col;
 }
 
 export const initMonth = (arr: IFilterChecker[]) => {
@@ -68,34 +72,36 @@ export const initInjTypes = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('other', false, ["נהג - רכב לא ידוע", "נוסע - רכב לא ידוע"]));
 }
 
-export const initVehicleTypes = (arr: IFilterChecker[]) => {
+export const initVehicleTypes = () => {
+    const col : IColumnFilter = new ColumnFilter('VehicleType','vehicle_vehicle_type_hebrew')
     //arr.push(new FilterChecker('all', true, []));
-    arr.push(new FilterChecker('pedestrian', true, ["null"]));
-    arr.push(new FilterChecker('mobilityscooter', true, ["קלנועית חשמלית"]));
-    arr.push(new FilterChecker('bicycle', true, ["אופניים"]));
-    arr.push(new FilterChecker('e-scooter', true, ["קורקינט חשמלי"]));
-    arr.push(new FilterChecker('e-bike', true, ["אופניים חשמליים"]));
-    arr.push(new FilterChecker('motorcycle', true, ['אופנוע 401+ סמ"ק','אופנוע 126 עד 400 סמ"ק','אופנוע 51 עד 125 סמ"ק',]));
-    arr.push(new FilterChecker('car', true, ["רכב נוסעים פרטי"]));
-    arr.push(new FilterChecker('taxi', true, ["מונית"]));
-    arr.push(new FilterChecker('bus', true, ["אוטובוס זעיר","אוטובוס"]));
-    arr.push(new FilterChecker('tranzit', true, ["משא עד 3.5 טון - אחוד (טרנזיט)"]));
-    arr.push(new FilterChecker('tender', true, ["משא עד 3.5  טון - לא אחוד (טנדר)"]));
-    arr.push(new FilterChecker('truck', true, ['משא 3.6 עד 9.9 טון','משא 10.0 עד 12.0 טון', 'משא 12.1 עד 15.9 טון', 'משא 16.0 עד 33.9 טון','משא 34.0+ טון',]));
-    arr.push(new FilterChecker('tractor', true, ["טרקטור"]));
-    arr.push(new FilterChecker('train', true, ["רכבת"]));
-    arr.push(new FilterChecker('other', true, ["אחר ולא ידוע"]));
+    col.arrGruops.push(new FilterChecker('pedestrian', true, ["null"]));
+    col.arrGruops.push(new FilterChecker('mobilityscooter', true, ["קלנועית חשמלית"]));
+    col.arrGruops.push(new FilterChecker('bicycle', true, ["אופניים"]));
+    col.arrGruops.push(new FilterChecker('e-scooter', true, ["קורקינט חשמלי"]));
+    col.arrGruops.push(new FilterChecker('e-bike', true, ["אופניים חשמליים"]));
+    col.arrGruops.push(new FilterChecker('motorcycle', true, ['אופנוע 401+ סמ"ק','אופנוע 126 עד 400 סמ"ק','אופנוע 51 עד 125 סמ"ק',]));
+    col.arrGruops.push(new FilterChecker('car', true, ["רכב נוסעים פרטי"]));
+    col.arrGruops.push(new FilterChecker('taxi', true, ["מונית"]));
+    col.arrGruops.push(new FilterChecker('bus', true, ["אוטובוס זעיר","אוטובוס"]));
+    col.arrGruops.push(new FilterChecker('tranzit', true, ["משא עד 3.5 טון - אחוד (טרנזיט)"]));
+    col.arrGruops.push(new FilterChecker('tender', true, ["משא עד 3.5  טון - לא אחוד (טנדר)"]));
+    col.arrGruops.push(new FilterChecker('truck', true, ['משא 3.6 עד 9.9 טון','משא 10.0 עד 12.0 טון', 'משא 12.1 עד 15.9 טון', 'משא 16.0 עד 33.9 טון','משא 34.0+ טון',]));
+    col.arrGruops.push(new FilterChecker('tractor', true, ["טרקטור"]));
+    col.arrGruops.push(new FilterChecker('train', true, ["רכבת"]));
+    col.arrGruops.push(new FilterChecker('other', true, ["אחר ולא ידוע"]));
+    return col;
 }
 
 export const initGenderTypes = () => {
-    const col : IFilterColumn = new FilterColumn('Gender','sex_hebrew')
+    const col : IColumnFilter = new ColumnFilter('Gender','sex_hebrew')
     col.arrGruops.push(new FilterChecker('female', true, ["נקבה"]));
     col.arrGruops.push(new FilterChecker('male', true, ["זכר"]));
     return col;
 }
 
 export const initAgeTypes = () => {
-    const col : IFilterColumn = new FilterColumn('Age','age_group_hebrew')
+    const col : IColumnFilter = new ColumnFilter('Age','age_group_hebrew')
     col.arrGruops.push(new FilterChecker('00-04', true, ["00-04"]));
     col.arrGruops.push(new FilterChecker('05-09', true, ["05-09"]));
     col.arrGruops.push(new FilterChecker('10-14', true, ["10-14"]));
@@ -111,7 +117,7 @@ export const initAgeTypes = () => {
     return col;
 }
 export const initPopulationTypes = () => {
-    const col : IFilterColumn = new FilterColumn('Population','population_type_hebrew')
+    const col : IColumnFilter = new ColumnFilter('Population','population_type_hebrew')
     col.arrGruops.push(new FilterChecker('jews', true, ["יהודים"]));
     col.arrGruops.push(new FilterChecker('arabs', true, ["ערבים"]));
     col.arrGruops.push(new FilterChecker('immigrants', true, ["זרים"]));
@@ -162,15 +168,17 @@ export const initOneLane = (arr: IFilterChecker[]) =>{
 }
 
 
-export const initAccidentType = (arr: IFilterChecker[]) => {
-    arr.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));
-    arr.push(new FilterChecker('hit-front-side', true, ["התנגשות חזית בצד"]));
-    arr.push(new FilterChecker('hit-front-front', true, ["התנגשות חזית בחזית"]));
-    arr.push(new FilterChecker('hit-front-rear', true, ["התנגשות חזית באחור"]));
-    arr.push(new FilterChecker('hit-side-side', true, ["התנגשות צד בצד"]));
-    arr.push(new FilterChecker('hit-obstacle', true, ["התנגשות עם עצם דומם"]));
-    arr.push(new FilterChecker('hit-turning-over', true, ["התהפכות"]));
-    arr.push(new FilterChecker('hit-slip', true, ["החלקה"]));
+export const initAccidentType = () => {
+    const col : IColumnFilter = new ColumnFilter('AccidentType','accident_type_hebrew')
+    col.arrGruops.push(new FilterChecker('hit-ped', true, ["פגיעה בהולך רגל"]));
+    col.arrGruops.push(new FilterChecker('hit-front-side', true, ["התנגשות חזית בצד"]));
+    col.arrGruops.push(new FilterChecker('hit-front-front', true, ["התנגשות חזית בחזית"]));
+    col.arrGruops.push(new FilterChecker('hit-front-rear', true, ["התנגשות חזית באחור"]));
+    col.arrGruops.push(new FilterChecker('hit-side-side', true, ["התנגשות צד בצד"]));
+    col.arrGruops.push(new FilterChecker('hit-obstacle', true, ["התנגשות עם עצם דומם"]));
+    col.arrGruops.push(new FilterChecker('hit-turning-over', true, ["התהפכות"]));
+    col.arrGruops.push(new FilterChecker('hit-slip', true, ["החלקה"]));
+    return col
 }
 
 
