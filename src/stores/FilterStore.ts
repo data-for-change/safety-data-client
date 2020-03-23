@@ -387,8 +387,21 @@ export default class FilterStore {
   }
 
   @action
-  updateFilters = (FilterGroup: IColumnFilter, aType: number, val: boolean) => {
-    FilterGroup.arrGruops[aType].checked = val;
+  updateFilters = (colFilter: IColumnFilter, aType: number, val: boolean) => {
+    if (colFilter.allTypesOption === -1)
+      colFilter.arrTypes[aType].checked = val;
+    else
+    {
+      if (aType === colFilter.allTypesOption) {
+        colFilter.arrTypes.forEach((x,index) =>{
+          return x.checked = (index === colFilter.allTypesOption) ? val: !val;
+        })
+      }
+      else{
+        colFilter.arrTypes[colFilter.allTypesOption].checked = false;
+        colFilter.arrTypes[aType].checked = val;
+      }
+    }  
   }
 
   getfilterForCityOnly = () => {
@@ -429,29 +442,36 @@ export default class FilterStore {
     return filter;
   }
 
-  getMultiplefilter = (filterGroup: IColumnFilter) => {
+  getMultiplefilter = (colFilter: IColumnFilter) => {
     let filter: string = '';
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    const iterator = filterGroup.arrGruops.values();
-    for (const filterCheck of iterator) {
-      if (filterCheck.checked) {
-        arrfilter = [...arrfilter, ...filterCheck.filters]
+    if(colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked)
+      allChecked = true;
+    else{
+      //in case there is allTypesOption , it want be copied to arrfilter
+      //as it is not checked
+      const iterator = colFilter.arrTypes.values();
+      for (const filterCheck of iterator) {
+        if (filterCheck.checked) {
+          arrfilter = [...arrfilter, ...filterCheck.filters]
+        }
+        else {
+          allChecked = false;
+        }
       }
-      else {
-        allChecked = false;
-      }
-    }
+    }  
+
     if (allChecked)
       filter = '';
     else {
       filter += `,{"$or": [`
       filter += arrfilter.map((x: string) => {
         if (x === "null")
-          return `{"${filterGroup.dbColName}":` + null + '}'
+          return `{"${colFilter.dbColName}":` + null + '}'
         else {
           let xSafe = x.replace('"', '\\"')
-          return `{"${filterGroup.dbColName}" : "${xSafe}"}`
+          return `{"${colFilter.dbColName}" : "${xSafe}"}`
         }
 
       }
@@ -527,7 +547,7 @@ export default class FilterStore {
   getMultiplefilterIDB = (arrFilters: any[], filterGroup: IColumnFilter) => {
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    const iterator = filterGroup.arrGruops.values();
+    const iterator = filterGroup.arrTypes.values();
     for (const filterCheck of iterator) {
       if (filterCheck.checked) {
         arrfilter = [...arrfilter, ...filterCheck.filters]
