@@ -482,7 +482,7 @@ export default class FilterStore {
   // local db filters - idb using Dexie.js
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  useLocalDb = 2;
+  useLocalDb = 0;
 
   submitMainDataFilterLocalDb = () => {
     this.isLoading = true;

@@ -1,11 +1,10 @@
-import { observable } from "mobx"
+import { observable, action } from "mobx"
 
 export interface IFilterChecker {
     checked: boolean;
     label: string;
     filters: string[];
 }
-
 export default class FilterChecker implements IFilterChecker {
     @observable
     checked: boolean;
@@ -17,14 +16,27 @@ export default class FilterChecker implements IFilterChecker {
         this.filters = filters;
     }
 }
-export enum EnumVehiclePass {
-    All,
-    Ped,
-    Cycle,
-    Motorcycle,
-    Car,
-    Others
+export interface IFilterGroup {
+    label: string;
+    dbColName: string;
+    arrFilters: IFilterChecker[]
 }
+export class FilterGroup implements IFilterGroup {
+    label: string;
+    dbColName: string;
+    @observable
+    arrFilters: IFilterChecker[];
+    constructor(label: string, dbColName: string) {
+        this.label = label;
+        this.dbColName = dbColName;
+        this.arrFilters = [];
+    }
+    @action
+    updateFilters = (aType: number, val: boolean) => {
+      this.arrFilters[aType].checked = val;
+    }
+}
+
 
 export const initInjurySeverity = (arr: IFilterChecker[]) => {
     arr.push(new FilterChecker('dead', true, ["הרוג"]));
