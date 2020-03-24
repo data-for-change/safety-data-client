@@ -11,10 +11,21 @@ import 'leaflet-css'
 interface IProps {}
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const mapRef = useRef<any>();
-  const store = useStore();
+  const store = useStore(); 
   const reactMapCenter = toJS(store.mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
-  const bounds = store.mapBounds;
+  const {isDynamicMarkers, mapBounds, language} = store;
+  let reactMarkers;
+  if (isDynamicMarkers)
+      reactMarkers = toJS(store.dataMarkersInBounds);
+  else    
+      reactMarkers = toJS(store.dataAllInjuries);
+  let markers = reactMarkers.map((x: any) => {
+    if (x.latitude !== null && x.longitude !== null) {
+        return <AccidentsMarkers data={x}  language={language} />
+    }
+    return null;
+});
   const didMountRef = useRef(false) 
   useEffect(() => {
     if (didMountRef.current) { 
@@ -39,7 +50,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         <Map ref={mapRef}
           center={reactMapCenter}
           zoom={13}
-          bounds ={bounds}
+          bounds ={mapBounds}
           style={WRAPPER_STYLES}
           onmoveend ={updateMarkers}
         >
@@ -47,7 +58,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <AccidentsMarkers />
+          {markers}
         </Map>
         {store.isReadyToRenderMap?"":""}
     </div>
