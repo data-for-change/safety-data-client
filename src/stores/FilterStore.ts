@@ -326,7 +326,8 @@ export default class FilterStore {
       }
     else
     {
-      this.submintGetMarkersBBox(this.mapBounds);
+      if(this.isDynamicMarkers)
+        this.submintGetMarkersBBox(this.mapBounds);
       this.submintMainDataFilter();
     }
     this.submitCityNameAndLocation();
@@ -341,7 +342,7 @@ export default class FilterStore {
     let filter = this.getFilter(null);
     this.updateIsSetBounds(this.cities, this.roadSegment);
     console.log(filter)
-    fetchFilter(filter)
+    fetchFilter(filter,"main")
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.updateAllInjuries(data);
@@ -354,7 +355,7 @@ export default class FilterStore {
   }
   submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
     let filter = this.getFilter(mapBounds, true)
-    fetchFilter(filter)
+    fetchFilter(filter, 'latlon')
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.updateDataMarkersInBounds(data);
@@ -515,9 +516,42 @@ export default class FilterStore {
         this.isLoading = false;
       })
   }
+  submintGetMarkersBBoxIdb = (mapBounds: L.LatLngBounds) => {
+    let arrFilters = this.getFilterBboxIDB(mapBounds)
+    getFromDexie(arrFilters)
+    .then((data: any[] | undefined) => {
+      if (data !== null && data !== undefined) {
+        this.updateDataMarkersInBounds(data);
+      }
+    })
+}
+
 
   getFilterIDB = () => {
     let arrFilters: any[] = []
+    let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
+    arrFilters.push(years)
+    this.getfilterCityIDB(arrFilters);
+    this.getFilterStreetsIDB(arrFilters);
+    this.getMultiplefilterIDB(arrFilters, this.dayNight);
+    this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.roadSegment)
+    this.getMultiplefilterIDB(arrFilters, this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, this.injTypes);
+    this.getMultiplefilterIDB(arrFilters, this.genderTypes)
+    this.getMultiplefilterIDB(arrFilters, this.ageTypes);
+    this.getMultiplefilterIDB(arrFilters, this.populationTypes);
+    this.getMultiplefilterIDB(arrFilters, this.accidentType);
+    this.getMultiplefilterIDB(arrFilters, this.vehicleType);
+    this.getMultiplefilterIDB(arrFilters, this.roadTypes);
+    this.getMultiplefilterIDB(arrFilters, this.speedLimit);
+    this.getMultiplefilterIDB(arrFilters, this.roadWidth);
+    this.getMultiplefilterIDB(arrFilters, this.separator);
+    this.getMultiplefilterIDB(arrFilters, this.oneLane);
+    return arrFilters;
+  }
+  getFilterBboxIDB = (bounds: L.LatLngBounds) => {
+    let arrFilters: any[] = []
+    let bbox = {filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast }
     let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
     arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
