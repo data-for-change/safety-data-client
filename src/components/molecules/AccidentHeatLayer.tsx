@@ -3,18 +3,6 @@ import 'leaflet-css'
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 
-
-
-interface IPoint {
-  lat: number,
-  lon: number,
-  _id: string
-}
-interface IState {
-  layerHidden?: boolean;
-  fitBoundsOnUpdate?: boolean;
-  addressPoints?: Array<IPoint>;
-}
 interface IProps {
   data: any[]
 }

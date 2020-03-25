@@ -5,28 +5,13 @@ import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 import 'leaflet-css'
 import AccidentHeatLayer from '../molecules/AccidentHeatLayer'
-// @ts-ignore
-import HeatmapLayer from 'react-leaflet-heatmap-layer';
-//import {getAll} from '../../services/Accident.Service'
  
-
-interface IPoint{
-  lat: number,
-  lon: number,
-  _id: string
-}
-interface IState {
-  layerHidden?: boolean;
-  fitBoundsOnUpdate?: boolean;
-  addressPoints?: Array<IPoint>;
-}
 interface IProps {}
 const INITIAL_ZOOM = 10;
 const HeatMap: FunctionComponent<IProps> = observer(() => {
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
   const store = useStore(); 
   let reactMarkers = toJS(store.dataAllInjuries);
-  let newArr:any[] = reactMarkers.map (x => [x.latitude, x.longitude, x._id])
   return (
     <div>
       <Map center={[32.09, 34.7818]} zoom={INITIAL_ZOOM} style={WRAPPER_STYLES}>
