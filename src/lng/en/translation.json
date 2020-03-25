@@ -1,7 +1,8 @@
 {
   "test": "Test translation",
   "Home": "Home",
-  "HeatMap": "HeatMap",
+  "HeatMap": "Heat Map",
+  "Markers" : "Markers",
   "Cities": "Cities",
   "About": "About",
   "Israel": "Israel",

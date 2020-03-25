@@ -654,6 +654,14 @@ export default class FilterStore {
     }
   }
 
+  @observable
+  heatLayerHidden: boolean = true;
+  @action
+  toggleHeatLayer = () =>{
+    this.heatLayerHidden =  !this.heatLayerHidden;
+  }
+
+
   @action
   setBounds = (data: any[]) => {
     console.log("setBounds!")
