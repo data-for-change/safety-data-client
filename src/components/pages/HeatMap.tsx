@@ -4,6 +4,7 @@ import { useStore } from '../../stores/storeConfig'
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 import 'leaflet-css'
+import AccidentHeatLayer from '../molecules/AccidentHeatLayer'
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 //import {getAll} from '../../services/Accident.Service'
@@ -28,18 +29,8 @@ const HeatMap: FunctionComponent<IProps> = observer(() => {
   let newArr:any[] = reactMarkers.map (x => [x.latitude, x.longitude, x._id])
   return (
     <div>
-      <Map center={[32.09, 34.7818]} zoom={INITIAL_ZOOM} style={WRAPPER_STYLES}
-      
-      >
-      {true &&
-        <HeatmapLayer
-          fitBoundsOnLoad
-          fitBoundsOnUpdate
-          points={newArr}
-          longitudeExtractor={(m:any) => m[1]}
-          latitudeExtractor={(m:any) => m[0]}
-          intensityExtractor={(m:any) => parseFloat(m[2])} />
-          }
+      <Map center={[32.09, 34.7818]} zoom={INITIAL_ZOOM} style={WRAPPER_STYLES}>
+        <AccidentHeatLayer data= {reactMarkers}/>  
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
