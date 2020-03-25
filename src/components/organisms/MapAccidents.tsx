@@ -23,7 +23,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     reactMarkers = toJS(store.dataAllInjuries);
   let markers = store.heatLayerHidden && reactMarkers.map((x: any) => {
     if (x.latitude !== null && x.longitude !== null) {
-      return <AccidentsMarkers data={x} language={language} />
+      return <AccidentsMarkers data={x} language={language} key={`marker-${x._id}`}/>
     }
     return null;
   });

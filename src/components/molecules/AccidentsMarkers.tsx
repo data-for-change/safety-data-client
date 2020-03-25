@@ -38,7 +38,7 @@ const AccidentsMarkers: React.FC<IProps> = (({ data: x, language }) => {
     const { t } = useTranslation();
     const lPoint: L.LatLng = new L.LatLng(x.latitude, x.longitude);
     const icon: L.Icon = setIconBySeverity(x.injury_severity_hebrew)
-    return (<Marker key={`marker-${x._id}`} position={lPoint} icon={icon}>
+    return (<Marker position={lPoint} icon={icon}>
         {<Popup>
             <div className={'text' + language}>
                 <div><span style={pStyle}>{t('When')}:</span> {x.accident_timestamp}, {x.day_in_week_hebrew}, {x.day_night_hebrew}</div>
