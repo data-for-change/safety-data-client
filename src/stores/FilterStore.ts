@@ -552,6 +552,7 @@ export default class FilterStore {
   getFilterBboxIDB = (bounds: L.LatLngBounds) => {
     let arrFilters: any[] = []
     let bbox = {filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast }
+    arrFilters.push(bbox)
     let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
     arrFilters.push(years)
     this.getfilterCityIDB(arrFilters);
