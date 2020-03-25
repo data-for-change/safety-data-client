@@ -1,8 +1,8 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next';
 import L from 'leaflet'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker} from 'react-leaflet'
 import 'leaflet-css'
+import AccidentPopUp from '../atoms/AccidentPopUp'
 import redMarker from '../../assets/marker-icon-2x-red.png'
 import orangeMarker from '../../assets/marker-icon-2x-orange2.png'
 import shadoMarker from '../../assets/marker-shadow.png'
@@ -31,23 +31,11 @@ const ORANGE_ICON = new L.Icon({
     shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
 });
 
-const AccidentsMarkers: React.FC<IProps> = (({ data: x, language }) => {
-    const pStyle = {
-        color: "#004ba0"
-    };
-    const { t } = useTranslation();
-    const lPoint: L.LatLng = new L.LatLng(x.latitude, x.longitude);
-    const icon: L.Icon = setIconBySeverity(x.injury_severity_hebrew)
+const AccidentsMarkers: React.FC<IProps> = (({ data, language }) => {
+    const lPoint: L.LatLng = new L.LatLng(data.latitude, data.longitude);
+    const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew)
     return (<Marker position={lPoint} icon={icon}>
-        {<Popup>
-            <div className={'text' + language}>
-                <div><span style={pStyle}>{t('When')}:</span> {x.accident_timestamp}, {x.day_in_week_hebrew}, {x.day_night_hebrew}</div>
-                <div><span style={pStyle}>{t('Who')}:</span> {x.injured_type_hebrew}, {x.injury_severity_hebrew}, {x.vehicle_vehicle_type_hebrew ? x.vehicle_vehicle_type_hebrew + ", " : ""} {x.sex_hebrew}, {x.age_group_hebrew}, {x.population_type_hebrew}</div>
-                <div><span style={pStyle}>{t('Where')}:</span> {x.accident_yishuv_name ? x.accident_yishuv_name + ", " : ""}{x.street1_hebrew ? x.street1_hebrew + ", " : ""}{x.street2_hebrew ? x.street2_hebrew + ", " : ""}{x.road_segment_name ? x.road_segment_name + ", " : ""}{x.road_type_hebrew}</div>
-                <div><span style={pStyle}>{t('What')}:</span> {x.accident_type_hebrew}</div>
-                <div><span style={pStyle}>{t('WhatRoad')}:</span> {x.speed_limit_hebrew ? x.speed_limit_hebrew + ", " : ""}{x.multi_lane_hebrew ? x.multi_lane_hebrew + ", " : ""}{x.one_lane_hebrew ? x.one_lane_hebrew + ", " : ""}{x.road_width_hebrew ? x.road_width_hebrew + ", " : ""}</div>
-            </div>
-        </Popup>}
+        <AccidentPopUp data={data} language={language} />
     </Marker>)
 })
 
