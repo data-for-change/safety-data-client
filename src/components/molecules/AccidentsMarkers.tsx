@@ -34,6 +34,7 @@ const ORANGE_ICON = new L.Icon({
 const AccidentsMarkers: React.FC<IProps> = (({ data, language }) => {
     const lPoint: L.LatLng = new L.LatLng(data.latitude, data.longitude);
     const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew)
+    //console.log(data.latitude)
     return (<Marker position={lPoint} icon={icon}>
         <AccidentPopUp data={data} language={language} />
     </Marker>)

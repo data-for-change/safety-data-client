@@ -198,6 +198,8 @@ export default class FilterStore {
   dataAllInjuries: any[] = []
   @action
   updateAllInjuries = (data: any[]) => {
+    //console.log("updateAllInjuries ",data.length)
+    this.markersLoadStep =2;
     this.dataAllInjuries = data;
     if (this.isSetBounds) {
       this.mapBounds = this.setBounds(this.dataAllInjuries)
@@ -205,6 +207,14 @@ export default class FilterStore {
     }
   }
 
+  @observable
+  dataMarkersLean: any[] = []
+  @action
+  updateDataMarkersLean = (data: any[]) => {
+    //console.log("updateDataMarkersLean ",data.length)
+    this.markersLoadStep =1;
+    this.dataMarkersLean = data;
+  }
   @observable
   dataMarkersInBounds: any[] = []
   @action
@@ -320,6 +330,7 @@ export default class FilterStore {
 
   @action
   submitFilter = () => {
+    this.markersLoadStep =0;
     if (this.useLocalDb === 2)
       {
         this.submitMainDataFilterLocalDb();
@@ -328,6 +339,8 @@ export default class FilterStore {
     {
       if(this.isDynamicMarkers)
         this.submintGetMarkersBBox(this.mapBounds);
+      if(this.isUse2StepsMarkers)  
+        this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
     }
     this.submitCityNameAndLocation();
@@ -351,6 +364,15 @@ export default class FilterStore {
             insertToDexie(data);
         }
         this.isLoading = false;
+      })
+  }
+  submintGetMarkerFirstStep = () => {
+    let filter = this.getFilter(null)
+    fetchFilter(filter, 'latlon')
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.updateDataMarkersLean(data);
+        }
       })
   }
   submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
@@ -626,9 +648,19 @@ export default class FilterStore {
   
   //this belong to mapstore! need to move
   @observable
+  isReadyToRenderMap: boolean = false;
+  @observable
   isDynamicMarkers :boolean = false;
   @observable
+  isUse2StepsMarkers :boolean = true;
+  @observable
+  markersLoadStep :number = 0;
+
+
+  @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
+  @observable
+  mapBounds: L.LatLngBounds = L.latLngBounds([L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)])
   @observable
   isSetBounds: boolean = false;
   @action
@@ -639,13 +671,7 @@ export default class FilterStore {
       this.isSetBounds = true;
   }
 
-  @observable
-  mapBounds: L.LatLngBounds = L.latLngBounds([L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)])
   
- 
-  @observable
-  isReadyToRenderMap: boolean = false;
-
   @action
   updateLocation = (res: any[]) => {
     if (res !== null && res.length > 0) {

@@ -15,18 +15,28 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const store = useStore();
   const reactMapCenter = toJS(store.mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
-  const { isDynamicMarkers, mapBounds, language } = store;
+  const { isDynamicMarkers, isUse2StepsMarkers, markersLoadStep ,mapBounds, language } = store
+  let markers;
   let reactMarkers;
   if (isDynamicMarkers)
     reactMarkers = toJS(store.dataMarkersInBounds);
-  else
+  else if (isUse2StepsMarkers && markersLoadStep ===1){
+    reactMarkers = toJS(store.dataMarkersLean);
+    //console.log("lean Markers ", reactMarkers.length, markersLoadStep)
+  }
+  else {
     reactMarkers = toJS(store.dataAllInjuries);
-  let markers = store.heatLayerHidden && reactMarkers.map((x: any) => {
+    //console.log("Main Markers ", reactMarkers.length, markersLoadStep)
+  }  
+  //console.log("reactMarkers ", reactMarkers.length)
+  markers = store.heatLayerHidden && reactMarkers.map((x: any) => {
     if (x.latitude !== null && x.longitude !== null) {
-      return <AccidentsMarkers data={x} language={language} key={`marker-${x._id}`}/>
+      return <AccidentsMarkers data={x} language={language} key={`marker-${x._id}`} />
     }
     return null;
   });
+
+
   const didMountRef = useRef(false)
   useEffect(() => {
     if (didMountRef.current) {
@@ -46,7 +56,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
       store.submintGetMarkersBBox(b);
     }
   })
-  const heatLayer = !store.heatLayerHidden && <AccidentHeatLayer data={reactMarkers} />
+  const heatLayer = !store.heatLayerHidden && reactMarkers !== undefined && <AccidentHeatLayer data={reactMarkers} />
   return (
     <div>
       <Map ref={mapRef}
