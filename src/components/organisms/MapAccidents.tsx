@@ -31,6 +31,10 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
       }
     }
     else didMountRef.current = true
+    //prevent zoom  0 bug 
+    const zoom = mapRef.current.leafletElement.getZoom();
+    if (zoom === 0)
+       mapRef.current.leafletElement.setZoom(13);
   })
   const updateMarkers = (() => {
     //console.log("updateMarkers")
@@ -39,7 +43,6 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
       store.submintGetMarkersBBox(b);
     }
   })
-
   return (
     <div>
       <Map ref={mapRef}

@@ -21,7 +21,7 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
     reactMarkers = toJS(store.dataAllInjuries);
     //console.log("Main Markers ", reactMarkers.length, markersLoadStep)
   }  
-  console.log("reactMarkers ", reactMarkers.length, markersLoadStep)
+  //console.log("reactMarkers ", reactMarkers.length, markersLoadStep)
   markers =  reactMarkers.map((x: any) => {
     if (x.latitude !== null && x.longitude !== null) {
       return <AccidentsMarker data={x} language={language} key={`marker-${x._id}`} />

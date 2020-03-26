@@ -198,7 +198,7 @@ export default class FilterStore {
   dataAllInjuries: any[] = []
   @action
   updateAllInjuries = (data: any[]) => {
-    console.log("updateAllInjuries ",data.length)
+    //console.log("updateAllInjuries ",data.length)
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     if (this.isSetBounds) {
@@ -211,7 +211,7 @@ export default class FilterStore {
   dataMarkersLean: any[] = []
   @action
   updateDataMarkersLean = (data: any[]) => {
-    console.log("updateDataMarkersLean ",data.length)
+    //console.log("updateDataMarkersLean ",data.length)
     this.setMarkersLoadStep(1);
     this.dataMarkersLean = data;
   }
@@ -354,7 +354,7 @@ export default class FilterStore {
     this.isLoading = true;
     let filter = this.getFilter(null);
     this.updateIsSetBounds(this.cities, this.roadSegment);
-    console.log(filter)
+    //console.log(filter)
     fetchFilter(filter,"main")
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
@@ -664,8 +664,15 @@ export default class FilterStore {
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
+
   @observable
-  mapBounds: L.LatLngBounds = L.latLngBounds([L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)])
+  mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
+  @action 
+  initBounds = () => {
+    this.mapBounds = L.latLngBounds(INIT_BOUNDS)
+    console.log(this.mapBounds)
+  } 
+
   @observable
   isSetBounds: boolean = false;
   @action
@@ -697,8 +704,6 @@ export default class FilterStore {
   @action
   setBounds = (data: any[]) => {
     console.log("setBounds!")
-    const corner1 = L.latLng(29.50, 34.22)
-    const corner2 = L.latLng(33.271, 35.946)
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);
     data.forEach(x => {
@@ -719,12 +724,17 @@ export default class FilterStore {
     }
     //in case no lat/lon info 
     if (arr.length < 2)
-      arr = [corner1, corner2];
+      arr = DEFAULT_BOUNDS;
     const bounds = L.latLngBounds(arr)
     return bounds;
   }
 
 }
+const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
+const DEFAULT_BOUNDS = [
+  L.latLng(29.50, 34.22),     // most possible south-west point
+  L.latLng(33.271, 35.946),   // most possible north-east point
+];
 
 
 

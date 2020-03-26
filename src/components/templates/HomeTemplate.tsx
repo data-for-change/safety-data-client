@@ -13,6 +13,7 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
   store.isMultipleCities = true;
   store.isReadyToRenderMap = false;
   store.updateCities([]);
+  store.initBounds();
   store.submitFilter();
   return (
     <div className="App">
@@ -28,7 +29,3 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
   </div>
   )
 })
-
-// const handleTabSelect= () =>{
-
-// }
