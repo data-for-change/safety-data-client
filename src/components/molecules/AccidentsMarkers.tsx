@@ -1,50 +1,44 @@
-import React from 'react'
-import L from 'leaflet'
-import { Marker} from 'react-leaflet'
-import 'leaflet-css'
-import AccidentPopUp from '../atoms/AccidentPopUp'
-import redMarker from '../../assets/marker-icon-2x-red.png'
-import orangeMarker from '../../assets/marker-icon-2x-orange2.png'
-import shadoMarker from '../../assets/marker-shadow.png'
+import React, { FunctionComponent } from 'react'
+import { observer } from "mobx-react"
+import { toJS } from 'mobx'
+//import L from 'leaflet'
+import AccidentsMarker from '../molecules/AccidentsMarker'
+import { useStore } from '../../stores/storeConfig'
 
-interface IProps {
-    data: any,
-    language: string
-}
-const lIconSizes = { iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] }
-//const mIconSizes = { iconSize: [19, 31], iconAnchor: [9, 31], popupAnchor: [1, -25], shadowSize: [31, 31] }
-const iconSize = lIconSizes;
-const RED_ICON = new L.Icon({
-    iconUrl: redMarker,
-    shadowUrl: shadoMarker,
-    iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
-    iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
-    popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
-    shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
-});
-const ORANGE_ICON = new L.Icon({
-    iconUrl: orangeMarker,
-    shadowUrl: shadoMarker,
-    iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
-    iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
-    popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
-    shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
-});
-
-const AccidentsMarkers: React.FC<IProps> = (({ data, language }) => {
-    const lPoint: L.LatLng = new L.LatLng(data.latitude, data.longitude);
-    const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew)
-    //console.log(data.latitude)
-    return (<Marker position={lPoint} icon={icon}>
-        <AccidentPopUp data={data} language={language} />
-    </Marker>)
+interface IProps { }
+const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
+  const store = useStore();
+  const { isDynamicMarkers, isUse2StepsMarkers, markersLoadStep , language } = store
+  let markers;
+  let reactMarkers;
+  if (isDynamicMarkers)
+    reactMarkers = toJS(store.dataMarkersInBounds);
+  else if (isUse2StepsMarkers && markersLoadStep ===1){
+    reactMarkers = toJS(store.dataMarkersLean);
+    //console.log("lean Markers ", reactMarkers.length, markersLoadStep)
+  }
+  else {
+    reactMarkers = toJS(store.dataAllInjuries);
+    //console.log("Main Markers ", reactMarkers.length, markersLoadStep)
+  }  
+  console.log("reactMarkers ", reactMarkers.length, markersLoadStep)
+  markers =  reactMarkers.map((x: any) => {
+    if (x.latitude !== null && x.longitude !== null) {
+      return <AccidentsMarker data={x} language={language} key={`marker-${x._id}`} />
+    }
+    else return null;
+  });
+//   const updateMarkers = (() => {
+//     //console.log("updateMarkers")
+//     if (store.isDynamicMarkers) {
+//       const b = mapRef.current.leafletElement.getBounds()
+//       store.submintGetMarkersBBox(b);
+//     }
+//   })
+  return (
+      <div>
+        {markers}
+    </div>
+  )
 })
-
-const setIconBySeverity = (severity: string) => {
-    if (severity === "הרוג")
-        return RED_ICON;
-    else // (severity === "קשה")    
-        return ORANGE_ICON;
-}
-
 export default AccidentsMarkers

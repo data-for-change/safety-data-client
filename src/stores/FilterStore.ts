@@ -198,8 +198,8 @@ export default class FilterStore {
   dataAllInjuries: any[] = []
   @action
   updateAllInjuries = (data: any[]) => {
-    //console.log("updateAllInjuries ",data.length)
-    this.markersLoadStep =2;
+    console.log("updateAllInjuries ",data.length)
+    this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     if (this.isSetBounds) {
       this.mapBounds = this.setBounds(this.dataAllInjuries)
@@ -211,8 +211,8 @@ export default class FilterStore {
   dataMarkersLean: any[] = []
   @action
   updateDataMarkersLean = (data: any[]) => {
-    //console.log("updateDataMarkersLean ",data.length)
-    this.markersLoadStep =1;
+    console.log("updateDataMarkersLean ",data.length)
+    this.setMarkersLoadStep(1);
     this.dataMarkersLean = data;
   }
   @observable
@@ -330,7 +330,7 @@ export default class FilterStore {
 
   @action
   submitFilter = () => {
-    this.markersLoadStep =0;
+    //this.setMarkersLoadStep(0);
     if (this.useLocalDb === 2)
       {
         this.submitMainDataFilterLocalDb();
@@ -654,7 +654,12 @@ export default class FilterStore {
   @observable
   isUse2StepsMarkers :boolean = true;
   @observable
-  markersLoadStep :number = 0;
+  markersLoadStep :number = 1;
+  @action 
+  setMarkersLoadStep = (step :number) =>{
+    if (this.isUse2StepsMarkers)
+    this.markersLoadStep = step;
+  } 
 
 
   @observable
