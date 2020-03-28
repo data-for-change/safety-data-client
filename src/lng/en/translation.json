@@ -126,6 +126,7 @@
   "onelane-oneway":"one way",
   "onelane-unknown" : "unknown lane count",
   "onelane-not-relevant": "not-relevant",
+  "check_one_checkbox" :"Please Check at least one Checkbox.", 
   "Submit": "Submit",
   "Loading…": "Loading…",
   "AllCasualtiesInRegion": "Casualties In the Region",
