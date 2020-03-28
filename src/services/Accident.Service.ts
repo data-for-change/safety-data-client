@@ -65,6 +65,9 @@ export const fetchFilter = async (filter: string, type: string): Promise<Array<a
     referrerPolicy: 'no-referrer', // no-referrer, *client
     body: filter
   });
+  if (!response.ok) {
+    return [];
+  }
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
@@ -84,6 +87,9 @@ export const fetchGroupBy = async (filter: string): Promise<Array<any> | undefin
     referrerPolicy: 'no-referrer', // no-referrer, *client
     body: filter
   });
+  if (!response.ok) {
+    return [];
+  }
   return await response.json(); // parses JSON response into native JavaScript objects
 }
 
