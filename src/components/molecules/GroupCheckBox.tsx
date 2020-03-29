@@ -19,7 +19,7 @@ export const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter ,
     color: '#dc3545'
   };
   const { t } = useTranslation();
-  const {isAllValsFalse} = colFilter;
+  const {isAllValsFalse, name, arrTypes} = colFilter;
   const onGroupChange = (aType: number, checked: boolean) => {
     //checkValid(checked)
     onChange(aType, checked);
@@ -28,9 +28,9 @@ export const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter ,
   const isvalid = (isAllValsFalse) ? feedback : null;
 
   return (
-    <Form.Group controlId={formName + ".Control" + colFilter.name} >
-      <Form.Label className="filterLable">{t(colFilter.name)}:</Form.Label>
-      {colFilter.arrTypes.map((fChecker, index) => (
+    <Form.Group controlId={formName + ".Control" + name} >
+      <Form.Label className="filterLable">{t(name)}:</Form.Label>
+      {arrTypes.map((fChecker, index) => (
         <Checkbox key={index} label={fChecker.label} group={colFilter.name} id={index} checked={fChecker.checked} onChange={(e: ChangeEvent<HTMLInputElement>) => { onGroupChange(index, e.target.checked); }} />
       ))}
       {isvalid}

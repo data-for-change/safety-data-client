@@ -16,11 +16,16 @@ import { useStore } from '../../stores/storeConfig';
 interface IProps {
   activeCardKey: number
 }
+const STYLE_TOGGLE_WARNING = {
+  color: '#dc3545'
+};
+const STYLE_TOGGLE_NORMAL = {
+  color: '#007bff'
+};
 
 export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
-  const store = useStore();
   const { t } = useTranslation();
-  //const {startYear, EndYear, City} = store;
+  const store = useStore();
   return (
     <Form>
       <Accordion defaultActiveKey={activeCardKey.toString()}>
@@ -31,22 +36,24 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhatVehicle />
         <CardFilterWhatRoad />
       </Accordion>
-      <GroupCheckbox formName="exampleForm" colFilter={store.injurySeverity} onChange={store.updateInjurySeverity}/>
+      <GroupCheckbox formName="exampleForm" colFilter={store.injurySeverity} onChange={store.updateInjurySeverity} />
       <Button variant="primary"
-        disabled={store.isLoading}
+        disabled={store.isLoading || !store.isValidAllFilters}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
-      {/* <Button variant="primary"
-        onClick={() => {  store.submitGroupByYears(); }} >group by</Button> */}
     </Form>
   );
 })
+
+
 const CardFilterWhen = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWhen } = store;
+  const styleToggle = isValidWhen ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+        <Accordion.Toggle as={Button} variant="link" eventKey="0" style={styleToggle}>
           {t('When')}
         </Accordion.Toggle>
       </Card.Header>
@@ -83,12 +90,14 @@ const CardFilterWhen = observer(() => {
   );
 })
 const CardFilterWhere = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWhere } = store;
+  const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+        <Accordion.Toggle as={Button} variant="link" eventKey="1" style={styleToggle}>
           {t('Where')}
         </Accordion.Toggle>
       </Card.Header>
@@ -104,12 +113,14 @@ const CardFilterWhere = observer(() => {
   );
 })
 const CardFilterWho = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWho } = store
+  const styleToggle = isValidWho ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="2">
+        <Accordion.Toggle as={Button} variant="link" eventKey="2" style={styleToggle} >
           {t('Who')}
         </Accordion.Toggle>
       </Card.Header>
@@ -118,19 +129,21 @@ const CardFilterWho = observer(() => {
           <GroupCheckbox formName="exampleForm" colFilter={store.injTypes} onChange={store.updateInjuerdType} />
           <GroupCheckbox formName="exampleForm" colFilter={store.genderTypes} onChange={store.updateGenderType} />
           <GroupCheckbox formName="exampleForm" colFilter={store.ageTypes} onChange={store.updateAgeType} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.populationTypes}  onChange={store.updatePopulationType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.populationTypes} onChange={store.updatePopulationType} />
         </div>
       </Accordion.Collapse>
     </Card>
   );
 })
 const CardFilterWhat = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWhat } = store;
+  const styleToggle = isValidWhat ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="3">
+        <Accordion.Toggle as={Button} variant="link" eventKey="3" style={styleToggle}>
           {t('What')}
         </Accordion.Toggle>
       </Card.Header>
@@ -144,12 +157,14 @@ const CardFilterWhat = observer(() => {
 })
 
 const CardFilterWhatVehicle = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWhatVehicle } = store;
+  const styleToggle = isValidWhatVehicle ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="4">
+        <Accordion.Toggle as={Button} variant="link" eventKey="4" style={styleToggle}>
           {t('WhatVehicle')}
         </Accordion.Toggle>
       </Card.Header>
@@ -161,13 +176,16 @@ const CardFilterWhatVehicle = observer(() => {
     </Card>
   );
 })
+
 const CardFilterWhatRoad = observer(() => {
-  const store = useStore();
   const { t } = useTranslation();
+  const store = useStore();
+  const { isValidWhatRoad } = store;
+  const styleToggle = isValidWhatRoad ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="5">
+        <Accordion.Toggle as={Button} variant="link" eventKey="5" style={styleToggle}>
           {t('WhatRoad')}
         </Accordion.Toggle>
       </Card.Header>

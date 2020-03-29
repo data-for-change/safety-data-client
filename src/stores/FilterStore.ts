@@ -1,4 +1,4 @@
-import { observable, action, reaction } from "mobx"
+import { observable, action, reaction, computed } from "mobx"
 import i18n from "../i18n";
 import L from 'leaflet'
 import { IColumnFilter } from './FilterChecker'
@@ -18,7 +18,7 @@ export default class FilterStore {
     this.dayNight = FC.initDayNight()
     this.injTypes = FC.initInjTypes();
     this.genderTypes = FC.initGenderTypes()
-    this.ageTypes= FC.initAgeTypes()
+    this.ageTypes = FC.initAgeTypes()
     this.populationTypes = FC.initPopulationTypes()
     this.accidentType = FC.initAccidentType()
     this.vehicleType = FC.initVehicleTypes()
@@ -33,12 +33,7 @@ export default class FilterStore {
     this.groupBy2 = this.group2Dict["Gender"];
     this.appInitialized = false;
   }
-  @observable
-  injurySeverity: IColumnFilter
-  @action
-  updateInjurySeverity = (aType: number, val: boolean) => {
-    this.updateFilters(this.injurySeverity, aType, val)
-  }
+
   //////////////////////////////////////////////
 
 
@@ -56,7 +51,19 @@ export default class FilterStore {
     }
   )
 
-
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  //Severity
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  injurySeverity: IColumnFilter
+  @action
+  updateInjurySeverity = (aType: number, val: boolean) => {
+    this.updateFilters(this.injurySeverity, aType, val)
+  }
+  @computed get isValidSeverity() {
+    const res = !this.injurySeverity.isAllValsFalse;
+    return res;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //where
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +93,16 @@ export default class FilterStore {
   updateRoadSegment = (names: string) => {
     this.roadSegment = names.split(',');
   }
-
+  @observable
+  roadTypes: IColumnFilter;
+  @action
+  updateRoadType = (aType: number, val: boolean) => {
+    this.updateFilters(this.roadTypes, aType, val)
+  }
+  @computed get isValidWhere() {
+    const res = !this.roadTypes.isAllValsFalse;
+    return res;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //when
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,13 +116,13 @@ export default class FilterStore {
   updateDayNight = (aType: number, val: boolean) => {
     this.updateFilters(this.dayNight, aType, val)
   }
-
+  @computed get isValidWhen() {
+    const res = !this.dayNight.isAllValsFalse;
+    return res;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // who
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-  //@observable
-  //genderTypes: Array<IFilterChecker> = [];
   @observable
   genderTypes: IColumnFilter
   @action
@@ -133,6 +149,11 @@ export default class FilterStore {
   updateInjuerdType = (aType: number, val: boolean) => {
     this.updateFilters(this.injTypes, aType, val)
   }
+  @computed get isValidWho() {
+    const res = !this.injTypes.isAllValsFalse && !this.genderTypes.isAllValsFalse && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
+    return res;
+  }
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,9 +162,12 @@ export default class FilterStore {
   accidentType: IColumnFilter;
   @action
   updateAccidentType = (aType: number, val: boolean) => {
-    this.updateFilters(this.accidentType, aType,val)
+    this.updateFilters(this.accidentType, aType, val)
   }
-
+  @computed get isValidWhat() {
+    const res = !this.accidentType.isAllValsFalse;
+    return res;
+  }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What Vehicle
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,45 +175,46 @@ export default class FilterStore {
   vehicleType: IColumnFilter;
   @action
   updateVehicleType = (aType: number, val: boolean) => {
-    this.updateFilters(this.vehicleType, aType,val)
+    this.updateFilters(this.vehicleType, aType, val)
+  }
+  @computed get isValidWhatVehicle() {
+    const res = !this.vehicleType.isAllValsFalse;
+    return res;
   }
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // What Road
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  @observable
-  roadTypes: IColumnFilter;
-  @action
-  updateRoadType = (aType: number, val: boolean) => {
-    this.updateFilters(this.roadTypes, aType,val)
-  }
 
   @observable
-  speedLimit:  IColumnFilter;
+  speedLimit: IColumnFilter;
   updateSpeedLimit = (aType: number, val: boolean) => {
-    this.updateFilters(this.speedLimit, aType,val)
+    this.updateFilters(this.speedLimit, aType, val)
   }
 
   @observable
-  roadWidth:  IColumnFilter;
+  roadWidth: IColumnFilter;
   @action
   updateRoadWidth = (aType: number, val: boolean) => {
-    this.updateFilters(this.roadWidth, aType,val)
+    this.updateFilters(this.roadWidth, aType, val)
   }
 
   @observable
   separator: IColumnFilter;
   @action
   updateSeparator = (aType: number, val: boolean) => {
-    this.updateFilters(this.separator, aType,val)
+    this.updateFilters(this.separator, aType, val)
   }
 
   @observable
   oneLane: IColumnFilter;
   @action
   updateOneLane = (aType: number, val: boolean) => {
-    this.updateFilters(this.oneLane, aType,val)
+    this.updateFilters(this.oneLane, aType, val)
   }
-
+  @computed get isValidWhatRoad() {
+    const res = !this.speedLimit.isAllValsFalse && !this.roadWidth.isAllValsFalse && !this.separator.isAllValsFalse && !this.oneLane.isAllValsFalse;
+    return res;
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // data
@@ -233,6 +258,11 @@ export default class FilterStore {
 
   @observable
   isLoading: boolean = false;
+
+  @computed get isValidAllFilters() {
+    const res = this.isValidSeverity && this.isValidWhen && this.isValidWho && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
+    return res;
+  }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // group by
@@ -331,15 +361,13 @@ export default class FilterStore {
   @action
   submitFilter = () => {
     //this.setMarkersLoadStep(0);
-    if (this.useLocalDb === 2)
-      {
-        this.submitMainDataFilterLocalDb();
-      }
-    else
-    {
-      if(this.isDynamicMarkers)
+    if (this.useLocalDb === 2) {
+      this.submitMainDataFilterLocalDb();
+    }
+    else {
+      if (this.isDynamicMarkers)
         this.submintGetMarkersBBox(this.mapBounds);
-      if(this.isUse2StepsMarkers)  
+      if (this.isUse2StepsMarkers)
         this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
     }
@@ -355,7 +383,7 @@ export default class FilterStore {
     let filter = this.getFilter(null);
     this.updateIsSetBounds(this.cities, this.roadSegment);
     //console.log(filter)
-    fetchFilter(filter,"main")
+    fetchFilter(filter, "main")
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.updateAllInjuries(data);
@@ -395,12 +423,12 @@ export default class FilterStore {
       this.cityResult = "";
   }
 
-  getFilter = ( bounds: any, useBounds :boolean = false) => {
+  getFilter = (bounds: any, useBounds: boolean = false) => {
     let filter = `{"$and" : [`
     filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
     filter += this.getMultiplefilter(this.injurySeverity)
     filter += this.getfilterCity();
-    if(useBounds && bounds !=null)
+    if (useBounds && bounds != null)
       filter += this.getfilterBounds(bounds);
     filter += this.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
@@ -412,10 +440,10 @@ export default class FilterStore {
     filter += this.getMultiplefilter(this.accidentType);
     filter += this.getMultiplefilter(this.vehicleType);
     filter += this.getMultiplefilter(this.roadTypes);
-    filter += this.getMultiplefilter( this.speedLimit);
-    filter += this.getMultiplefilter( this.roadWidth);
-    filter += this.getMultiplefilter( this.separator);
-    filter += this.getMultiplefilter( this.oneLane);
+    filter += this.getMultiplefilter(this.speedLimit);
+    filter += this.getMultiplefilter(this.roadWidth);
+    filter += this.getMultiplefilter(this.separator);
+    filter += this.getMultiplefilter(this.oneLane);
     filter += `]}`
     return filter;
   }
@@ -424,18 +452,17 @@ export default class FilterStore {
   updateFilters = (colFilter: IColumnFilter, aType: number, val: boolean) => {
     if (colFilter.allTypesOption === -1)
       colFilter.arrTypes[aType].checked = val;
-    else
-    {
+    else {
       if (aType === colFilter.allTypesOption) {
-        colFilter.arrTypes.forEach((x,index) =>{
-          return x.checked = (index === colFilter.allTypesOption) ? val: !val;
+        colFilter.arrTypes.forEach((x, index) => {
+          return x.checked = (index === colFilter.allTypesOption) ? val : !val;
         })
       }
-      else{
+      else {
         colFilter.arrTypes[colFilter.allTypesOption].checked = false;
         colFilter.arrTypes[aType].checked = val;
       }
-    }  
+    }
   }
   getfilterBounds = (mapBounds: L.LatLngBounds) => {
     let filter: string = '';
@@ -484,9 +511,9 @@ export default class FilterStore {
     let filter: string = '';
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
-    if(colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked)
+    if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked)
       allChecked = true;
-    else{
+    else {
       //in case there is allTypesOption , it want be copied to arrfilter
       //as it is not checked
       const iterator = colFilter.arrTypes.values();
@@ -498,7 +525,7 @@ export default class FilterStore {
           allChecked = false;
         }
       }
-    }  
+    }
 
     if (allChecked)
       filter = '';
@@ -541,12 +568,12 @@ export default class FilterStore {
   submintGetMarkersBBoxIdb = (mapBounds: L.LatLngBounds) => {
     let arrFilters = this.getFilterBboxIDB(mapBounds)
     getFromDexie(arrFilters)
-    .then((data: any[] | undefined) => {
-      if (data !== null && data !== undefined) {
-        this.updateDataMarkersInBounds(data);
-      }
-    })
-}
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.updateDataMarkersInBounds(data);
+        }
+      })
+  }
 
 
   getFilterIDB = () => {
@@ -573,7 +600,7 @@ export default class FilterStore {
   }
   getFilterBboxIDB = (bounds: L.LatLngBounds) => {
     let arrFilters: any[] = []
-    let bbox = {filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast }
+    let bbox = { filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast }
     arrFilters.push(bbox)
     let years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() }
     arrFilters.push(years)
@@ -641,25 +668,25 @@ export default class FilterStore {
       arrFilters.push(filter)
     }
   }
-  
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // map store
   ///////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
   //this belong to mapstore! need to move
   @observable
   isReadyToRenderMap: boolean = false;
   @observable
-  isDynamicMarkers :boolean = false;
+  isDynamicMarkers: boolean = false;
   @observable
-  isUse2StepsMarkers :boolean = true;
+  isUse2StepsMarkers: boolean = true;
   @observable
-  markersLoadStep :number = 1;
-  @action 
-  setMarkersLoadStep = (step :number) =>{
+  markersLoadStep: number = 1;
+  @action
+  setMarkersLoadStep = (step: number) => {
     if (this.isUse2StepsMarkers)
-    this.markersLoadStep = step;
-  } 
+      this.markersLoadStep = step;
+  }
 
 
   @observable
@@ -667,11 +694,11 @@ export default class FilterStore {
 
   @observable
   mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
-  @action 
+  @action
   initBounds = () => {
     this.mapBounds = L.latLngBounds(INIT_BOUNDS)
     console.log(this.mapBounds)
-  } 
+  }
 
   @observable
   isSetBounds: boolean = false;
@@ -683,7 +710,7 @@ export default class FilterStore {
       this.isSetBounds = true;
   }
 
-  
+
   @action
   updateLocation = (res: any[]) => {
     if (res !== null && res.length > 0) {
@@ -696,8 +723,8 @@ export default class FilterStore {
   @observable
   heatLayerHidden: boolean = true;
   @action
-  toggleHeatLayer = () =>{
-    this.heatLayerHidden =  !this.heatLayerHidden;
+  toggleHeatLayer = () => {
+    this.heatLayerHidden = !this.heatLayerHidden;
   }
 
 
