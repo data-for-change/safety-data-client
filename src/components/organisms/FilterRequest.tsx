@@ -31,7 +31,7 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhatVehicle />
         <CardFilterWhatRoad />
       </Accordion>
-      <GroupCheckbox formName="exampleForm" groupName={store.injurySeverity.name} dataArr={store.injurySeverity.arrTypes} onChange={store.updateInjurySeverity} />
+      <GroupCheckbox formName="exampleForm" colFilter={store.injurySeverity} onChange={store.updateInjurySeverity}/>
       <Button variant="primary"
         disabled={store.isLoading}
         onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
@@ -75,7 +75,7 @@ const CardFilterWhen = observer(() => {
                 </Form.Control>
               </Form.Group>
             </Form.Row>
-            <GroupCheckbox formName="exampleForm" groupName={store.dayNight.name} dataArr={store.dayNight.arrTypes} onChange={store.updateDayNight} />
+            <GroupCheckbox formName="exampleForm" colFilter={store.dayNight} onChange={store.updateDayNight} />
           </div>
         </Card.Body>
       </Accordion.Collapse>
@@ -97,7 +97,7 @@ const CardFilterWhere = observer(() => {
           <CitySelector isMultiple={store.isMultipleCities} />
           <StreetSelector />
           <RoadSegmentSelector />
-          <GroupCheckbox formName="exampleForm" groupName={store.roadTypes.name} dataArr={store.roadTypes.arrTypes} onChange={store.updateRoadType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.roadTypes} onChange={store.updateRoadType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -115,10 +115,10 @@ const CardFilterWho = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="2" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName={store.injTypes.name} dataArr={store.injTypes.arrTypes} onChange={store.updateInjuerdType} />
-          <GroupCheckbox formName="exampleForm" groupName={store.genderTypes.name} dataArr={store.genderTypes.arrTypes} onChange={store.updateGenderType} />
-          <GroupCheckbox formName="exampleForm" groupName={store.ageTypes.name} dataArr={store.ageTypes.arrTypes} onChange={store.updateAgeType} />
-          <GroupCheckbox formName="exampleForm" groupName={store.populationTypes.name} dataArr={store.populationTypes.arrTypes} onChange={store.updatePopulationType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.injTypes} onChange={store.updateInjuerdType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.genderTypes} onChange={store.updateGenderType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.ageTypes} onChange={store.updateAgeType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.populationTypes}  onChange={store.updatePopulationType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -136,7 +136,7 @@ const CardFilterWhat = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="3" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName={store.accidentType.name} dataArr={store.accidentType.arrTypes} onChange={store.updateAccidentType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.accidentType} onChange={store.updateAccidentType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -155,7 +155,7 @@ const CardFilterWhatVehicle = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="4" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName={store.vehicleType.name} dataArr={store.vehicleType.arrTypes} onChange={store.updateVehicleType} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.vehicleType} onChange={store.updateVehicleType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -173,10 +173,10 @@ const CardFilterWhatRoad = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="5" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" groupName={store.speedLimit.name} dataArr={store.speedLimit.arrTypes} onChange={store.updateSpeedLimit} />
-          <GroupCheckbox formName="exampleForm" groupName={store.roadWidth.name} dataArr={store.roadWidth.arrTypes} onChange={store.updateRoadWidth} />
-          <GroupCheckbox formName="exampleForm" groupName={store.separator.name} dataArr={store.separator.arrTypes} onChange={store.updateSeparator} />
-          <GroupCheckbox formName="exampleForm" groupName={store.oneLane.name} dataArr={store.oneLane.arrTypes} onChange={store.updateOneLane} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.speedLimit} onChange={store.updateSpeedLimit} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.roadWidth} onChange={store.updateRoadWidth} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.separator} onChange={store.updateSeparator} />
+          <GroupCheckbox formName="exampleForm" colFilter={store.oneLane} onChange={store.updateOneLane} />
         </div>
       </Accordion.Collapse>
     </Card>

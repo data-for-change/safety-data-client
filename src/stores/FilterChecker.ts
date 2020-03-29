@@ -1,4 +1,4 @@
-import { observable } from "mobx"
+import { observable,computed } from "mobx"
 
 export interface IFilterChecker {
     checked: boolean;
@@ -21,6 +21,7 @@ export interface IColumnFilter {
     dbColName: string;
     arrTypes: IFilterChecker[];
     allTypesOption : number;
+    isAllValsFalse: boolean;
 }
 export class ColumnFilter implements IColumnFilter {
     name: string;
@@ -34,6 +35,18 @@ export class ColumnFilter implements IColumnFilter {
         this.arrTypes = [];
         this.allTypesOption = allTypesOption;
     }
+    @computed get isAllValsFalse () {
+        const res = this.arrTypes.reduce(function(counter,currentValue){
+            return currentValue.checked? ++counter:counter;
+          },0);
+        return (res ===0);
+    }
+    // @computed get countTrueVals () {
+    //     const res = this.arrTypes.reduce(function(counter,currentValue){
+    //         return currentValue.checked? ++counter:counter;
+    //       },0);
+    //     return res;
+    // }
 }
 
 export const initInjurySeverity = () => {
