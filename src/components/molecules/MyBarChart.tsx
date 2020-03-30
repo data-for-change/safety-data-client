@@ -12,15 +12,15 @@ import { useTranslation } from 'react-i18next';
 // ];
 
 interface IProps {
-  data :ReadonlyArray<object>
+  data :readonly any[]
   bars ?: any 
   width? : number
   height? : number
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350}) => {
   const { t } = useTranslation();
-  let colName = t('Casualties')
+  let colName = t('Casualties');
   if (bars === undefined){
     bars = <Bar dataKey="count" name={colName} fill="#8884d8" />
   }
@@ -31,6 +31,10 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}
       return(<Bar key={`bar-${x.key}`} dataKey={x.key} name={aName} fill={x.color}/>)
     })
   }
+  const maxLabelLangth = data.reduce(function(maxval,currentValue){
+    return (currentValue._id !== null && currentValue._id.length > maxval)? currentValue._id.length:maxval;
+  },0);
+  let xAxis = (data.length >5 || maxLabelLangth>7)? <XAxis dataKey="_id" textAnchor="end" interval={0} angle={-30} tick={{fontSize: 12}} />: <XAxis dataKey="_id"/>
   return (
     <div style={{direction: "ltr"}}>
     <BarChart
@@ -38,14 +42,14 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=300}
       height={height}
       data={data}
       margin={{
-        top: 5, right: 5, left: 5, bottom: 5,
+        top: 5, right: 5, left: 5, bottom: 75,
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="_id" />
+      {xAxis}
       <YAxis />
       <Tooltip />
-      <Legend />
+      {/* <Legend /> */}
       {bars}
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>
