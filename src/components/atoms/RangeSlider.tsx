@@ -7,9 +7,10 @@ import Form from 'react-bootstrap/Form';
 interface IProps {
     label: string,
     id: string,
+    value: number,
     onChange: (e: ChangeEvent<HTMLInputElement>) => any
 }
-export const RangeSlider: React.FC<IProps> = ({ label, id, onChange }) => {
+export const RangeSlider: React.FC<IProps> = ({ label, id, value, onChange }) => {
     const style = {
         paddingLeft: "10px",
         paddingRight: "10px",
@@ -20,7 +21,7 @@ export const RangeSlider: React.FC<IProps> = ({ label, id, onChange }) => {
             <Form className="form-inline" >
                 <Form.Group controlId={"Range."+id}>
                 <Form.Label style={style}>{t(label)}: </Form.Label>
-                <Form.Control type="range" onChange={onChange}/>
+                <Form.Control type="range" defaultValue={value.toString()} onChange={onChange}/>
                 </Form.Group>
             </Form>
         </div>

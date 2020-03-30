@@ -5,12 +5,16 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig'
 
 
-interface IProps { id:string }
+interface IProps { 
+    id:string ,
+    labelText?:string,
+}
 
-export const SelectGroupBy: React.FC<IProps> = observer(({id}) => {
+export const SelectGroupBy: React.FC<IProps> = observer(({id, labelText='GroupBy'}) => {
     const { t } = useTranslation();
     const store = useStore();
     const {groupByDict, groupBy, updateGroupby} = store;
+    const lable= (labelText !== '')? <Form.Label className="filterLable"> {t(labelText)}:</Form.Label>:null;
     const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         updateGroupby(event.target.value)
       }, [updateGroupby]);
@@ -18,7 +22,7 @@ export const SelectGroupBy: React.FC<IProps> = observer(({id}) => {
     return (
         <Form className="form-inline">
             <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
-                <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label>
+                {lable}
                 <Form.Control as="select" value={groupBy.text}
                     onChange={onSelectChange}
                     >

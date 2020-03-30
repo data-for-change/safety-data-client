@@ -16,9 +16,10 @@ interface IProps {
   bars ?: any 
   width? : number
   height? : number
+  legendType? : string
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350, legendType="null"}) => {
   const { t } = useTranslation();
   let colName = t('Casualties');
   if (bars === undefined){
@@ -34,7 +35,8 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350}
   const maxLabelLangth = data.reduce(function(maxval,currentValue){
     return (currentValue._id !== null && currentValue._id.length > maxval)? currentValue._id.length:maxval;
   },0);
-  let xAxis = (data.length >5 || maxLabelLangth>7)? <XAxis dataKey="_id" textAnchor="end" interval={0} angle={-30} tick={{fontSize: 12}} />: <XAxis dataKey="_id"/>
+  const xAxis = (data.length >5 || maxLabelLangth>9)? <XAxis dataKey="_id" textAnchor="end" interval={0} angle={-30} tick={{fontSize: 12}} />: <XAxis dataKey="_id"/>
+  const legend = (legendType === "null" || width < 500) ? null :  <Legend layout="horizontal" verticalAlign="top" align="center"/>
   return (
     <div style={{direction: "ltr"}}>
     <BarChart
@@ -49,7 +51,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350}
       {xAxis}
       <YAxis />
       <Tooltip />
-      {/* <Legend /> */}
+      {legend}
       {bars}
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>

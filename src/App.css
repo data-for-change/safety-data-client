@@ -97,8 +97,6 @@
   text-decoration: none;
   display: inline-block;
 }
-
-
 .button:hover {
   background-color: var(--secondary-color)
 }
@@ -108,5 +106,14 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.graphBy2Size {
+  width: 800px
+}
+@media screen and (max-width: 480px) {
+  .graphBy2Size {
+    width: 470px;
   }
 }
