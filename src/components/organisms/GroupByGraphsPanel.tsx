@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react'
+import React, { useState} from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
@@ -6,7 +6,7 @@ import { useStore } from '../../stores/storeConfig'
 import { SmallCard } from '../atoms/SmallCard'
 import { SelectGroupBy } from '../atoms/SelectGroupBy'
 import { SelectGroupBy2 } from '../atoms/SelectGroupBy2'
-import { RangeSlider } from '../atoms/RangeSlider'
+// import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
@@ -29,6 +29,12 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
         marginLeft: "0",
         marginRight: "0",
         marginTop: "20px"
+    };
+    const styleLable = {
+        fontWeight: 700,
+        marginTop: "5px",
+        marginLeft: "20px",
+        marginRight: "20px"
     };
     // const onSizeSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
     //     let size:number = parseInt(event.target.value)
@@ -77,7 +83,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                 </SmallCard>
                 <SmallCard styleType={3} width={graphSize + 150}>
                     <div className="row">
-                        <span className="filterLable"> {t('GroupBy')}:</span>
+                        <span style={styleLable}> {t('GroupBy')}:</span>
                         <SelectGroupBy id="Graphs.Grp2" labelText='' />
                         <SelectGroupBy2 id="Graphs" />
                         {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
