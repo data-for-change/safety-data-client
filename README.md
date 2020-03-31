@@ -1,68 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Safety-Data presents data on road accidents in Israel. The site analysis focus on casualties in severe and fatal accidents, in accordance to Vision Zero focus.
 
-## Available Scripts
+The site offers a variety of options to filter, group and display the data in different formats, in the hope that this will improve research, policy and education on accidents prevention.
 
-In the project directory, you can run:
+With Safety-Data you can see:
+ * What are the differences between women and men's injuries, 
+* What is the gender difference in different kind of vehicle?
+* In what places are car drivers injured?
+* What types of fatal accidents are most common for motorcyclists in cities?
+* how many young motorcyclists were killed, compared to older motorcyclists?
+* How many pedestrians were hit Jerusalem? Are some roads there have more accidents?
+* compare the number of fatalities in 2 or more cities 
+* Find the top 10 cities where most severe accidents happened,
+* What percent of pedestrians where hit at daytime compare to nighttime?
 
-### `npm start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The source of the data on the accidents is CBS, through accidents data engine of [Anyway project](https://www.anyway.co.il/), from the Public Knowledge Workshop. The map on the site is thanks to the [OpenStreetMap](https://www.openstreetmap.org/) project
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Technologies of the site are React.js front-end and Node.js + MongoDB back-end.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
