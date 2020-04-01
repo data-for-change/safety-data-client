@@ -7,6 +7,20 @@
   --primary-old:#4576c4;
 }
 
+.App-header {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 5000000;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+  color:var(--onprimary-color)
+}
+.App-header a {
+  color:var(--onprimary-color)
+}
+
 .heb{
   direction: rtl;
 }
@@ -16,21 +30,12 @@
 .texten{
   text-align: left;
 }
-
-.App-header {
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--primary-color);
-  color:var(--onprimary-color)
-}
 .languageSelector
 {
   padding:3px;
 }
-.HederTitle {
-  font-size: 30px;
-  padding-left: 20px;
-  padding-right: 20px;
+.App {
+  margin-top: 23px;
 }
 .App-footer {
   background-color:var(--primary-color);
@@ -65,6 +70,9 @@
   height: 700px;
   max-width:100%;
 } */
+.App-nav{
+  padding-top: 10px;
+}
 .App-nav a{
   padding-left: 10px;
   padding-right: 10px;
