@@ -15,15 +15,16 @@ interface IProps {
   data :readonly any[]
   bars ?: any 
   width? : number
-  height? : number
+  height? : number,
+  fill? : string, 
   legendType? : string
 }
 
-const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350, legendType="null"}) => {
+const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=390, height=350, fill="#8884d8",legendType="null"}) => {
   const { t } = useTranslation();
   let colName = t('Casualties');
   if (bars === undefined){
-    bars = <Bar dataKey="count" name={colName} fill="#8884d8" />
+    bars = <Bar dataKey="count" name={colName} fill={fill} />
   }
   else
   {
@@ -44,7 +45,7 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=400, height=350,
       height={height}
       data={data}
       margin={{
-        top: 5, right: 5, left: 5, bottom: 75,
+        top: 5, right: 0, left: 0, bottom: 75,
       }}
     >
       <CartesianGrid strokeDasharray="3 3" />

@@ -75,13 +75,13 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
         return (
             <div className="row" style={style}>
                 <SmallCard styleType={2} title={t('CasualtiesByFilter')}>
-                    <MyBarChart data={reactData2} />
+                    <MyBarChart data={reactData2} fill="#FE9772" />
                 </SmallCard>
                 <SmallCard styleType={3}>
                     <SelectGroupBy id="Graphs.Main" />
                     <MyBarChart data={reactData3} width={600} height={390}></MyBarChart>
                 </SmallCard>
-                <SmallCard styleType={3} width={graphSize + 150}>
+                <SmallCard width={graphSize + 150}>
                     <div className="row">
                         <span style={styleLable}> {t('GroupBy')}:</span>
                         <SelectGroupBy id="Graphs.Grp2" labelText='' />
