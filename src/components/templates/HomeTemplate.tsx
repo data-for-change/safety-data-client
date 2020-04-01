@@ -20,10 +20,10 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
     <div className="container-fluid">
       <div className="row ">
         <div className="p-2 col-md-2"><FilterPanel /></div>
-        <div className="col-md-10">
+        <main className="col-md-10">
             <h4>{t("Israel")}</h4>
            <TabsTemplate/>
-        </div>
+        </main>
       </div>
     </div>
   </div>

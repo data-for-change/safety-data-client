@@ -25,10 +25,10 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
       <div className="container-fluid">
         <div className="row ">
           <div className="p-2 col-md-2"><FilterPanel activeCardKey={1}/></div>
-          <div className="col-md-10">
+          <main className="col-md-10">
               <h4>{cityResult}</h4>
               <TabsTemplate defaultKey="map"/>
-          </div>
+          </main>
         </div>
       </div>
     </div>
