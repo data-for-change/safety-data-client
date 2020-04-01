@@ -10,7 +10,7 @@ import { SelectGroupBy2 } from '../atoms/SelectGroupBy2'
 import MyBarChart from '../molecules/MyBarChart'
 
 interface IProps { }
-let getSize = (width: number) => {
+const getSize = (width: number) => {
     let size: number = 500;
     if (width <= 500)
         size = 450;
