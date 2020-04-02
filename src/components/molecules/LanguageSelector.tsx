@@ -26,7 +26,7 @@ export const LanguageSelector = observer(() => {
     <div>
     <ButtonGroup toggle size="sm" className="languageSelector">
     <ToggleButton type="radio" name="radiolang"  value="he" defaultChecked onClick={(e:MouseEvent) => { store.updateLanguage('he'); }}>
-      heb
+      Heb
     </ToggleButton>
     <ToggleButton type="radio" name="radiolang" value="en" onClick={(e:MouseEvent) => { store.updateLanguage('en'); }}>
       Eng
