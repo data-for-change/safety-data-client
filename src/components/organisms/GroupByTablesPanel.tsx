@@ -18,6 +18,16 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = observer(() => {
         marginRight: "0",
         marginTop: "20px"
     };
+    const divConstolsRow ={
+        display: "flex",
+        flexWrap: "wrap" 
+    }  as React.CSSProperties;
+    const styleLable = {
+        fontWeight: 700,
+        marginTop: "5px",
+        marginLeft: "20px",
+        marginRight: "20px"
+    }; 
     let reactData1 = toJS(store.dataByYears)
     let reactData2 = toJS(store.dataFilterdByYears)
     let reactData3 = toJS(store.dataFilterd)
@@ -36,9 +46,10 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = observer(() => {
                     <SelectGroupBy id="Tables.Main"/>
                     <GroupByTable data={reactData3} dataName={store.groupBy.text} />
                 </SmallCard>
-                <SmallCard styleType={2}>
-                    <div className="row">
-                        <SelectGroupBy  id="Tables.Grp2"/>
+                <SmallCard styleType={4}>
+                    <div style ={divConstolsRow}>
+                        <span style={styleLable}> {t('GroupBy')}:</span>
+                        <SelectGroupBy  id="Tables.Grp2"  labelText=''/>
                         <SelectGroupBy2 id="Tables"/></div>
                     <GroupByTable data={reactDataGrp2} dataName={store.groupBy.text} columns={columnsGrp2} />
                 </SmallCard>
