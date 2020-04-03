@@ -38,6 +38,10 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
         marginLeft: "20px",
         marginRight: "20px"
     };
+    const divConstolsRow ={
+        display: "flex",
+        flexWrap: "wrap" 
+    }  as React.CSSProperties;
     React.useEffect(() => {
         function handleResize() {
             const size = getSize(window.innerWidth)
@@ -65,7 +69,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                     <MyBarChart data={reactData3} width={graph2Size} height={graph2Size*0.65}></MyBarChart>
                 </SmallCard>
                 <SmallCard width={graphSize + 150}>
-                    <div className="row">
+                    <div style ={divConstolsRow}>
                         <span style={styleLable}> {t('GroupBy')}:</span>
                         <SelectGroupBy id="Graphs.Grp2" labelText='' />
                         <SelectGroupBy2 id="Graphs" />

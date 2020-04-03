@@ -15,11 +15,6 @@ export const Header: React.FC<IProps> = ({ title }) => {
     display: 'flex',
     flexFlow: 'row wrap'
   };
-  const hederTitle = {
-    fontSize: '30px',
-    paddingLeft: '20px',
-    paddingRight: '20px'
-  }
   const { t } = useTranslation();
   const [showNavMenu, setShowNavMenu] = useState(getShowNavMenu(window.innerWidth));
   const navMenu = (showNavMenu) ? <div style={divStyle}>
