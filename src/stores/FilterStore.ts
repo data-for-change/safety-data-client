@@ -226,10 +226,7 @@ export default class FilterStore {
     //console.log("updateAllInjuries ",data.length)
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
-    if (this.isSetBounds) {
-      this.mapBounds = this.setBounds(this.dataAllInjuries)
-      this.isSetBounds = false;
-    }
+    this.setBounds(data, this.cities);
   }
 
   @observable
@@ -416,7 +413,7 @@ export default class FilterStore {
     if (this.cities.length >= 1) {
       let city = this.cities[0];
       var srvCity = new CityService();
-      srvCity.getCityByNameHe(city, this.updateLocation);
+      srvCity.getCityByNameHe(city, this.updateMapCenter);
       this.cityResult = this.cities[0];
     }
     else
@@ -679,7 +676,7 @@ export default class FilterStore {
   @observable
   isDynamicMarkers: boolean = false;
   @observable
-  isUse2StepsMarkers: boolean = true;
+  isUse2StepsMarkers: boolean = false;
   @observable
   markersLoadStep: number = 1;
   @action
@@ -691,34 +688,58 @@ export default class FilterStore {
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
-
-  @observable
-  mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
   @action
-  initBounds = () => {
-    this.mapBounds = L.latLngBounds(INIT_BOUNDS)
-    console.log(this.mapBounds)
-  }
-
-  @observable
-  isSetBounds: boolean = false;
-  @action
-  updateIsSetBounds = (citisArr: any[], roadSegArr: any[]) => {
-    if (citisArr.length > 0 && citisArr[0] !== "")
-      this.isSetBounds = true;
-    else if (roadSegArr.length > 0 && roadSegArr[0] !== "")
-      this.isSetBounds = true;
-  }
-
-
-  @action
-  updateLocation = (res: any[]) => {
+  updateMapCenter = (res: any[]) => {
     if (res !== null && res.length > 0) {
       let city = res[0];
       if (city.lat !== null && city.lon !== null)
         this.mapCenter = new L.LatLng(city.lat, city.lon);
     }
   }
+
+  @observable
+  mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
+  @action
+  initBounds = () => {
+    this.mapBounds = L.latLngBounds(INIT_BOUNDS)
+    
+  }
+  @action 
+  setBounds = (data: any[], citisArr: string[]) =>{
+    if (this.isSetBounds) {
+      const bunds = this.getBounds(data);
+      if (citisArr.length > 0 && citisArr[0] !== "")
+      {
+        //this.mapBounds = bunds;
+        if (bunds.contains(this.mapCenter))
+          this.mapBounds = bunds;
+        else
+         console.log("worng bounds: ", bunds, this.mapCenter)
+      }
+      else
+        this.mapBounds = bunds;
+      this.isSetBounds = false;
+    }
+  }
+  
+  @observable
+  useSetBounds: boolean = true;
+
+  @observable
+  isSetBounds: boolean = false;
+  @action
+  updateIsSetBounds = (citisArr: string[], roadSegArr: any[]) => {
+    if (this.useSetBounds)
+    {
+      if (citisArr.length > 0 && citisArr[0] !== "")
+      this.isSetBounds = true;
+    else if (roadSegArr.length > 0 && roadSegArr[0] !== "")
+      this.isSetBounds = true;
+    }
+  }
+
+
+ 
 
   @observable
   heatLayerHidden: boolean = true;
@@ -728,8 +749,7 @@ export default class FilterStore {
   }
 
 
-  @action
-  setBounds = (data: any[]) => {
+  getBounds = (data: any[]) => {
     console.log("setBounds!")
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);

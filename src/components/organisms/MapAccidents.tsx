@@ -23,12 +23,15 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const didMountRef = useRef(false)
   useEffect(() => {
     if (didMountRef.current) {
-      if (mapRef.current) {
-        //mapRef.current  = true - like componentDidUpdate
-        //invalidateSize - leaflet map rendered has a bug parent tab not active
-        //this event is fierd when parent tab is shown - help render map 
+      // if (mapRef.current) {
+      //   //mapRef.current  = true - like componentDidUpdate
+      //   //invalidateSize - leaflet map rendered has a bug parent tab not active
+      //   //this event is fierd when parent tab is shown - help render map 
+      setTimeout(() => {
         mapRef.current.leafletElement.invalidateSize(false);
-      }
+      }, 300); // Adjust timeout to tab transition   
+      // }
+      //mapRef.current.leafletElement.invalidateSize(false);
     }
     else didMountRef.current = true
     //prevent zoom  0 bug 
