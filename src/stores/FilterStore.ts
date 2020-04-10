@@ -685,7 +685,6 @@ export default class FilterStore {
       this.markersLoadStep = step;
   }
 
-
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
   @action
@@ -696,13 +695,13 @@ export default class FilterStore {
         this.mapCenter = new L.LatLng(city.lat, city.lon);
     }
   }
-
+  @observable
+  useSetBounds: boolean = true;
   @observable
   mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
   @action
   initBounds = () => {
     this.mapBounds = L.latLngBounds(INIT_BOUNDS)
-    
   }
   @action 
   setBounds = (data: any[], citisArr: string[]) =>{
@@ -710,11 +709,11 @@ export default class FilterStore {
       const bunds = this.getBounds(data);
       if (citisArr.length > 0 && citisArr[0] !== "")
       {
-        //this.mapBounds = bunds;
-        if (bunds.contains(this.mapCenter))
-          this.mapBounds = bunds;
-        else
-         console.log("worng bounds: ", bunds, this.mapCenter)
+        // //this.mapBounds = bunds;
+        // if (bunds.contains(this.mapCenter))
+        //   this.mapBounds = bunds;
+        // else
+        //  console.log("worng bounds: ", bunds, this.mapCenter)
       }
       else
         this.mapBounds = bunds;
@@ -722,8 +721,7 @@ export default class FilterStore {
     }
   }
   
-  @observable
-  useSetBounds: boolean = false;
+ 
 
   @observable
   isSetBounds: boolean = false;
