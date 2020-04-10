@@ -27,6 +27,8 @@ export const TabsTemplate: React.FC<IProps> = observer(({defaultKey="charts"}) =
                     //map is renderd only when tab is shown to prevent leaflet bug
                     store.isReadyToRenderMap = true;
                 }
+                else
+                    store.isReadyToRenderMap = false;
             }}
         >
             <Tab style={style} eventKey="charts" title={t("Charts")}>

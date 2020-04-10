@@ -723,7 +723,7 @@ export default class FilterStore {
   }
   
   @observable
-  useSetBounds: boolean = true;
+  useSetBounds: boolean = false;
 
   @observable
   isSetBounds: boolean = false;

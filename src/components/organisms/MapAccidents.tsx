@@ -13,31 +13,35 @@ interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const mapRef = useRef<any>();
   const store = useStore();
-  const {heatLayerHidden, mapBounds, mapCenter} = store
+  const { heatLayerHidden, mapBounds, mapCenter } = store;
   const reactMapCenter = toJS(mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
 
-  const markers = heatLayerHidden && <AccidentsMarkers/>
-  const  heatLayer = !heatLayerHidden && <AccidentHeatLayer />
+  const markers = heatLayerHidden && <AccidentsMarkers />
+  const heatLayer = !heatLayerHidden && <AccidentHeatLayer />
 
   const didMountRef = useRef(false)
   useEffect(() => {
+    //console.log("useEffect")
     if (didMountRef.current) {
-      // if (mapRef.current) {
-      //   //mapRef.current  = true - like componentDidUpdate
-      //   //invalidateSize - leaflet map rendered has a bug parent tab not active
-      //   //this event is fierd when parent tab is shown - help render map 
-      setTimeout(() => {
-        mapRef.current.leafletElement.invalidateSize(false);
-      }, 300); // Adjust timeout to tab transition   
-      // }
-      //mapRef.current.leafletElement.invalidateSize(false);
+      if (mapRef.current) {
+        //mapRef.current  = true - like componentDidUpdate
+        //invalidateSize - leaflet map rendered has a bug parent tab not active
+        //this event is fierd when parent tab is shown - help render map 
+        if (store.isReadyToRenderMap)
+        {
+          setTimeout(() => {
+            //console.log("invalidateSize")
+            mapRef.current.leafletElement.invalidateSize(false);
+          }, 300); // Adjust timeout to tab transition   
+        }
+      }
     }
     else didMountRef.current = true
     //prevent zoom  0 bug 
     const zoom = mapRef.current.leafletElement.getZoom();
     if (zoom === 0)
-       mapRef.current.leafletElement.setZoom(13);
+      mapRef.current.leafletElement.setZoom(13);
   })
   const updateMarkers = (() => {
     //console.log("updateMarkers")
@@ -62,12 +66,16 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         />
         {markers}
       </Map>
-      <ButtonTuggleHeatLayer isLoading={store.isLoading} isHeatMapHidden={store.heatLayerHidden} onClick={store.toggleHeatLayer} />
-      {store.isReadyToRenderMap ? "" : ""}
+      <CurrButtonTuggleHeatLayer />
+      {store.isReadyToRenderMap ? " " : ""}
     </div>
   )
 })
 
+interface IProps2 { }
+const CurrButtonTuggleHeatLayer: FunctionComponent<IProps2> = observer(() => {
+  const store = useStore();
+  return <ButtonTuggleHeatLayer isLoading={store.isLoading} isHeatMapHidden={store.heatLayerHidden} onClick={store.toggleHeatLayer} />
+})
 
-
-export default MapAccidents
+export default MapAccidents 
