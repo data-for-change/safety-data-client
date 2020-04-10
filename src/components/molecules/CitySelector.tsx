@@ -27,7 +27,6 @@ export const CitySelector: React.FC<IProps> = observer(({ isMultiple = false}) =
                 options={citisNamesHeb}
                 multiple= {isMultiple}
                 selected={store.cities}
-                placeholder={t('ChooseCity')}
             />
         </Form.Group>
     )

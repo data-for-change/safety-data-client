@@ -22,22 +22,6 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
 
   const didMountRef = useRef(false)
   useEffect(() => {
-    //console.log("useEffect")
-    if (didMountRef.current) {
-      if (mapRef.current) {
-        //mapRef.current  = true - like componentDidUpdate
-        //invalidateSize - leaflet map rendered has a bug parent tab not active
-        //this event is fierd when parent tab is shown - help render map 
-        if (store.isReadyToRenderMap)
-        {
-          setTimeout(() => {
-            //console.log("invalidateSize")
-            mapRef.current.leafletElement.invalidateSize(false);
-          }, 300); // Adjust timeout to tab transition   
-        }
-      }
-    }
-    else didMountRef.current = true
     //prevent zoom  0 bug 
     const zoom = mapRef.current.leafletElement.getZoom();
     if (zoom === 0)
@@ -67,15 +51,42 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         {markers}
       </Map>
       <CurrButtonTuggleHeatLayer />
-      {store.isReadyToRenderMap ? " " : ""}
+      <MapInvalidateSize mapRef={mapRef}/>
+      {/* {store.isReadyToRenderMap ? " " : ""} */}
     </div>
   )
 })
 
-interface IProps2 { }
-const CurrButtonTuggleHeatLayer: FunctionComponent<IProps2> = observer(() => {
+interface IPropsButtonTuggleHeatLayer { }
+const CurrButtonTuggleHeatLayer: FunctionComponent<IPropsButtonTuggleHeatLayer> = observer(() => {
   const store = useStore();
   return <ButtonTuggleHeatLayer isLoading={store.isLoading} isHeatMapHidden={store.heatLayerHidden} onClick={store.toggleHeatLayer} />
+})
+
+interface IPropsMapInvalidateSize { 
+  mapRef:any
+}
+
+const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer(({mapRef}) => {
+  const didMountRef = useRef(false)
+  const store = useStore();
+  useEffect(() => {
+    if (didMountRef.current) {
+      if (mapRef.current) {
+        //mapRef.current  = true - like componentDidUpdate
+        //invalidateSize - leaflet map rendered has a bug if container parent tab not active / hidden
+        //this event is fierd when parent tab is shown - to help render map and prevent css bug
+        if (store.isReadyToRenderMap)
+        {
+          setTimeout(() => {
+            mapRef.current.leafletElement.invalidateSize(false);
+          }, 300); // Adjust timeout to tab transition   
+        }
+      }
+    }
+    else didMountRef.current = true
+  })
+  return <span>{store.isReadyToRenderMap ? " " : ""}</span>
 })
 
 export default MapAccidents 
