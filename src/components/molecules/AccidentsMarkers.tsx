@@ -8,36 +8,36 @@ import { useStore } from '../../stores/storeConfig'
 interface IProps { }
 const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
   const store = useStore();
-  const { isDynamicMarkers, isUse2StepsMarkers, markersLoadStep , language } = store
+  const { isUse2StepsMarkers, markersLoadStep, dataMarkersInBounds, dataMarkersLean, dataAllInjuries } = store.filterStore;
   let markers;
   let reactMarkers;
-  if (isDynamicMarkers)
-    reactMarkers = toJS(store.dataMarkersInBounds);
-  else if (isUse2StepsMarkers && markersLoadStep ===1){
-    reactMarkers = toJS(store.dataMarkersLean);
+  if (store.mapStore.isDynamicMarkers)
+    reactMarkers = toJS(dataMarkersInBounds);
+  else if (isUse2StepsMarkers && markersLoadStep === 1) {
+    reactMarkers = toJS(dataMarkersLean);
     //console.log("lean Markers ", reactMarkers.length, markersLoadStep)
   }
   else {
-    reactMarkers = toJS(store.dataAllInjuries);
+    reactMarkers = toJS(dataAllInjuries);
     //console.log("Main Markers ", reactMarkers.length, markersLoadStep)
-  }  
+  }
   //console.log("reactMarkers ", reactMarkers.length, markersLoadStep)
-  markers =  reactMarkers.map((x: any) => {
+  markers = reactMarkers.map((x: any) => {
     if (x.latitude !== null && x.longitude !== null) {
-      return <AccidentsMarker data={x} language={language} key={`marker-${x._id}`} />
+      return <AccidentsMarker data={x} language={store.uiStore.language} key={`marker-${x._id}`} />
     }
     else return null;
   });
-//   const updateMarkers = (() => {
-//     //console.log("updateMarkers")
-//     if (store.isDynamicMarkers) {
-//       const b = mapRef.current.leafletElement.getBounds()
-//       store.submintGetMarkersBBox(b);
-//     }
-//   })
+  //   const updateMarkers = (() => {
+  //     //console.log("updateMarkers")
+  //     if (store.isDynamicMarkers) {
+  //       const b = mapRef.current.leafletElement.getBounds()
+  //       store.submintGetMarkersBBox(b);
+  //     }
+  //   })
   return (
-      <div>
-        {markers}
+    <div>
+      {markers}
     </div>
   )
 })

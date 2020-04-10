@@ -5,29 +5,27 @@ import { toJS } from 'mobx'
 import { useStore } from '../../stores/storeConfig'
 import { GroupByGraphsPanel } from '../organisms/GroupByGraphsPanel'
 import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
-
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 
 interface IProps { }
-
 export const AggregatesPanel: React.FC<IProps> = observer(() => {
     const { t } = useTranslation();
-    const store = useStore();
     const style = {
         marginLeft: "0",
         marginRight: "0",
         marginTop: "20px"
     };
-    let reactData1 = toJS(store.dataByYears)
+    const { filterStore } = useStore();
+    let reactData1 = toJS(filterStore.dataByYears)
     if (reactData1.length > 0) {
         return (
             <Tabs defaultActiveKey="home" id="uncontrolled-tab1">
                 <Tab eventKey="home" title="Grpahs">
-                   <GroupByGraphsPanel/>
+                    <GroupByGraphsPanel />
                 </Tab>
                 <Tab eventKey="profile" title="Groups">
-                    <GroupByTablesPanel/>
+                    <GroupByTablesPanel />
                 </Tab>
             </Tabs>
         )

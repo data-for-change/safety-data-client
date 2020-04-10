@@ -12,8 +12,8 @@ import citisNamesHeb from "../../assets/cities_names_heb.json";
 interface IProps {
     isMultiple?: boolean
 }
-export const CitySelector: React.FC<IProps> = observer(({ isMultiple = false}) => {
-    const store = useStore();
+export const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
+    const { filterStore } = useStore();
     const { t } = useTranslation();
     return (
         <Form.Group controlId="exampleForm.ControlCity">
@@ -22,11 +22,11 @@ export const CitySelector: React.FC<IProps> = observer(({ isMultiple = false}) =
                 id="typeaheadCity"
                 //defaultSelected={[store.city]}
                 onChange={(selected: string[]) => {
-                    store.updateCities(selected); 
+                    filterStore.updateCities(selected);
                 }}
                 options={citisNamesHeb}
-                multiple= {isMultiple}
-                selected={store.cities}
+                multiple={isMultiple}
+                selected={filterStore.cities}
             />
         </Form.Group>
     )

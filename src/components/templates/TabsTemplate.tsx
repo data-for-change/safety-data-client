@@ -9,26 +9,25 @@ import { GroupByGraphsPanel } from '../organisms/GroupByGraphsPanel'
 import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
 import { useStore } from '../../stores/storeConfig'
 
-interface IProps { 
-    defaultKey? :string
+interface IProps {
+    defaultKey?: string
 }
-
-export const TabsTemplate: React.FC<IProps> = observer(({defaultKey="charts"}) => {
+export const TabsTemplate: React.FC<IProps> = observer(({ defaultKey = "charts" }) => {
     const style = {
         marginTop: "20px"
     }
     const { t } = useTranslation();
     const [activeKey] = useState(defaultKey);
-    const store = useStore();
+    const { mapStore } = useStore();
     return (
         <Tabs defaultActiveKey={activeKey} id="main-tabs"
             onSelect={(activeKey: any) => {
                 if (activeKey === "map") {
                     //map is renderd only when tab is shown to prevent leaflet bug
-                    store.isReadyToRenderMap = true;
+                    mapStore.isReadyToRenderMap = true;
                 }
                 else
-                    store.isReadyToRenderMap = false;
+                    mapStore.isReadyToRenderMap = false;
             }}
         >
             <Tab style={style} eventKey="charts" title={t("Charts")}>

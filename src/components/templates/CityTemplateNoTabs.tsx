@@ -10,14 +10,13 @@ import { useStore } from '../../stores/storeConfig'
 import citisNamesHeb from "../../assets/cities_names_heb.json";
 
 interface IProps { }
-
 export const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
-  const store = useStore();
-  const { cityResult } = store;
+  const { filterStore } = useStore();
+  const { cityResult } = filterStore;
   if (cityResult === "") {
     let cityName = useCityNamefromQuery();
-    store.updateCities(cityName);
-    store.submitFilter();
+    filterStore.updateCities(cityName);
+    filterStore.submitFilter();
   }
   return (
     <div className="App">
@@ -58,5 +57,3 @@ function useCityNamefromQuery() {
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
-
-

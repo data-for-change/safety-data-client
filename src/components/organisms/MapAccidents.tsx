@@ -13,7 +13,7 @@ interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const mapRef = useRef<any>();
   const store = useStore();
-  const { heatLayerHidden, mapBounds, mapCenter } = store;
+  const { heatLayerHidden, mapBounds, mapCenter, isDynamicMarkers } = store.mapStore;
   const reactMapCenter = toJS(mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
 
@@ -29,9 +29,9 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   })
   const updateMarkers = (() => {
     //console.log("updateMarkers")
-    if (store.isDynamicMarkers) {
+    if (isDynamicMarkers) {
       const b = mapRef.current.leafletElement.getBounds()
-      store.submintGetMarkersBBox(b);
+      store.filterStore.submintGetMarkersBBox(b);
     }
   })
   return (
@@ -51,7 +51,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         {markers}
       </Map>
       <CurrButtonTuggleHeatLayer />
-      <MapInvalidateSize mapRef={mapRef}/>
+      <MapInvalidateSize mapRef={mapRef} />
       {/* {store.isReadyToRenderMap ? " " : ""} */}
     </div>
   )
@@ -59,25 +59,24 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
 
 interface IPropsButtonTuggleHeatLayer { }
 const CurrButtonTuggleHeatLayer: FunctionComponent<IPropsButtonTuggleHeatLayer> = observer(() => {
-  const store = useStore();
-  return <ButtonTuggleHeatLayer isLoading={store.isLoading} isHeatMapHidden={store.heatLayerHidden} onClick={store.toggleHeatLayer} />
+  const { mapStore, filterStore } = useStore();
+  return <ButtonTuggleHeatLayer isLoading={filterStore.isLoading} isHeatMapHidden={mapStore.heatLayerHidden} onClick={mapStore.toggleHeatLayer} />
 })
 
-interface IPropsMapInvalidateSize { 
-  mapRef:any
+interface IPropsMapInvalidateSize {
+  mapRef: any
 }
 
-const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer(({mapRef}) => {
+const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer(({ mapRef }) => {
   const didMountRef = useRef(false)
-  const store = useStore();
+  const { mapStore } = useStore();
   useEffect(() => {
     if (didMountRef.current) {
       if (mapRef.current) {
         //mapRef.current  = true - like componentDidUpdate
         //invalidateSize - leaflet map rendered has a bug if container parent tab not active / hidden
         //this event is fierd when parent tab is shown - to help render map and prevent css bug
-        if (store.isReadyToRenderMap)
-        {
+        if (mapStore.isReadyToRenderMap) {
           setTimeout(() => {
             mapRef.current.leafletElement.invalidateSize(false);
           }, 300); // Adjust timeout to tab transition   
@@ -86,7 +85,6 @@ const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer((
     }
     else didMountRef.current = true
   })
-  return <span>{store.isReadyToRenderMap ? " " : ""}</span>
+  return <span>{mapStore.isReadyToRenderMap ? " " : ""}</span>
 })
-
 export default MapAccidents 

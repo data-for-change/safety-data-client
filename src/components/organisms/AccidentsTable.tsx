@@ -1,4 +1,4 @@
-import React ,{useState} from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { toJS } from 'mobx'
 import { observer } from "mobx-react"
@@ -10,19 +10,18 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
-import {CasualtiesSumLabel} from '../atoms/CasualtiesSumLabel'
+import { CasualtiesSumLabel } from '../atoms/CasualtiesSumLabel'
 import { useStore } from '../../stores/storeConfig'
 
 interface IProps { }
-
 export const AccidentsTable = observer((props: IProps) => {
-    const store = useStore();
+    const { filterStore } = useStore();
     const { t } = useTranslation();
     const divStyle = {
         display: 'flex',
         justifyContent: 'flex-end'
-      };
-    const reactMarkers = toJS(store.dataAllInjuries)
+    };
+    const reactMarkers = toJS(filterStore.dataAllInjuries)
     const { ExportCSVButton } = CSVExport;
     const [columns, setColumns] = useState(getColumnsByWidth(window.innerWidth, t));
     React.useEffect(() => {
@@ -35,7 +34,7 @@ export const AccidentsTable = observer((props: IProps) => {
     })
     if (reactMarkers.length > 0) {
         return (<div>
-            <CasualtiesSumLabel length={reactMarkers.length} name={store.cityResult}/>
+            <CasualtiesSumLabel length={reactMarkers.length} name={filterStore.cityResult} />
             <ToolkitProvider
                 keyField="id"
                 data={reactMarkers}
@@ -45,10 +44,10 @@ export const AccidentsTable = observer((props: IProps) => {
                 {
                     (props: any) => (
                         <div>
-                            <BootstrapTable {...props.baseProps} pagination={ paginationFactory()}  headerClasses="table-header"/>
+                            <BootstrapTable {...props.baseProps} pagination={paginationFactory()} headerClasses="table-header" />
                             <hr />
                             <div style={divStyle}>
-                            <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
+                                <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
                             </div>
                         </div>
                     )
@@ -57,12 +56,12 @@ export const AccidentsTable = observer((props: IProps) => {
         </div>
         )
     }
-    else return (  
-        <CasualtiesSumLabel length={reactMarkers.length} name={store.cityResult}/> 
+    else return (
+        <CasualtiesSumLabel length={reactMarkers.length} name={filterStore.cityResult} />
     );
 })
 
-const getColumnsByWidth =( width: number, t: any) => {
+const getColumnsByWidth = (width: number, t: any) => {
     const columns1 = [{
         dataField: '_id',
         text: 'ID',
@@ -71,7 +70,7 @@ const getColumnsByWidth =( width: number, t: any) => {
         dataField: 'accident_year',
         text: t('Year'),
         sort: true
-    },  {
+    }, {
         dataField: 'injury_severity_hebrew',
         text: t('Severity'),
         sort: true
@@ -85,7 +84,7 @@ const getColumnsByWidth =( width: number, t: any) => {
         text: t('City'),
         sort: true
     };
-    const colStreet ={
+    const colStreet = {
         dataField: 'street1_hebrew',
         text: t('Street'),
         sort: true
@@ -99,7 +98,7 @@ const getColumnsByWidth =( width: number, t: any) => {
         text: t('AccidentType'),
         sort: true
     }];
-    const columns4 = [ {   
+    const columns4 = [{
         dataField: 'age_group_hebrew',
         text: t('Age'),
         sort: true
@@ -111,9 +110,9 @@ const getColumnsByWidth =( width: number, t: any) => {
 
     let columns = columns1;
     if (width > 500)
-        columns.splice( 2, 0, colCity);
+        columns.splice(2, 0, colCity);
     if (width > 700)
-        columns.splice( 3, 0, colStreet);
+        columns.splice(3, 0, colStreet);
     if (width > 900)
         columns = columns.concat(columns3);
     columns = columns.concat(columns4);

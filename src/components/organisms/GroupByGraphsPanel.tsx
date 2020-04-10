@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import { toJS } from 'mobx'
@@ -25,7 +25,6 @@ const getSize = (width: number) => {
 
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     const { t } = useTranslation();
-    const store = useStore();
     const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
     const style = {
         marginLeft: "0",
@@ -38,10 +37,12 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
         marginLeft: "20px",
         marginRight: "20px"
     };
-    const divConstolsRow ={
+    const divConstolsRow = {
         display: "flex",
-        flexWrap: "wrap" 
-    }  as React.CSSProperties;
+        flexWrap: "wrap"
+    } as React.CSSProperties;
+    const { filterStore } = useStore();
+    const { dataByYears, dataFilterdByYears, dataFilterd } = filterStore;
     React.useEffect(() => {
         function handleResize() {
             const size = getSize(window.innerWidth)
@@ -53,23 +54,23 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     let graph1Size = Math.min(380, graphSize)
     let graph2Size = Math.min(600, graphSize)
     //let width = window.innerWidth|| document.documentElement.clientWidth|| document.body.clientWidth;  
-    let reactData1 = toJS(store.dataByYears)
-    let reactData2 = toJS(store.dataFilterdByYears)
-    let reactData3 = toJS(store.dataFilterd)
-    let barsGrp2 = store.groupBy2.getBars();
-    let reactDataGrp2 = toJS(store.dataGroupby2)
+    let reactData1 = toJS(dataByYears)
+    let reactData2 = toJS(dataFilterdByYears)
+    let reactData3 = toJS(dataFilterd)
+    let barsGrp2 = filterStore.groupBy2.getBars();
+    let reactDataGrp2 = toJS(filterStore.dataGroupby2)
     if (reactData1.length > 0) {
         return (
             <div className="row" style={style}>
                 <SmallCard styleType={2} title={t('CasualtiesByFilter')}>
-                    <MyBarChart data={reactData2} width={graph1Size}  fill="#FE9772" />
+                    <MyBarChart data={reactData2} width={graph1Size} fill="#FE9772" />
                 </SmallCard>
                 <SmallCard styleType={3}>
                     <SelectGroupBy id="Graphs.Main" />
-                    <MyBarChart data={reactData3} width={graph2Size} height={graph2Size*0.65}></MyBarChart>
+                    <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65}></MyBarChart>
                 </SmallCard>
                 <SmallCard width={graphSize + 150}>
-                    <div style ={divConstolsRow}>
+                    <div style={divConstolsRow}>
                         <span style={styleLable}> {t('GroupBy')}:</span>
                         <SelectGroupBy id="Graphs.Grp2" labelText='' />
                         <SelectGroupBy2 id="Graphs" />

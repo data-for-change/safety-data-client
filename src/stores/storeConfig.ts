@@ -1,12 +1,10 @@
 // https://mobx-react.js.org/recipes-context
-
 import React from 'react'
-import FilterStore from './FilterStore';
+import RootStore from './RootStore';
 
-export const store = new FilterStore();
+export const store = new RootStore();
 export const StoreContext = React.createContext(store);
-
-export const useStore = (): FilterStore => {
+export const useStore = (): RootStore => {
   const store = React.useContext(StoreContext);
   if (!store) {
     // this is especially useful in TypeScript so you don't need to be checking for null all the time

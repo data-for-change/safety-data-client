@@ -25,7 +25,8 @@ const STYLE_TOGGLE_NORMAL = {
 
 export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
   const { t } = useTranslation();
-  const store = useStore();
+  const { filterStore } = useStore();
+  const { injurySeverity, updateInjurySeverity, isLoading, isValidAllFilters } = filterStore;
   return (
     <Form>
       <Accordion defaultActiveKey={activeCardKey.toString()}>
@@ -36,10 +37,10 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhatVehicle />
         <CardFilterWhatRoad />
       </Accordion>
-      <GroupCheckbox formName="exampleForm" colFilter={store.injurySeverity} onChange={store.updateInjurySeverity} />
+      <GroupCheckbox formName="exampleForm" colFilter={injurySeverity} onChange={updateInjurySeverity} />
       <Button variant="primary"
-        disabled={store.isLoading || !store.isValidAllFilters}
-        onClick={() => { store.submitFilter(); }} >{store.isLoading ? t('Loading…') : t('Submit')} </Button>
+        disabled={isLoading || !isValidAllFilters}
+        onClick={() => { filterStore.submitFilter(); }} >{isLoading ? t('Loading…') : t('Submit')} </Button>
     </Form>
   );
 })
@@ -47,8 +48,8 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
 
 const CardFilterWhen = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWhen } = store;
+  const { filterStore } = useStore();
+  let { isValidWhen, startYear, endYear, dayNight, updateDayNight } = filterStore;
   const styleToggle = isValidWhen ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -63,7 +64,7 @@ const CardFilterWhen = observer(() => {
             <Form.Row>
               <Form.Group as={Col} controlId="exampleForm.ControlSelectStartYear">
                 <Form.Label className="filterLable"> {t('FromYear')}:</Form.Label>
-                <Form.Control as="select" defaultValue={store.startYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.startYear = parseInt(e.target.value); }}>
+                <Form.Control as="select" defaultValue={startYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { startYear = parseInt(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
                   <option>2017</option>
@@ -73,7 +74,7 @@ const CardFilterWhen = observer(() => {
               </Form.Group>
               <Form.Group as={Col} controlId="exampleForm.ControlSelectEndYear">
                 <Form.Label className="filterLable"> {t('ToYear')}:</Form.Label>
-                <Form.Control as="select" defaultValue={store.endYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { store.endYear = parseInt(e.target.value); }}>
+                <Form.Control as="select" defaultValue={endYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { endYear = parseInt(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
                   <option>2017</option>
@@ -82,7 +83,7 @@ const CardFilterWhen = observer(() => {
                 </Form.Control>
               </Form.Group>
             </Form.Row>
-            <GroupCheckbox formName="exampleForm" colFilter={store.dayNight} onChange={store.updateDayNight} />
+            <GroupCheckbox formName="exampleForm" colFilter={dayNight} onChange={updateDayNight} />
           </div>
         </Card.Body>
       </Accordion.Collapse>
@@ -91,8 +92,8 @@ const CardFilterWhen = observer(() => {
 })
 const CardFilterWhere = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWhere } = store;
+  const { filterStore } = useStore();
+  const { isValidWhere, roadTypes, updateRoadType, isMultipleCities } = filterStore;
   const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -103,10 +104,10 @@ const CardFilterWhere = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="1" className="filterControls">
         <div>
-          <CitySelector isMultiple={store.isMultipleCities} />
+          <CitySelector isMultiple={isMultipleCities} />
           <StreetSelector />
           <RoadSegmentSelector />
-          <GroupCheckbox formName="exampleForm" colFilter={store.roadTypes} onChange={store.updateRoadType} />
+          <GroupCheckbox formName="exampleForm" colFilter={roadTypes} onChange={updateRoadType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -114,8 +115,9 @@ const CardFilterWhere = observer(() => {
 })
 const CardFilterWho = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWho } = store
+  const { filterStore } = useStore();
+  const { isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType } = filterStore;
+  const { ageTypes, updateAgeType, populationTypes, updatePopulationType } = filterStore;
   const styleToggle = isValidWho ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -126,10 +128,10 @@ const CardFilterWho = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="2" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" colFilter={store.injTypes} onChange={store.updateInjuerdType} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.genderTypes} onChange={store.updateGenderType} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.ageTypes} onChange={store.updateAgeType} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.populationTypes} onChange={store.updatePopulationType} />
+          <GroupCheckbox formName="exampleForm" colFilter={injTypes} onChange={updateInjuerdType} />
+          <GroupCheckbox formName="exampleForm" colFilter={genderTypes} onChange={updateGenderType} />
+          <GroupCheckbox formName="exampleForm" colFilter={ageTypes} onChange={updateAgeType} />
+          <GroupCheckbox formName="exampleForm" colFilter={populationTypes} onChange={updatePopulationType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -137,8 +139,8 @@ const CardFilterWho = observer(() => {
 })
 const CardFilterWhat = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWhat } = store;
+  const { filterStore } = useStore();
+  const { isValidWhat, accidentType, updateAccidentType } = filterStore;
   const styleToggle = isValidWhat ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -149,7 +151,7 @@ const CardFilterWhat = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="3" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" colFilter={store.accidentType} onChange={store.updateAccidentType} />
+          <GroupCheckbox formName="exampleForm" colFilter={accidentType} onChange={updateAccidentType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -158,8 +160,8 @@ const CardFilterWhat = observer(() => {
 
 const CardFilterWhatVehicle = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWhatVehicle } = store;
+  const { filterStore } = useStore();
+  const { isValidWhatVehicle, vehicleType, updateVehicleType } = filterStore;
   const styleToggle = isValidWhatVehicle ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -170,7 +172,7 @@ const CardFilterWhatVehicle = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="4" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" colFilter={store.vehicleType} onChange={store.updateVehicleType} />
+          <GroupCheckbox formName="exampleForm" colFilter={vehicleType} onChange={updateVehicleType} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -179,8 +181,10 @@ const CardFilterWhatVehicle = observer(() => {
 
 const CardFilterWhatRoad = observer(() => {
   const { t } = useTranslation();
-  const store = useStore();
-  const { isValidWhatRoad } = store;
+  const { filterStore } = useStore();
+  const { isValidWhatRoad } = filterStore;
+  const { speedLimit, updateSpeedLimit, roadWidth, updateRoadWidth } = filterStore;
+  const { separator, updateSeparator, oneLane, updateOneLane } = filterStore;
   const styleToggle = isValidWhatRoad ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -191,10 +195,10 @@ const CardFilterWhatRoad = observer(() => {
       </Card.Header>
       <Accordion.Collapse eventKey="5" className="filterControls">
         <div>
-          <GroupCheckbox formName="exampleForm" colFilter={store.speedLimit} onChange={store.updateSpeedLimit} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.roadWidth} onChange={store.updateRoadWidth} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.separator} onChange={store.updateSeparator} />
-          <GroupCheckbox formName="exampleForm" colFilter={store.oneLane} onChange={store.updateOneLane} />
+          <GroupCheckbox formName="exampleForm" colFilter={speedLimit} onChange={updateSpeedLimit} />
+          <GroupCheckbox formName="exampleForm" colFilter={roadWidth} onChange={updateRoadWidth} />
+          <GroupCheckbox formName="exampleForm" colFilter={separator} onChange={updateSeparator} />
+          <GroupCheckbox formName="exampleForm" colFilter={oneLane} onChange={updateOneLane} />
         </div>
       </Accordion.Collapse>
     </Card>

@@ -9,18 +9,18 @@ import HeatmapLayer from 'react-leaflet-heatmap-layer';
 interface IProps {
   fitBoundsOnUpdate?: boolean
 }
-
 const AccidentHeatLayer: FunctionComponent<IProps> = observer(({ fitBoundsOnUpdate = false }) => {
-  const store = useStore();
-  const { isDynamicMarkers, isUse2StepsMarkers } = store
+  const { mapStore, filterStore } = useStore();
+  const { isDynamicMarkers } = mapStore;
+  const { dataMarkersInBounds, dataMarkersLean, dataAllInjuries, isUse2StepsMarkers } = filterStore;
   let reactMarkers;
   if (isDynamicMarkers)
-    reactMarkers = toJS(store.dataMarkersInBounds);
+    reactMarkers = toJS(dataMarkersInBounds);
   else if (isUse2StepsMarkers) {
-    reactMarkers = toJS(store.dataMarkersLean);
+    reactMarkers = toJS(dataMarkersLean);
   }
   else {
-    reactMarkers = toJS(store.dataAllInjuries);
+    reactMarkers = toJS(dataAllInjuries);
   }
   //console.log("reactMarkers ", reactMarkers.length)
   let newArr: any[] = reactMarkers.map(x => [x.latitude, x.longitude, x._id])
@@ -34,7 +34,4 @@ const AccidentHeatLayer: FunctionComponent<IProps> = observer(({ fitBoundsOnUpda
       intensityExtractor={(m: any) => parseFloat(m[2])} />
   )
 })
-export default AccidentHeatLayer
-
-
-
+export default AccidentHeatLayer;
