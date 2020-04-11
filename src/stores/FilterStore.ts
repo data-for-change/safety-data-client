@@ -212,7 +212,7 @@ export default class FilterStore {
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
     if(this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX)
-      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds)
+      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds, 0.1) 
   }
 
   @observable

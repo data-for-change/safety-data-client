@@ -37,7 +37,7 @@ export default class MapStore {
   useSetBounds: boolean = true;
   @observable
   mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
-  @action 
+  @action
   updateBounds = (bounds: L.LatLngBounds) => {
     this.mapBounds = (bounds);
   }
@@ -115,24 +115,23 @@ export default class MapStore {
     this.dataMarkersInBounds = data;
   }
   getMarkersInBBox = (mapBounds: L.LatLngBounds) => {
-    if (this.bboxType === BBoxType.LOCAL_BBOX)
-    {
-      this.getMarkersInLocalBBox(mapBounds);
+    if (this.bboxType === BBoxType.LOCAL_BBOX) {
+      this.getMarkersInLocalBBox(mapBounds, 0.1);
     }
-    else if(this.bboxType === BBoxType.SERVER_BBOX)
+    else if (this.bboxType === BBoxType.SERVER_BBOX)
       this.submintGetMarkersBBox(mapBounds);
   }
-  getMarkersInLocalBBox = (mapBounds: L.LatLngBounds) => {
-    const west = mapBounds.getWest();
-    const east = mapBounds.getEast();
-    const south = mapBounds.getSouth();
-    const north = mapBounds.getNorth();
-    const data = this.rootStore.filterStore.dataAllInjuries.filter(x => 
-       x.latitude >= south && x.latitude <= north && x.longitude >= west && x.longitude <=  east
-      );
+  getMarkersInLocalBBox = (mapBounds: L.LatLngBounds, boundsMargin: number) => {
+    const west = mapBounds.getWest() - boundsMargin;
+    const east = mapBounds.getEast() + boundsMargin;
+    const south = mapBounds.getSouth() - boundsMargin;
+    const north = mapBounds.getNorth() + boundsMargin;
+    const data = this.rootStore.filterStore.dataAllInjuries.filter(x =>
+      x.latitude >= south && x.latitude <= north && x.longitude >= west && x.longitude <= east
+    );
     this.updateDataMarkersInBounds(data);
   }
-  
+
   submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
     let filter = this.rootStore.filterStore.getFilter(mapBounds, true)
     fetchFilter(filter, 'latlon')
