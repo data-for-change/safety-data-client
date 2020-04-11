@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
+import { ErrorBoundary } from '../atoms/ErrorBoundary'
 import MapAccidents from '../organisms/MapAccidents'
 import { AccidentsTable } from '../organisms/AccidentsTable'
 import { GroupByGraphsPanel } from '../organisms/GroupByGraphsPanel'
@@ -31,16 +32,24 @@ export const TabsTemplate: React.FC<IProps> = observer(({ defaultKey = "charts" 
             }}
         >
             <Tab style={style} eventKey="charts" title={t("Charts")}>
-                <GroupByGraphsPanel />
+                <ErrorBoundary>
+                    <GroupByGraphsPanel />
+                </ErrorBoundary>
             </Tab>
             <Tab style={style} eventKey="grouptables" title={t("Groups")}>
-                <GroupByTablesPanel />
+                <ErrorBoundary>
+                    <GroupByTablesPanel />
+                </ErrorBoundary>
             </Tab>
             <Tab style={style} eventKey="map" title={t("Map")}>
-                <MapAccidents />
+                <ErrorBoundary>
+                    <MapAccidents />
+                </ErrorBoundary>
             </Tab>
             <Tab style={style} eventKey="table" title={t("Table")}>
-                <div className="col-auto"><AccidentsTable /></div>
+                <ErrorBoundary>
+                    <div className="col-auto"><AccidentsTable /></div>
+                </ErrorBoundary>
             </Tab>
         </Tabs>
     )
