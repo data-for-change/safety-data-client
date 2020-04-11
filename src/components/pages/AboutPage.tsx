@@ -2,7 +2,7 @@ import React from 'react'
 
 interface IProps { }
 
-export const AboutPage: React.FC<IProps> = () => {
+const AboutPage: React.FC<IProps> = () => {
   const style = {
     margin: "20px",
   };
@@ -37,3 +37,4 @@ export const AboutPage: React.FC<IProps> = () => {
     </main>
   );
 }
+export default AboutPage
