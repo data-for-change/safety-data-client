@@ -3,6 +3,7 @@ import { observer } from "mobx-react"
 import { toJS } from 'mobx'
 //import L from 'leaflet'
 import { useStore } from '../../stores/storeConfig'
+import { BBoxType } from '../../stores/MapStore'
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 
@@ -11,10 +12,10 @@ interface IProps {
 }
 const AccidentHeatLayer: FunctionComponent<IProps> = observer(({ fitBoundsOnUpdate = false }) => {
   const { mapStore, filterStore } = useStore();
-  const { isDynamicMarkers } = mapStore;
-  const { dataMarkersInBounds, dataMarkersLean, dataAllInjuries, isUse2StepsMarkers } = filterStore;
+  const { bboxType, dataMarkersInBounds} = mapStore;
+  const { dataMarkersLean, dataAllInjuries, isUse2StepsMarkers } = filterStore;
   let reactMarkers;
-  if (isDynamicMarkers)
+  if (bboxType !== BBoxType.NO_BBOX)
     reactMarkers = toJS(dataMarkersInBounds);
   else if (isUse2StepsMarkers) {
     reactMarkers = toJS(dataMarkersLean);

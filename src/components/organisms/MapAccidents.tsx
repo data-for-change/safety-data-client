@@ -7,20 +7,20 @@ import AccidentsMarkers from '../molecules/AccidentsMarkers'
 import AccidentHeatLayer from '../molecules/AccidentHeatLayer'
 import ButtonTuggleHeatLayer from '../atoms/ButtonTuggleHeatLayer'
 import { useStore } from '../../stores/storeConfig'
+import { BBoxType } from '../../stores/MapStore'
 import 'leaflet-css'
+
 
 interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
-  const mapRef = useRef<any>();
-  const store = useStore();
-  const { heatLayerHidden, mapBounds, mapCenter, isDynamicMarkers } = store.mapStore;
-  const reactMapCenter = toJS(mapCenter);
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
-
+  const mapRef = useRef<any>();
+  const {mapStore} = useStore();
+  const { heatLayerHidden, mapBounds, mapCenter, bboxType } = mapStore;
+  const reactMapCenter = toJS(mapCenter);
   const markers = heatLayerHidden && <AccidentsMarkers />
   const heatLayer = !heatLayerHidden && <AccidentHeatLayer />
 
-  const didMountRef = useRef(false)
   useEffect(() => {
     //prevent zoom  0 bug 
     const zoom = mapRef.current.leafletElement.getZoom();
@@ -28,10 +28,9 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
       mapRef.current.leafletElement.setZoom(13);
   })
   const updateMarkers = (() => {
-    //console.log("updateMarkers")
-    if (isDynamicMarkers) {
-      const b = mapRef.current.leafletElement.getBounds()
-      store.filterStore.submintGetMarkersBBox(b);
+    if (bboxType !== BBoxType.NO_BBOX) {
+      const bounds = mapRef.current.leafletElement.getBounds()
+      mapStore.submintGetMarkersBBox(bounds);
     }
   })
   return (

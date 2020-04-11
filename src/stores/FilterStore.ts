@@ -1,4 +1,4 @@
-import { observable, action, reaction, computed } from "mobx"
+import { observable, action, computed } from "mobx"
 import L from 'leaflet'
 import { IColumnFilter } from './FilterChecker'
 import * as FC from './FilterChecker'
@@ -7,6 +7,7 @@ import RootStore from "./RootStore";
 import { fetchFilter, fetchGroupBy } from "../services/Accident.Service"
 import CityService from '../services/City.Service'
 import { insertToDexie, getFromDexie } from '../services/Dexie.Injured.Service'
+import { BBoxType } from "./MapStore"
 //import autorun  from "mobx"
 
 export default class FilterStore {
@@ -220,12 +221,7 @@ export default class FilterStore {
     this.setMarkersLoadStep(1);
     this.dataMarkersLean = data;
   }
-  @observable
-  dataMarkersInBounds: any[] = []
-  @action
-  updateDataMarkersInBounds = (data: any[]) => {
-    this.dataMarkersInBounds = data;
-  }
+
 
   @observable
   dataByYears: any[] = []
@@ -345,8 +341,8 @@ export default class FilterStore {
       this.submitMainDataFilterLocalDb();
     }
     else {
-      if (this.rootStore.mapStore.isDynamicMarkers)
-        this.submintGetMarkersBBox(this.rootStore.mapStore.mapBounds);
+      if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX)
+      this.rootStore.mapStore.submintGetMarkersBBox(this.rootStore.mapStore.mapBounds);
       if (this.isUse2StepsMarkers)
         this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
@@ -383,15 +379,7 @@ export default class FilterStore {
         }
       })
   }
-  submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
-    let filter = this.getFilter(mapBounds, true)
-    fetchFilter(filter, 'latlon')
-      .then((data: any[] | undefined) => {
-        if (data !== null && data !== undefined) {
-          this.updateDataMarkersInBounds(data);
-        }
-      })
-  }
+
   submitCityNameAndLocation = () => {
     if (this.cities.length >= 1) {
       let city = this.cities[0];
@@ -550,11 +538,10 @@ export default class FilterStore {
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.updateDataMarkersInBounds(data);
+          this.rootStore.mapStore.updateDataMarkersInBounds(data);
         }
       })
   }
-
 
   getFilterIDB = () => {
     let arrFilters: any[] = []

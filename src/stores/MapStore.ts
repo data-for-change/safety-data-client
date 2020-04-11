@@ -1,24 +1,30 @@
-import { observable, action, reaction, computed } from "mobx"
+import { observable, action } from "mobx"
 import L from 'leaflet'
 import RootStore from "./RootStore";
+import { fetchFilter } from "../services/Accident.Service"
 //import autorun  from "mobx"
+
+export enum BBoxType {
+  NO_BBOX,
+  SERVER_BBOX,
+  LOCAL_BBOX
+}
 
 export default class MapStore {
   appInitialized = false
-  constructor(rootStore:RootStore) {
+  constructor(rootStore: RootStore) {
     // init app data
     this.rootStore = rootStore;
   }
   rootStore: RootStore;
- ///////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   // map store
   ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   @observable
   isReadyToRenderMap: boolean = false;
   @observable
-  isDynamicMarkers: boolean = false;
-
+  bboxType: BBoxType = BBoxType.NO_BBOX;
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
@@ -38,12 +44,11 @@ export default class MapStore {
   initBounds = () => {
     this.mapBounds = L.latLngBounds(INIT_BOUNDS)
   }
-  @action 
-  setBounds = (data: any[], citisArr: string[]) =>{
+  @action
+  setBounds = (data: any[], citisArr: string[]) => {
     if (this.isSetBounds) {
       const bunds = this.getBounds(data);
-      if (citisArr.length > 0 && citisArr[0] !== "")
-      {
+      if (citisArr.length > 0 && citisArr[0] !== "") {
         // //this.mapBounds = bunds;
         // if (bunds.contains(this.mapCenter))
         //   this.mapBounds = bunds;
@@ -55,17 +60,16 @@ export default class MapStore {
       this.isSetBounds = false;
     }
   }
-  
+
   @observable
   isSetBounds: boolean = false;
   @action
   updateIsSetBounds = (citisArr: string[], roadSegArr: any[]) => {
-    if (this.useSetBounds)
-    {
+    if (this.useSetBounds) {
       if (citisArr.length > 0 && citisArr[0] !== "")
-      this.isSetBounds = true;
-    else if (roadSegArr.length > 0 && roadSegArr[0] !== "")
-      this.isSetBounds = true;
+        this.isSetBounds = true;
+      else if (roadSegArr.length > 0 && roadSegArr[0] !== "")
+        this.isSetBounds = true;
     }
   }
 
@@ -75,7 +79,7 @@ export default class MapStore {
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
   }
-  
+
   getBounds = (data: any[]) => {
     console.log("setBounds!")
     let arr: L.LatLng[] = [];
@@ -102,6 +106,22 @@ export default class MapStore {
     const bounds = L.latLngBounds(arr)
     return bounds;
   }
+
+  @observable
+  dataMarkersInBounds: any[] = []
+  @action
+  updateDataMarkersInBounds = (data: any[]) => {
+    this.dataMarkersInBounds = data;
+  }
+  submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
+    let filter = this.rootStore.filterStore.getFilter(mapBounds, true)
+    fetchFilter(filter, 'latlon')
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.updateDataMarkersInBounds(data);
+        }
+      })
+  }
 }
 
 const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
@@ -109,3 +129,4 @@ const DEFAULT_BOUNDS = [
   L.latLng(29.50, 34.22),     // most possible south-west point
   L.latLng(33.271, 35.946),   // most possible north-east point
 ];
+
