@@ -60,6 +60,7 @@ export const AccidentsTable = observer((props: IProps) => {
         <CasualtiesSumLabel length={reactMarkers.length} name={filterStore.cityResult} />
     );
 })
+export default AccidentsTable
 
 const getColumnsByWidth = (width: number, t: any) => {
     const columns1 = [{

@@ -83,6 +83,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
     }
     else return null;
 })
+export default GroupByGraphsPanel
     // const onSizeSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
     //     let size:number = parseInt(event.target.value)
     //     switch(true) {

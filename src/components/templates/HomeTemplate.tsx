@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { observer } from "mobx-react"
 import { FilterPanel } from '../organisms/FilterPanel'
-import { TabsTemplate } from './TabsTemplate'
+import  TabsTemplate  from './TabsTemplate'
 import { useStore } from '../../stores/storeConfig'
 
 interface IProps { }
