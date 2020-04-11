@@ -39,7 +39,12 @@ export default class MapStore {
   mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
   @action
   updateBounds = (bounds: L.LatLngBounds) => {
-    this.mapBounds = (bounds);
+    //console.log("updateBounds",bounds) 
+    try {
+      this.mapBounds = (bounds);
+    } catch (error) {
+      console.error(error)
+    }
   }
   @action
   initBounds = () => {
@@ -122,14 +127,19 @@ export default class MapStore {
       this.submintGetMarkersBBox(mapBounds);
   }
   getMarkersInLocalBBox = (mapBounds: L.LatLngBounds, boundsMargin: number) => {
-    const west = mapBounds.getWest() - boundsMargin;
-    const east = mapBounds.getEast() + boundsMargin;
-    const south = mapBounds.getSouth() - boundsMargin;
-    const north = mapBounds.getNorth() + boundsMargin;
-    const data = this.rootStore.filterStore.dataAllInjuries.filter(x =>
-      x.latitude >= south && x.latitude <= north && x.longitude >= west && x.longitude <= east
-    );
-    this.updateDataMarkersInBounds(data);
+    try {
+      const west = mapBounds.getWest() - boundsMargin;
+      const east = mapBounds.getEast() + boundsMargin;
+      const south = mapBounds.getSouth() - boundsMargin;
+      const north = mapBounds.getNorth() + boundsMargin;
+      const data = this.rootStore.filterStore.dataAllInjuries.filter(x =>
+        x.latitude >= south && x.latitude <= north && x.longitude >= west && x.longitude <= east
+      );
+      this.updateDataMarkersInBounds(data);
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
   submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {

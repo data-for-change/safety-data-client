@@ -1,5 +1,4 @@
 import { observable, action, computed } from "mobx"
-import L from 'leaflet'
 import { IColumnFilter } from './FilterChecker'
 import * as FC from './FilterChecker'
 import * as GroupBy from './GroupBy'
@@ -211,8 +210,8 @@ export default class FilterStore {
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
-    if(this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX)
-      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds, 0.1) 
+    if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX)
+      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds, 0.1)
   }
 
   @observable
@@ -353,7 +352,7 @@ export default class FilterStore {
     }
     else {
       if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX)
-      this.rootStore.mapStore.submintGetMarkersBBox(this.rootStore.mapStore.mapBounds);
+        this.rootStore.mapStore.submintGetMarkersBBox(this.rootStore.mapStore.mapBounds);
       if (this.isUse2StepsMarkers)
         this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
