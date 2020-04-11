@@ -17,14 +17,11 @@ export default class MapStore {
     this.rootStore = rootStore;
   }
   rootStore: RootStore;
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // map store
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
 
   @observable
   isReadyToRenderMap: boolean = false;
   @observable
-  bboxType: BBoxType = BBoxType.NO_BBOX;
+  bboxType: BBoxType = BBoxType.LOCAL_BBOX;
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
@@ -40,9 +37,13 @@ export default class MapStore {
   useSetBounds: boolean = true;
   @observable
   mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
+  @action 
+  updateBounds = (bounds: L.LatLngBounds) => {
+    this.mapBounds = (bounds);
+  }
   @action
   initBounds = () => {
-    this.mapBounds = L.latLngBounds(INIT_BOUNDS)
+    this.updateBounds(L.latLngBounds(INIT_BOUNDS))
   }
   @action
   setBounds = (data: any[], citisArr: string[]) => {
@@ -113,6 +114,25 @@ export default class MapStore {
   updateDataMarkersInBounds = (data: any[]) => {
     this.dataMarkersInBounds = data;
   }
+  getMarkersInBBox = (mapBounds: L.LatLngBounds) => {
+    if (this.bboxType === BBoxType.LOCAL_BBOX)
+    {
+      this.getMarkersInLocalBBox(mapBounds);
+    }
+    else if(this.bboxType === BBoxType.SERVER_BBOX)
+      this.submintGetMarkersBBox(mapBounds);
+  }
+  getMarkersInLocalBBox = (mapBounds: L.LatLngBounds) => {
+    const west = mapBounds.getWest();
+    const east = mapBounds.getEast();
+    const south = mapBounds.getSouth();
+    const north = mapBounds.getNorth();
+    const data = this.rootStore.filterStore.dataAllInjuries.filter(x => 
+       x.latitude >= south && x.latitude <= north && x.longitude >= west && x.longitude <=  east
+      );
+    this.updateDataMarkersInBounds(data);
+  }
+  
   submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
     let filter = this.rootStore.filterStore.getFilter(mapBounds, true)
     fetchFilter(filter, 'latlon')

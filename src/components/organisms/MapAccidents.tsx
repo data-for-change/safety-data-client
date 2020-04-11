@@ -27,10 +27,11 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     if (zoom === 0)
       mapRef.current.leafletElement.setZoom(13);
   })
-  const updateMarkers = (() => {
+  const updateBounds = (() => {
+    const bounds = mapRef.current.leafletElement.getBounds()
+    mapStore.updateBounds(bounds);
     if (bboxType !== BBoxType.NO_BBOX) {
-      const bounds = mapRef.current.leafletElement.getBounds()
-      mapStore.submintGetMarkersBBox(bounds);
+      mapStore.getMarkersInBBox(bounds);
     }
   })
   return (
@@ -40,7 +41,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         zoom={13}
         bounds={mapBounds}
         style={WRAPPER_STYLES}
-        onmoveend={updateMarkers}
+        onmoveend={updateBounds}
       >
         {heatLayer}
         <TileLayer

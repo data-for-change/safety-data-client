@@ -211,6 +211,8 @@ export default class FilterStore {
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
+    if(this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX)
+      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds)
   }
 
   @observable
@@ -333,6 +335,15 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   // filters actions
   ///////////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  isUse2StepsMarkers: boolean = false;
+  @observable
+  markersLoadStep: number = 1;
+  @action
+  setMarkersLoadStep = (step: number) => {
+    if (this.isUse2StepsMarkers)
+      this.markersLoadStep = step;
+  }
 
   @action
   submitFilter = () => {
@@ -634,19 +645,6 @@ export default class FilterStore {
       let filter = { filterName: filterName, values: arr.map((x: string) => { return x.trim() }) }
       arrFilters.push(filter)
     }
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  // map store
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  @observable
-  isUse2StepsMarkers: boolean = false;
-  @observable
-  markersLoadStep: number = 1;
-  @action
-  setMarkersLoadStep = (step: number) => {
-    if (this.isUse2StepsMarkers)
-      this.markersLoadStep = step;
   }
 }
 
