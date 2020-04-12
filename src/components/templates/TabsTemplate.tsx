@@ -4,7 +4,7 @@ import { observer } from "mobx-react"
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { ErrorBoundary } from '../atoms/ErrorBoundary'
-import MapAccidents from '../organisms/MapAccidents'
+//import MapAccidents from '../organisms/MapAccidents'
 //import AccidentsTable from '../organisms/AccidentsTable'
 //import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel'
 import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
-//const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
+const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = "charts" }) => {
     const style = {
