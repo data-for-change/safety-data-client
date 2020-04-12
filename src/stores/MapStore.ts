@@ -17,6 +17,10 @@ export default class MapStore {
     this.rootStore = rootStore;
   }
   rootStore: RootStore;
+  mapRef: any
+  setMapRef = (mapRef: any) => {
+    this.mapRef = mapRef;
+  }
 
   @observable
   isReadyToRenderMap: boolean = false;
@@ -26,30 +30,34 @@ export default class MapStore {
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
   @action
-  updateMapCenter = (res: any[]) => {
+  updateMapCenter = (center: L.LatLng) => {
+    this.mapCenter = center;
+  }
+  @action
+  updateMapCenterByCity = (res: any[]) => {
     if (res !== null && res.length > 0) {
       let city = res[0];
       if (city.lat !== null && city.lon !== null)
-        this.mapCenter = new L.LatLng(city.lat, city.lon);
+        this.updateMapCenter(new L.LatLng(city.lat, city.lon));
     }
   }
   @observable
   useSetBounds: boolean = true;
-  @observable
-  mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
-  @action
-  updateBounds = (bounds: L.LatLngBounds) => {
-    //console.log("updateBounds",bounds) 
-    try {
-      this.mapBounds = (bounds);
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  @action
-  initBounds = () => {
-    this.updateBounds(L.latLngBounds(INIT_BOUNDS))
-  }
+  // @observable
+  // mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
+  // @action
+  // updateBounds = (bounds: L.LatLngBounds) => {
+  //   //console.log("updateBounds",bounds) 
+  //   try {
+  //     this.mapBounds = (bounds);
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+  // @action
+  // initBounds = () => {
+  //   this.updateBounds(L.latLngBounds(INIT_BOUNDS))
+  // }
   @action
   setBounds = (data: any[], citisArr: string[]) => {
     if (this.isSetBounds) {
@@ -61,8 +69,10 @@ export default class MapStore {
         // else
         //  console.log("worng bounds: ", bunds, this.mapCenter)
       }
-      else
-        this.mapBounds = bunds;
+      else {
+        this.updateMapCenter(bunds.getCenter())
+        //this.mapBounds = bunds;
+      }
       this.isSetBounds = false;
     }
   }
@@ -87,7 +97,7 @@ export default class MapStore {
   }
 
   getBounds = (data: any[]) => {
-    console.log("setBounds!")
+    //console.log("setBounds!")
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);
     data.forEach(x => {
@@ -112,6 +122,28 @@ export default class MapStore {
     const bounds = L.latLngBounds(arr)
     return bounds;
   }
+  getBounds2 = (data: any[]) => {
+    if (data.length === 0)
+      return L.latLngBounds(DEFAULT_BOUNDS)
+    let bounds = { south: 200, north: -200, west: 200, east: -200 }
+    data.forEach(x => {
+      if (x.latitude !== null && x.longitude !== null) {
+        bounds.south = Math.min(x.latitude, bounds.south);
+        bounds.north = Math.max(x.latitude, bounds.north);
+        bounds.west = Math.min(x.longitude, bounds.west);
+        bounds.east = Math.max(x.longitude, bounds.east);
+      }
+    });
+    //bounds for single point
+    if (bounds.south === bounds.north) {
+      bounds.south = bounds.south - 0.01;
+      bounds.north = bounds.north + 0.01;
+      bounds.west = bounds.west - 0.01;
+      bounds.east = bounds.east + 0.01;
+    }
+    const b = L.latLngBounds([bounds.south, bounds.west], [bounds.east, bounds.north])
+    return b;
+  }
 
   @observable
   dataMarkersInBounds: any[] = []
@@ -119,15 +151,19 @@ export default class MapStore {
   updateDataMarkersInBounds = (data: any[]) => {
     this.dataMarkersInBounds = data;
   }
-  getMarkersInBBox = (mapBounds: L.LatLngBounds) => {
+  getMarkersInBBox = () => {
     if (this.bboxType === BBoxType.LOCAL_BBOX) {
-      this.getMarkersInLocalBBox(mapBounds, 0.1);
+      this.getMarkersInLocalBBox(0.1);
     }
-    else if (this.bboxType === BBoxType.SERVER_BBOX)
-      this.submintGetMarkersBBox(mapBounds);
+    else if (this.bboxType === BBoxType.SERVER_BBOX) {
+      this.submintGetMarkersBBox();
+    }
   }
-  getMarkersInLocalBBox = (mapBounds: L.LatLngBounds, boundsMargin: number) => {
+  getMarkersInLocalBBox = (boundsMargin: number) => {
+    if (this.mapRef === undefined)
+      return;
     try {
+      const mapBounds = this.mapRef.current.leafletElement.getBounds();
       const west = mapBounds.getWest() - boundsMargin;
       const east = mapBounds.getEast() + boundsMargin;
       const south = mapBounds.getSouth() - boundsMargin;
@@ -142,7 +178,10 @@ export default class MapStore {
 
   }
 
-  submintGetMarkersBBox = (mapBounds: L.LatLngBounds) => {
+  submintGetMarkersBBox = () => {
+    if (this.mapRef === undefined)
+      return;
+    const mapBounds = this.mapRef.current.leafletElement.getBounds();
     let filter = this.rootStore.filterStore.getFilter(mapBounds, true)
     fetchFilter(filter, 'latlon')
       .then((data: any[] | undefined) => {
@@ -153,7 +192,7 @@ export default class MapStore {
   }
 }
 
-const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
+//const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
 const DEFAULT_BOUNDS = [
   L.latLng(29.50, 34.22),     // most possible south-west point
   L.latLng(33.271, 35.946),   // most possible north-east point

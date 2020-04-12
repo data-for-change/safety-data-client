@@ -211,7 +211,7 @@ export default class FilterStore {
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
     if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX)
-      this.rootStore.mapStore.getMarkersInLocalBBox(this.rootStore.mapStore.mapBounds, 0.1)
+      this.rootStore.mapStore.getMarkersInLocalBBox(0.1)
   }
 
   @observable
@@ -352,7 +352,7 @@ export default class FilterStore {
     }
     else {
       if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX)
-        this.rootStore.mapStore.submintGetMarkersBBox(this.rootStore.mapStore.mapBounds);
+        this.rootStore.mapStore.submintGetMarkersBBox();
       if (this.isUse2StepsMarkers)
         this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
@@ -394,7 +394,7 @@ export default class FilterStore {
     if (this.cities.length >= 1) {
       let city = this.cities[0];
       var srvCity = new CityService();
-      srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenter);
+      srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenterByCity);
       this.cityResult = this.cities[0];
     }
     else

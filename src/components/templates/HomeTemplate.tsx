@@ -12,7 +12,7 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
   filterStore.isMultipleCities = true;
   mapStore.isReadyToRenderMap = false;
   filterStore.updateCities([]);
-  mapStore.initBounds();
+  //mapStore.initBounds();
   filterStore.submitFilter();
   return (
     <div className="App">

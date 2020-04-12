@@ -15,8 +15,10 @@ interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
   const mapRef = useRef<any>();
-  const { mapStore, filterStore } = useStore();
-  const { heatLayerHidden, mapBounds, mapCenter, bboxType } = mapStore;
+  //const didMountRef = useRef(false)
+  const { mapStore } = useStore();
+  mapStore.setMapRef(mapRef);
+  const { heatLayerHidden, mapCenter, bboxType } = mapStore;
   const reactMapCenter = toJS(mapCenter);
   const markers = heatLayerHidden && <AccidentsMarkers />
   const heatLayer = !heatLayerHidden && <AccidentHeatLayer />
@@ -28,13 +30,8 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   })
   const updateBounds = (() => {
     try {
-      const bounds = mapRef.current.leafletElement.getBounds()
-      if (!filterStore.isLoading) {
-        mapStore.updateBounds(bounds);
-      }
-      if (bboxType !== BBoxType.NO_BBOX) {
-        mapStore.getMarkersInBBox(bounds);
-      }
+      if (bboxType !== BBoxType.NO_BBOX)
+        mapStore.getMarkersInBBox();
     } catch (error) {
       console.error(error)
     }
@@ -44,7 +41,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
       <Map ref={mapRef}
         center={reactMapCenter}
         zoom={13}
-        bounds={mapBounds}
+        // bounds={mapBounds}
         style={WRAPPER_STYLES}
         onmoveend={updateBounds}
       >
