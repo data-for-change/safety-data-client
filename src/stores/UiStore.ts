@@ -8,15 +8,18 @@ export default class UiStore {
   constructor(rootStore: RootStore) {
     // init app data
     this.rootStore = rootStore
+    this.initLang();
     this.appInitialized = false;
   }
   rootStore: RootStore;
+  
   //////////////////////////////////////////////
   @observable
   language: string = "he"
   @action
   updateLanguage = (lang: string) => {
     this.language = lang;
+    localStorage.setItem("lang", JSON.stringify(lang))
   }
   reactionChangeLang = reaction(
     () => this.language,
@@ -24,4 +27,15 @@ export default class UiStore {
       i18n.changeLanguage(locale);
     }
   )
+  initLang = () =>{
+    try {
+      const slang = localStorage.getItem("lang")
+      if (slang !== null){
+        const lang = JSON.parse(slang);
+        this.updateLanguage(lang)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
