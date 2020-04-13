@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
@@ -60,4 +60,4 @@ const MyBarChart:React.FC<IProps>=  observer(({data,bars, width=390, height=350,
   );
 })
 
-export default MyBarChart
+export default memo(MyBarChart)
