@@ -23,6 +23,8 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const markers = heatLayerHidden && <AccidentsMarkers />
   const heatLayer = !heatLayerHidden && <AccidentHeatLayer />
   useEffect(() => {
+    //us in mountOnEnter
+    updateBounds();
     //prevent zoom  0 bug 
     const zoom = mapRef.current.leafletElement.getZoom();
     if (zoom === 0)

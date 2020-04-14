@@ -25,7 +25,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 
     const [activeKey] = useState(defaultKey);
     const { mapStore } = useStore();
     return (
-        <Tabs defaultActiveKey={activeKey} id="main-tabs"
+        <Tabs mountOnEnter={true} defaultActiveKey={activeKey} id="main-tabs"
             onSelect={(activeKey: any) => {
                 if (activeKey === "map") {
                     //map is renderd only when tab is shown to prevent leaflet bug
