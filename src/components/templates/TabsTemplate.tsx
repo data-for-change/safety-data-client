@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../atoms/ErrorBoundary'
 //import MapAccidents from '../organisms/MapAccidents'
 //import AccidentsTable from '../organisms/AccidentsTable'
 //import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel'
-import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
+//import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
 import { useStore } from '../../stores/storeConfig'
 
 interface IProps {
@@ -15,6 +15,7 @@ interface IProps {
 }
 
 const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
+const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel')); 
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = "charts" }) => {
@@ -37,14 +38,16 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 
         >
             <Tab style={style} eventKey="charts" title={t("Charts")}>
                 <ErrorBoundary>
-                 <Suspense fallback={<div>Loading Charts...</div>}>
-                    <GroupByGraphsPanel />
+                    <Suspense fallback={<div>Loading Charts...</div>}>
+                        <GroupByGraphsPanel />
                     </Suspense>
                 </ErrorBoundary>
             </Tab>
             <Tab style={style} eventKey="grouptables" title={t("Groups")}>
                 <ErrorBoundary>
-                    <GroupByTablesPanel />
+                    <Suspense fallback={<div>Loading Groups tables...</div>}>
+                        <GroupByTablesPanel />
+                    </Suspense>
                 </ErrorBoundary>
             </Tab>
             <Tab style={style} eventKey="map" title={t("Map")}>

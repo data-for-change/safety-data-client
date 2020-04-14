@@ -57,4 +57,5 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = observer(() => {
         )
     }
     else return null;
-})
+});
+export default GroupByTablesPanel
