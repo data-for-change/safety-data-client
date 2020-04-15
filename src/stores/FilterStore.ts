@@ -91,8 +91,16 @@ export default class FilterStore {
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   startYear: number = 2015;
+  @action
+  setStartYear = (year:string) =>{
+    this.startYear = parseInt(year);
+  }
   @observable
   endYear: number = 2019;
+  @action
+  setEndYear = (year:string) =>{
+    this.endYear = parseInt(year);
+  }
   @observable
   dayNight: IColumnFilter;
   @action
