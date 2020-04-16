@@ -1,41 +1,46 @@
-import { observable, action, reaction } from "mobx"
-import i18n from "../i18n";
-import RootStore from "./RootStore";
-//import autorun  from "mobx"
+import { observable, action, reaction } from 'mobx';
+import i18n from '../i18n';
+import RootStore from './RootStore';
+// import autorun  from "mobx"
 
 export default class UiStore {
   appInitialized = false
+
   constructor(rootStore: RootStore) {
     // init app data
-    this.rootStore = rootStore
+    this.rootStore = rootStore;
     this.initLang();
     this.appInitialized = false;
   }
+
   rootStore: RootStore;
-  
-  //////////////////////////////////////////////
+
+  // ////////////////////////////////////////////
   @observable
-  language: string = "he"
+  language: string = 'he'
+
   @action
   updateLanguage = (lang: string) => {
     this.language = lang;
-    localStorage.setItem("lang", JSON.stringify(lang))
+    localStorage.setItem('lang', JSON.stringify(lang));
   }
+
   reactionChangeLang = reaction(
     () => this.language,
-    locale => {
+    (locale) => {
       i18n.changeLanguage(locale);
-    }
+    },
   )
-  initLang = () =>{
+
+  initLang = () => {
     try {
-      const slang = localStorage.getItem("lang")
-      if (slang !== null){
+      const slang = localStorage.getItem('lang');
+      if (slang !== null) {
         const lang = JSON.parse(slang);
-        this.updateLanguage(lang)
+        this.updateLanguage(lang);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 }
