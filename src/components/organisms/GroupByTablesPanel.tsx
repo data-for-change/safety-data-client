@@ -83,7 +83,7 @@ const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
     const { t } = useTranslation();
     const { filterStore } = useStore();
     const { groupBy, groupBy2, dataGroupby2} = filterStore;
-    const columnsGrp2 = groupBy2.getColumns().map((x) => { return ({ dataField: x, text: t(x) }) })
+    const columnsGrp2 = groupBy2.getColumns().map((x:any) => { return ({ dataField: x, text: t(x) }) })
     const reactDataGrp2 = toJS(dataGroupby2)
     if (reactDataGrp2.length > 0) {
         return (
