@@ -5,8 +5,8 @@ import { observer } from 'mobx-react';
 import Card from 'react-bootstrap/Card';
 import MapAccidents from '../organisms/MapAccidents';
 import FilterPanel from '../organisms/FilterPanel';
-import { AggregatesPanel } from '../organisms/AggregatesPanel';
-import { AccidentsTable } from '../organisms/AccidentsTable';
+import AggregatesPanel from '../organisms/AggregatesPanel';
+import AccidentsTable from '../organisms/AccidentsTable';
 import { useStore } from '../../stores/storeConfig';
 import citisNamesHeb from '../../assets/cities_names_heb.json';
 

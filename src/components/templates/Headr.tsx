@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { LanguageSelector } from '../molecules/LanguageSelector';
+import LanguageSelector from '../molecules/LanguageSelector';
 import ButtonMenu from '../atoms/ButtonMenu';
 import logo from '../../assets/safety-logo.png';
 

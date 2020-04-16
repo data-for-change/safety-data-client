@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
-import { GroupByTable } from '../molecules/GroupByTable';
-import { SmallCard } from '../atoms/SmallCard';
-import { SelectGroupBy } from '../atoms/SelectGroupBy';
-import { SelectGroupBy2 } from '../atoms/SelectGroupBy2';
+import GroupByTable from '../molecules/GroupByTable';
+import SmallCard from '../atoms/SmallCard';
+import SelectGroupBy from '../atoms/SelectGroupBy';
+import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 
 interface IProps { }
 export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
@@ -24,7 +24,6 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
     </div>
   );
 };
-
 
 const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
   const { t } = useTranslation();

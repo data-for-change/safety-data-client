@@ -8,9 +8,9 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { CitySelector } from '../molecules/CitySelector';
-import { StreetSelector } from '../molecules/StreetSelector';
-import { RoadSegmentSelector } from '../molecules/RoadSegmentSelector';
-import { GroupCheckbox } from '../molecules/GroupCheckBox';
+import StreetSelector from '../molecules/StreetSelector';
+import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
+import GroupCheckbox from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {

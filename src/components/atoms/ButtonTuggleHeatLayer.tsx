@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 
@@ -9,12 +9,15 @@ interface IProps {
     onClick: () => any
 }
 const ButtonTuggleHeatLayer: React.FC<IProps> = ({ isLoading, isHeatMapHidden, onClick }) => {
-    const { t } = useTranslation();
-    return (
-        <Button variant="primary"
-            disabled={isLoading}
-            onClick={() => { onClick() }} >{isHeatMapHidden ? t('HeatMap') : t('Markers')}
-        </Button>
-    )
-}
+  const { t } = useTranslation();
+  return (
+    <Button
+      variant="primary"
+      disabled={isLoading}
+      onClick={() => { onClick(); }}
+    >
+      {isHeatMapHidden ? t('HeatMap') : t('Markers')}
+    </Button>
+  );
+};
 export default ButtonTuggleHeatLayer;

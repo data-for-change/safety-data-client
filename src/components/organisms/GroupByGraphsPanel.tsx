@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
-import { SmallCard } from '../atoms/SmallCard';
-import { SelectGroupBy } from '../atoms/SelectGroupBy';
-import { SelectGroupBy2 } from '../atoms/SelectGroupBy2';
+import SmallCard from '../atoms/SmallCard';
+import SelectGroupBy from '../atoms/SelectGroupBy';
+import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart';
 

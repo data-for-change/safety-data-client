@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import { ErrorBoundary } from '../atoms/ErrorBoundary';
+import ErrorBoundary from '../atoms/ErrorBoundary';
 // import MapAccidents from '../organisms/MapAccidents'
 // import AccidentsTable from '../organisms/AccidentsTable'
 // import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel'
