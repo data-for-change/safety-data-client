@@ -1,20 +1,20 @@
-import React from 'react'
-import { useLocation } from 'react-router-dom'
-//import { useTranslation } from 'react-i18next';
-import { observer } from "mobx-react"
-import { TabsTemplate } from './TabsTemplate'
-import { FilterPanel } from '../organisms/FilterPanel'
-import { useStore } from '../../stores/storeConfig'
-import citisNamesHeb from "../../assets/cities_names_heb.json";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+// import { useTranslation } from 'react-i18next';
+import { observer } from 'mobx-react';
+import { TabsTemplate } from './TabsTemplate';
+import FilterPanel from '../organisms/FilterPanel';
+import { useStore } from '../../stores/storeConfig';
+import citisNamesHeb from '../../assets/cities_names_heb.json';
 
 interface IProps { }
 export const CityTemplate: React.FC<IProps> = observer(() => {
-  //const { t } = useTranslation();
+  // const { t } = useTranslation();
   const { filterStore } = useStore();
   filterStore.isMultipleCities = false;
   const { cityResult } = filterStore;
-  if (cityResult === "") {
-    let cityName = useCityNamefromQuery();
+  if (cityResult === '') {
+    const cityName = useCityNamefromQuery();
     filterStore.updateCities(cityName);
     filterStore.submitFilter();
   }
@@ -30,19 +30,18 @@ export const CityTemplate: React.FC<IProps> = observer(() => {
         </div>
       </div>
     </div>
-  )
-})
+  );
+});
 
-//get city name by query by url
+// get city name by query by url
 function useCityNamefromQuery() {
-  let query = useQuery();
-  let res = ["תל אביב -יפו"];
-  let name = query.get("name")
+  const query = useQuery();
+  let res = ['תל אביב -יפו'];
+  const name = query.get('name');
   let found = false;
-  if (name !== null)
-    found = citisNamesHeb.includes(name);
+  if (name !== null) found = citisNamesHeb.includes(name);
   if (found) {
-    res = [citisNamesHeb.find(element => element === name!)!];
+    res = [citisNamesHeb.find((element) => element === name!)!];
   }
   return res;
 }

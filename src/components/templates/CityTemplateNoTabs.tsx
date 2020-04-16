@@ -1,20 +1,39 @@
-import React from 'react'
-import { useLocation } from 'react-router-dom'
-import { observer } from "mobx-react"
+/* eslint-disable import/no-unresolved */
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import Card from 'react-bootstrap/Card';
-import MapAccidents from '../organisms/MapAccidents'
-import { FilterPanel } from '../organisms/FilterPanel'
-import { AggregatesPanel } from '../organisms/AggregatesPanel'
-import { AccidentsTable } from '../organisms/AccidentsTable'
-import { useStore } from '../../stores/storeConfig'
-import citisNamesHeb from "../../assets/cities_names_heb.json";
+import MapAccidents from '../organisms/MapAccidents';
+import FilterPanel from '../organisms/FilterPanel';
+import { AggregatesPanel } from '../organisms/AggregatesPanel';
+import { AccidentsTable } from '../organisms/AccidentsTable';
+import { useStore } from '../../stores/storeConfig';
+import citisNamesHeb from '../../assets/cities_names_heb.json';
+
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+// get city name by query by url
+function useCityNamefromQuery() {
+  const query = useQuery();
+  let res = ['תל אביב -יפו'];
+  const name = query.get('name');
+  let found = false;
+  if (name !== null) found = citisNamesHeb.includes(name);
+  if (found) {
+    res = [citisNamesHeb.find((element) => element === name!)!];
+  }
+  return res;
+}
 
 interface IProps { }
-export const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
+const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
   const { cityResult } = filterStore;
-  if (cityResult === "") {
-    let cityName = useCityNamefromQuery();
+  if (cityResult === '') {
+    const cityName = useCityNamefromQuery();
     filterStore.updateCities(cityName);
     filterStore.submitFilter();
   }
@@ -36,24 +55,6 @@ export const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
         </div>
       </div>
     </div>
-  )
-})
-
-//get city name by query by url
-function useCityNamefromQuery() {
-  let query = useQuery();
-  let res = ["תל אביב -יפו"];
-  let name = query.get("name")
-  let found = false;
-  if (name !== null)
-    found = citisNamesHeb.includes(name);
-  if (found) {
-    res = [citisNamesHeb.find(element => element === name!)!];
-  }
-  return res;
-}
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+  );
+});
+export default CityTemplateNoTabs;

@@ -1,15 +1,15 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { observer } from "mobx-react"
+import { observer } from 'mobx-react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col'
+import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import { CitySelector } from '../molecules/CitySelector';
-import { StreetSelector } from '../molecules/StreetSelector'
-import { RoadSegmentSelector } from '../molecules/RoadSegmentSelector'
+import { StreetSelector } from '../molecules/StreetSelector';
+import { RoadSegmentSelector } from '../molecules/RoadSegmentSelector';
 import { GroupCheckbox } from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 
@@ -17,16 +17,18 @@ interface IProps {
   activeCardKey: number
 }
 const STYLE_TOGGLE_WARNING = {
-  color: '#dc3545'
+  color: '#dc3545',
 };
 const STYLE_TOGGLE_NORMAL = {
-  color: '#007bff'
+  color: '#007bff',
 };
 
-export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
+const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injurySeverity, updateInjurySeverity, isLoading, isValidAllFilters } = filterStore;
+  const {
+    injurySeverity, updateInjurySeverity, isLoading, isValidAllFilters,
+  } = filterStore;
   return (
     <Form>
       <Accordion defaultActiveKey={activeCardKey.toString()}>
@@ -38,17 +40,25 @@ export const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) 
         <CardFilterWhatRoad />
       </Accordion>
       <GroupCheckbox formName="exampleForm" colFilter={injurySeverity} onChange={updateInjurySeverity} />
-      <Button variant="primary"
+      <Button
+        variant="primary"
         disabled={isLoading || !isValidAllFilters}
-        onClick={() => { filterStore.submitFilter(); }} >{isLoading ? t('Loading…') : t('Submit')} </Button>
+        onClick={() => { filterStore.submitFilter(); }}
+      >
+        {isLoading ? t('Loading…') : t('Submit')}
+        {' '}
+
+      </Button>
     </Form>
   );
-})
+});
 
 const CardFilterWhen = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  let { isValidWhen, startYear, setStartYear, endYear, setEndYear, dayNight, updateDayNight } = filterStore;
+  const {
+    isValidWhen, startYear, setStartYear, endYear, setEndYear, dayNight, updateDayNight,
+  } = filterStore;
   const styleToggle = isValidWhen ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -62,7 +72,11 @@ const CardFilterWhen = observer(() => {
           <div>
             <Form.Row>
               <Form.Group as={Col} controlId="exampleForm.ControlSelectStartYear">
-                <Form.Label className="filterLable"> {t('FromYear')}:</Form.Label>
+                <Form.Label className="filterLable">
+                  {' '}
+                  {t('FromYear')}
+:
+                </Form.Label>
                 <Form.Control as="select" defaultValue={startYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { setStartYear(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
@@ -72,7 +86,11 @@ const CardFilterWhen = observer(() => {
                 </Form.Control>
               </Form.Group>
               <Form.Group as={Col} controlId="exampleForm.ControlSelectEndYear">
-                <Form.Label className="filterLable"> {t('ToYear')}:</Form.Label>
+                <Form.Label className="filterLable">
+                  {' '}
+                  {t('ToYear')}
+:
+                </Form.Label>
                 <Form.Control as="select" defaultValue={endYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { setEndYear(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
@@ -88,11 +106,13 @@ const CardFilterWhen = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
 const CardFilterWhere = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { isValidWhere, roadTypes, updateRoadType, isMultipleCities } = filterStore;
+  const {
+    isValidWhere, roadTypes, updateRoadType, isMultipleCities,
+  } = filterStore;
   const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -111,17 +131,21 @@ const CardFilterWhere = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
 const CardFilterWho = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType } = filterStore;
-  const { ageTypes, updateAgeType, populationTypes, updatePopulationType } = filterStore;
+  const {
+    isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType,
+  } = filterStore;
+  const {
+    ageTypes, updateAgeType, populationTypes, updatePopulationType,
+  } = filterStore;
   const styleToggle = isValidWho ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
       <Card.Header>
-        <Accordion.Toggle as={Button} variant="link" eventKey="2" style={styleToggle} >
+        <Accordion.Toggle as={Button} variant="link" eventKey="2" style={styleToggle}>
           {t('Who')}
         </Accordion.Toggle>
       </Card.Header>
@@ -135,7 +159,7 @@ const CardFilterWho = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
 const CardFilterWhat = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
@@ -155,7 +179,7 @@ const CardFilterWhat = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
 
 const CardFilterWhatVehicle = observer(() => {
   const { t } = useTranslation();
@@ -176,14 +200,18 @@ const CardFilterWhatVehicle = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
 
 const CardFilterWhatRoad = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { isValidWhatRoad } = filterStore;
-  const { speedLimit, updateSpeedLimit, roadWidth, updateRoadWidth } = filterStore;
-  const { separator, updateSeparator, oneLane, updateOneLane } = filterStore;
+  const {
+    speedLimit, updateSpeedLimit, roadWidth, updateRoadWidth,
+  } = filterStore;
+  const {
+    separator, updateSeparator, oneLane, updateOneLane,
+  } = filterStore;
   const styleToggle = isValidWhatRoad ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>
@@ -202,4 +230,5 @@ const CardFilterWhatRoad = observer(() => {
       </Accordion.Collapse>
     </Card>
   );
-})
+});
+export default FilterRequest;

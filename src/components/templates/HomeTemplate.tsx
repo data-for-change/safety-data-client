@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { observer } from "mobx-react"
-import { FilterPanel } from '../organisms/FilterPanel'
-import  TabsTemplate  from './TabsTemplate'
-import { useStore } from '../../stores/storeConfig'
+import { observer } from 'mobx-react';
+import FilterPanel from '../organisms/FilterPanel';
+import TabsTemplate from './TabsTemplate';
+import { useStore } from '../../stores/storeConfig';
 
 interface IProps { }
 export const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -12,7 +12,7 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
   filterStore.isMultipleCities = true;
   mapStore.isReadyToRenderMap = false;
   filterStore.updateCities([]);
-  //mapStore.initBounds();
+  // mapStore.initBounds();
   filterStore.submitFilter();
   return (
     <div className="App">
@@ -20,11 +20,11 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
         <div className="row ">
           <div className="p-2 col-md-2"><FilterPanel /></div>
           <main className="col-md-10">
-            <h4>{t("Israel")}</h4>
+            <h4>{t('Israel')}</h4>
             <TabsTemplate />
           </main>
         </div>
       </div>
     </div>
-  )
-})
+  );
+});

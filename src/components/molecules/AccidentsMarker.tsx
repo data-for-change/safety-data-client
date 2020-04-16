@@ -8,7 +8,7 @@ import shadoMarker from '../../assets/marker-shadow.png'
 
 interface IProps {
     data: any,
-    language: string
+    language: string,
 }
 const lIconSizes = { iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] }
 //const mIconSizes = { iconSize: [19, 31], iconAnchor: [9, 31], popupAnchor: [1, -25], shadowSize: [31, 31] }
