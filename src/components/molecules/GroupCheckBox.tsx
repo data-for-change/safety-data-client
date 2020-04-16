@@ -39,7 +39,7 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
       </Form.Label>
       {arrTypes.map((fChecker, index) => (
         <Checkbox
-          key={index}
+          key={fChecker.label}
           label={fChecker.label}
           group={colFilter.name}
           id={index}

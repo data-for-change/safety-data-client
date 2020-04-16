@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { observable, action } from 'mobx';
 import L from 'leaflet';
 import { fetchFilter } from '../services/Accident.Service';

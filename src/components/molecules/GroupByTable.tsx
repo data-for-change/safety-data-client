@@ -13,19 +13,18 @@ interface IProps {
   }
 const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, data }) => {
   const { t } = useTranslation();
-  if (columns === undefined) {
-    columns = [{
-      dataField: '_id',
-      text: t(dataName),
-    }, {
-      dataField: 'count',
-      text: t('Casualties'),
-    }];
-  }
+  // let reactColumns = 1;
+  const reactColumns = (columns === undefined) ? [{
+    dataField: '_id',
+    text: t(dataName),
+  }, {
+    dataField: 'count',
+    text: t('Casualties'),
+  }] : columns;
   if (data != null) {
     return (
       <div className="groupByTable">
-        <BootstrapTable keyField="_id" data={data} columns={columns} headerClasses="table-header" />
+        <BootstrapTable keyField="_id" data={data} columns={reactColumns} headerClasses="table-header" />
       </div>
     );
   }

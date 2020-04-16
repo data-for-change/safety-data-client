@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { FunctionComponent } from 'react';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';

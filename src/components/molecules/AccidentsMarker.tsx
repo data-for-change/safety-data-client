@@ -10,10 +10,13 @@ interface IProps {
     data: any,
     language: string,
 }
+
 const lIconSizes = {
   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 };
-// const mIconSizes = { iconSize: [19, 31], iconAnchor: [9, 31], popupAnchor: [1, -25], shadowSize: [31, 31] }
+// const mIconSizes = {
+// iconSize: [19, 31], iconAnchor: [9, 31], popupAnchor: [1, -25], shadowSize: [31, 31]
+// };
 const iconSize = lIconSizes;
 const RED_ICON = new L.Icon({
   iconUrl: redMarker,
@@ -31,6 +34,10 @@ const ORANGE_ICON = new L.Icon({
   popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
   shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
 });
+const setIconBySeverity = (severity: string) => {
+  if (severity === 'הרוג') return RED_ICON;
+  return ORANGE_ICON;
+};
 
 const AccidentsMarker: React.FC<IProps> = (({ data, language }) => {
   const lPoint: L.LatLng = new L.LatLng(data.latitude, data.longitude);
@@ -42,10 +49,5 @@ const AccidentsMarker: React.FC<IProps> = (({ data, language }) => {
     </Marker>
   );
 });
-
-const setIconBySeverity = (severity: string) => {
-  if (severity === 'הרוג') return RED_ICON;
-  return ORANGE_ICON;
-};
 
 export default AccidentsMarker;

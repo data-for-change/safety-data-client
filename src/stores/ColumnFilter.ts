@@ -1,5 +1,5 @@
 import { observable, computed } from 'mobx';
-import FilterChecker , {IFilterChecker} from './FilterChecker';
+import FilterChecker, { IFilterChecker } from './FilterChecker';
 
 export interface IColumnFilter {
     name: string;

@@ -12,7 +12,8 @@ import citisNamesHeb from '../../assets/cities_names_heb.json';
 interface IProps {
     isMultiple?: boolean
 }
-export const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
+
+const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { filterStore } = useStore();
   const { t } = useTranslation();
   return (

@@ -4,10 +4,8 @@ import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
 
-interface IProps {
-    isMultiple?: boolean
-}
-const StreetSelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
+interface IProps {}
+const StreetSelector: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
   const { t } = useTranslation();
   if (filterStore.cities.length > 0) {
