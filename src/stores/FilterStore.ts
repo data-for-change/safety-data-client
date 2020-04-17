@@ -646,8 +646,9 @@ export default class FilterStore {
   }
 
   getMultiplefilterIDB = (arrFilters: any[], colFilter: IColumnFilter) => {
-    if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) // all
-    { return; }
+    if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) {
+      return;
+    }
     let allChecked: boolean = true;
     let arrfilter: string[] = [];
     const iterator = colFilter.arrTypes.values();
