@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import FilterChecker, { IFilterChecker } from './FilterChecker';
 
 export interface IColumnFilter {
@@ -7,6 +7,7 @@ export interface IColumnFilter {
     arrTypes: IFilterChecker[];
     allTypesOption : number;
     isAllValsFalse: boolean;
+    updateFilter:(aType: number, val: boolean) => void;
 }
 export class ColumnFilter implements IColumnFilter {
     name: string;
@@ -28,6 +29,17 @@ export class ColumnFilter implements IColumnFilter {
     @computed get isAllValsFalse() {
       const res = this.arrTypes.reduce((counter, currentValue) => (currentValue.checked ? ++counter : counter), 0);
       return (res === 0);
+    }
+
+    @action
+    updateFilter = (aType: number, val: boolean) => {
+      if (this.allTypesOption === -1) this.arrTypes[aType].checked = val;
+      else if (aType === this.allTypesOption) {
+        this.arrTypes.forEach((x, index) => x.checked = (index === this.allTypesOption) ? val : !val);
+      } else {
+        this.arrTypes[this.allTypesOption].checked = false;
+        this.arrTypes[aType].checked = val;
+      }
     }
     // @computed get countTrueVals () {
     //     const res = this.arrTypes.reduce(function(counter,currentValue){
