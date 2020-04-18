@@ -1,5 +1,5 @@
 import React from 'react'
-import { CityTemplate } from '../templates/CityTemplate'
+import CityTemplate from '../templates/CityTemplate'
 
 interface IProps { }
 

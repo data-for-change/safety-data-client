@@ -63,7 +63,13 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
 interface IPropsButtonTuggleHeatLayer { }
 const CurrButtonTuggleHeatLayer: FunctionComponent<IPropsButtonTuggleHeatLayer> = observer(() => {
   const { mapStore, filterStore } = useStore();
-  return <ButtonTuggleHeatLayer isLoading={filterStore.isLoading} isHeatMapHidden={mapStore.heatLayerHidden} onClick={mapStore.toggleHeatLayer} />;
+  return (
+    <ButtonTuggleHeatLayer
+      isLoading={filterStore.isLoading}
+      isHeatMapHidden={mapStore.heatLayerHidden}
+      onClick={mapStore.toggleHeatLayer}
+    />
+  );
 });
 
 interface IPropsMapInvalidateSize {
@@ -75,9 +81,9 @@ const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer((
   const { mapStore } = useStore();
   useEffect(() => {
     if (didMountRef.current) {
+      // like componentDidUpdate
       if (mapRef.current) {
-        // mapRef.current  = true - like componentDidUpdate
-        // invalidateSize - leaflet map rendered has a bug if container parent tab not active / hidden
+        // invalidateSize - leaflet map rendered has a bug if container tab not active / hidden
         // this event is fierd when parent tab is shown - to help render map and prevent css bug
         if (mapStore.isReadyToRenderMap) {
           setTimeout(() => {

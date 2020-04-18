@@ -7,32 +7,6 @@ import FilterPanel from '../organisms/FilterPanel';
 import { useStore } from '../../stores/storeConfig';
 import citisNamesHeb from '../../assets/cities_names_heb.json';
 
-interface IProps { }
-export const CityTemplate: React.FC<IProps> = observer(() => {
-  // const { t } = useTranslation();
-  const { filterStore } = useStore();
-  filterStore.isMultipleCities = false;
-  const { cityResult } = filterStore;
-  if (cityResult === '') {
-    const cityName = useCityNamefromQuery();
-    filterStore.updateCities(cityName);
-    filterStore.submitFilter();
-  }
-  return (
-    <div className="App">
-      <div className="container-fluid">
-        <div className="row ">
-          <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div>
-          <main className="col-md-10">
-            <h4>{cityResult}</h4>
-            <TabsTemplate defaultKey="map" />
-          </main>
-        </div>
-      </div>
-    </div>
-  );
-});
-
 // get city name by query by url
 function useCityNamefromQuery() {
   const query = useQuery();
@@ -50,3 +24,39 @@ function useCityNamefromQuery() {
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
+interface IProps { }
+const CityTemplate: React.FC<IProps> = observer(() => {
+  // const { t } = useTranslation();
+  const { filterStore } = useStore();
+  filterStore.isMultipleCities = false;
+  let { cityResult } = filterStore;
+  if (cityResult === '') {
+    const cityName = useCityNamefromQuery();
+    filterStore.updateCities(cityName);
+    cityResult = cityName[0];
+    filterStore.submitFilter();
+  }
+  return (
+    <div className="App">
+      <div className="container-fluid">
+        <div className="row ">
+          <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div>
+          <main className="col-md-10">
+            <CityLable />
+            <TabsTemplate defaultKey="map" />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+});
+export default CityTemplate;
+
+export const CityLable: React.FC<{}> = observer(() => {
+  const { filterStore } = useStore();
+  const { cityResult } = filterStore;
+  return (
+    <h4>{cityResult}</h4>
+  );
+});

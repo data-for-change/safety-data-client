@@ -32,7 +32,17 @@ module.exports = {
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error",
       "import/no-unresolved" : "off",
-      "import/extensions": ['error', "never"],
+      "import/extensions": [
+        'error',
+        "never" | "always" ,
+        {
+          pattern: {
+            "ts": "never" ,
+            "tsx": "never" ,
+          }
+        }
+      ],
+      'max-len': ["error", { "code": 130, "tabWidth": 4 }],
       "radix": ["error", "as-needed"],
     },
 };
