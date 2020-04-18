@@ -1,11 +1,13 @@
-import { observable, action, computed } from 'mobx';
+import {
+  observable, action, computed,
+} from 'mobx';
 import { IColumnFilter } from './ColumnFilter';
 import * as FC from './ColumnFilter';
 import * as GroupBy from './GroupBy';
 import RootStore from './RootStore';
-import { fetchFilter, fetchGroupBy } from '../services/Accident.Service';
-import CityService from '../services/City.Service';
-import { insertToDexie, getFromDexie } from '../services/Dexie.Injured.Service';
+import { fetchFilter, fetchGroupBy } from '../services/AccidentService';
+import CityService from '../services/CityService';
+import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import { BBoxType } from './MapStore';
 // import autorun  from "mobx"
 
@@ -69,9 +71,34 @@ export default class FilterStore {
       this.streets = [];
     }
   }
-
   @observable
   cityResult: string = '';
+
+  // @computed get cityResult() {
+  //   let res = (this.cities.length >= 1) ? this.cities[0] : '';
+  //   if (window.location.pathname === '/city' && this.onInitCityPage && res === '')
+  //   {
+  //     res = 'תל אביב -יפו';
+  //     this.onInitCityPage = false;
+  //   }
+  //   return res;
+  // };
+
+  // @observable
+  // onInitCityPage = true;
+  
+  // setAddressBar = autorun(() => {
+  //   if (window.history.pushState && window.location.pathname === '/city') {
+  //     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?name=${this.cityResult}`;
+  //     window.history.pushState({ path: newurl }, '', newurl);
+  //   }
+  // });
+
+  // submitCityFilter = autorun(() => {
+  //   if (window.location.pathname === '/city' && this.cityResult !== '') {
+  //     this.submitFilter();
+  //   }
+  // });
 
   @observable
   streets: string[] = [];
@@ -171,7 +198,8 @@ export default class FilterStore {
   }
 
   @computed get isValidWho() {
-    const res = !this.injTypes.isAllValsFalse && !this.genderTypes.isAllValsFalse && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
+    const res = !this.injTypes.isAllValsFalse && !this.genderTypes.isAllValsFalse
+    && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
     return res;
   }
 
@@ -243,7 +271,8 @@ export default class FilterStore {
   }
 
   @computed get isValidWhatRoad() {
-    const res = !this.speedLimit.isAllValsFalse && !this.roadWidth.isAllValsFalse && !this.separator.isAllValsFalse && !this.oneLane.isAllValsFalse;
+    const res = !this.speedLimit.isAllValsFalse && !this.roadWidth.isAllValsFalse
+    && !this.separator.isAllValsFalse && !this.oneLane.isAllValsFalse;
     return res;
   }
 
@@ -259,7 +288,9 @@ export default class FilterStore {
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
-    if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX) this.rootStore.mapStore.getMarkersInLocalBBox(0.1);
+    if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX) {
+      this.rootStore.mapStore.getMarkersInLocalBBox(0.1);
+    }
   }
 
   @observable
@@ -289,7 +320,8 @@ export default class FilterStore {
   isLoading: boolean = false;
 
   @computed get isValidAllFilters() {
-    const res = this.isValidSeverity && this.isValidWhen && this.isValidWho && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
+    const res = this.isValidSeverity && this.isValidWhen && this.isValidWho
+    && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
     return res;
   }
 
@@ -406,7 +438,9 @@ export default class FilterStore {
     if (this.useLocalDb === 2) {
       this.submitMainDataFilterLocalDb();
     } else {
-      if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX) this.rootStore.mapStore.submintGetMarkersBBox();
+      if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX) {
+        this.rootStore.mapStore.submintGetMarkersBBox();
+      }
       if (this.isUse2StepsMarkers) this.submintGetMarkerFirstStep();
       this.submintMainDataFilter();
     }
@@ -478,14 +512,15 @@ export default class FilterStore {
 
   @action
   updateFilters = (colFilter: IColumnFilter, aType: number, val: boolean) => {
-    if (colFilter.allTypesOption === -1) colFilter.arrTypes[aType].checked = val;
-    else if (aType === colFilter.allTypesOption) {
-      colFilter.arrTypes
-        .forEach((x, index) => x.checked = (index === colFilter.allTypesOption) ? val : !val);
-    } else {
-      colFilter.arrTypes[colFilter.allTypesOption].checked = false;
-      colFilter.arrTypes[aType].checked = val;
-    }
+    colFilter.updateFilter(aType, val);
+    // if (colFilter.allTypesOption === -1) colFilter.arrTypes[aType].checked = val;
+    // else if (aType === colFilter.allTypesOption) {
+    //   colFilter.arrTypes
+    //     .forEach((x, index) => x.checked = (index === colFilter.allTypesOption) ? val : !val);
+    // } else {
+    //   colFilter.arrTypes[colFilter.allTypesOption].checked = false;
+    //   colFilter.arrTypes[aType].checked = val;
+    // }
   }
 
   getfilterBounds = (mapBounds: L.LatLngBounds) => {

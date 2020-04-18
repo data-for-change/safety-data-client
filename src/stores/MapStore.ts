@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import L from 'leaflet';
-import { fetchFilter } from '../services/Accident.Service';
+import { fetchFilter } from '../services/AccidentService';
 import RootStore from './RootStore';
 // import autorun  from "mobx"
 
