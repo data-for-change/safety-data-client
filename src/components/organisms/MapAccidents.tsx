@@ -14,7 +14,7 @@ import 'leaflet-css';
 interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
   const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
-  const mapRef = useRef<any>();
+  const mapRef = useRef<Map>(null);
   // const didMountRef = useRef(false)
   const { mapStore } = useStore();
   mapStore.setMapRef(mapRef);
@@ -33,8 +33,11 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     // us in mountOnEnter
     updateBounds();
     // prevent zoom  0 bug
-    const zoom = mapRef.current.leafletElement.getZoom();
-    if (zoom === 0) mapRef.current.leafletElement.setZoom(13);
+    if(mapRef.current !== null) {
+      const zoom = mapRef.current.leafletElement.getZoom();
+      if (zoom === 0) mapRef.current.leafletElement.setZoom(13);
+    }
+  
   });
   return (
     <div>
@@ -73,7 +76,7 @@ const CurrButtonTuggleHeatLayer: FunctionComponent<IPropsButtonTuggleHeatLayer> 
 });
 
 interface IPropsMapInvalidateSize {
-  mapRef: any
+  mapRef: React.RefObject<Map<any>>
 }
 
 const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer(({ mapRef }) => {
@@ -87,7 +90,8 @@ const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer((
         // this event is fierd when parent tab is shown - to help render map and prevent css bug
         if (mapStore.isReadyToRenderMap) {
           setTimeout(() => {
-            mapRef.current.leafletElement.invalidateSize(false);
+            if (mapRef.current !== null)
+              mapRef.current.leafletElement.invalidateSize(false);
           }, 300); // Adjust timeout to tab transition
         }
       }

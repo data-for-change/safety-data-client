@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { Map} from 'react-leaflet';
 import L from 'leaflet';
 import { fetchFilter } from '../services/AccidentService';
 import RootStore from './RootStore';
@@ -25,9 +26,9 @@ export default class MapStore {
 
   rootStore: RootStore;
 
-  mapRef: any
+  mapRef: React.RefObject<Map<any>>|null = null;
 
-  setMapRef = (mapRef: any) => {
+  setMapRef = (mapRef:  React.RefObject<Map<any>>) => {
     this.mapRef = mapRef;
   }
 
@@ -179,7 +180,7 @@ export default class MapStore {
   }
 
   getMarkersInLocalBBox = (boundsMargin: number) => {
-    if (this.mapRef === undefined) return;
+    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     try {
       const mapBounds = this.mapRef.current.leafletElement.getBounds();
       const west = mapBounds.getWest() - boundsMargin;
@@ -188,7 +189,7 @@ export default class MapStore {
       const north = mapBounds.getNorth() + boundsMargin;
       const data = this.rootStore.filterStore.dataAllInjuries
         .filter((x) => x.latitude >= south
-         && x.latitude <= north && x.longitude >= west && x.longitude <= east);
+          && x.latitude <= north && x.longitude >= west && x.longitude <= east);
       this.updateDataMarkersInBounds(data);
     } catch (error) {
       console.error(error);
@@ -196,7 +197,7 @@ export default class MapStore {
   }
 
   submintGetMarkersBBox = () => {
-    if (this.mapRef === undefined) return;
+    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     const mapBounds = this.mapRef.current.leafletElement.getBounds();
     const filter = this.rootStore.filterStore.getFilter(mapBounds, true);
     fetchFilter(filter, 'latlon')
