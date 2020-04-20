@@ -1,10 +1,9 @@
-import React from 'react'
-import { HomeTemplate } from '../templates/HomeTemplate'
+import React from 'react';
+import HomeTemplate from '../templates/HomeTemplate';
 
 interface IProps { }
 
-export const HomePage: React.FC<IProps> = () => {
-  return (
-    <HomeTemplate />
-  )
-}
+const HomePage: React.FC<IProps> = () => (
+  <HomeTemplate />
+);
+export default HomePage;

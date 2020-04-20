@@ -6,9 +6,10 @@ import TabsTemplate from './TabsTemplate';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps { }
-export const HomeTemplate: React.FC<IProps> = observer(() => {
+const HomeTemplate: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
   const { mapStore, filterStore } = useStore();
+  filterStore.setCurrentPage('home');
   filterStore.isMultipleCities = true;
   mapStore.isReadyToRenderMap = false;
   filterStore.updateCities([]);
@@ -21,10 +22,11 @@ export const HomeTemplate: React.FC<IProps> = observer(() => {
           <div className="p-2 col-md-2"><FilterPanel /></div>
           <main className="col-md-10">
             <h4>{t('Israel')}</h4>
-            <TabsTemplate />
+            <TabsTemplate type="home" />
           </main>
         </div>
       </div>
     </div>
   );
 });
+export default HomeTemplate;

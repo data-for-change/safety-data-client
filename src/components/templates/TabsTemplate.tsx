@@ -14,7 +14,8 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
-    defaultKey?: string
+    type: string;
+    defaultKey?: string;
 }
 
 const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
@@ -22,7 +23,7 @@ const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'))
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 const ImageGallery = lazy(() => import('../organisms/ImageGallery'));
-export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 'charts' }) => {
+export const TabsTemplate: FunctionComponent<IProps> = observer(({ type, defaultKey = 'charts' }) => {
   const style = {
     marginTop: '20px',
   };
@@ -72,7 +73,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 
       <Tab style={style} eventKey="image" title={t('Images')}>
         <ErrorBoundary>
           <Suspense fallback={<div>Loading Images...</div>}>
-            <div className="col-auto"><ImageGallery /></div>
+            <div className="col-auto"><ImageGallery type={type} /></div>
           </Suspense>
         </ErrorBoundary>
       </Tab>

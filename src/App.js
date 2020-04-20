@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './i18n';
 import './App.css';
 import Card from 'react-bootstrap/Card';
-import { HomePage } from './components/pages/HomePage'
-import { CityPage } from './components/pages/CityPage'
+import HomePage from './components/pages/HomePage';
+import { CityPage } from './components/pages/CityPage';
 import Header from './components/templates/Headr';
 import Footer from './components/templates/Footer';
-//import mapStore from './stores/MapStore';
+// import mapStore from './stores/MapStore';
 
 const AboutPage = lazy(() => import('./components/pages/AboutPage'));
 function App() {
@@ -16,7 +16,7 @@ function App() {
       <div>
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
-        <Card display='flex' height='100%'>
+        <Card display="flex" height="100%">
           <Header title="Safety Data" />
           <div className="App">
             <Suspense fallback={<div>Loading...</div>}>

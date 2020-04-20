@@ -42,6 +42,15 @@ export default class FilterStore {
 
   rootStore: RootStore;
 
+  @observable
+  currentPage: string ='home';
+
+  @action
+  setCurrentPage = (pageType: string) => {
+    this.currentPage = pageType;
+  }
+
+
   // ///////////////////////////////////////////////////////////////////////////////////////////////
   // Severity
   // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -470,6 +479,7 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
     this.setCasualtiesNames(this.injurySeverity);
+    if (this.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult);
   }
 
   submintMainDataFilter = () => {

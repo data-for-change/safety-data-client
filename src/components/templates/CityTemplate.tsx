@@ -7,6 +7,11 @@ import FilterPanel from '../organisms/FilterPanel';
 import { useStore } from '../../stores/storeConfig';
 import citisNamesHeb from '../../assets/cities_names_heb.json';
 
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 // get city name by query by url
 function useCityNamefromQuery() {
   const query = useQuery();
@@ -19,16 +24,20 @@ function useCityNamefromQuery() {
   }
   return res;
 }
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
+
+export const CityLable: React.FC<{}> = observer(() => {
+  const { filterStore } = useStore();
+  const { cityResult } = filterStore;
+  return (
+    <h4>{cityResult}</h4>
+  );
+});
 
 interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore } = useStore();
+  filterStore.setCurrentPage('city');
   filterStore.isMultipleCities = false;
   let { cityResult } = filterStore;
   if (cityResult === '') {
@@ -44,7 +53,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
           <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div>
           <main className="col-md-10">
             <CityLable />
-            <TabsTemplate defaultKey="map" />
+            <TabsTemplate type="city" defaultKey="map" />
           </main>
         </div>
       </div>
@@ -52,11 +61,3 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   );
 });
 export default CityTemplate;
-
-export const CityLable: React.FC<{}> = observer(() => {
-  const { filterStore } = useStore();
-  const { cityResult } = filterStore;
-  return (
-    <h4>{cityResult}</h4>
-  );
-});

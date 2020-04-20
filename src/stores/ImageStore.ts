@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import RootStore from './RootStore';
-import { fetchListImgProps } from '../services/ImageService';
+import { fetchListImgByTag, fetchListImgByPlace } from '../services/ImageService';
 
 export default class ImageStore {
   appInitialized = false
@@ -13,19 +13,37 @@ export default class ImageStore {
   rootStore: RootStore;
 
   @observable
-  imagesData: any[] = [];
+  imageList: any[] = [];
 
   @action
-  updateAllInjuries = (data: any[]) => {
-    this.imagesData = data;
+  setImageList = (data: any[]) => {
+    this.imageList = data;
   }
 
-  submintGetImages = (tag :string) => {
+  getImages = (type :string) => {
+    if (type === 'city') {
+      const city = this.rootStore.filterStore.cityResult;
+      this.getImagesByPlace(city);
+    } else { this.getImagesByTag('הולכי רגל'); }
+  }
+
+  getImagesByTag = (tag :string) => {
     // this.isLoading = true;
-    fetchListImgProps(tag)
+    fetchListImgByTag(tag)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
-          this.updateAllInjuries(data);
+          this.setImageList(data);
+        }
+        // this.isLoading = false;
+      });
+  }
+
+  getImagesByPlace = (place :string) => {
+    // this.isLoading = true;
+    fetchListImgByPlace(place)
+      .then((data: any[] | undefined) => {
+        if (data !== null && data !== undefined) {
+          this.setImageList(data);
         }
         // this.isLoading = false;
       });

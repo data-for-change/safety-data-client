@@ -10,19 +10,20 @@ import { useStore } from '../../stores/storeConfig';
 
 
 interface Props {
+  type: string;
 }
 
-const ImageGallery: React.FC<Props> = observer(() => {
+const ImageGallery: React.FC<Props> = observer(({ type }) => {
   const { t } = useTranslation();
   const { imageStore } = useStore();
-  const { submintGetImages } = imageStore;
+  const { getImages } = imageStore;
   useEffect(() => {
-    submintGetImages('הולכי רגל');
-  }, [submintGetImages]);
-  const arrayImagesProps = toJS(imageStore.imagesData);
+    getImages(type);
+  }, [getImages, type]);
+  const arrayImagesProps = toJS(imageStore.imageList);
   const reactGallery = arrayImagesProps.map((x: any) => (
-    <Col xs={6} md={4} key={x._id}>
-      <Image src={x.filename} thumbnail />
+    <Col xs={6} md={4} key={`col-${x._id}`}>
+      <Image src={x.filename} thumbnail key={`img-${x._id}`} />
       <div>{x.title}</div>
     </Col>
   ));
