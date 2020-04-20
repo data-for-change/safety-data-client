@@ -121,7 +121,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
         <SelectGroupBy2 id="Graphs" />
         {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
       </div>
-      <MyBarChart data={reactDataGrp2} bars={barsGrp2} width={graphSize} height={graphSize * 0.62} legendType="top" />
+      <MyBarChart data={reactDataGrp2} barsData={barsGrp2} width={graphSize} height={graphSize * 0.62} legendType="top" />
     </SmallCard>
   );
 });
