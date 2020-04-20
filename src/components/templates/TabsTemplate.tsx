@@ -10,6 +10,7 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 // import AccidentsTable from '../organisms/AccidentsTable'
 // import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel'
 // import { GroupByTablesPanel } from '../organisms/GroupByTablesPanel'
+// import ImageGallery from '../organisms/ImageGallery';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
@@ -20,6 +21,7 @@ const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'))
 const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
+const ImageGallery = lazy(() => import('../organisms/ImageGallery'));
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 'charts' }) => {
   const style = {
     marginTop: '20px',
@@ -64,6 +66,13 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ defaultKey = 
         <ErrorBoundary>
           <Suspense fallback={<div>Loading Accidents Table...</div>}>
             <div className="col-auto"><AccidentsTable /></div>
+          </Suspense>
+        </ErrorBoundary>
+      </Tab>
+      <Tab style={style} eventKey="image" title={t('Images')}>
+        <ErrorBoundary>
+          <Suspense fallback={<div>Loading Images...</div>}>
+            <div className="col-auto"><ImageGallery /></div>
           </Suspense>
         </ErrorBoundary>
       </Tab>

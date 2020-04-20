@@ -33,11 +33,10 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     // us in mountOnEnter
     updateBounds();
     // prevent zoom  0 bug
-    if(mapRef.current !== null) {
+    if (mapRef.current !== null) {
       const zoom = mapRef.current.leafletElement.getZoom();
       if (zoom === 0) mapRef.current.leafletElement.setZoom(13);
     }
-  
   });
   return (
     <div>
@@ -90,8 +89,7 @@ const MapInvalidateSize: FunctionComponent<IPropsMapInvalidateSize> = observer((
         // this event is fierd when parent tab is shown - to help render map and prevent css bug
         if (mapStore.isReadyToRenderMap) {
           setTimeout(() => {
-            if (mapRef.current !== null)
-              mapRef.current.leafletElement.invalidateSize(false);
+            if (mapRef.current !== null) mapRef.current.leafletElement.invalidateSize(false);
           }, 300); // Adjust timeout to tab transition
         }
       }

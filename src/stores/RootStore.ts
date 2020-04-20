@@ -1,6 +1,7 @@
 import FilterStore from './FilterStore';
 import UiStore from './UiStore';
 import MapStore from './MapStore';
+import ImageStore from './ImageStore'
 
 export default class RootStore {
     appInitialized = false;
@@ -9,6 +10,7 @@ export default class RootStore {
       this.uiStore = new UiStore(this);
       this.mapStore = new MapStore(this);
       this.filterStore = new FilterStore(this);
+      this.imageStore = new ImageStore(this);
     }
 
     uiStore: UiStore;
@@ -16,4 +18,6 @@ export default class RootStore {
     mapStore: MapStore;
 
     filterStore: FilterStore;
+
+    imageStore: ImageStore;
 }
