@@ -28,11 +28,11 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
 const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { dataByYears } = filterStore;
+  const { dataByYears, casualtiesNames } = filterStore;
   const reactData1 = toJS(dataByYears);
   if (reactData1.length > 0) {
     return (
-      <SmallCard title={t('AllCasualtiesInRegion')}>
+      <SmallCard title={`${t(casualtiesNames)} ${t('in-region')}, ${t('by-years')}`}>
         <GroupByTable data={reactData1} />
       </SmallCard>
     );

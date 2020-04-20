@@ -320,15 +320,19 @@ export default class FilterStore {
     this.dataMarkersLean = data;
   }
 
+  // casualties groupd by yeras, filterd only by injurySeverity
   @observable
   dataByYears: any[] = []
 
+  // casualties groupd by yeras, filterd on main filter
   @observable
   dataFilterdByYears: any[] = []
 
+  // casualties groupd by some group, filterd on main filter
   @observable
   dataFilterd: any[] = []
 
+  // casualties groupd by 2 groups, filterd on main filter
   @observable
   dataGroupby2: any[] = []
 
@@ -359,7 +363,7 @@ export default class FilterStore {
 
   @action
   submitGroupByYears = () => {
-    const filtermatch = this.getfilterForCityOnly();
+    const filtermatch = this.getfilterBySeverityAndCity();
     const filter = this.getFilterGroupBy(filtermatch, 'accident_year');
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
@@ -548,9 +552,10 @@ export default class FilterStore {
     return filter;
   }
 
-  getfilterForCityOnly = () => {
+  getfilterBySeverityAndCity = () => {
     let filter = '{"$and" : [';
     filter += '{"accident_year":{"$gte":"2015"}}';
+    filter += this.getMultiplefilter(this.injurySeverity);
     filter += this.getfilterCity();
     filter += ']}';
     return filter;
