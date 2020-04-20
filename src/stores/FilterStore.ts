@@ -9,6 +9,7 @@ import { fetchFilter, fetchGroupBy } from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import { BBoxType } from './MapStore';
+import Casualty from './Casualty';
 // import autorun  from "mobx"
 
 export default class FilterStore {
@@ -280,10 +281,10 @@ export default class FilterStore {
   // data
   // ////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  dataAllInjuries: any[] = []
+  dataAllInjuries: Casualty[] = [];
 
   @action
-  updateAllInjuries = (data: any[]) => {
+  updateAllInjuries = (data: Casualty[]) => {
     // console.log("updateAllInjuries ",data.length)
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
@@ -294,15 +295,14 @@ export default class FilterStore {
   }
 
   @observable
-  dataMarkersLean: any[] = []
+  dataMarkersLean: Casualty[] = []
 
   @action
-  updateDataMarkersLean = (data: any[]) => {
+  updateDataMarkersLean = (data: Casualty[]) => {
     // console.log("updateDataMarkersLean ",data.length)
     this.setMarkersLoadStep(1);
     this.dataMarkersLean = data;
   }
-
 
   @observable
   dataByYears: any[] = []
