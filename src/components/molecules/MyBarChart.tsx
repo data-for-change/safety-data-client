@@ -55,7 +55,7 @@ const MyBarChart:React.FC<IProps> = observer(({
         height={height}
         data={data}
         margin={{
-          top: 15, right: 2, left: 2, bottom: bottomMargin,
+          top: 20, right: 2, left: 2, bottom: bottomMargin,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
