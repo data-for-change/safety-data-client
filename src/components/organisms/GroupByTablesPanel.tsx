@@ -42,11 +42,11 @@ const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
 const GroupTablesYears2: FunctionComponent<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { dataFilterdByYears } = filterStore;
+  const { dataFilterdByYears, casualtiesNames } = filterStore;
   const reactData2 = toJS(dataFilterdByYears);
   if (reactData2.length > 0) {
     return (
-      <SmallCard title={t('CasualtiesByFilter')}>
+      <SmallCard title={`${t(casualtiesNames)} ${t('by-years')}`}>
         <GroupByTable data={reactData2} />
       </SmallCard>
     );
@@ -91,7 +91,7 @@ const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
           <span style={styleLable}>
             {' '}
             {t('GroupBy')}
-:
+            :
           </span>
           <SelectGroupBy id="Tables.Grp2" labelText="" />
           <SelectGroupBy2 id="Tables" />

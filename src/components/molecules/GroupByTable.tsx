@@ -19,7 +19,7 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, da
     text: t(dataName),
   }, {
     dataField: 'count',
-    text: t('Casualties'),
+    text: t('casualties'),
   }] : columns;
   if (data != null) {
     return (

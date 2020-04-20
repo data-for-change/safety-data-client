@@ -3,6 +3,7 @@ import {
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilter';
 import * as FC from './ColumnFilter';
+import { IFilterChecker } from './FilterChecker';
 import * as GroupBy from './GroupBy';
 import RootStore from './RootStore';
 import { fetchFilter, fetchGroupBy } from '../services/AccidentService';
@@ -19,6 +20,7 @@ export default class FilterStore {
     // init app data
     this.rootStore = rootStore;
     this.injurySeverity = FC.initInjurySeverity();
+    this.setCasualtiesNames(this.injurySeverity);
     this.dayNight = FC.initDayNight();
     this.injTypes = FC.initInjTypes();
     this.genderTypes = FC.initGenderTypes();
@@ -56,6 +58,19 @@ export default class FilterStore {
     return res;
   }
 
+  @observable
+  casualtiesNames:string = 'casualties';
+
+  @action
+  setCasualtiesNames = (injurySeverity:IColumnFilter) => {
+    let res = 'casualties';
+    const deadChecker : IFilterChecker = injurySeverity.arrTypes[0];
+    const sevIngChecker : IFilterChecker = injurySeverity.arrTypes[1];
+    if (deadChecker.checked && !sevIngChecker.checked) res = 'killed';
+    else if (!deadChecker.checked && sevIngChecker.checked) res = 'severely-injured';
+    this.casualtiesNames = res;
+  }
+
   // ///////////////////////////////////////////////////////////////////////////////////////////////
   // where
   // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +87,7 @@ export default class FilterStore {
       this.streets = [];
     }
   }
+
   @observable
   cityResult: string = '';
 
@@ -87,7 +103,7 @@ export default class FilterStore {
 
   // @observable
   // onInitCityPage = true;
-  
+
   // setAddressBar = autorun(() => {
   //   if (window.history.pushState && window.location.pathname === '/city') {
   //     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?name=${this.cityResult}`;
@@ -449,6 +465,7 @@ export default class FilterStore {
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+    this.setCasualtiesNames(this.injurySeverity);
   }
 
   submintMainDataFilter = () => {
@@ -482,7 +499,8 @@ export default class FilterStore {
       const city = this.cities[0];
       const srvCity = new CityService();
       srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenterByCity);
-      this.cityResult = this.cities[0];
+      const index = 0;
+      this.cityResult = this.cities[index];
     } else this.cityResult = '';
   }
 

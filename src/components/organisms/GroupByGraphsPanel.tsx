@@ -53,10 +53,10 @@ const CardChartYears: React.FC<IProps> = observer(() => {
   });
   const graph1Size = Math.min(380, graphSize);
   const { filterStore } = useStore();
-  const { dataFilterdByYears } = filterStore;
+  const { dataFilterdByYears, casualtiesNames } = filterStore;
   const reactData2 = toJS(dataFilterdByYears);
   return (
-    <SmallCard styleType={2} title={t('CasualtiesByFilter')}>
+    <SmallCard styleType={2} title={`${t(casualtiesNames)} ${t('by-years')}`}>
       <MyBarChart data={reactData2} width={graph1Size} fill="#FE9772" />
     </SmallCard>
   );
@@ -115,7 +115,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
         <span style={styleLable}>
           {' '}
           {t('GroupBy')}
-:
+          :
         </span>
         <SelectGroupBy id="Graphs.Grp2" labelText="" />
         <SelectGroupBy2 id="Graphs" />
@@ -126,34 +126,3 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
   );
 });
 export default GroupByGraphsPanel;
-// const onSizeSliderChange = (event: ChangeEvent<HTMLInputElement>) => {
-//     let size:number = parseInt(event.target.value)
-//     switch(true) {
-//         case (size <= 25):
-//             size= 300;
-//             break;
-//         case (size <= 50):
-//             size= 500;
-//           break;
-//         case (size <= 75):
-//             size= 800;
-//           break;
-//         case (size <= 100):
-//             size= 1200;
-//           break;
-//         default:
-//             size= 500;
-//       }
-//     setGraphSize(size)
-//   };
-
-// function debounce(fn:()=>void, ms:any ) {
-//     let timer :any
-//     return _ => {
-//       clearTimeout(timer)
-//       timer = setTimeout(_ => {
-//         timer = null
-//         fn.apply(this , arguments)
-//       }, ms)
-//     };
-//   }
