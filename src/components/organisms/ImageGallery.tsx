@@ -24,7 +24,8 @@ const ImageGallery: React.FC<Props> = observer(({ type }) => {
   const reactGallery = arrayImagesProps.map((x: any) => (
     <Col xs={6} md={4} key={`col-${x._id}`}>
       <Image src={x.filename} thumbnail key={`img-${x._id}`} />
-      <div>{x.title}</div>
+      <div><b>{x.titlehe}</b></div>
+      <div>{x.texthe}</div>
     </Col>
   ));
   return (

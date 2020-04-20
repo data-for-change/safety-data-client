@@ -1,7 +1,7 @@
 export const fetchListImgByTag = async (tag: string):
   Promise<Array<any> | undefined> => {
   // Default options are marked with *
-  const url = `/api/v1/img/tags/${tag}`;
+  const url = `/api/v1/img/tags/he/${tag}`;
   const response = await fetch(url, {
     method: 'GET',
     mode: 'cors', // no-cors, *cors, same-origin
@@ -21,7 +21,7 @@ export const fetchListImgByTag = async (tag: string):
 export const fetchListImgByPlace = async (place: string):
   Promise<Array<any> | undefined> => {
   // Default options are marked with *
-  const url = `/api/v1/img/place/${place}`;
+  const url = `/api/v1/img/place/he/${place}`;
   const response = await fetch(url, {
     method: 'GET',
     mode: 'cors', // no-cors, *cors, same-origin
