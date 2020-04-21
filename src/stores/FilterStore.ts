@@ -37,6 +37,11 @@ export default class FilterStore {
     GroupBy.initGroup2Dict(this.group2Dict);
     this.groupBy = this.groupByDict.TypeInjured;
     this.groupBy2 = this.group2Dict.Gender;
+    // init data (on home page)
+    this.dataByYears = FC.initDataYreasUnfilterd();
+    this.dataFilterdByYears = FC.initDataYreasfilterd();
+    this.dataFilterd = FC.initDataGrpBy1();
+    this.dataGroupby2 = FC.initDataGrpBy2();
     this.appInitialized = false;
   }
 
@@ -85,6 +90,12 @@ export default class FilterStore {
   // ///////////////////////////////////////////////////////////////////////////////////////////////
   @observable
   isMultipleCities: boolean = false;
+
+  @action
+  setIsMultipleCities = (isMulti :boolean) => {
+    this.isMultipleCities = isMulti;
+  }
+
 
   @observable
   cities: string[] = [];
@@ -645,7 +656,7 @@ export default class FilterStore {
     this.isLoading = true;
     const arrFilters = this.getFilterIDB();
     this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
-    console.log(arrFilters);
+    // console.log(arrFilters);
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {

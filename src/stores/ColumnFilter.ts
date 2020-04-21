@@ -1,5 +1,9 @@
 import { observable, action, computed } from 'mobx';
 import FilterChecker, { IFilterChecker } from './FilterChecker';
+import dataYearsUnfilterdInit from '../assets/data-by-years.json';
+import dataYearsfilterdInit from '../assets/data-by-years-filtred.json';
+import dataGrpBy1Init from '../assets/data-by-grp1.json';
+import dataGrp2Init from '../assets/data-by-grp2.json'
 
 export interface IColumnFilter {
     name: string;
@@ -97,13 +101,15 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('bicycle', false, ['אופניים']));
   col.arrTypes.push(new FilterChecker('e-scooter', false, ['קורקינט חשמלי']));
   col.arrTypes.push(new FilterChecker('e-bike', false, ['אופניים חשמליים']));
-  col.arrTypes.push(new FilterChecker('motorcycle', false, ['אופנוע 401+ סמ"ק', 'אופנוע 126 עד 400 סמ"ק', 'אופנוע 51 עד 125 סמ"ק']));
+  col.arrTypes.push(new FilterChecker('motorcycle', false,
+    ['אופנוע 401+ סמ"ק', 'אופנוע 126 עד 400 סמ"ק', 'אופנוע 51 עד 125 סמ"ק']));
   col.arrTypes.push(new FilterChecker('car', false, ['רכב נוסעים פרטי']));
   col.arrTypes.push(new FilterChecker('taxi', false, ['מונית']));
   col.arrTypes.push(new FilterChecker('bus', false, ['אוטובוס זעיר', 'אוטובוס']));
   col.arrTypes.push(new FilterChecker('tranzit', false, ['משא עד 3.5 טון - אחוד (טרנזיט)']));
   col.arrTypes.push(new FilterChecker('tender', false, ['משא עד 3.5  טון - לא אחוד (טנדר)']));
-  col.arrTypes.push(new FilterChecker('truck', false, ['משא 3.6 עד 9.9 טון', 'משא 10.0 עד 12.0 טון', 'משא 12.1 עד 15.9 טון', 'משא 16.0 עד 33.9 טון', 'משא 34.0+ טון']));
+  col.arrTypes.push(new FilterChecker('truck', false,
+    ['משא 3.6 עד 9.9 טון', 'משא 10.0 עד 12.0 טון', 'משא 12.1 עד 15.9 טון', 'משא 16.0 עד 33.9 טון', 'משא 34.0+ טון']));
   col.arrTypes.push(new FilterChecker('tractor', false, ['טרקטור']));
   col.arrTypes.push(new FilterChecker('train', false, ['רכבת']));
   col.arrTypes.push(new FilterChecker('other', false, ['אחר ולא ידוע']));
@@ -210,3 +216,11 @@ export const initAccidentType = () => {
   col.arrTypes.push(new FilterChecker('hit-slip', false, ['החלקה']));
   return col;
 };
+
+export const initDataYreasUnfilterd = () => dataYearsUnfilterdInit;
+
+export const initDataYreasfilterd = () => dataYearsfilterdInit;
+
+export const initDataGrpBy1 = () => dataGrpBy1Init;
+
+export const initDataGrpBy2 = () => dataGrp2Init;
