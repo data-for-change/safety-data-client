@@ -139,5 +139,6 @@
   "Found": "Found",
   "resize": "Resize",
   "NoResultsFound": "No results found",
-  "export-to-csv": "Export to CSV"
+  "export-to-csv": "Export to CSV",
+  "not-found-images" : "No photos found for this category"
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import ImageGallery from 'react-image-gallery';
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
+  const { t } = useTranslation();
   const { imageStore, uiStore } = useStore();
   const { getImages } = imageStore;
   const { language } = uiStore;
@@ -25,9 +26,11 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     originalTitle: x.titlehe,
     description: x.texthe,
   }));
+  const isGotImages = (images.length > 0);
   return (
     <div>
-      <ImageGallery items={images} isRTL={isRTL} />
+      {isGotImages && <ImageGallery items={images} isRTL={isRTL} />}
+      {!isGotImages && `${t('not-found-images')}`}
     </div>
   );
 });

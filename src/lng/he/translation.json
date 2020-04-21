@@ -140,5 +140,6 @@
   "Found": "נמצאו",
   "resize": "הגדלה",
   "NoResultsFound": "לא נמצאו תוצאות",
-  "export-to-csv": "יצוא לקובץ CSV"
+  "export-to-csv": "יצוא לקובץ CSV",
+  "not-found-images" : "לא נמצאו תמונות לקטגוריה זו"
 }
