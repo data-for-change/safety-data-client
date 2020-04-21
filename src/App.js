@@ -5,6 +5,7 @@ import './App.css';
 import Card from 'react-bootstrap/Card';
 import HomePage from './components/pages/HomePage';
 import { CityPage } from './components/pages/CityPage';
+import UpdateImagePage from './components/pages/UpdateImagePage';
 import Header from './components/templates/Headr';
 import Footer from './components/templates/Footer';
 // import mapStore from './stores/MapStore';
@@ -26,6 +27,9 @@ function App() {
                 </Route>
                 <Route path="/city">
                   <CityPage />
+                </Route>
+                <Route path="/update-img">
+                  <UpdateImagePage />
                 </Route>
                 <Route path="/">
                   <HomePage />
