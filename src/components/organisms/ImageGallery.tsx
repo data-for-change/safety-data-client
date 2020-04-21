@@ -12,7 +12,7 @@ interface Props {
   type: string;
 }
 
-const ImageGallery: React.FC<Props> = observer(({ type }) => {
+const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   const { t } = useTranslation();
   const { imageStore } = useStore();
   const { getImages } = imageStore;
@@ -38,4 +38,4 @@ const ImageGallery: React.FC<Props> = observer(({ type }) => {
     </div>
   );
 });
-export default ImageGallery;
+export default MyImageGallery;

@@ -22,7 +22,7 @@ const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'))
 const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
-// const ImageGallery = lazy(() => import('../organisms/ImageGallery'));
+const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type, defaultKey = 'charts' }) => {
   const style = {
     marginTop: '20px',
@@ -70,13 +70,13 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type, default
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      {/* <Tab style={style} eventKey="image" title={t('Images')}>
+      <Tab style={style} eventKey="image" title={t('Images')}>
         <ErrorBoundary>
           <Suspense fallback={<div>Loading Images...</div>}>
-            <div className="col-auto"><ImageGallery type={type} /></div>
+            <div className="col-auto"><MyImageGallery type={type} /></div>
           </Suspense>
         </ErrorBoundary>
-      </Tab> */}
+      </Tab>
     </Tabs>
   );
 });
