@@ -37,7 +37,7 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
   const isLoading = false;
   const isValidAllContols = true;
   const submitFile = () => {
-    const image = new ImageEntity(1, selectedImage.filename, titlehe, texthe, tags, place);
+    const image = new ImageEntity(selectedImage._id, selectedImage.filename, titlehe, texthe, tags, place);
     // console.log(tags);
     updateImgProps(image);
   };
