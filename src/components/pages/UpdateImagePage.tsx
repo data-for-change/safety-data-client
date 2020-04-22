@@ -22,7 +22,10 @@ const UpdateImagePage: React.FC<IProps> = observer(() => {
     justifyContent: 'flex-start',
   };
   const styleDiv2 = {
-    marginTop: '80px',
+    margin: '20px',
+  };
+  const styleDiv3 = {
+    marginTop: '20px',
     width: '450px',
   };
   const { imageStore, uiStore } = useStore();
@@ -50,37 +53,43 @@ const UpdateImagePage: React.FC<IProps> = observer(() => {
   const isGotImages = (images.length > 0);
   return (
     <div style={styleDiv}>
-      <div>
+      <div style={styleDiv2}>
         <Form>
-          <Form.Group as={Col} controlId="exampleForm.SelectTag">
-            <Form.Label>
-              tags
-            </Form.Label>
-            <Form.Control
-              as="select"
-              style={styleSelect}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTag(e.target.value); }}
-            >
-              <option>הולכי רגל</option>
-              <option>רוכבי אופניים</option>
-              <option>רוכבי אופנוע</option>
-              <option>כללי</option>
-            </Form.Control>
-          </Form.Group>
+          <Row>
+            <Form.Group as={Col} controlId="exampleForm.SelectTag">
+              <Form.Label>
+                tags
+              </Form.Label>
+              <Form.Control
+                as="select"
+                style={styleSelect}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTag(e.target.value); }}
+              >
+                <option>הולכי רגל</option>
+                <option>רוכבי אופניים</option>
+                <option>רוכבי אופנוע</option>
+                <option>כללי</option>
+              </Form.Control>
+            </Form.Group>
+          </Row>
+          <Row>
+            <div style={styleDiv3}>
+              {isGotImages && (
+              <ImageGallery
+                items={images}
+                isRTL={isRTL}
+                onSlide={(currentIndex: number) => setImageIndex(currentIndex)}
+              />
+              )}
+              {!isGotImages && `${'not-found-images'}`}
+            </div>
+          </Row>
         </Form>
       </div>
       <div style={styleDiv2}>
-        {isGotImages && (
-        <ImageGallery
-          items={images}
-          isRTL={isRTL}
-          onSlide={(currentIndex: number) => setImageIndex(currentIndex)}
-        />
-        )}
-        {!isGotImages && `${'not-found-images'}`}
-      </div>
-      <div>
-        {selectedImage !== undefined && selectedImage !== null && <FormImageDetails selectedImage={selectedImage} />}
+        {selectedImage !== undefined
+        && selectedImage !== null
+        && <FormImageDetails selectedImage={selectedImage} />}
       </div>
     </div>
   );
