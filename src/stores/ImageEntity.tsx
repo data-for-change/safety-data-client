@@ -17,7 +17,7 @@ export default class ImageEntity implements IimageEntity {
     this.filename = filename;
     this.titlehe = titlehe;
     this.texthe = texthe;
-    this.tags = tags; 
+    this.tags = tags;
     this.place = place;
   }
 

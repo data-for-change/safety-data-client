@@ -22,16 +22,24 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
     width: '250px',
   };
   const [titlehe, setTitleHe] = useState('');
+  const [texthe, setTextHe] = useState('');
+  // const [titleen, setTitleHn] = useState('');
+  // const [texten, setTextEn] = useState('');
+  const [tags, setTags] = useState('');
+  const [place, setPlace] = useState('');
   useEffect(() => {
     setTitleHe(selectedImage.titlehe);
+    setTextHe(selectedImage.texthe);
+    setTags(selectedImage.tags);
+    setPlace(selectedImage.place);
   }, []);
 
   const isLoading = false;
   const isValidAllContols = true;
   const submitFile = () => {
-    const image = new ImageEntity(1, selectedImage.filename, titlehe, 'text', 'tag,tag2', 'place');
-    console.log(image);
-    // updateImgProps(image);
+    const image = new ImageEntity(1, selectedImage.filename, titlehe, texthe, tags, place);
+    // console.log(tags);
+    updateImgProps(image);
   };
   return (
     <Form>
@@ -54,7 +62,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               style={styleControl2}
-              value={selectedImage.tags}
+              value={tags}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTags(e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -65,7 +74,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               style={styleControl1}
-              value={(selectedImage !== null) ? selectedImage.place : ''}
+              value={place}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPlace(e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -87,7 +97,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               as="textarea"
-              value={(selectedImage !== null) ? selectedImage.texthe : ''}
+              value={texthe}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTextHe(e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col} controlId="exampleForm.ControlTitleEn">
@@ -107,24 +118,23 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
               value={(selectedImage !== null) ? selectedImage.texten : ''}
             />
           </Form.Group>
-          <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
+          {/* <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
             <Form.Label>
               ar title
             </Form.Label>
             <Form.Control
               value={(selectedImage !== null) ? selectedImage.titlear : ''}
             />
-          </Form.Group>
-          <Form.Group as={Col} controlId="exampleForm.ControlTextAr">
+          </Form.Group> */}
+          {/* <Form.Group as={Col} controlId="exampleForm.ControlTextAr">
             <Form.Label>
               ar text
             </Form.Label>
             <Form.Control
               as="textarea"
-
               value={(selectedImage !== null) ? selectedImage.textear : ''}
             />
-          </Form.Group>
+          </Form.Group> */}
           <Button
             variant="primary"
             disabled={isLoading || !isValidAllContols}
