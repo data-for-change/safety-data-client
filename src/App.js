@@ -5,12 +5,13 @@ import './App.css';
 import Card from 'react-bootstrap/Card';
 import HomePage from './components/pages/HomePage';
 import { CityPage } from './components/pages/CityPage';
-import UpdateImagePage from './components/pages/UpdateImagePage';
+// import UpdateImagePage from './components/pages/UpdateImagePage';
 import Header from './components/templates/Headr';
 import Footer from './components/templates/Footer';
 // import mapStore from './stores/MapStore';
 
 const AboutPage = lazy(() => import('./components/pages/AboutPage'));
+const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
 function App() {
   return (
     <Router>
