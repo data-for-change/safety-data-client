@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import RootStore from './RootStore';
 import { fetchListImgByTag, fetchListImgByPlace } from '../services/ImageService';
+import IimageEntity from './ImageEntity';
 
 export default class ImageStore {
   appInitialized = false
@@ -13,10 +14,10 @@ export default class ImageStore {
   rootStore: RootStore;
 
   @observable
-  imageList: any[] = [];
+  imageList: IimageEntity[] = [];
 
   @action
-  setImageList = (data: any[]) => {
+  setImageList = (data: IimageEntity[]) => {
     this.imageList = data;
   }
 

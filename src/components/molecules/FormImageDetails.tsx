@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { updateImgProps } from '../../services/ImageService';
+import ImageEntity from '../../stores/ImageEntity';
 // import { useStore } from '../../stores/storeConfig';
 
 interface IProps {selectedImage:any }
@@ -19,9 +21,18 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
   const styleControl2 = {
     width: '250px',
   };
+  const [titlehe, setTitleHe] = useState('');
+  useEffect(() => {
+    setTitleHe(selectedImage.titlehe);
+  }, []);
+
   const isLoading = false;
   const isValidAllContols = true;
-  const submitFile = () => true;
+  const submitFile = () => {
+    const image = new ImageEntity(1, selectedImage.filename, titlehe, 'text', 'tag,tag2', 'place');
+    console.log(image);
+    // updateImgProps(image);
+  };
   return (
     <Form>
       <Row>
@@ -61,13 +72,13 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
       </Row>
       <Row>
         <Col style={styleCol}>
-
           <Form.Group as={Col} controlId="exampleForm.ControlTitleHe">
             <Form.Label>
               he title
             </Form.Label>
             <Form.Control
-              value={(selectedImage !== null) ? selectedImage.titlehe : ''}
+              value={titlehe}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTitleHe(e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col} controlId="exampleForm.ControlTextHe">

@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useStore } from '../../stores/storeConfig';
 import FormImageDetails from '../molecules/FormImageDetails';
+import IimageEntity from '../../stores/ImageEntity';
 
 interface IProps { }
 
@@ -38,7 +39,7 @@ const UpdateImagePage: React.FC<IProps> = observer(() => {
   }, [getImagesByTag, tag]);
   const [imageindex, setImageIndex] = React.useState(0);
   const arrayImages = toJS(imageStore.imageList);
-  const images = arrayImages.map((x: any) => ({
+  const images = arrayImages.map((x: IimageEntity) => ({
     original: x.filename,
     thumbnail: x.filename,
     originalTitle: x.titlehe,
