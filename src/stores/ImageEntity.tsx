@@ -3,16 +3,18 @@ export interface ImageEntityLean {
     filename: string;
     titlehe: string;
     texthe: string;
-    tags: string|string[];
+    tags: string;
     place: string;
   }
 
 export interface IimageEntity extends ImageEntityLean {
-
+    titleen?: string;
+    texten?: string;
+    file?: File
   }
 
 export default class ImageEntity implements IimageEntity {
-  constructor(_id:number, filename: string, titlehe: string, texthe: string, tags: string|string[], place:string) {
+  constructor(_id:number, filename: string, titlehe: string, texthe: string, tags: string, place:string) {
     this._id = _id;
     this.filename = filename;
     this.titlehe = titlehe;
@@ -29,7 +31,13 @@ export default class ImageEntity implements IimageEntity {
 
   texthe: string;
 
-  tags: string|string[];
+  tags: string;
 
   place: string;
+
+  titleen?: string;
+
+  texten?: string;
+
+  file?: File;
 }

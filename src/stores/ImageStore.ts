@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
 import RootStore from './RootStore';
-import { fetchListImgByTag, fetchListImgByPlace } from '../services/ImageService';
+import {
+  fetchListImgByTag, fetchListImgByPlace, updateImgProps, uploadImg,
+} from '../services/ImageService';
 import IimageEntity from './ImageEntity';
 
 export default class ImageStore {
@@ -19,7 +21,29 @@ export default class ImageStore {
   @action
   setImageList = (data: IimageEntity[]) => {
     this.imageList = data;
+    if (this.imageList.length > 0) this.setCurrImage(this.imageList[0]);
   }
+
+  @observable
+  currImage: IimageEntity| null = null;
+
+  @action
+  setCurrImage = (image: IimageEntity) => {
+    this.currImage = image;
+  }
+
+  setCurrImageVal= <T extends keyof IimageEntity, K extends IimageEntity[T]> (valName: T, val: K) => {
+    if (this.currImage !== null) this.currImage[valName] = val;
+  }
+
+  submitImageFile = () => {
+    if (this.currImage !== null) {
+      // console.log(tags);
+      if (this.currImage._id === 0 && this.currImage.file !== undefined) {
+        uploadImg(this.currImage);
+      } else updateImgProps(this.currImage);
+    }
+  };
 
   getImages = (type :string) => {
     if (type === 'city') {

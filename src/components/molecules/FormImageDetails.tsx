@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { updateImgProps } from '../../services/ImageService';
-import ImageEntity from '../../stores/ImageEntity';
-// import { useStore } from '../../stores/storeConfig';
+// import ImageEntity from '../../stores/ImageEntity';
+import { useStore } from '../../stores/storeConfig';
 
-interface IProps {selectedImage:any }
+interface IProps { }
 
-const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
+const FormImageDetails: React.FC<IProps> = observer(() => {
   const styleCol = {
     width: '50vw', maxWidth: '100%',
   };
@@ -21,26 +20,11 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
   const styleControl2 = {
     width: '250px',
   };
-  const [titlehe, setTitleHe] = useState('');
-  const [texthe, setTextHe] = useState('');
-  // const [titleen, setTitleHn] = useState('');
-  // const [texten, setTextEn] = useState('');
-  const [tags, setTags] = useState('');
-  const [place, setPlace] = useState('');
-  useEffect(() => {
-    setTitleHe(selectedImage.titlehe);
-    setTextHe(selectedImage.texthe);
-    setTags(selectedImage.tags);
-    setPlace(selectedImage.place);
-  }, []);
+  const { imageStore } = useStore();
+  const { currImage, setCurrImageVal, submitImageFile } = imageStore;
 
   const isLoading = false;
   const isValidAllContols = true;
-  const submitFile = () => {
-    const image = new ImageEntity(selectedImage._id, selectedImage.filename, titlehe, texthe, tags, place);
-    // console.log(tags);
-    updateImgProps(image);
-  };
   return (
     <Form>
       <Row>
@@ -52,7 +36,7 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
           <Form.Control
             disabled
             style={styleControl1}
-            value={(selectedImage !== null) ? selectedImage.filename : ''}
+            value={(currImage !== null) ? currImage.filename : ''}
           />
         </Form.Group>
         <Col>
@@ -62,8 +46,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               style={styleControl2}
-              value={tags}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTags(e.target.value)}
+              value={(currImage !== null) ? currImage.tags : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('tags', e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -74,8 +58,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               style={styleControl1}
-              value={place}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setPlace(e.target.value)}
+              value={(currImage !== null) ? currImage.place : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('place', e.target.value)}
             />
           </Form.Group>
         </Col>
@@ -87,8 +71,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
               he title
             </Form.Label>
             <Form.Control
-              value={titlehe}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTitleHe(e.target.value)}
+              value={(currImage !== null) ? currImage.titlehe : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('titlehe', e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col} controlId="exampleForm.ControlTextHe">
@@ -97,8 +81,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               as="textarea"
-              value={texthe}
-              onChange={(e:React.ChangeEvent<HTMLInputElement>) => setTextHe(e.target.value)}
+              value={(currImage !== null) ? currImage.texthe : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texthe', e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col} controlId="exampleForm.ControlTitleEn">
@@ -106,7 +90,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
               en title
             </Form.Label>
             <Form.Control
-              value={(selectedImage !== null) ? selectedImage.titleen : ''}
+              value={(currImage !== null) ? currImage.titleen : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('titleen', e.target.value)}
             />
           </Form.Group>
           <Form.Group as={Col} controlId="exampleForm.ControlTextEn">
@@ -115,7 +100,8 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
             </Form.Label>
             <Form.Control
               as="textarea"
-              value={(selectedImage !== null) ? selectedImage.texten : ''}
+              value={(currImage !== null) ? currImage.texten : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texten', e.target.value)}
             />
           </Form.Group>
           {/* <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
@@ -138,7 +124,7 @@ const FormImageDetails: React.FC<IProps> = observer(({ selectedImage }) => {
           <Button
             variant="primary"
             disabled={isLoading || !isValidAllContols}
-            onClick={() => { submitFile(); }}
+            onClick={() => { submitImageFile(); }}
           >
             {isLoading ? 'Loading…' : 'Submit'}
             {' '}
