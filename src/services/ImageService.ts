@@ -43,23 +43,17 @@ export const fetchListImgByPlace = async (place: string):
 
 export const uploadImg = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
-  // const formData = new FormData();
-  // formData.append('blob', new Blob(['Hello World!\n']), 'test');
-
+  if (image.file === undefined) return [];
   const formData = new FormData();
   formData.append('titleh', image.titlehe);
   formData.append('texthe', image.texthe);
-  formData.append('image', '');
-  // formData.append('tags', image.tags.toString());
+  formData.append('image', image.file);
+  formData.append('tags', image.tags);
   formData.append('place', image.place);
-
   const url = '/api/v1/img/';
   const response = await fetch(url, {
     method: 'POST',
     mode: 'cors',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
     body: formData,
   });
   if (!response.ok) {

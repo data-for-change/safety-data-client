@@ -1,3 +1,5 @@
+import { observable } from 'mobx';
+
 export interface ImageEntityLean {
     _id : number;
     filename: string;
@@ -27,16 +29,22 @@ export default class ImageEntity implements IimageEntity {
 
   filename: string;
 
+  @observable
   titlehe: string;
 
+  @observable
   texthe: string;
-
+  
+  @observable
   tags: string;
 
+  @observable
   place: string;
 
+  @observable
   titleen?: string;
 
+  @observable
   texten?: string;
 
   file?: File;
