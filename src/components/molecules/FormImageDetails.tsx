@@ -140,23 +140,25 @@ const FormImageDetails: React.FC<IProps> = observer(() => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texten', e.target.value)}
             />
           </Form.Group>
-          {/* <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
+          <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
             <Form.Label>
               ar title
             </Form.Label>
             <Form.Control
-              value={(selectedImage !== null) ? selectedImage.titlear : ''}
+              value={(currImage !== null) ? currImage.titlear : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('titlear', e.target.value)}
             />
-          </Form.Group> */}
-          {/* <Form.Group as={Col} controlId="exampleForm.ControlTextAr">
+          </Form.Group>
+          <Form.Group as={Col} controlId="exampleForm.ControlTextAr">
             <Form.Label>
               ar text
             </Form.Label>
             <Form.Control
               as="textarea"
-              value={(selectedImage !== null) ? selectedImage.textear : ''}
+              value={(currImage !== null) ? currImage.textar : ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('textar', e.target.value)}
             />
-          </Form.Group> */}
+          </Form.Group>
           <Button
             variant="primary"
             disabled={isLoading || !isValidAllContols}
