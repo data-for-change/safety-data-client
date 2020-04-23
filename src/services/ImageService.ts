@@ -45,7 +45,7 @@ export const uploadImg = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
   if (image.file === undefined) return [];
   const formData = new FormData();
-  formData.append('titleh', image.titlehe);
+  formData.append('titlhe', image.titlehe);
   formData.append('texthe', image.texthe);
   formData.append('image', image.file);
   formData.append('tags', image.tags);
@@ -61,7 +61,6 @@ export const uploadImg = async (image: IimageEntity):
   }
   return response.json(); // parses JSON response into native JavaScript objects
 };
-
 
 export const updateImgProps = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
