@@ -25,6 +25,9 @@ export default class ImageStore {
   }
 
   @observable
+  isLoading: boolean = false;
+
+  @observable
   currImage: IimageEntity| null = null;
 
   @action
@@ -53,13 +56,13 @@ export default class ImageStore {
   }
 
   getImagesByTag = (tag :string) => {
-    // this.isLoading = true;
+    this.isLoading = true;
     fetchListImgByTag(tag)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.setImageList(data);
         }
-        // this.isLoading = false;
+        this.isLoading = false;
       });
   }
 

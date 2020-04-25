@@ -18,9 +18,8 @@ const styleCard: any = {
 };
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
-  const { t } = useTranslation();
   const { imageStore, uiStore } = useStore();
-  const { getImages } = imageStore;
+  const { getImages, setCurrImage } = imageStore;
   const { language } = uiStore;
   const isRTL = (language !== 'en');
   useEffect(() => {
@@ -34,11 +33,46 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     description: x.texthe,
   }));
   const isGotImages = (images.length > 0);
+  const handleOnSlide = (currentIndex:number) => {
+    if (arrayImagesProps.length > 0) setCurrImage(arrayImagesProps[currentIndex]);
+    return true;
+  };
   return (
     <Card style={styleCard}>
-      {isGotImages && <ImageGallery items={images} isRTL={isRTL} />}
-      {!isGotImages && `${t('not-found-images')}`}
+      {isGotImages && <ImageTitle />}
+      {isGotImages && (
+      <ImageGallery
+        items={images}
+        isRTL={isRTL}
+        onSlide={(currentIndex: number) => handleOnSlide(currentIndex)}
+      />
+      )}
+      {!isGotImages && <ImageMsg />}
     </Card>
   );
 });
+
+const styleTitle: React.CSSProperties = {
+  textAlign: 'center',
+  fontWeight: 700,
+  fontSize: 18,
+  margin: '10px',
+};
+const ImageTitle: React.FC<{}> = observer(() => {
+  const { imageStore } = useStore();
+  const { currImage } = imageStore;
+  return (
+    <div style={styleTitle}>{currImage?.titlehe}</div>
+  );
+});
+
+const ImageMsg: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
+  const { imageStore } = useStore();
+  const { isLoading } = imageStore;
+  return (
+    <span>{(isLoading) ? `${t('Loading…')}` : `${t('not-found-images')}` }</span>
+  );
+});
+
 export default MyImageGallery;
