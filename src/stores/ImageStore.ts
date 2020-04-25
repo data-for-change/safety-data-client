@@ -35,6 +35,17 @@ export default class ImageStore {
     this.currImage = image;
   }
 
+  @observable
+  hideDescription = false;
+
+  @action
+  toggleHideDescription = () => {
+    this.hideDescription = !this.hideDescription;
+    if (this.hideDescription) {
+      document.documentElement.style.setProperty('--image-gallery-description-visable', 'none');
+    } else document.documentElement.style.setProperty('--image-gallery-description-visable', 'inherit');
+  }
+
   setCurrImageVal= <T extends keyof IimageEntity, K extends IimageEntity[T]> (valName: T, val: K) => {
     if (this.currImage !== null) this.currImage[valName] = val;
   }

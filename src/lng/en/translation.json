@@ -140,5 +140,7 @@
   "resize": "Resize",
   "NoResultsFound": "No results found",
   "export-to-csv": "Export to CSV",
+  "hide-description": "Hide Description",
+  "show-description": "Show Description",
   "not-found-images" : "No photos found for this category"
 }

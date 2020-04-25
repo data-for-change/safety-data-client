@@ -5,6 +5,7 @@
   --onprimary-color:white;
   --secondary-color: #00aacc;
   --primary-old:#4576c4;
+  --image-gallery-description-visable:inherit;
 }
 
 .App-header {
@@ -130,4 +131,8 @@
 .image-gallery-slide img {
   width: 100%;
   height: 65vh;
+}
+
+.image-gallery-description {
+  display: var(--image-gallery-description-visable);
 }

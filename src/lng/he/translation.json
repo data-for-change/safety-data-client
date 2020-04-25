@@ -141,5 +141,7 @@
   "resize": "הגדלה",
   "NoResultsFound": "לא נמצאו תוצאות",
   "export-to-csv": "יצוא לקובץ CSV",
+  "hide-description": "הסתר תאור",
+  "show-description": "הצג תאור",
   "not-found-images" : "לא נמצאו תמונות לקטגוריה זו"
 }

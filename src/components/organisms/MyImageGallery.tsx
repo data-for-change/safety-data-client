@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
+import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 
 interface Props {
@@ -39,7 +42,14 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   };
   return (
     <Card style={styleCard}>
-      {isGotImages && <ImageTitle />}
+      <Row>
+        <Col />
+        <Col xs={10}>
+          {' '}
+          {isGotImages && <ImageTitle />}
+        </Col>
+        <Col>{isGotImages && <ButtonToggleHideDescription />}</Col>
+      </Row>
       {isGotImages && (
       <ImageGallery
         items={images}
@@ -49,6 +59,19 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
       )}
       {!isGotImages && <ImageMsg />}
     </Card>
+  );
+});
+
+const ButtonToggleHideDescription: React.FC<{}> = observer(() => {
+  const { imageStore } = useStore();
+  const { hideDescription, toggleHideDescription } = imageStore;
+  return (
+    <ButtonToggle
+      condtion={hideDescription}
+      textTrue="show-description"
+      textFalse="hide-description"
+      onClick={toggleHideDescription}
+    />
   );
 });
 
