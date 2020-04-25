@@ -19,11 +19,10 @@ interface IProps { }
 const styleSelect = {
   width: '150px',
 };
-const styleDiv3 = {
-  marginTop: '20px',
+const styleCard = {
   marginLeft: '5px',
   marginRight: '5px',
-  width: '450px',
+  width: '90%',
 };
 
 const CardEditFile = observer(() => {
@@ -50,53 +49,50 @@ const CardEditFile = observer(() => {
     return true;
   };
   const isGotImages = (images.length > 0);
-
-
   return (
-    <Card>
-      <div>
-        <Form>
-          <Row>
-            <Col>
-              <Form.Group as={Col} controlId="exampleForm.SelectTag">
-                <Form.Label>
-                  tags
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  style={styleSelect}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTag(e.target.value); }}
-                >
-                  <option>הולכי רגל</option>
-                  <option>רוכבי אופניים</option>
-                  <option>רוכבי אופנוע</option>
-                  <option>מכוניות</option>
-                  <option>אוטובוסים</option>
-                  <option>משאיות</option>
-                  <option>כללי</option>
-                </Form.Control>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <div style={styleDiv3}>
-              {isGotImages && (
-              <ImageGallery
-                items={images}
-                isRTL={isRTL}
-                onSlide={(currentIndex: number) => handleOnSlide(currentIndex)}
-              />
-              )}
-              {!isGotImages && `${'not-found-images'}`}
-            </div>
-          </Row>
-        </Form>
-      </div>
-    </Card>
+    <div>
+      <Form>
+        <Form.Group as={Col} controlId="exampleForm.SelectTag">
+          <Form.Label>
+            tags
+          </Form.Label>
+          <Form.Control
+            as="select"
+            style={styleSelect}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTag(e.target.value); }}
+          >
+            <option>הולכי רגל</option>
+            <option>רוכבי אופניים</option>
+            <option>רוכבי אופנוע</option>
+            <option>מכוניות</option>
+            <option>אוטובוסים</option>
+            <option>משאיות</option>
+            <option>כללי</option>
+          </Form.Control>
+        </Form.Group>
+        <Card style={styleCard}>
+          {isGotImages && (
+          <ImageGallery
+            items={images}
+            disableArrowKeys
+            thumbnailPosition="top"
+            isRTL={isRTL}
+            onSlide={(currentIndex: number) => handleOnSlide(currentIndex)}
+          />
+          )}
+          {!isGotImages && `${t('not-found-images')}`}
+        </Card>
+      </Form>
+    </div>
   );
 });
 const CardUploadFile = observer(() => {
-  const { t } = useTranslation();
+  const styleInput = {
+    marginTop: '15px',
+    marginLeft: '5px',
+    marginRight: '5px',
+    width: '70%',
+  };
   const [ifile, setFile] = React.useState('');
   const { imageStore } = useStore();
   const { setCurrImage } = imageStore;
@@ -117,7 +113,7 @@ const CardUploadFile = observer(() => {
           <Row>
             <Col>
               <input type="file" name="file" onChange={onChangeFileHandler} />
-              <img src={ifile} alt="" style={styleDiv3} />
+              <img src={ifile} alt="" style={styleInput} />
             </Col>
           </Row>
         </Form>

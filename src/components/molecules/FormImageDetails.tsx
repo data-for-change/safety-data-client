@@ -56,8 +56,8 @@ const GroupTags: React.FC<IGroupProps> = observer(({ name }) => {
 
 const GroupTitleHe: React.FC<IGroupProps> = observer(({ name }) => {
   const { imageStore } = useStore();
-  const { setCurrImageVal } = imageStore;
-  const myVal = imageStore.currImage?.titlehe;
+  const { setCurrImageVal, currImage } = imageStore;
+  const myVal = (currImage && currImage.titlehe != null) ? currImage.titlehe : '';
   return (
     <Form.Group as={Col} controlId={`exampleForm.Control${name}`}>
       <Form.Label>
