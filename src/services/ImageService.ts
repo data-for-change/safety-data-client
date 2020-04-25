@@ -45,7 +45,7 @@ export const uploadImg = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
   if (image.file === undefined) return [];
   const formData = new FormData();
-  formData.append('titlhe', image.titlehe);
+  formData.append('titlehe', image.titlehe);
   formData.append('texthe', image.texthe);
   formData.append('image', image.file);
   formData.append('tags', image.tags);

@@ -63,6 +63,7 @@ const CardEditImageFile = observer(() => {
             <option>אוטובוסים</option>
             <option>משאיות</option>
             <option>כללי</option>
+            <option>ילדים</option>
           </Form.Control>
         </Form.Group>
         <Card style={styleCard}>
