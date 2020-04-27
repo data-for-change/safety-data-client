@@ -14,7 +14,7 @@ const CardUploadImageFile = observer(() => {
     marginTop: '15px',
     marginLeft: '5px',
     marginRight: '5px',
-    width: '90%',
+    width: '95%',
   };
   const [ifile, setFile] = React.useState('');
   const { imageStore } = useStore();
