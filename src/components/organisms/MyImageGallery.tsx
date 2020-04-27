@@ -14,11 +14,15 @@ import { useStore } from '../../stores/storeConfig';
 interface Props {
   type: string;
 }
-const styleCard: any = {
+const styleCard: React.CSSProperties = {
   borderRadius: '5px',
   padding: '5px',
   margin: '7px',
   width: '80%',
+};
+const styleButCol: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'flex-end',
 };
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
@@ -46,13 +50,15 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   return (
     <Card style={styleCard}>
       <Row>
-        <Col xs={3}>
+        <Col md={2}>
           <SelectImageByTag onChange={(val:string) => getImagesByTag(val)} />
         </Col>
-        <Col xs={8}>
+        <Col xs={12} md={8}>
           {isGotImages && <ImageTitle />}
         </Col>
-        <Col xs={1}>{isGotImages && <ButtonToggleHideDescription />}</Col>
+        <Col md={2} style={styleButCol}>
+          {isGotImages && <ButtonToggleHideDescription />}
+        </Col>
       </Row>
       {isGotImages && (
         <ImageGallery
@@ -66,16 +72,23 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   );
 });
 
+const styleButtonToggle = {
+  marginLeft: '3px',
+  marginRight: '3px',
+  marginBottom: '3px',
+};
 const ButtonToggleHideDescription: React.FC<{}> = observer(() => {
   const { imageStore } = useStore();
   const { hideDescription, toggleHideDescription } = imageStore;
   return (
-    <ButtonToggle
-      condtion={hideDescription}
-      textTrue="show-description"
-      textFalse="hide-description"
-      onClick={toggleHideDescription}
-    />
+    <div style={styleButtonToggle}>
+      <ButtonToggle
+        condtion={hideDescription}
+        textTrue="show-description"
+        textFalse="hide-description"
+        onClick={toggleHideDescription}
+      />
+    </div>
   );
 });
 
