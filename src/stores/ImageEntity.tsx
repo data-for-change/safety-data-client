@@ -14,6 +14,7 @@ export interface IimageEntity extends ImageEntityLean {
     texten?: string;
     titlear?: string;
     textar?: string;
+    index?: number;
     file?: File
   }
 
@@ -54,6 +55,9 @@ export default class ImageEntity implements IimageEntity {
 
   @observable
   place: string;
+
+  @observable
+  index?: number;
 
   file?: File;
 }

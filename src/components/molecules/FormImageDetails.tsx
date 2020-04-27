@@ -15,6 +15,7 @@ const styleControl1 = {
 const styleControl2 = {
   width: '250px',
 };
+
 interface IProps { }
 interface IGroupProps {name: string}
 // interface IGroupProps {image: IimageEntity}
@@ -89,6 +90,25 @@ const GroupTextHe: React.FC<IGroupProps> = observer(({ name }) => {
   );
 });
 
+const GroupIndex: React.FC<IGroupProps> = observer(({ name }) => {
+  const { imageStore } = useStore();
+  const { setCurrImageVal } = imageStore;
+  const myVal = (imageStore.currImage !== null
+    && imageStore.currImage.index !== undefined
+    && imageStore.currImage.index !== null)
+    ? imageStore.currImage.index.toString() : '';
+  return (
+    <Form.Group as={Col} controlId={`exampleForm.Control${name}`}>
+      <Form.Label>
+        {name}
+      </Form.Label>
+      <Form.Control
+        value={myVal}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('index', Number.parseInt(e.target.value))}
+      />
+    </Form.Group>
+  );
+});
 
 const FormImageDetails: React.FC<IProps> = observer(() => {
   const { imageStore } = useStore();
@@ -110,11 +130,14 @@ const FormImageDetails: React.FC<IProps> = observer(() => {
             value={(currImage !== null) ? currImage.filename : ''}
           />
         </Form.Group>
-        <Col>
+        <Col xs={3}>
           <GroupTags name="tags" />
         </Col>
         <Col>
           <GroupPlace name="place" />
+        </Col>
+        <Col>
+          <GroupIndex name="index" />
         </Col>
       </Row>
       <Row>

@@ -50,6 +50,7 @@ export const uploadImg = async (image: IimageEntity):
   formData.append('image', image.file);
   formData.append('tags', image.tags);
   formData.append('place', image.place);
+  if (image.index !== undefined) formData.append('index', image.index?.toString());
   const url = '/api/v1/img/';
   const response = await fetch(url, {
     method: 'POST',
