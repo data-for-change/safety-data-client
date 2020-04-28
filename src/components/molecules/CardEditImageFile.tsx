@@ -23,14 +23,16 @@ const styleCard = {
 const CardEditImageFile = observer(() => {
   const { t } = useTranslation();
   const { imageStore, uiStore } = useStore();
-  const { getImagesByTag, setCurrImage } = imageStore;
+  const { getImages, setCurrImage, setCurrTag } = imageStore;
   const { language } = uiStore;
   const isRTL = (language !== 'en');
-  const [tag, setTag] = React.useState('הולכי רגל');
+  const type = 'home';
   useEffect(() => {
-    getImagesByTag(tag);
-  }, [getImagesByTag, tag]);
-  // const [imageindex, setImageIndex] = React.useState(0);
+    getImages(type);
+  }, [getImages, type]);
+  // useEffect(() => {
+  //   getImagesByTag(tag);
+  // }, [getImagesByTag, tag]);
   const arrayImages = toJS(imageStore.imageList);
   const images = arrayImages.map((x: IimageEntity) => ({
     original: x.filename,
@@ -54,15 +56,15 @@ const CardEditImageFile = observer(() => {
           <Form.Control
             as="select"
             style={styleSelect}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTag(e.target.value); }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setCurrTag(e.target.value); }}
           >
+            <option>כללי</option>
             <option>הולכי רגל</option>
             <option>רוכבי אופניים</option>
             <option>רוכבי אופנוע</option>
             <option>מכוניות</option>
             <option>אוטובוסים</option>
             <option>משאיות</option>
-            <option>כללי</option>
             <option>ילדים</option>
           </Form.Control>
         </Form.Group>

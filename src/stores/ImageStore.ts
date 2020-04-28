@@ -28,6 +28,15 @@ export default class ImageStore {
   isLoading: boolean = false;
 
   @observable
+  currTag: string = 'כללי';
+
+  @action
+  setCurrTag = (tag: string) => {
+    this.currTag = tag;
+    this.getImagesByTag(tag);
+  }
+
+  @observable
   currImage: IimageEntity| null = null;
 
   @action
@@ -63,7 +72,7 @@ export default class ImageStore {
     if (type === 'city') {
       const city = this.rootStore.filterStore.cityResult;
       this.getImagesByPlace(city);
-    } else { this.getImagesByTag('הולכי רגל'); }
+    } else { this.getImagesByTag(this.currTag); }
   }
 
   getImagesByTag = (tag :string) => {

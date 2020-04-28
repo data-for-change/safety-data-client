@@ -28,7 +28,7 @@ const styleButCol: React.CSSProperties = {
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   const { imageStore, uiStore } = useStore();
   const {
-    getImages, setCurrImage, imageList, getImagesByTag,
+    getImages, setCurrImage, imageList, setCurrTag,
   } = imageStore;
   const { language } = uiStore;
   const isRTL = (language !== 'en');
@@ -51,7 +51,7 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     <Card style={styleCard}>
       <Row>
         <Col md={2}>
-          <SelectImageByTag onChange={(val:string) => getImagesByTag(val)} />
+          <SelectImageByTag onChange={(val:string) => setCurrTag(val)} />
         </Col>
         <Col xs={12} md={8}>
           {isGotImages && <ImageTitle />}
@@ -109,13 +109,12 @@ const SelectImageByTag: React.FC<PropsSelectImageByTag> = observer(({ onChange }
         style={styleSelect}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => { onChange(e.target.value); }}
       >
+        <option>כללי</option>
         <option>הולכי רגל</option>
         <option>רוכבי אופניים</option>
         <option>רוכבי אופנוע</option>
         <option>מכוניות</option>
         <option>אוטובוסים</option>
-        <option>משאיות</option>
-        <option>כללי</option>
         <option>ילדים</option>
       </Form.Control>
     </Form.Group>
