@@ -6,10 +6,15 @@ import { Map, TileLayer } from 'react-leaflet';
 import AccidentsMarkers from '../molecules/AccidentsMarkers';
 import AccidentHeatLayer from '../molecules/AccidentHeatLayer';
 import ButtonTuggleHeatLayer from '../atoms/ButtonTuggleHeatLayer';
+import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
 import 'leaflet-css';
 
+const styleButDiv: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'flex-start',
+};
 
 interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
@@ -55,7 +60,10 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
         />
         {markers}
       </Map>
-      <CurrButtonTuggleHeatLayer />
+      <div style={styleButDiv} className="div-buttons">
+        <CurrButtonTuggleHeatLayer />
+        <ButtonToggleSmallMarkers />
+      </div>
       <MapInvalidateSize mapRef={mapRef} />
       {/* {store.isReadyToRenderMap ? " " : ""} */}
     </div>
@@ -71,6 +79,22 @@ const CurrButtonTuggleHeatLayer: FunctionComponent<IPropsButtonTuggleHeatLayer> 
       isHeatMapHidden={mapStore.heatLayerHidden}
       onClick={mapStore.toggleHeatLayer}
     />
+  );
+});
+
+const ButtonToggleSmallMarkers: React.FC<{}> = observer(() => {
+  const { mapStore } = useStore();
+  const { useSmallMarkers, toggleUseSmallMarkers } = mapStore;
+  return (
+    <div>
+      <ButtonToggle
+        condtion={useSmallMarkers}
+        textTrue="big-markers"
+        textFalse="small-markers"
+        width={120}
+        onClick={toggleUseSmallMarkers}
+      />
+    </div>
   );
 });
 

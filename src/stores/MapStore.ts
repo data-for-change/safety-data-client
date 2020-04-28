@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { Map} from 'react-leaflet';
+import { Map } from 'react-leaflet';
 import L from 'leaflet';
 import { fetchFilter } from '../services/AccidentService';
 import RootStore from './RootStore';
@@ -28,7 +28,7 @@ export default class MapStore {
 
   mapRef: React.RefObject<Map<any>>|null = null;
 
-  setMapRef = (mapRef:  React.RefObject<Map<any>>) => {
+  setMapRef = (mapRef: React.RefObject<Map<any>>) => {
     this.mapRef = mapRef;
   }
 
@@ -109,6 +109,14 @@ export default class MapStore {
   @action
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
+  }
+
+  @observable
+  useSmallMarkers = false;
+
+  @action
+  toggleUseSmallMarkers = () => {
+    this.useSmallMarkers = !this.useSmallMarkers;
   }
 
   getBounds = (data: any[]) => {

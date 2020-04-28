@@ -107,6 +107,10 @@
   text-decoration: none;
   display: inline-block;
 }
+.div-buttons > * {
+  margin: 5px 5px;
+}
+
 .button:hover {
   background-color: var(--secondary-color)
 }
