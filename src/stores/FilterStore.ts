@@ -490,7 +490,8 @@ export default class FilterStore {
     this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
     this.setCasualtiesNames(this.injurySeverity);
-    if (this.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult);
+    const lang = this.rootStore.uiStore.language;
+    if (this.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, lang);
   }
 
   submintMainDataFilter = () => {

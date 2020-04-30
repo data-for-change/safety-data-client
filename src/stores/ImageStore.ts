@@ -33,7 +33,8 @@ export default class ImageStore {
   @action
   setCurrTag = (tag: string) => {
     this.currTag = tag;
-    this.getImagesByTag(tag);
+    const lang = this.rootStore.uiStore.language;
+    this.getImagesByTag(tag, lang);
   }
 
   @observable
@@ -69,15 +70,18 @@ export default class ImageStore {
   };
 
   getImages = (type :string) => {
+    const lang = this.rootStore.uiStore.language;
     if (type === 'city') {
       const city = this.rootStore.filterStore.cityResult;
-      this.getImagesByPlace(city);
-    } else { this.getImagesByTag(this.currTag); }
+      this.getImagesByPlace(city, lang);
+    } else {
+      this.getImagesByTag(this.currTag, lang);
+    }
   }
 
-  getImagesByTag = (tag :string) => {
+  getImagesByTag = (tag :string, lang: string) => {
     this.isLoading = true;
-    fetchListImgByTag(tag)
+    fetchListImgByTag(tag, lang)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.setImageList(data);
@@ -86,9 +90,9 @@ export default class ImageStore {
       });
   }
 
-  getImagesByPlace = (place :string) => {
+  getImagesByPlace = (place :string, lang: string) => {
     // this.isLoading = true;
-    fetchListImgByPlace(place)
+    fetchListImgByPlace(place, lang)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.setImageList(data);

@@ -35,12 +35,14 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   useEffect(() => {
     getImages(type);
   }, [getImages, type]);
+  const titleKey = `title${language}`;
+  const destkey = `text${language}`;
   const arrayImagesProps = toJS(imageList);
   const images = arrayImagesProps.map((x: any) => ({
     original: x.filename,
     thumbnail: x.filename,
-    originalTitle: x.titlehe,
-    description: x.texthe,
+    originalTitle: x[titleKey],
+    description: x[destkey],
   }));
   const isGotImages = (images.length > 0);
   const handleOnSlide = (currentIndex: number) => {
@@ -128,10 +130,14 @@ const styleTitle: React.CSSProperties = {
   margin: '10px',
 };
 const ImageTitle: React.FC<{}> = observer(() => {
-  const { imageStore } = useStore();
+  const { imageStore, uiStore } = useStore();
   const { currImage } = imageStore;
+  const { language } = uiStore;
+  const titleKey = `title${language}`;
+  // @ts-ignore
+  const title:string = (currImage !== null) ? currImage[titleKey] : '';
   return (
-    <div style={styleTitle}>{currImage?.titlehe}</div>
+    <div style={styleTitle}>{title}</div>
   );
 });
 

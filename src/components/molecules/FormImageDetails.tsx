@@ -72,6 +72,24 @@ const GroupTitleHe: React.FC<IGroupProps> = observer(({ name }) => {
   );
 });
 
+const GroupTitleEn: React.FC<IGroupProps> = observer(({ name }) => {
+  const { imageStore } = useStore();
+  const { setCurrImageVal, currImage } = imageStore;
+  const myVal = (currImage && currImage.titleen != null) ? currImage.titleen : '';
+  return (
+    <Form.Group as={Col} controlId={`exampleForm.Control${name}`}>
+      <Form.Label>
+        {name}
+      </Form.Label>
+      <Form.Control
+        value={myVal}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('titleen', e.target.value)}
+      />
+    </Form.Group>
+  );
+});
+
+
 const GroupTextHe: React.FC<IGroupProps> = observer(({ name }) => {
   const { imageStore } = useStore();
   const { setCurrImageVal } = imageStore;
@@ -89,6 +107,25 @@ const GroupTextHe: React.FC<IGroupProps> = observer(({ name }) => {
     </Form.Group>
   );
 });
+
+const GroupTextEn: React.FC<IGroupProps> = observer(({ name }) => {
+  const { imageStore } = useStore();
+  const { setCurrImageVal, currImage } = imageStore;
+  const myVal = (currImage && currImage.texten != null) ? currImage.texten : '';
+  return (
+    <Form.Group as={Col} controlId={`exampleForm.Control${name}`}>
+      <Form.Label>
+        {name}
+      </Form.Label>
+      <Form.Control
+        as="textarea"
+        value={myVal}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texthe', e.target.value)}
+      />
+    </Form.Group>
+  );
+});
+
 
 const GroupIndex: React.FC<IGroupProps> = observer(({ name }) => {
   const { imageStore } = useStore();
@@ -144,25 +181,8 @@ const FormImageDetails: React.FC<IProps> = observer(() => {
         <Col>
           <GroupTitleHe name="titlehe" />
           <GroupTextHe name="texthe" />
-          <Form.Group as={Col} controlId="exampleForm.ControlTitleEn">
-            <Form.Label>
-              en title
-            </Form.Label>
-            <Form.Control
-              value={(currImage !== null) ? currImage.titleen : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('titleen', e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group as={Col} controlId="exampleForm.ControlTextEn">
-            <Form.Label>
-              en text
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              value={(currImage !== null) ? currImage.texten : ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texten', e.target.value)}
-            />
-          </Form.Group>
+          <GroupTitleEn name="titleen" />
+          <GroupTextEn name="texten" />
           <Form.Group as={Col} controlId="exampleForm.ControlTitleAr">
             <Form.Label>
               ar title

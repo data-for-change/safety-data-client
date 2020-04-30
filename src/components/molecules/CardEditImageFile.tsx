@@ -22,14 +22,14 @@ const styleCard = {
 
 const CardEditImageFile = observer(() => {
   const { t } = useTranslation();
+  const [tag, setTags] = React.useState('כללי');
   const { imageStore, uiStore } = useStore();
-  const { getImages, setCurrImage, setCurrTag } = imageStore;
+  const { getImagesByTag, setCurrImage } = imageStore;
   const { language } = uiStore;
   const isRTL = (language !== 'en');
-  const type = 'home';
   useEffect(() => {
-    getImages(type);
-  }, [getImages, type]);
+    getImagesByTag(tag, '');
+  }, [getImagesByTag, tag]);
   // useEffect(() => {
   //   getImagesByTag(tag);
   // }, [getImagesByTag, tag]);
@@ -56,7 +56,7 @@ const CardEditImageFile = observer(() => {
           <Form.Control
             as="select"
             style={styleSelect}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setCurrTag(e.target.value); }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setTags(e.target.value); }}
           >
             <option>כללי</option>
             <option>הולכי רגל</option>

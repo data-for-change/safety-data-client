@@ -1,9 +1,9 @@
 import IimageEntity from '../stores/ImageEntity';
 
-export const fetchListImgByTag = async (tag: string):
+export const fetchListImgByTag = async (tag: string, lang: string):
   Promise<Array<any> | undefined> => {
   // Default options are marked with *
-  const url = `/api/v1/img/tags/he/${tag}`;
+  const url = (lang === '') ? `/api/v1/img/tags/${tag}` : `/api/v1/img/tags/${lang}/${tag}`;
   const response = await fetch(url, {
     method: 'GET',
     mode: 'cors', // no-cors, *cors, same-origin
@@ -20,10 +20,10 @@ export const fetchListImgByTag = async (tag: string):
   }
   return response.json(); // parses JSON response into native JavaScript objects
 };
-export const fetchListImgByPlace = async (place: string):
+export const fetchListImgByPlace = async (place: string, lang: string):
   Promise<Array<any> | undefined> => {
   // Default options are marked with *
-  const url = `/api/v1/img/place/he/${place}`;
+  const url = `/api/v1/img/place/${lang}/${place}`;
   const response = await fetch(url, {
     method: 'GET',
     mode: 'cors', // no-cors, *cors, same-origin
