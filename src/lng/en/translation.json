@@ -142,6 +142,8 @@
   "resize": "Resize",
   "NoResultsFound": "No results found",
   "export-to-csv": "Export to CSV",
+  "general": "General",
+  "kids": "Kids",
   "hide-description": "Hide Text",
   "show-description": "Show Text",
   "not-found-images" : "No photos found for this category"

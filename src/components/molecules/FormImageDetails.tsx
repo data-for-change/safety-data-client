@@ -120,7 +120,7 @@ const GroupTextEn: React.FC<IGroupProps> = observer(({ name }) => {
       <Form.Control
         as="textarea"
         value={myVal}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texthe', e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrImageVal('texten', e.target.value)}
       />
     </Form.Group>
   );
