@@ -25,19 +25,25 @@ const MyBarChart:React.FC<IProps> = observer(({
 }) => {
   const { t } = useTranslation();
   const colName = t('casualties');
+  const maxLabelLangth = data.reduce((maxval, currentValue) => (
+    (currentValue._id !== null && currentValue._id.length > maxval) ? currentValue._id.length : maxval), 0);
+  const isManyBarsForXAxis = (data.length > 5 || maxLabelLangth > 9);
+  const isManyBarsForLables = (data.length > 30);
   let bars = null;
   if (barsData === undefined) {
-    bars = <Bar dataKey="count" name={colName} fill={fill}><LabelList dataKey="count" position="top" /></Bar>;
+    bars = (
+      <Bar dataKey="count" name={colName} fill={fill}>
+        <LabelList dataKey="count" position="top" />
+      </Bar>
+    );
   } else {
     bars = barsData.map((x:any) => {
       const aName = t(x.key);
-      return (<Bar key={`bar-${x.key}`} dataKey={x.key} name={aName} fill={x.color}> </Bar>);
+      const labelList = (isManyBarsForLables) ? null : <LabelList dataKey={x.key} position="top" />;
+      return (<Bar key={`bar-${x.key}`} dataKey={x.key} name={aName} fill={x.color}>{labelList}</Bar>);
     });
   }
-  const maxLabelLangth = data.reduce((maxval, currentValue) => (
-    (currentValue._id !== null && currentValue._id.length > maxval) ? currentValue._id.length : maxval), 0);
-  const isManyBars = (data.length > 5 || maxLabelLangth > 9);
-  const xAxis = isManyBars ? (
+  const xAxis = isManyBarsForXAxis ? (
     <XAxis
       dataKey="_id"
       textAnchor="end"
@@ -46,8 +52,9 @@ const MyBarChart:React.FC<IProps> = observer(({
       tick={{ fontSize: 12 }}
     />
   ) : <XAxis dataKey="_id" />;
-  const bottomMargin = isManyBars ? 75 : 15;
-  const legend = (legendType === 'null' || width < 500) ? null : <Legend layout="horizontal" verticalAlign="top" align="center" />;
+  const bottomMargin = isManyBarsForXAxis ? 75 : 15;
+  const legend = (legendType === 'null' || width < 500) ? null
+    : <Legend layout="horizontal" verticalAlign="top" align="center" />;
   return (
     <div style={{ direction: 'ltr' }}>
       <BarChart
