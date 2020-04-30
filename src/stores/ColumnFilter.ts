@@ -175,7 +175,7 @@ export const initRoadWidth = () => {
   const col : IColumnFilter = new ColumnFilter('RoadWidth', 'road_width_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('road-width-5', false, ['עד 5 מטר']));
-  col.arrTypes.push(new FilterChecker('road-width-7', false, ['5 עד 7 מטר']));
+  col.arrTypes.push(new FilterChecker('road-width-7', false, ['5 עד 7  מטר']));
   col.arrTypes.push(new FilterChecker('road-width-10', false, ['7 עד 10.5 מטר']));
   col.arrTypes.push(new FilterChecker('road-width-14', false, ['10.5 עד 14 מטר']));
   col.arrTypes.push(new FilterChecker('road-width-14+', false, ['יותר מ- 14 מטר']));
