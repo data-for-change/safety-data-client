@@ -116,6 +116,35 @@ export const initVehicleTypes = () => {
   return col;
 };
 
+export const initVehicleTypesFull = () => {
+  const col : IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
+  col.arrTypes.push(new FilterChecker('all', true, []));
+  col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
+  col.arrTypes.push(new FilterChecker('mobilityscooter', false, ['קלנועית חשמלית']));
+  col.arrTypes.push(new FilterChecker('bicycle', false, ['אופניים']));
+  col.arrTypes.push(new FilterChecker('e-scooter', false, ['קורקינט חשמלי']));
+  col.arrTypes.push(new FilterChecker('e-bike', false, ['אופניים חשמליים']));
+  col.arrTypes.push(new FilterChecker('motorcycle1', false, ['אופנוע 51 עד 125 סמ"ק']));
+  col.arrTypes.push(new FilterChecker('motorcycle2', false, ['אופנוע 126 עד 400 סמ"ק']));
+  col.arrTypes.push(new FilterChecker('motorcycle3', false, ['אופנוע 401+ סמ"ק']));
+  col.arrTypes.push(new FilterChecker('car', false, ['רכב נוסעים פרטי']));
+  col.arrTypes.push(new FilterChecker('taxi', false, ['מונית']));
+  col.arrTypes.push(new FilterChecker('tranzit', false, ['משא עד 3.5 טון - אחוד (טרנזיט)']));
+  col.arrTypes.push(new FilterChecker('tender', false, ['משא עד 3.5  טון - לא אחוד (טנדר)']));
+  col.arrTypes.push(new FilterChecker('minbuss', false, ['אוטובוס זעיר']));
+  col.arrTypes.push(new FilterChecker('bus', false, ['אוטובוס']));
+  col.arrTypes.push(new FilterChecker('truck1', false, ['משא 3.6 עד 9.9 טון']));
+  col.arrTypes.push(new FilterChecker('truck2', false, ['משא 10.0 עד 12.0 טון']));
+  col.arrTypes.push(new FilterChecker('truck3', false, ['משא 12.1 עד 15.9 טון']));
+  col.arrTypes.push(new FilterChecker('truck4', false, ['משא 16.0 עד 33.9 טון']));
+  col.arrTypes.push(new FilterChecker('truck5', false, ['משא 34.0+ טון']));
+  col.arrTypes.push(new FilterChecker('tractor', false, ['טרקטור']));
+  col.arrTypes.push(new FilterChecker('train', false, ['רכבת']));
+  col.arrTypes.push(new FilterChecker('other', false, ['אחר ולא ידוע']));
+  return col;
+};
+
+
 export const initGenderTypes = () => {
   const col : IColumnFilter = new ColumnFilter('Gender', 'sex_hebrew');
   col.arrTypes.push(new FilterChecker('female', true, ['נקבה']));

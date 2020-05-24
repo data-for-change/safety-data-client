@@ -55,6 +55,19 @@ export default class FilterStore {
     this.currentPage = pageType;
   }
 
+  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  // Config Filter
+  // ///////////////////////////////////////////////////////////////////////////////////////////////
+  @observable
+  showAllVehicleTypes: boolean = false;
+
+  @action
+  updateShowAllVehicleTypes= (val: boolean) => {
+    this.showAllVehicleTypes = val;
+    if (this.showAllVehicleTypes) this.vehicleType = FC.initVehicleTypesFull();
+    else this.vehicleType = FC.initVehicleTypes();
+  }
+
 
   // ///////////////////////////////////////////////////////////////////////////////////////////////
   // Severity
