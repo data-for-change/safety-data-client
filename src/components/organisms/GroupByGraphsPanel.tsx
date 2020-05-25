@@ -9,6 +9,7 @@ import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart';
+import MyPieChart from '../molecules/MyPieChart';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
 
@@ -86,9 +87,13 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
     window.addEventListener('resize', handleResize);
     return (() => { window.removeEventListener('resize', handleResize); });
   });
-  const { filterStore } = useStore();
+  const { filterStore, uiStore } = useStore();
   const { dataFilterd } = filterStore;
   const reactData3 = toJS(dataFilterd);
+  const { usePieChart } = uiStore;
+  const Chart = (usePieChart)
+    ? <MyPieChart data={reactData3} width={graph2Size * 0.65} />
+    : <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />;
   return (
     <SmallCard styleType={3}>
       <div style={styles.divStyle}>
@@ -100,7 +105,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
         <ConfigChart />
       </ConfigFilterModal>
-      <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />
+      {Chart}
     </SmallCard>
   );
 });
