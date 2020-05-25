@@ -43,4 +43,12 @@ export default class UiStore {
       console.log(error);
     }
   }
+
+  @observable
+  usePieChart: boolean = false
+
+  @action
+  updateUsePieChart = (val: boolean) => {
+    this.usePieChart = val;
+  }
 }

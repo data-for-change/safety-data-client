@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
+import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard from '../atoms/SmallCard';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart';
+import ConfigFilterModal from './ConfigFilterModal';
+import ConfigChart from '../molecules/ConfigChart';
 
 interface IProps { }
 const getSize = (width: number) => {
@@ -20,17 +23,19 @@ const getSize = (width: number) => {
 };
 
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
-  const style = {
-    marginLeft: '0',
-    marginRight: '0',
-    marginTop: '20px',
+  const styles = {
+    divStyle: {
+      marginLeft: '0',
+      marginRight: '0',
+      marginTop: '20px',
+    },
   };
   const { filterStore } = useStore();
   const { dataByYears } = filterStore;
   const reactData1 = toJS(dataByYears);
   if (reactData1.length > 0) {
     return (
-      <div className="row" style={style}>
+      <div className="row" style={styles.divStyle}>
         <CardChartYears />
         <CardChartByGroup1 />
         <CardChartGrpBy2 />
@@ -63,6 +68,14 @@ const CardChartYears: React.FC<IProps> = observer(() => {
 });
 
 const CardChartByGroup1: React.FC<IProps> = observer(() => {
+  const styles = {
+    divStyle: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
+  };
+  const { t } = useTranslation();
+  const [showModel, setShowModal] = useState(false);
   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
   const graph2Size = Math.min(600, graphSize);
   React.useEffect(() => {
@@ -78,7 +91,15 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
   const reactData3 = toJS(dataFilterd);
   return (
     <SmallCard styleType={3}>
-      <SelectGroupBy id="Graphs.Main" />
+      <div style={styles.divStyle}>
+        <SelectGroupBy id="Graphs.Main" />
+        <Button onClick={() => { setShowModal(!showModel); }}>
+          {t('Chart Options')}
+        </Button>
+      </div>
+      <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
+        <ConfigChart />
+      </ConfigFilterModal>
       <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />
     </SmallCard>
   );

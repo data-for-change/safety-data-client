@@ -4,12 +4,13 @@ import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import FilterRequest from './FilterRequest';
 import ConfigFilterModal from './ConfigFilterModal';
+import ConfigFilter from '../molecules/ConfigFilter';
 
 interface IProps {
   activeCardKey?: number
 }
 const styles = {
-  buttonStyle : {
+  buttonStyle: {
     display: 'flex',
     justifyContent: 'space-between',
   },
@@ -29,7 +30,9 @@ const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }) => {
           {t('Filter Options')}
         </Button>
       </div>
-      <ConfigFilterModal showModal={showModel} setShow={setShowModal} />
+      <ConfigFilterModal title="Filter Options" showModal={showModel} setShow={setShowModal}>
+        <ConfigFilter />
+      </ConfigFilterModal>
       <Collapse in={open}>
         <div id="example-collapse-text">
           <FilterRequest activeCardKey={activeCardKey} />
