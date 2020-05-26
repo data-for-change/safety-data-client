@@ -51,4 +51,12 @@ export default class UiStore {
   updateUsePieChart = (val: boolean) => {
     this.usePieChart = val;
   }
+
+  @observable
+  showPercentageChart: boolean = false
+
+  @action
+  updateShowPercentageChart = (val: boolean) => {
+    this.showPercentageChart = val;
+  }
 }

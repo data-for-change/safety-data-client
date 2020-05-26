@@ -8,21 +8,34 @@ interface IProps { }
 const ConfigChart: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { uiStore } = useStore();
-  const { usePieChart, updateUsePieChart } = uiStore;
+  const { usePieChart, updateUsePieChart, showPercentageChart, updateShowPercentageChart } = uiStore;
   return (
-    <Form.Group controlId="ConfigFile.ControlVehicles">
-      <Checkbox
-        key={1}
-        label="UsePieChart"
-        group="ChartConfig"
-        id={1}
-        checked={usePieChart}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+    <div>
+      <Form.Group controlId="ConfigFile.ControlUsePieChart">
+        <Checkbox
+          key={1}
+          label="UsePieChart"
+          group="ChartConfig"
+          id={1}
+          checked={usePieChart}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
             updateUsePieChart(e.target.checked);
-        }}
-      />
-    </Form.Group>
-
+          }}
+        />
+      </Form.Group>
+      <Form.Group controlId="ConfigFile.ControlShowPercentageChart">
+        <Checkbox
+          key={2}
+          label="PercentageChart"
+          group="ChartConfig"
+          id={2}
+          checked={showPercentageChart}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            updateShowPercentageChart(e.target.checked);
+          }}
+        />
+      </Form.Group>
+    </div>
   );
 });
 export default ConfigChart;
