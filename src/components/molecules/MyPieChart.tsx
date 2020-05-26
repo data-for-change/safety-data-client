@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React, { memo } from 'react';
 import {
-  PieChart, Pie, Tooltip,
+  PieChart, Pie, Tooltip, PieLabelRenderProps,
 } from 'recharts';
 import { observer } from 'mobx-react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { useStore } from '../../stores/storeConfig';
 
 // const data = [
@@ -23,21 +22,26 @@ interface IProps {
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
-  cx, cy, midAngle, innerRadius, outerRadius, percent, index,
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
+  cx, cy, midAngle, innerRadius, outerRadius, percent, name,
+  fcx = (cx === undefined) ? 0 : +cx,
+  fcy = (cy === undefined) ? 0 : +cy,
+  inR = (innerRadius === undefined) ? 1 : +innerRadius,
+  outR = (outerRadius === undefined) ? 1 : +outerRadius,
+  midA = (midAngle === undefined) ? 1 : +midAngle,
+  p = (percent === undefined) ? 1 : +percent,
+} : PieLabelRenderProps) => {
+  const radius = inR + (outR - inR) * 0.7;
+  const x = fcx + radius * Math.cos(-midA * RADIAN);
+  const y = fcy + radius * Math.sin(-midA * RADIAN);
   return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-      {`${(percent * 100).toFixed(0)}%`}
+    <text x={x} y={y} fill="white" textAnchor={x > fcx ? 'start' : 'end'} dominantBaseline="central">
+      {`${(p * 100).toFixed(0)}%`}
     </text>
   );
 };
 
 const MyPieChart: React.FC<IProps> = observer(({
-  data, barsData, width = 390, fill = '#8884d8', legendType = 'null',
+  data, width = 390, fill = '#8884d8',
 }) => {
   const { uiStore } = useStore();
   const { showPercentageChart } = uiStore;
