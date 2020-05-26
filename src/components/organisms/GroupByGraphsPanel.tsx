@@ -10,6 +10,7 @@ import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart';
 import MyPieChart from '../molecules/MyPieChart';
+import MyTreeMap from '../molecules/MyTreeMap';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
 
@@ -94,6 +95,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
   const Chart = (usePieChart)
     ? <MyPieChart data={reactData3} width={graph2Size * 0.65} />
     : <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />;
+  // const Chart = <MyTreeMap data={reactData3} />;
   return (
     <SmallCard styleType={3}>
       <div style={styles.divStyle}>
