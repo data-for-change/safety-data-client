@@ -45,11 +45,14 @@ export default class UiStore {
   }
 
   @observable
-  usePieChart: boolean = false
+  chartType: string = 'BarChart';
+
+  @observable
+  chartTypeList: string[] = ['BarChart', 'PieChart', 'TreeMap'];
 
   @action
-  updateUsePieChart = (val: boolean) => {
-    this.usePieChart = val;
+  updateChartType = (val: string) => {
+    this.chartType = val;
   }
 
   @observable

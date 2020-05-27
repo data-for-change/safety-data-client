@@ -91,11 +91,11 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
   const { filterStore, uiStore } = useStore();
   const { dataFilterd } = filterStore;
   const reactData3 = toJS(dataFilterd);
-  const { usePieChart } = uiStore;
-  const Chart = (usePieChart)
-    ? <MyPieChart data={reactData3} width={graph2Size * 0.65} />
-    : <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />;
-  // const Chart = <MyTreeMap data={reactData3} />;
+  const { chartType } = uiStore;
+  let chart = null;
+  if (chartType === 'BarChart') chart = <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />;
+  else if (chartType === 'PieChart') chart = <MyPieChart data={reactData3} width={graph2Size * 0.65} />;
+  else chart = <MyTreeMap data={reactData3} />;
   return (
     <SmallCard styleType={3}>
       <div style={styles.divStyle}>
@@ -107,7 +107,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
         <ConfigChart />
       </ConfigFilterModal>
-      {Chart}
+      {chart}
     </SmallCard>
   );
 });
