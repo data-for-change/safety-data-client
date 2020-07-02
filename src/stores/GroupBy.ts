@@ -54,6 +54,7 @@ export class GroupBy2  implements IGroupBy2 {
     this.vals = {};
   }
   revTrnas = (key: string) => {
+    if (key == "") return "";
     let res = this.vals[key].name;
     return res;
   }

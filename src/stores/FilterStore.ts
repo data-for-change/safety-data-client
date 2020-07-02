@@ -545,7 +545,7 @@ export default class FilterStore {
 
   getFilter = (bounds: any, useBounds: boolean = false) => {
     let filter = '{"$and" : [';
-    filter += `{"accident_year":  { "$gte" : "${this.startYear}","$lte": "${this.endYear}"}}`;
+    filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
     filter += this.getMultiplefilter(this.injurySeverity);
     filter += this.getfilterCity();
     if (useBounds && bounds != null) filter += this.getfilterBounds(bounds);
@@ -589,7 +589,7 @@ export default class FilterStore {
 
   getfilterBySeverityAndCity = () => {
     let filter = '{"$and" : [';
-    filter += '{"accident_year":{"$gte":"2015"}}';
+    filter += '{"accident_year":{"$gte":2015}}';
     filter += this.getMultiplefilter(this.injurySeverity);
     filter += this.getfilterCity();
     filter += ']}';
