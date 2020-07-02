@@ -433,8 +433,14 @@ export default class FilterStore {
     fetchGroupBy(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined && data.length > 0) {
-          const fixData = this.groupBy2.fixStrcutTable(data);
-          this.dataGroupby2 = fixData;
+          try {
+            const fixData = this.groupBy2.fixStrcutTable(data);
+            this.dataGroupby2 = fixData;
+          } catch (error) {
+            console.log(error);
+            this.dataGroupby2 = [];
+          }
+
         }
       });
   }
