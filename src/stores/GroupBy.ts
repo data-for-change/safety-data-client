@@ -25,7 +25,7 @@ export const initGroupByDict = (dictGroupBy: any) => {
   dictGroupBy["Gender"] = new GroupBy('Gender', "sex_hebrew");
   dictGroupBy["Age"] = new GroupBy('Age', "age_group_hebrew");
   dictGroupBy["Year"] = new GroupBy('Year', "accident_year");
-  //dictGroupBy["Month"] = new GroupBy('Month', "accident_month");
+  dictGroupBy["Month"] = new GroupBy('Month', "accident_month");
   dictGroupBy["DayNight"] = new GroupBy('DayNight', "day_night_hebrew");
   dictGroupBy["WeekDay"] = new GroupBy('WeekDay', "day_in_week_hebrew");
   dictGroupBy["RoadType"] = new GroupBy('RoadType', "road_type_hebrew");
@@ -65,7 +65,7 @@ export class GroupBy2  implements IGroupBy2 {
         return ('"' + engVal + '":' + y.count)
       }).join(',')
       let xId = x._id;
-      if (xId !== null && xId !== undefined)
+      if (xId !== null && xId !== undefined && typeof(xId) == 'string')
         xId = xId.replace('"', '\\"')
       let sObject = `{"_id":"${xId}",${arr}}`
       sObject = JSON.parse(sObject)
