@@ -13,6 +13,7 @@ import MyPieChart from '../molecules/MyPieChart';
 import MyTreeMap from '../molecules/MyTreeMap';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
+import gearlogo from '../../assets/gear2.png';
 
 interface IProps { }
 const getSize = (width: number) => {
@@ -75,6 +76,12 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       display: 'flex',
       justifyContent: 'space-between',
     },
+    iconStyle: {
+      height: '21px',
+      width: '21px',
+      paddingTop: '0px',
+      paddingBottom: '1px',
+    },
   };
   const { t } = useTranslation();
   const [showModel, setShowModal] = useState(false);
@@ -101,7 +108,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       <div style={styles.divStyle}>
         <SelectGroupBy id="Graphs.Main" />
         <Button onClick={() => { setShowModal(!showModel); }}>
-          {t('Chart Options')}
+          <img src={gearlogo} alt="settings" style={styles.iconStyle} />
         </Button>
       </div>
       <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>

@@ -5,6 +5,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import FilterRequest from './FilterRequest';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigFilter from '../molecules/ConfigFilter';
+import gearlogo from '../../assets/gear2.png';
 
 interface IProps {
   activeCardKey?: number
@@ -13,6 +14,12 @@ const styles = {
   buttonStyle: {
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  iconStyle: {
+    height: '21px',
+    width: '21px',
+    paddingTop: '0px',
+    paddingBottom: '1px',
   },
 };
 
@@ -27,7 +34,7 @@ const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }) => {
           {t('Hide')}
         </Button>
         <Button onClick={() => { setShowModal(!showModel); }}>
-          {t('Filter Options')}
+          <img src={gearlogo} alt="settings" style={styles.iconStyle} />
         </Button>
       </div>
       <ConfigFilterModal title="Filter Options" showModal={showModel} setShow={setShowModal}>
