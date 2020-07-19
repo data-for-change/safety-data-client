@@ -50,7 +50,7 @@ export default class MapStore {
   updateMapCenterByCity = (res: any[]) => {
     if (res !== null && res.length > 0) {
       const city = res[0];
-      if (city.lat !== null && city.lon !== null) {
+      if (city.lat && city.lon) {
         this.updateMapCenter(new L.LatLng(city.lat, city.lon));
       }
     }
