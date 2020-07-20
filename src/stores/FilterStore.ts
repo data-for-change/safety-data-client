@@ -4,7 +4,8 @@ import {
 import { IColumnFilter } from './ColumnFilter';
 import * as FC from './ColumnFilter';
 import { IFilterChecker } from './FilterChecker';
-import * as GroupBy from './GroupBy';
+import GroupBy, { initGroupByDict } from './GroupBy';
+import GroupBy2, { initGroup2Dict } from './GroupBy2';
 import RootStore from './RootStore';
 import { fetchFilter, fetchAggregate } from '../services/AccidentService';
 import CityService from '../services/CityService';
@@ -33,8 +34,8 @@ export default class FilterStore {
     this.roadWidth = FC.initRoadWidth();
     this.separator = FC.initSeparator();
     this.oneLane = FC.initOneLane();
-    GroupBy.initGroupByDict(this.groupByDict);
-    GroupBy.initGroup2Dict(this.group2Dict);
+    this.groupByDict = initGroupByDict();
+    initGroup2Dict(this.group2Dict);
     this.groupBy = this.groupByDict.TypeInjured;
     this.groupBy2 = this.group2Dict.Gender;
     // init data (on home page)
@@ -382,12 +383,13 @@ export default class FilterStore {
   // group by
   // //////////////////////////////////////////////////////////////////////////////////////////////
   @observable
-  groupBy: GroupBy.default;
+  groupBy: GroupBy;
 
   @action
   updateGroupby = (key: string) => {
     this.groupBy = this.groupByDict[key];
-    this.submitfilterdGroup(this.groupBy);
+    if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+    else this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
 
@@ -415,7 +417,7 @@ export default class FilterStore {
   }
 
   @action
-  submitfilterdGroup = (aGroupBy: GroupBy.default) => {
+  submitfilterdGroup = (aGroupBy: GroupBy) => {
     const filtermatch = this.getFilter(null);
     const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, '', aGroupBy.limit);
     // console.log(filter);
@@ -440,13 +442,13 @@ export default class FilterStore {
   }
 
   foramtDataPrecision = (data: any[]) => {
-    const data2 = data.map((x) => ({ _id : x._id, count: x.count.toPrecision(2) }));
+    const data2 = data.map((x) => ({ _id : x._id, count: x.count.toPrecision(3) }));
     return data2;
   }
 
 
   @action
-  submitfilterdGroup2 = (aGroupBy: GroupBy.default, groupName2: string) => {
+  submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
     const filtermatch = this.getFilter(null);
     const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
     // console.log(filter)
@@ -465,7 +467,7 @@ export default class FilterStore {
   }
 
   @observable
-  groupBy2: GroupBy.GroupBy2;
+  groupBy2: GroupBy2;
 
   @action
   updateGroupBy2 = (key: string) => {
@@ -550,8 +552,8 @@ export default class FilterStore {
     this.submitCityNameAndLocation();
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
-    this.submitfilterdGroup(this.groupBy);
-    // this.submitfilterdGroupByPop();
+    if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+    else this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
     this.setCasualtiesNames(this.injurySeverity);
     const lang = this.rootStore.uiStore.language;
