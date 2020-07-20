@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ImageGallery from 'react-image-gallery';
