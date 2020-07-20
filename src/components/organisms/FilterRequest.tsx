@@ -11,6 +11,7 @@ import CitySelector from '../molecules/CitySelector';
 import StreetSelector from '../molecules/StreetSelector';
 import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
+import SelectCityPop from '../atoms/SelectCityPop';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
@@ -111,7 +112,7 @@ const CardFilterWhere = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const {
-    isValidWhere, roadTypes, updateRoadType, isMultipleCities,
+    isValidWhere, roadTypes, updateRoadType, isMultipleCities, cityPopSizeRange, setCityPopSizeRange,
   } = filterStore;
   const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
@@ -127,6 +128,7 @@ const CardFilterWhere = observer(() => {
           <StreetSelector />
           <RoadSegmentSelector />
           <GroupCheckbox formName="exampleForm" colFilter={roadTypes} onChange={updateRoadType} />
+          <SelectCityPop value={cityPopSizeRange} onChange={(val:string) => setCityPopSizeRange(val)} />
         </div>
       </Accordion.Collapse>
     </Card>

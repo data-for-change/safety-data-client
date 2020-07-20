@@ -160,6 +160,14 @@ export default class FilterStore {
   }
 
   @observable
+  cityPopSizeRange:string = '{"min":-1,"max":-1}';
+
+  @action
+  setCityPopSizeRange = (range: string) => {
+    this.cityPopSizeRange = range;
+  }
+
+  @observable
   roadSegment: string[] = [];
 
   @action
@@ -429,8 +437,9 @@ export default class FilterStore {
 
   @action
   submitfilterdGroupByPop = () => {
+    const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = this.getFilterGroupByPop(filtermatch, 100000, 200000, -1, 0);
+    const filter = this.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 25);
     // console.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
@@ -499,14 +508,16 @@ export default class FilterStore {
   }
 
   // fiter by accidents per 100,000 city population
-  getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax = 100000, sort: number, limit: number = 0) => {
+  getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax = 100000, sort: number, limit: number) => {
     let filter = `${'['
       + '{"$match": '}${filterMatch}}`;
     filter += ',{"$lookup":{'
                + ' "from": "cities", "localField": "accident_yishuv_name",'
                + ' "foreignField": "name_he","as": "city"'
                + '}}';
-    filter += `,{ "$match": { "city.population": { "$gte" : ${popMin} , "$lte" : ${popMax}}}}`;
+    if (popMin > 0 && popMax > 0) {
+      filter += `,{ "$match": { "city.population": { "$gte" : ${popMin} , "$lte" : ${popMax}}}}`;
+    }
     filter += ',{"$group": {'
         + '"_id": "$accident_yishuv_name","t_count" : { "$sum" : 1 },"t_population" : { "$first" : "$city.population" }'
         + '}}';
