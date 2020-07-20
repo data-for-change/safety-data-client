@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ButtonToggle from '../atoms/ButtonToggle';
+import SelectImageByTag from '../atoms/SelectImageByTag';
 import { useStore } from '../../stores/storeConfig';
 
 interface Props {
@@ -90,38 +91,6 @@ const ButtonToggleHideDescription: React.FC<{}> = observer(() => {
         textFalse="hide-description"
         onClick={toggleHideDescription}
       />
-    </div>
-  );
-});
-
-interface PropsSelectImageByTag {
-  onChange: (val:string) => void;
-}
-const styleSelect = {
-  width: '150px',
-};
-const SelectImageByTag: React.FC<PropsSelectImageByTag> = observer(({ onChange }) => {
-  const { t } = useTranslation();
-  return (
-    <div>
-      <Form.Group as={Col} controlId="exampleForm.SelectTag">
-        {/* <Form.Label>
-        tags
-      </Form.Label> */}
-        <Form.Control
-          as="select"
-          style={styleSelect}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => { onChange(e.target.value); }}
-        >
-          <option value="כללי">{t('general')}</option>
-          <option value="הולכי רגל">{t('pedestrian')}</option>
-          <option value="רוכבי אופניים">{t('cyclist')}</option>
-          <option value="רוכבי אופנוע">{t('motorcycle')}</option>
-          <option value="מכוניות">{t('car')}</option>
-          <option value="אוטובוסים">{t('bus')}</option>
-          <option value="ילדים">{t('kids')}</option>
-        </Form.Control>
-      </Form.Group>
     </div>
   );
 });
