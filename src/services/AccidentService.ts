@@ -73,7 +73,7 @@ export const fetchFilter = async (filter: string, type: string):
 };
 
 
-export const fetchGroupBy = async (filter: string): Promise<Array<any> | undefined> => {
+export const fetchAggregate = async (filter: string): Promise<Array<any> | undefined> => {
   // Default options are marked with *
   const url = '/api/v1/accident/agg';
   const response = await fetch(url, {

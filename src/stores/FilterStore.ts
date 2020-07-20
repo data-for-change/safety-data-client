@@ -6,7 +6,7 @@ import * as FC from './ColumnFilter';
 import { IFilterChecker } from './FilterChecker';
 import * as GroupBy from './GroupBy';
 import RootStore from './RootStore';
-import { fetchFilter, fetchGroupBy } from '../services/AccidentService';
+import { fetchFilter, fetchAggregate } from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import { BBoxType } from './MapStore';
@@ -398,7 +398,7 @@ export default class FilterStore {
   submitGroupByYears = () => {
     const filtermatch = this.getfilterBySeverityAndCity();
     const filter = this.getFilterGroupBy(filtermatch, 'accident_year');
-    fetchGroupBy(filter)
+    fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataByYears = data;
       });
@@ -408,7 +408,7 @@ export default class FilterStore {
   submitfilterdGroupByYears = () => {
     const filtermatch = this.getFilter(null);
     const filter = this.getFilterGroupBy(filtermatch, 'accident_year');
-    fetchGroupBy(filter)
+    fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterdByYears = data;
       });
@@ -418,19 +418,39 @@ export default class FilterStore {
   submitfilterdGroup = (aGroupBy: GroupBy.default) => {
     const filtermatch = this.getFilter(null);
     const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, '', aGroupBy.limit);
-    // console.log(filter)
-    fetchGroupBy(filter)
+    // console.log(filter);
+    fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterd = data;
       });
   }
 
   @action
+  submitfilterdGroupByPop = () => {
+    const filtermatch = this.getFilter(null);
+    const filter = this.getFilterGroupByPop(filtermatch, 100000, 200000, -1, 0);
+    // console.log(filter);
+    fetchAggregate(filter)
+      .then((data: any[] | undefined) => {
+        if (data !== undefined) {
+          const data2 = this.foramtDataPrecision(data);
+          this.dataFilterd = data2;
+        }
+      });
+  }
+
+  foramtDataPrecision = (data: any[]) => {
+    const data2 = data.map((x) => ({ _id : x._id, count: x.count.toPrecision(2) }));
+    return data2;
+  }
+
+
+  @action
   submitfilterdGroup2 = (aGroupBy: GroupBy.default, groupName2: string) => {
     const filtermatch = this.getFilter(null);
     const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
     // console.log(filter)
-    fetchGroupBy(filter)
+    fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined && data.length > 0) {
           try {
@@ -440,7 +460,6 @@ export default class FilterStore {
             console.log(error);
             this.dataGroupby2 = [];
           }
-
         }
       });
   }
@@ -477,6 +496,31 @@ export default class FilterStore {
     return filter;
   }
 
+  // fiter by accidents per 100,000 city population
+  getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax = 100000, sort: number, limit: number = 0) => {
+    let filter = `${'['
+      + '{"$match": '}${filterMatch}}`;
+    filter += ',{"$lookup":{'
+               + ' "from": "cities", "localField": "accident_yishuv_name",'
+               + ' "foreignField": "name_he","as": "city"'
+               + '}}';
+    filter += `,{ "$match": { "city.population": { "$gte" : ${popMin} , "$lte" : ${popMax}}}}`;
+    filter += ',{"$group": {'
+        + '"_id": "$accident_yishuv_name","t_count" : { "$sum" : 1 },"t_population" : { "$first" : "$city.population" }'
+        + '}}';
+    filter += ',{ "$unwind" : "$t_population"}';
+    filter += ',{ "$project" : { "count" :'
+        + '{ "$multiply" : [100000, { "$divide" : ["$t_count", "$t_population"] } ]}'
+        + '}}';
+    if (limit === 0) filter += `,{"$sort": {"count": ${sort}}}`;
+    else {
+      filter += `${`,{"$sort": {"count": ${sort}}}`
+      + `,{"$limit": `}${limit}}`;
+    }
+    filter += ']';
+    return filter;
+  }
+
   // //////////////////////////////////////////////////////////////////////////////////////////////
   // filters actions
   // //////////////////////////////////////////////////////////////////////////////////////////////
@@ -507,6 +551,7 @@ export default class FilterStore {
     this.submitGroupByYears();
     this.submitfilterdGroupByYears();
     this.submitfilterdGroup(this.groupBy);
+    // this.submitfilterdGroupByPop();
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
     this.setCasualtiesNames(this.injurySeverity);
     const lang = this.rootStore.uiStore.language;
