@@ -29,14 +29,27 @@ const MyBarChart:React.FC<IProps> = observer(({
     (currentValue._id !== null && currentValue._id.length > maxval) ? currentValue._id.length : maxval), 0);
   const isManyBarsForXAxis = (data.length > 5 || maxLabelLangth > 9);
   const isManyBarsForLables = (data.length > 30);
+  const myFormater = (label :string | number) => {
+    if (typeof label === 'number' && !Number.isInteger(label)) {
+      return label.toFixed(1);
+    }
+    return label;
+  };
+
   let bars = null;
   if (barsData === undefined) {
+    // in regular charts
     bars = (
       <Bar dataKey="count" name={colName} fill={fill}>
-        <LabelList dataKey="count" position="top" />
+        <LabelList
+          dataKey="count"
+          position="top"
+          formatter={myFormater}
+        />
       </Bar>
     );
   } else {
+    // in charts for 2 groups
     bars = barsData.map((x:any) => {
       const aName = t(x.key);
       const labelList = (isManyBarsForLables) ? null : <LabelList dataKey={x.key} position="top" />;
@@ -62,7 +75,7 @@ const MyBarChart:React.FC<IProps> = observer(({
         height={height}
         data={data}
         margin={{
-          top: 20, right: 2, left: 2, bottom: bottomMargin,
+          top: 30, right: 2, left: 2, bottom: bottomMargin,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />

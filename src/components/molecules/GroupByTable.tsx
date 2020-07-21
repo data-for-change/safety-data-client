@@ -11,7 +11,19 @@ interface IProps {
     data: any[]
     columns? :any[]
   }
+
+const foramtDataPrecision = (data: any[]) => {
+  const data2 = data.map((x) => {
+    if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
+      return { _id : x._id, count: x.count.toFixed(1) };
+    }
+    return { _id : x._id, count: x.count};
+  });
+  return data2;
+};
+
 const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, data }) => {
+  const data1 = foramtDataPrecision(data);
   const { t } = useTranslation();
   // let reactColumns = 1;
   const reactColumns = (columns === undefined) ? [{
@@ -24,10 +36,11 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, da
   if (data != null) {
     return (
       <div className="groupByTable">
-        <BootstrapTable keyField="_id" data={data} columns={reactColumns} headerClasses="table-header" />
+        <BootstrapTable keyField="_id" data={data1} columns={reactColumns} headerClasses="table-header" />
       </div>
     );
   }
   return null;
 };
+
 export default GroupByTable;

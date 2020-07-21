@@ -442,22 +442,15 @@ export default class FilterStore {
   submitfilterdGroupByPop = () => {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 25);
+    const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
     // console.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) {
-          const data2 = this.foramtDataPrecision(data);
-          this.dataFilterd = data2;
+          this.dataFilterd = data;
         }
       });
   }
-
-  foramtDataPrecision = (data: any[]) => {
-    const data2 = data.map((x) => ({ _id : x._id, count: x.count.toPrecision(3) }));
-    return data2;
-  }
-
 
   @action
   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
