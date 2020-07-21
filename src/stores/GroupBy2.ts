@@ -10,23 +10,23 @@ export interface IGroupBy2 {
 export default class GroupBy2 implements IGroupBy2 {
     @observable
     text:string;
-  
+
     name: string;
-  
+
     vals: any;
-  
+
     constructor(text:string, name: string) {
       this.text = text;
       this.name = name;
       this.vals = {};
     }
-  
+
     revTrnas = (key: string) => {
-      if (key == '') return '';
+      if (key === '') return '';
       const res = this.vals[key].name;
       return res;
     }
-  
+
     // input like {_id: 2015, count: Array(2)}
     // output like {_id: "2015", male: 264, female: 92}
     fixStrcutTable = (data: any[]) => {

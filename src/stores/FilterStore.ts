@@ -6,8 +6,9 @@ import * as FC from './ColumnFilter';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
+import * as FiterUtils from './FiterUtils';
 import RootStore from './RootStore';
-import { fetchFilter, fetchAggregate } from '../services/AccidentService';
+import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import { BBoxType } from './MapStore';
@@ -407,7 +408,7 @@ export default class FilterStore {
   @action
   submitGroupByYears = () => {
     const filtermatch = this.getfilterBySeverityAndCity();
-    const filter = this.getFilterGroupBy(filtermatch, 'accident_year');
+    const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year');
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataByYears = data;
@@ -416,8 +417,9 @@ export default class FilterStore {
 
   @action
   submitfilterdGroupByYears = () => {
+    const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = this.getFilterGroupBy(filtermatch, 'accident_year');
+    const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterdByYears = data;
@@ -426,8 +428,9 @@ export default class FilterStore {
 
   @action
   submitfilterdGroup = (aGroupBy: GroupBy) => {
+    const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, '', aGroupBy.limit);
+    const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
     // console.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
@@ -439,7 +442,7 @@ export default class FilterStore {
   submitfilterdGroupByPop = () => {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = this.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 25);
+    const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 25);
     // console.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
@@ -458,8 +461,9 @@ export default class FilterStore {
 
   @action
   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
+    const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
-    const filter = this.getFilterGroupBy(filtermatch, aGroupBy.value, groupName2, aGroupBy.limit);
+    const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
     // console.log(filter)
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
@@ -486,53 +490,6 @@ export default class FilterStore {
 
   @observable
   group2Dict: any = {}
-
-
-  getFilterGroupBy = (filterMatch: string, groupName: string, groupName2: string = '', limit: number = 0) => {
-    let filter = `${'['
-      + '{"$match": '}${filterMatch}}`;
-    if (groupName2 === '') filter += `,{"$group": { "_id": "$${groupName}", "count": { "$sum": 1 }}}`;
-    else {
-      filter += `, { "$match" : { "${groupName2}" : { "$exists" : true, "$ne" : null}}}`;
-      const grpids = `{ "grp1": "$${groupName}", "grp2": "$${groupName2}"}`;
-      filter += `,{"$group": { "_id":${grpids}, "count": { "$sum": 1 }}}`;
-      filter += ',{"$group": { "_id": "$_id.grp1" , "count": { "$push": {"grp2" : "$_id.grp2","count" : "$count" } }}}';
-    }
-    if (limit === 0) filter += ',{"$sort": {"_id": 1}}';
-    else {
-      filter += `${',{"$sort": {"count": -1}}'
-        + ',{"$limit": '}${limit}}`;
-    }
-    filter += ']';
-    return filter;
-  }
-
-  // fiter by accidents per 100,000 city population
-  getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax = 100000, sort: number, limit: number) => {
-    let filter = `${'['
-      + '{"$match": '}${filterMatch}}`;
-    filter += ',{"$lookup":{'
-               + ' "from": "cities", "localField": "accident_yishuv_name",'
-               + ' "foreignField": "name_he","as": "city"'
-               + '}}';
-    if (popMin > 0 && popMax > 0) {
-      filter += `,{ "$match": { "city.population": { "$gte" : ${popMin} , "$lte" : ${popMax}}}}`;
-    }
-    filter += ',{"$group": {'
-        + '"_id": "$accident_yishuv_name","t_count" : { "$sum" : 1 },"t_population" : { "$first" : "$city.population" }'
-        + '}}';
-    filter += ',{ "$unwind" : "$t_population"}';
-    filter += ',{ "$project" : { "count" :'
-        + '{ "$multiply" : [100000, { "$divide" : ["$t_count", "$t_population"] } ]}'
-        + '}}';
-    if (limit === 0) filter += `,{"$sort": {"count": ${sort}}}`;
-    else {
-      filter += `${`,{"$sort": {"count": ${sort}}}`
-      + `,{"$limit": `}${limit}}`;
-    }
-    filter += ']';
-    return filter;
-  }
 
   // //////////////////////////////////////////////////////////////////////////////////////////////
   // filters actions
@@ -573,10 +530,12 @@ export default class FilterStore {
 
   submintMainDataFilter = () => {
     this.isLoading = true;
-    const filter = this.getFilter(null);
+    const range = JSON.parse(this.cityPopSizeRange);
+    const filterMatch = this.getFilter(null);
+    const filter = FiterUtils.getAggFiter(filterMatch, range.min, range.max);
     this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
     // console.log(filter)
-    fetchFilter(filter, 'main')
+    fetchAggregatFilter(filter, 'main')
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.updateAllInjuries(data);
@@ -588,8 +547,10 @@ export default class FilterStore {
   }
 
   submintGetMarkerFirstStep = () => {
-    const filter = this.getFilter(null);
-    fetchFilter(filter, 'latlon')
+    const range = JSON.parse(this.cityPopSizeRange);
+    const filterMatch = this.getFilter(null);
+    const filter = FiterUtils.getAggFiter(filterMatch, range.min, range.max);
+    fetchAggregatFilter(filter, 'latlon')
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
           this.updateDataMarkersLean(data);
@@ -610,23 +571,23 @@ export default class FilterStore {
   getFilter = (bounds: any, useBounds: boolean = false) => {
     let filter = '{"$and" : [';
     filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-    filter += this.getMultiplefilter(this.injurySeverity);
+    filter += FiterUtils.getMultiplefilter(this.injurySeverity);
     filter += this.getfilterCity();
     if (useBounds && bounds != null) filter += this.getfilterBounds(bounds);
-    filter += this.getMultiplefilter(this.dayNight);
+    filter += FiterUtils.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
     filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
-    filter += this.getMultiplefilter(this.injTypes);
-    filter += this.getMultiplefilter(this.genderTypes);
-    filter += this.getMultiplefilter(this.ageTypes);
-    filter += this.getMultiplefilter(this.populationTypes);
-    filter += this.getMultiplefilter(this.accidentType);
-    filter += this.getMultiplefilter(this.vehicleType);
-    filter += this.getMultiplefilter(this.roadTypes);
-    filter += this.getMultiplefilter(this.speedLimit);
-    filter += this.getMultiplefilter(this.roadWidth);
-    filter += this.getMultiplefilter(this.separator);
-    filter += this.getMultiplefilter(this.oneLane);
+    filter += FiterUtils.getMultiplefilter(this.injTypes);
+    filter += FiterUtils.getMultiplefilter(this.genderTypes);
+    filter += FiterUtils.getMultiplefilter(this.ageTypes);
+    filter += FiterUtils.getMultiplefilter(this.populationTypes);
+    filter += FiterUtils.getMultiplefilter(this.accidentType);
+    filter += FiterUtils.getMultiplefilter(this.vehicleType);
+    filter += FiterUtils.getMultiplefilter(this.roadTypes);
+    filter += FiterUtils.getMultiplefilter(this.speedLimit);
+    filter += FiterUtils.getMultiplefilter(this.roadWidth);
+    filter += FiterUtils.getMultiplefilter(this.separator);
+    filter += FiterUtils.getMultiplefilter(this.oneLane);
     filter += ']}';
     return filter;
   }
@@ -654,7 +615,7 @@ export default class FilterStore {
   getfilterBySeverityAndCity = () => {
     let filter = '{"$and" : [';
     filter += '{"accident_year":{"$gte":2015}}';
-    filter += this.getMultiplefilter(this.injurySeverity);
+    filter += FiterUtils.getMultiplefilter(this.injurySeverity);
     filter += this.getfilterCity();
     filter += ']}';
     return filter;
@@ -687,38 +648,6 @@ export default class FilterStore {
     if (arr.length > 0 && arr[0] !== '') {
       filter += ',{"$or": [';
       filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',');
-      filter += ']}';
-    }
-    return filter;
-  }
-
-  getMultiplefilter = (colFilter: IColumnFilter) => {
-    let filter: string = '';
-    let allChecked: boolean = true;
-    let arrfilter: string[] = [];
-    if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) allChecked = true;
-    else {
-      // in case there is allTypesOption , it want be copied to arrfilter
-      // as it is not checked
-      const iterator = colFilter.arrTypes.values();
-      for (const filterCheck of iterator) {
-        if (filterCheck.checked) {
-          arrfilter = [...arrfilter, ...filterCheck.filters];
-        } else {
-          allChecked = false;
-        }
-      }
-    }
-
-    if (allChecked) filter = '';
-    else {
-      filter += ',{"$or": [';
-      filter += arrfilter.map((x: string) => {
-        if (x === 'null') return `{"${colFilter.dbColName}":${null}}`;
-
-        const xSafe = x.replace('"', '\\"');
-        return `{"${colFilter.dbColName}" : "${xSafe}"}`;
-      }).join(',');
       filter += ']}';
     }
     return filter;

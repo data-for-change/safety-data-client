@@ -32,7 +32,7 @@ const SelectCityPop: React.FC<Props> = observer(({ onChange, value }) => {
           <option value='{"min":50000,"max":100000}'>{t('50K-100K')}</option>
           <option value='{"min":20000,"max":50000}'>{t('20K-50K')}</option>
           <option value='{"min":10000,"max":20000}'>{t('10K-20K')}</option>
-          <option value='{"min":000,"max":10000}'>{t('0-10K')}</option>
+          <option value='{"min":0,"max":10000}'>{t('0-10K')}</option>
         </Form.Control>
       </Form.Group>
     </div>
