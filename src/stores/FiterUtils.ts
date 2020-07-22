@@ -27,8 +27,8 @@ export const getFilterGroupBy = (filterMatch: string, groupName: string, popMin 
   return filter;
 };
 
-// fiter accidents using aggrgation pipline
-export const getAggFiter = (filterMatch: string, popMin: number, popMax: number) => {
+// filter accidents using aggrgation pipline
+export const getAggFilter = (filterMatch: string, popMin: number, popMax: number) => {
   let filter = `${'['
       + '{"$match": '}${filterMatch}}`;
   if (popMin >= 0 && popMax > 0) {

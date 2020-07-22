@@ -525,7 +525,7 @@ export default class FilterStore {
     this.isLoading = true;
     const range = JSON.parse(this.cityPopSizeRange);
     const filterMatch = this.getFilter(null);
-    const filter = FiterUtils.getAggFiter(filterMatch, range.min, range.max);
+    const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
     this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
     // console.log(filter)
     fetchAggregatFilter(filter, 'main')
@@ -542,7 +542,7 @@ export default class FilterStore {
   submintGetMarkerFirstStep = () => {
     const range = JSON.parse(this.cityPopSizeRange);
     const filterMatch = this.getFilter(null);
-    const filter = FiterUtils.getAggFiter(filterMatch, range.min, range.max);
+    const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
     fetchAggregatFilter(filter, 'latlon')
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
