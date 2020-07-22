@@ -23,7 +23,8 @@ const foramtDataPrecision = (data: any[]) => {
 };
 
 const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, data }) => {
-  const data1 = foramtDataPrecision(data);
+  // do format only grp1 and not grpBy2
+  const data1 = (columns === undefined) ? foramtDataPrecision(data) : data;
   const { t } = useTranslation();
   // let reactColumns = 1;
   const reactColumns = (columns === undefined) ? [{
