@@ -83,7 +83,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       paddingBottom: '1px',
     },
   };
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [showModel, setShowModal] = useState(false);
   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
   const graph2Size = Math.min(600, graphSize);
