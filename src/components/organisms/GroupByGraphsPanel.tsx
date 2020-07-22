@@ -141,10 +141,14 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
     return (() => { window.removeEventListener('resize', handleResize); });
   });
   const { filterStore } = useStore();
-  const { groupBy2 } = filterStore;
+  const { groupBy2, groupBy } = filterStore;
   const barsGrp2 = groupBy2.getBars();
   const reactDataGrp2 = toJS(filterStore.dataGroupby2);
+  const show = (groupBy.text !== 'CityByPop');
   return (
+    <div>
+      {show
+    && (
     <SmallCard width={graphSize + 150}>
       <div style={divConstolsRow}>
         <span style={styleLable}>
@@ -158,6 +162,8 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
       </div>
       <MyBarChart data={reactDataGrp2} barsData={barsGrp2} width={graphSize} height={graphSize * 0.62} legendType="top" />
     </SmallCard>
+    )}
+    </div>
   );
 });
 export default GroupByGraphsPanel;

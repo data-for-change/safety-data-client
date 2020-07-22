@@ -84,20 +84,26 @@ const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
   const { groupBy, groupBy2, dataGroupby2 } = filterStore;
   const columnsGrp2 = groupBy2.getColumns().map((x:any) => ({ dataField: x, text: t(x) }));
   const reactDataGrp2 = toJS(dataGroupby2);
+  const show = (groupBy.text !== 'CityByPop');
   if (reactDataGrp2.length > 0) {
     return (
-      <SmallCard styleType={4}>
-        <div style={divStyle}>
-          <span style={styleLable}>
-            {' '}
-            {t('GroupBy')}
-            :
-          </span>
-          <SelectGroupBy id="Tables.Grp2" labelText="" />
-          <SelectGroupBy2 id="Tables" />
-        </div>
-        <GroupByTable data={reactDataGrp2} dataName={groupBy.text} columns={columnsGrp2} />
-      </SmallCard>
+      <div>
+        {show
+       && (
+       <SmallCard styleType={4}>
+         <div style={divStyle}>
+           <span style={styleLable}>
+             {' '}
+             {t('GroupBy')}
+             :
+           </span>
+           <SelectGroupBy id="Tables.Grp2" labelText="" />
+           <SelectGroupBy2 id="Tables" />
+         </div>
+         <GroupByTable data={reactDataGrp2} dataName={groupBy.text} columns={columnsGrp2} />
+       </SmallCard>
+       )}
+      </div>
     );
   }
   return null;
