@@ -12,8 +12,10 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
   const {
     setCurrentPage, setIsMultipleCities, updateCities, submitFilter,
   } = filterStore;
-  setCurrentPage('home');
-  setIsMultipleCities(true);
+  useEffect(() => {
+    setCurrentPage('home');
+    setIsMultipleCities(true);
+  }, []);
   mapStore.isReadyToRenderMap = false;
   useEffect(() => {
     // mapStore.initBounds();
