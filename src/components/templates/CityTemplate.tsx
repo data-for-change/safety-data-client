@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 // import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { TabsTemplate } from './TabsTemplate';
@@ -37,15 +37,45 @@ interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore } = useStore();
-  filterStore.setCurrentPage('city');
-  filterStore.isMultipleCities = false;
-  let { cityResult } = filterStore;
-  if (cityResult === '') {
+  const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
+  const history = useHistory();
+  useEffect(() => {
+    filterStore.setCurrentPage('city');
+    filterStore.isMultipleCities = false;
+    if (cityResult !== '') {
+      filterStore.submitFilter();
+    }
+    return () => setIsUpdateFromUrl(true); // unmount
+  }, []);
+  useEffect(() => {
+    if (cityResult !== '') {
+      history.push({
+        pathname: '/city',
+        search: `?name=${cityResult}`,
+      });
+      filterStore.submitFilter();
+    }
+  }, [cityResult]);
+  if (cityResult === '' && isUpdateFromUrl) {
+    setIsUpdateFromUrl(false);
     const cityName = useCityNamefromQuery();
-    filterStore.updateCities(cityName);
-    cityResult = cityName[0];
+    filterStore.updateCities(cityName, true);
+    // cityResult = cityName[0];
     filterStore.submitFilter();
   }
+  useEffect(() => {
+    if (cityResult !== '') {
+      filterStore.submitFilter();
+    }
+  }, [cityResult]);
+  // useEffect(() => {
+  //   if (cityResult !== '') {
+  //     history.push({
+  //       pathname: '/city',
+  //       search: `?name=${cityResult}`,
+  //     });
+  //   }
+  // }, [cityResult]);
   return (
     <div className="App">
       <div className="container-fluid">

@@ -26,9 +26,7 @@ function App() {
                 <Route path="/about">
                   <AboutPage />
                 </Route>
-                <Route path="/city">
-                  <CityPage />
-                </Route>
+                <Route exact path="/city" component={CityPage} />
                 <Route path="/update-img">
                   <UpdateImagePage />
                 </Route>

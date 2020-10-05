@@ -26,7 +26,7 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
         id="typeaheadCity"
                 // defaultSelected={[store.city]}
         onChange={(selected: string[]) => {
-          filterStore.updateCities(selected);
+          filterStore.updateCities(selected, true);
         }}
         options={citisNamesHeb}
         multiple={isMultiple}

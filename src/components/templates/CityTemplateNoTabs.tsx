@@ -34,7 +34,7 @@ const CityTemplateNoTabs: React.FC<IProps> = observer(() => {
   const { cityResult } = filterStore;
   if (cityResult === '') {
     const cityName = useCityNamefromQuery();
-    filterStore.updateCities(cityName);
+    filterStore.updateCities(cityName, false);
     filterStore.submitFilter();
   }
   return (

@@ -17,7 +17,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
   mapStore.isReadyToRenderMap = false;
   useEffect(() => {
     // mapStore.initBounds();
-    updateCities([]);
+    updateCities([], false);
     submitFilter();
   }, [submitFilter, updateCities]);
   return (

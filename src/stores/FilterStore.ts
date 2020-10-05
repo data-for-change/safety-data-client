@@ -70,6 +70,11 @@ export default class FilterStore {
     else this.vehicleType = FC.initVehicleTypes();
   }
 
+  @observable isUpdateFromUrl: boolean = true;
+
+  @action setIsUpdateFromUrl = (value: boolean) => {
+    this.isUpdateFromUrl = value;
+  }
 
   // ///////////////////////////////////////////////////////////////////////////////////////////////
   // Severity
@@ -116,10 +121,12 @@ export default class FilterStore {
   cities: string[] = [];
 
   @action
-  updateCities = (names: string[]) => {
+  updateCities = (names: string[], updateCityResult: boolean) => {
     this.cities = names;
     if (this.cities.length === 0) {
       this.streets = [];
+    } else if (updateCityResult) {
+      this.cityResult = this.cities[0];
     }
   }
 
