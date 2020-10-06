@@ -45,6 +45,23 @@ export default class UiStore {
   }
 
   @observable
+  currentPage: string ='home';
+
+  @action
+  setCurrentPage = (pageType: string) => {
+    this.currentPage = pageType;
+  }
+
+  @observable
+  currentTab: string ='charts';
+
+  @action
+  setCurrentTab = (tabName: string) => {
+    this.currentTab = tabName;
+  }
+
+
+  @observable
   chartType: string = 'BarChart';
 
   @observable

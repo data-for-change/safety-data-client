@@ -8,10 +8,11 @@ import { useStore } from '../../stores/storeConfig';
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
-  const { mapStore, filterStore } = useStore();
+  const { mapStore, filterStore, uiStore } = useStore();
   const {
-    setCurrentPage, setIsMultipleCities, updateCities, submitFilter,
+    setIsMultipleCities, updateCities, submitFilter,
   } = filterStore;
+  const {setCurrentPage, setCurrentTab} = uiStore;
   useEffect(() => {
     setCurrentPage('home');
     setIsMultipleCities(true);

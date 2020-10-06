@@ -9,18 +9,26 @@ import citisNamesHeb from '../../assets/cities_names_heb.json';
 
 // A custom hook that builds on useLocation to parse
 // the query string for you.
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
+function useQuery(location: any) {
+  return new URLSearchParams(location.search);
 }
-// get city name by query by url
-function useCityNamefromQuery() {
-  const query = useQuery();
+// get city name by url query parmas
+function useCityNameFromQuery(query: URLSearchParams) {
   let res = ['תל אביב -יפו'];
   const name = query.get('name');
   let found = false;
   if (name !== null) found = citisNamesHeb.includes(name);
   if (found) {
     res = [citisNamesHeb.find((element) => element === name!)!];
+  }
+  return res;
+}
+// get city name by url query parmas
+function useTabFromQuery(query: URLSearchParams, defVal: string) {
+  let res = defVal;
+  const name = query.get('tab');
+  if (name !== null) {
+    res = name;
   }
   return res;
 }
@@ -36,11 +44,13 @@ export const CityLable: React.FC<{}> = observer(() => {
 interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
-  const { filterStore } = useStore();
+  const { filterStore, uiStore } = useStore();
   const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
+  const { currentTab, setCurrentTab, setCurrentPage } = uiStore;
   const history = useHistory();
+  const location = useLocation();
   useEffect(() => {
-    filterStore.setCurrentPage('city');
+    setCurrentPage('city');
     filterStore.isMultipleCities = false;
     if (cityResult !== '') {
       filterStore.submitFilter();
@@ -51,18 +61,23 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     if (cityResult !== '') {
       history.push({
         pathname: '/city',
-        search: `?name=${cityResult}`,
+        search: `?name=${cityResult}&tab=${currentTab}`,
       });
       filterStore.submitFilter();
     }
-  }, [cityResult]);
-  if (cityResult === '' && isUpdateFromUrl) {
-    setIsUpdateFromUrl(false);
-    const cityName = useCityNamefromQuery();
-    filterStore.updateCities(cityName, true);
-    // cityResult = cityName[0];
-    filterStore.submitFilter();
-  }
+  }, [cityResult, currentTab]);
+  useEffect(() => {
+    if (cityResult === '' && isUpdateFromUrl) {
+      setIsUpdateFromUrl(false);
+      const query = useQuery(location);
+      const cityName = useCityNameFromQuery(query);
+      const tab = useTabFromQuery(query, 'map');
+      filterStore.updateCities(cityName, true);
+      setCurrentTab(tab);
+      // cityResult = cityName[0];
+      filterStore.submitFilter();
+    }
+  }, []);
   useEffect(() => {
     if (cityResult !== '') {
       filterStore.submitFilter();
@@ -83,7 +98,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
           <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div>
           <main className="col-md-10">
             <CityLable />
-            <TabsTemplate type="city" defaultKey="map" />
+            <TabsTemplate type="city" />
           </main>
         </div>
       </div>

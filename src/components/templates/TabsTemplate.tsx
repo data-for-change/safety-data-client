@@ -15,7 +15,6 @@ import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
     type: string;
-    defaultKey?: string;
 }
 
 const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
@@ -23,23 +22,26 @@ const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'))
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
-export const TabsTemplate: FunctionComponent<IProps> = observer(({ type, defaultKey = 'charts' }) => {
+export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const style = {
     marginTop: '20px',
   };
   const { t } = useTranslation();
-  const [activeKey] = useState(defaultKey);
-  const { mapStore } = useStore();
+  const { mapStore, uiStore } = useStore();
+  // const [activeKey] = useState(uiStore.);
+  // console.log(activeKey);
+   // defaultActiveKey={uiStore.currentTab}
   return (
     <Tabs
       mountOnEnter
-      defaultActiveKey={activeKey}
+      activeKey={uiStore.currentTab}
       id="main-tabs"
       onSelect={(tabActiveKey: string) => {
         if (tabActiveKey === 'map') {
           // map is renderd only when tab is shown to prevent leaflet bug
           mapStore.isReadyToRenderMap = true;
         } else mapStore.isReadyToRenderMap = false;
+        uiStore.setCurrentTab(tabActiveKey);
       }}
     >
       <Tab style={style} eventKey="charts" title={t('Charts')}>
@@ -49,7 +51,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type, default
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={style} eventKey="grouptables" title={t('Groups')}>
+      <Tab style={style} eventKey="groups" title={t('Groups')}>
         <ErrorBoundary>
           <Suspense fallback={<div>Loading Groups tables...</div>}>
             <GroupByTablesPanel />
