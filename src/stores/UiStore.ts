@@ -60,7 +60,6 @@ export default class UiStore {
     this.currentTab = tabName;
   }
 
-
   @observable
   chartType: string = 'BarChart';
 
