@@ -1,9 +1,26 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import FilterPanel from '../organisms/FilterPanel';
 import TabsTemplate from './TabsTemplate';
 import { useStore } from '../../stores/storeConfig';
+
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery(location: any) {
+  return new URLSearchParams(location.search);
+}
+
+// get city name by url query parmas
+function useTabFromQuery(query: URLSearchParams, defVal: string) {
+  let res = defVal;
+  const name = query.get('tab');
+  if (name !== null) {
+    res = name;
+  }
+  return res;
+}
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -12,9 +29,20 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
   const {
     setIsMultipleCities, updateCities, submitFilter,
   } = filterStore;
-  const {setCurrentPage, setCurrentTab} = uiStore;
+  const { currentTab, setCurrentPage, setCurrentTab } = uiStore;
+  const history = useHistory();
+  const location = useLocation();
+  useEffect(() => {
+    history.push({
+      pathname: '/home',
+      search: `?tab=${currentTab}`,
+    });
+  }, [currentTab]);
   useEffect(() => {
     setCurrentPage('home');
+    const query = useQuery(location);
+    const tab = useTabFromQuery(query, 'charts');
+    setCurrentTab(tab);
     setIsMultipleCities(true);
   }, []);
   mapStore.isReadyToRenderMap = false;

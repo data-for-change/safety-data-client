@@ -1,5 +1,5 @@
 import React, {
-  useState, FunctionComponent, lazy, Suspense,
+  FunctionComponent, lazy, Suspense,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
@@ -30,7 +30,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { mapStore, uiStore } = useStore();
   // const [activeKey] = useState(uiStore.);
   // console.log(activeKey);
-   // defaultActiveKey={uiStore.currentTab}
+  // defaultActiveKey={uiStore.currentTab}
   return (
     <Tabs
       mountOnEnter
