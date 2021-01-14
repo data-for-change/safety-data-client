@@ -4,34 +4,8 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { TabsTemplate } from './TabsTemplate';
 import FilterPanel from '../organisms/FilterPanel';
+import { useQuery, useTabFromQuery, useCityNameFromQuery } from '../../hooks/queryHooks';
 import { useStore } from '../../stores/storeConfig';
-import citisNamesHeb from '../../assets/cities_names_heb.json';
-
-// A custom hook that builds on useLocation to parse
-// the query string for you.
-function useQuery(location: any) {
-  return new URLSearchParams(location.search);
-}
-// get city name by url query parmas
-function useCityNameFromQuery(query: URLSearchParams) {
-  let res = ['תל אביב -יפו'];
-  const name = query.get('name');
-  let found = false;
-  if (name !== null) found = citisNamesHeb.includes(name);
-  if (found) {
-    res = [citisNamesHeb.find((element) => element === name!)!];
-  }
-  return res;
-}
-// get city name by url query parmas
-function useTabFromQuery(query: URLSearchParams, defVal: string) {
-  let res = defVal;
-  const name = query.get('tab');
-  if (name !== null) {
-    res = name;
-  }
-  return res;
-}
 
 export const CityLable: React.FC<{}> = observer(() => {
   const { filterStore } = useStore();
@@ -70,7 +44,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
       const query = useQuery(location);
-      const cityName = useCityNameFromQuery(query);
+      const cityName = useCityNameFromQuery(query, 'תל אביב -יפו');
       const tab = useTabFromQuery(query, 'map');
       filterStore.updateCities(cityName, true);
       setCurrentTab(tab);
