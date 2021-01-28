@@ -18,7 +18,7 @@ const styleButDiv: React.CSSProperties = {
 
 interface IProps { }
 const MapAccidents: FunctionComponent<IProps> = observer(() => {
-  const WRAPPER_STYLES = { height: '80vh', width: '100vw', maxWidth: '100%' };
+  const WRAPPER_STYLES = { height: '75vh', width: '100vw', maxWidth: '100%' };
   const mapRef = useRef<Map>(null);
   // const didMountRef = useRef(false)
   const { mapStore } = useStore();
