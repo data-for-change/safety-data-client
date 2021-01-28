@@ -27,11 +27,15 @@ const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }) => {
   const [open, setOpen] = useState(true);
   const [showModel, setShowModal] = useState(false);
   const { t } = useTranslation();
+  const showFilter = () => {
+    setOpen(!open);
+  };
+  const textHideButton = (open)? t('HideFilter'):t('ShowFilter');
   return (
     <>
       <div style={styles.buttonStyle}>
-        <Button onClick={() => { setOpen(!open); }} aria-controls="example-collapse-text" aria-expanded={open}>
-          {t('Hide')}
+        <Button onClick={() => { showFilter(); }} aria-controls="example-collapse-text" aria-expanded={open}>
+          {textHideButton}
         </Button>
         <Button onClick={() => { setShowModal(!showModel); }}>
           <img src={gearlogo} alt="settings" style={styles.iconStyle} />
