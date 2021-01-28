@@ -3,65 +3,70 @@ import FilterChecker, { IFilterChecker } from './FilterChecker';
 import dataYearsUnfilterdInit from '../assets/data-by-years.json';
 import dataYearsfilterdInit from '../assets/data-by-years-filtred.json';
 import dataGrpBy1Init from '../assets/data-by-grp1.json';
-import dataGrp2Init from '../assets/data-by-grp2.json'
+import dataGrp2Init from '../assets/data-by-grp2.json';
 
 export interface IColumnFilter {
-    name: string;
-    dbColName: string;
-    arrTypes: IFilterChecker[];
-    allTypesOption : number;
-    isAllValsFalse: boolean;
-    updateFilter:(aType: number, val: boolean) => void;
+  name: string;
+  dbColName: string;
+  arrTypes: IFilterChecker[];
+  // spaciel value, if checkd it will mark all options as true
+  allTypesOption: number;
+  isAllValsFalse: boolean;
+  updateFilter: (aType: number, checked: boolean) => void;
 }
+/**  filter group of boolaen filters
+*  each group represnt one column in the database that can get
+* several fixd values
+*/
 export class ColumnFilter implements IColumnFilter {
-    name: string;
+  name: string;
 
-    dbColName: string;
+  dbColName: string;
 
-    @observable
-    arrTypes: IFilterChecker[];
+  @observable
+  arrTypes: IFilterChecker[];
 
-    allTypesOption : number;
+  allTypesOption: number;
 
-    constructor(name: string, dbColName: string, allTypesOption: number = -1) {
-      this.name = name;
-      this.dbColName = dbColName;
-      this.arrTypes = [];
-      this.allTypesOption = allTypesOption;
+  constructor(name: string, dbColName: string, allTypesOption: number = -1) {
+    this.name = name;
+    this.dbColName = dbColName;
+    this.arrTypes = [];
+    // if this value > -1 , there is an option to set all values as true
+    this.allTypesOption = allTypesOption;
+  }
+
+  /**
+   * check if all the a values in the group are false
+   */
+  @computed get isAllValsFalse() {
+    const res = this.arrTypes.reduce((counter, currentValue) => (currentValue.checked ? ++counter : counter), 0);
+    return (res === 0);
+  }
+
+  @action
+  updateFilter = (aType: number, checked: boolean) => {
+    // in case this filter group has no option for "select all" - update the value
+    if (this.allTypesOption === -1) this.arrTypes[aType].checked = checked;
+    // in case this filter has opthion for "select all"
+    else if (aType === this.allTypesOption) {
+      this.arrTypes.forEach((x, index) => x.checked = (index === this.allTypesOption) ? checked : !checked);
+    } else {
+      this.arrTypes[this.allTypesOption].checked = false;
+      this.arrTypes[aType].checked = checked;
     }
-
-    @computed get isAllValsFalse() {
-      const res = this.arrTypes.reduce((counter, currentValue) => (currentValue.checked ? ++counter : counter), 0);
-      return (res === 0);
-    }
-
-    @action
-    updateFilter = (aType: number, val: boolean) => {
-      if (this.allTypesOption === -1) this.arrTypes[aType].checked = val;
-      else if (aType === this.allTypesOption) {
-        this.arrTypes.forEach((x, index) => x.checked = (index === this.allTypesOption) ? val : !val);
-      } else {
-        this.arrTypes[this.allTypesOption].checked = false;
-        this.arrTypes[aType].checked = val;
-      }
-    }
-    // @computed get countTrueVals () {
-    //     const res = this.arrTypes.reduce(function(counter,currentValue){
-    //         return currentValue.checked? ++counter:counter;
-    //       },0);
-    //     return res;
-    // }
+  }
 }
 
 export const initInjurySeverity = () => {
-  const col : IColumnFilter = new ColumnFilter('Severity', 'injury_severity_hebrew');
+  const col: IColumnFilter = new ColumnFilter('Severity', 'injury_severity_hebrew');
   col.arrTypes.push(new FilterChecker('dead', true, ['הרוג']));
   col.arrTypes.push(new FilterChecker('severly-injured', false, ['פצוע קשה']));
   return col;
 };
 
 export const initDayNight = () => {
-  const col : IColumnFilter = new ColumnFilter('DayNight', 'day_night_hebrew');
+  const col: IColumnFilter = new ColumnFilter('DayNight', 'day_night_hebrew');
   col.arrTypes.push(new FilterChecker('day', true, ['יום']));
   col.arrTypes.push(new FilterChecker('night', true, ['לילה']));
   return col;
@@ -83,7 +88,7 @@ export const initMonth = (arr: IFilterChecker[]) => {
 };
 
 export const initInjTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('Vehicle', 'injured_type_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('Vehicle', 'injured_type_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, ['הולך רגל']));
   col.arrTypes.push(new FilterChecker('cyclist', false, ['נהג - אופניים', 'נוסע - אופניים (לא נהג)']));
@@ -94,7 +99,7 @@ export const initInjTypes = () => {
 };
 
 export const initVehicleTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
   col.arrTypes.push(new FilterChecker('mobilityscooter', false, ['קלנועית חשמלית']));
@@ -117,7 +122,7 @@ export const initVehicleTypes = () => {
 };
 
 export const initVehicleTypesFull = () => {
-  const col : IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
   col.arrTypes.push(new FilterChecker('mobilityscooter', false, ['קלנועית חשמלית']));
@@ -146,14 +151,14 @@ export const initVehicleTypesFull = () => {
 
 
 export const initGenderTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('Gender', 'sex_hebrew');
+  const col: IColumnFilter = new ColumnFilter('Gender', 'sex_hebrew');
   col.arrTypes.push(new FilterChecker('female', true, ['נקבה']));
   col.arrTypes.push(new FilterChecker('male', true, ['זכר']));
   return col;
 };
 
 export const initAgeTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('Age', 'age_group_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('Age', 'age_group_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('00-04', false, ['00-04']));
   col.arrTypes.push(new FilterChecker('05-09', false, ['05-09']));
@@ -170,7 +175,7 @@ export const initAgeTypes = () => {
   return col;
 };
 export const initPopulationTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('Population', 'population_type_hebrew');
+  const col: IColumnFilter = new ColumnFilter('Population', 'population_type_hebrew');
   col.arrTypes.push(new FilterChecker('jews', true, ['יהודים']));
   col.arrTypes.push(new FilterChecker('arabs', true, ['ערבים']));
   col.arrTypes.push(new FilterChecker('immigrants', true, ['זרים']));
@@ -179,7 +184,7 @@ export const initPopulationTypes = () => {
 };
 
 export const initRoadTypes = () => {
-  const col : IColumnFilter = new ColumnFilter('RoadType', 'road_type_hebrew');
+  const col: IColumnFilter = new ColumnFilter('RoadType', 'road_type_hebrew');
   col.arrTypes.push(new FilterChecker('urban-junction', true, ['עירונית בצומת']));
   col.arrTypes.push(new FilterChecker('urban-road', true, ['עירונית לא בצומת']));
   col.arrTypes.push(new FilterChecker('non-urban-junction', true, ['לא-עירונית בצומת']));
@@ -187,7 +192,7 @@ export const initRoadTypes = () => {
   return col;
 };
 export const initSpeedLimit = () => {
-  const col : IColumnFilter = new ColumnFilter('SpeedLimit', 'speed_limit_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('SpeedLimit', 'speed_limit_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('speed50', false, ['עד 50 קמ"ש']));
   col.arrTypes.push(new FilterChecker('speed60', false, ['60 קמ"ש']));
@@ -201,7 +206,7 @@ export const initSpeedLimit = () => {
   return col;
 };
 export const initRoadWidth = () => {
-  const col : IColumnFilter = new ColumnFilter('RoadWidth', 'road_width_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('RoadWidth', 'road_width_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('road-width-5', false, ['עד 5 מטר']));
   col.arrTypes.push(new FilterChecker('road-width-7', false, ['5 עד 7  מטר']));
@@ -212,7 +217,7 @@ export const initRoadWidth = () => {
   return col;
 };
 export const initSeparator = () => {
-  const col : IColumnFilter = new ColumnFilter('Separator', 'multi_lane_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('Separator', 'multi_lane_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('separator-fence', false, ['מיפרדה עם גדר בטיחות']));
   col.arrTypes.push(new FilterChecker('separator-built', false, ['מיפרדה בנויה ללא גדר בטיחות']));
@@ -223,7 +228,7 @@ export const initSeparator = () => {
   return col;
 };
 export const initOneLane = () => {
-  const col : IColumnFilter = new ColumnFilter('OneLane', 'one_lane_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('OneLane', 'one_lane_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('onelane-twoway-line', false, ['דו סיטרי + קו הפרדה רצוף']));
   col.arrTypes.push(new FilterChecker('onelane-twoway-noline', false, ['דו סיטרי אין קו הפרדה רצוף']));
@@ -233,7 +238,7 @@ export const initOneLane = () => {
   return col;
 };
 export const initAccidentType = () => {
-  const col : IColumnFilter = new ColumnFilter('AccidentType', 'accident_type_hebrew', 0);
+  const col: IColumnFilter = new ColumnFilter('AccidentType', 'accident_type_hebrew', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('hit-ped', false, ['פגיעה בהולך רגל']));
   col.arrTypes.push(new FilterChecker('hit-front-side', false, ['התנגשות חזית בצד']));

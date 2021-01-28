@@ -23,14 +23,19 @@ export default class FilterStore {
     this.rootStore = rootStore;
     this.injurySeverity = FC.initInjurySeverity();
     this.setCasualtiesNames(this.injurySeverity);
+    // when
     this.dayNight = FC.initDayNight();
+    // where
+    this.roadTypes = FC.initRoadTypes();
+    // who
     this.injTypes = FC.initInjTypes();
     this.genderTypes = FC.initGenderTypes();
     this.ageTypes = FC.initAgeTypes();
     this.populationTypes = FC.initPopulationTypes();
+    // What
     this.accidentType = FC.initAccidentType();
     this.vehicleType = FC.initVehicleTypes();
-    this.roadTypes = FC.initRoadTypes();
+    // What Road
     this.speedLimit = FC.initSpeedLimit();
     this.roadWidth = FC.initRoadWidth();
     this.separator = FC.initSeparator();
@@ -247,7 +252,9 @@ export default class FilterStore {
     this.updateFilters(this.populationTypes, aType, val);
   }
 
-  // injTypes
+  /**
+   * injuerd type - for example pedestrian bycicle, car driver etc,
+   */
   @observable
   injTypes: IColumnFilter;
 

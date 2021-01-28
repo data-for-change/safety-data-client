@@ -5,6 +5,9 @@ export interface IFilterChecker {
     label: string;
     filters: string[];
 }
+/**
+ * filter that represnt a check - box in gui
+ */
 export default class FilterChecker implements IFilterChecker {
     @observable
     checked: boolean;

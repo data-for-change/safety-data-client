@@ -11,6 +11,12 @@ interface IProps {
   onChange: (aType: number, val: boolean) => void
 }
 
+/**
+ * group of check boxs, that represnat single filter
+ * each filter can get several boolean paramters - for exampe car and bycle
+ * each of this paramters is repreansted as a number, and get a true/false value
+ * in some cases there is a "select all" option.
+ */
 const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChange }) => {
   const styleFeedback = {
     marginTop: '.25rem',

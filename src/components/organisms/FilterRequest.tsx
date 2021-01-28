@@ -1,4 +1,5 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Button from 'react-bootstrap/Button';
@@ -13,6 +14,7 @@ import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
 import SelectCityPop from '../atoms/SelectCityPop';
 import { useStore } from '../../stores/storeConfig';
+import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 
 interface IProps {
   activeCardKey: number
@@ -78,7 +80,10 @@ const CardFilterWhen = observer(() => {
                   {t('FromYear')}
 :
                 </Form.Label>
-                <Form.Control as="select" defaultValue={startYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { setStartYear(e.target.value); }}>
+                <Form.Control
+                  as="select"
+                  defaultValue={startYear}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setStartYear(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
                   <option>2017</option>
@@ -92,7 +97,10 @@ const CardFilterWhen = observer(() => {
                   {t('ToYear')}
 :
                 </Form.Label>
-                <Form.Control as="select" defaultValue={endYear} onChange={(e: ChangeEvent<HTMLInputElement>) => { setEndYear(e.target.value); }}>
+                <Form.Control
+                  as="select"
+                  defaultValue={endYear}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => { setEndYear(e.target.value); }}>
                   <option>2015</option>
                   <option>2016</option>
                   <option>2017</option>
@@ -128,7 +136,7 @@ const CardFilterWhere = observer(() => {
           <StreetSelector />
           <RoadSegmentSelector />
           <GroupCheckbox formName="exampleForm" colFilter={roadTypes} onChange={updateRoadType} />
-          <SelectCityPop value={cityPopSizeRange} onChange={(val:string) => setCityPopSizeRange(val)} />
+          <SelectCityPop value={cityPopSizeRange} onChange={(val: string) => setCityPopSizeRange(val)} />
         </div>
       </Accordion.Collapse>
     </Card>
@@ -136,6 +144,7 @@ const CardFilterWhere = observer(() => {
 });
 const CardFilterWho = observer(() => {
   const { t } = useTranslation();
+  const location = useLocation();
   const { filterStore } = useStore();
   const {
     isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType,
@@ -143,6 +152,13 @@ const CardFilterWho = observer(() => {
   const {
     ageTypes, updateAgeType, populationTypes, updatePopulationType,
   } = filterStore;
+  useEffect(() => {
+    const query = useQuery(location);
+    const injType = useInjTypeByQuery(query);
+    if (injType) {
+      updateInjuerdType(injType, true);
+    }
+  }, []);
   const styleToggle = isValidWho ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
   return (
     <Card>

@@ -18,6 +18,16 @@ export function useTabFromQuery(query: URLSearchParams, defVal: string) {
   return res;
 }
 
+// get injuerd type by query parmas
+export function useInjTypeByQuery(query: URLSearchParams) {
+  let res = null;
+  const qText = query.get('inj');
+  if (qText) {
+    res = parseInt(qText);
+  }
+  return res;
+}
+
 // get city name by url query parmas
 export function useCityNameFromQuery(query: URLSearchParams, defaultName: string) {
   let res = [defaultName];

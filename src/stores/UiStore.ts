@@ -44,8 +44,11 @@ export default class UiStore {
     }
   }
 
+  /**
+   * current page
+   */
   @observable
-  currentPage: string ='home';
+  currentPage: string = 'home';
 
   @action
   setCurrentPage = (pageType: string) => {
@@ -53,11 +56,28 @@ export default class UiStore {
   }
 
   @observable
-  currentTab: string ='charts';
+  currentTab: string = 'charts';
 
   @action
   setCurrentTab = (tabName: string) => {
     this.currentTab = tabName;
+  }
+
+  @observable
+  searchParams: string = '';
+
+  @action
+  setSearchParams = () => {
+    let res = '';
+    if (this.currentPage === 'home') {
+      res += `?tab=${this.currentTab}`;
+    } else {
+      res += `?name=${this.rootStore.filterStore.cityResult}`;
+      res += `&tab=${this.currentTab}`;
+    }
+    // if (!this.rootStore.filterStore.injTypes.isAllValsFalse()) {
+    // }
+    this.searchParams = res;
   }
 
   @observable
