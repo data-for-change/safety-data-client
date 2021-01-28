@@ -19,9 +19,9 @@ interface IProps { }
 const getSize = (width: number) => {
   let size: number = 500;
   if (width <= 350) size = 300;
-  else if (width <= 760) size = width * 0.85;
-  else if (width <= 1500) size = width * 0.75;
-  else size = 1200;
+  else if (width <= 770) size = width * 0.8;
+  else if (width <= 1200) size = (width - 300) * 0.9;
+  else size = 1000;
   return size;
 };
 
@@ -144,7 +144,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
   const { groupBy2, groupBy } = filterStore;
   const barsGrp2 = groupBy2.getBars();
   const reactDataGrp2 = toJS(filterStore.dataGroupby2);
-  const show = (groupBy.text !== 'CityByPop');
+  const show = (groupBy.text !== 'CityByPop') && graphSize > 500;
   return (
     <div>
       {show
