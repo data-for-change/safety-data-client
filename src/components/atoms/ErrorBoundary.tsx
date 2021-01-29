@@ -1,4 +1,5 @@
 import React from 'react';
+import logger from '../../services/logger';
 
 interface IProps {
 }
@@ -19,7 +20,7 @@ class ErrorBoundary extends React.Component<IProps, IState> {
   componentDidCatch(error:any, errorInfo:any) {
     // You can also log the error to an error reporting service
     // logErrorToMyService(error: TypeError, errorInfo);
-    console.error(error);
+    logger.error(error);
   }
 
   render() {

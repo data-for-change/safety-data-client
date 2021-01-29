@@ -62,7 +62,6 @@ export default class ImageStore {
 
   submitImageFile = () => {
     if (this.currImage !== null) {
-      // console.log(tags);
       if (this.currImage._id === 0 && this.currImage.file !== undefined) {
         uploadImg(this.currImage);
       } else updateImgProps(this.currImage);

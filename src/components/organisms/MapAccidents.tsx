@@ -9,6 +9,7 @@ import ButtonTuggleHeatLayer from '../atoms/ButtonTuggleHeatLayer';
 import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
+import logger from '../../services/logger';
 import 'leaflet-css';
 
 const styleButDiv: React.CSSProperties = {
@@ -31,7 +32,7 @@ const MapAccidents: FunctionComponent<IProps> = observer(() => {
     try {
       if (bboxType !== BBoxType.NO_BBOX) mapStore.getMarkersInBBox();
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   });
   useEffect(() => {

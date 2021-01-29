@@ -22,6 +22,7 @@ const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'))
 const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
+
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const style = {
     marginTop: '20px',
@@ -29,7 +30,6 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { t } = useTranslation();
   const { mapStore, uiStore } = useStore();
   // const [activeKey] = useState(uiStore.);
-  // console.log(activeKey);
   // defaultActiveKey={uiStore.currentTab}
   return (
     <Tabs

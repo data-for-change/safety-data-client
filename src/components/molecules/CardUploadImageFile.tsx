@@ -21,7 +21,6 @@ const CardUploadImageFile = observer(() => {
   const { setCurrImage } = imageStore;
   const onChangeFileHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== undefined && event.target.files !== null && event.target.files.length > 0) {
-      // console.log(event.target.files[0]);
       const file = event.target.files[0];
       const image = new ImageEntity(0, file.name, '', '', '', '');
       image.file = file;

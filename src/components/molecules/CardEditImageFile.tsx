@@ -41,7 +41,6 @@ const CardEditImageFile = observer(() => {
     description: x.texthe,
   }));
   const handleOnSlide = (currentIndex:number) => {
-    // console.log(currentIndex);
     if (arrayImages.length > 0) setCurrImage(arrayImages[currentIndex]);
     return true;
   };

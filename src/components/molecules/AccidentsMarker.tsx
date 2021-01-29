@@ -60,7 +60,6 @@ const setIconBySeverity = (severity: string, useSmallIcons: boolean) => {
 const AccidentsMarker: React.FC<IProps> = (({ data, language, useSmallMarkers }) => {
   const lPoint: L.LatLng = new L.LatLng(data.latitude, data.longitude);
   const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew, useSmallMarkers);
-  // console.log(data.latitude)
   return (
     <Marker position={lPoint} icon={icon}>
       <AccidentPopUp data={data} language={language} />

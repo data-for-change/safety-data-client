@@ -11,6 +11,7 @@ import RootStore from './RootStore';
 import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
+import logger from '../services/logger';
 import { BBoxType } from './MapStore';
 import Casualty from './Casualty';
 // import autorun  from "mobx"
@@ -123,7 +124,7 @@ export default class FilterStore {
     if (this.cities.length === 0) {
       this.streets = [];
     } else if (updateCityResult) {
-      this.cityResult = this.cities[0];
+      [this.cityResult] = this.cities;
     }
   }
 
@@ -350,7 +351,7 @@ export default class FilterStore {
 
   @action
   updateAllInjuries = (data: Casualty[]) => {
-    // console.log("updateAllInjuries ",data.length)
+    // looger.log("updateAllInjuries ",data.length)
     this.setMarkersLoadStep(2);
     this.dataAllInjuries = data;
     this.rootStore.mapStore.setBounds(data, this.cities);
@@ -364,7 +365,7 @@ export default class FilterStore {
 
   @action
   updateDataMarkersLean = (data: Casualty[]) => {
-    // console.log("updateDataMarkersLean ",data.length)
+    // logger.log("updateDataMarkersLean ",data.length)
     this.setMarkersLoadStep(1);
     this.dataMarkersLean = data;
   }
@@ -437,7 +438,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
-    // console.log(filter);
+    // logger.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterd = data;
@@ -449,7 +450,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
-    // console.log(filter);
+    // logger.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) {
@@ -463,7 +464,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
-    // console.log(filter)
+    // logger.log(filter)
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined && data.length > 0) {
@@ -471,7 +472,7 @@ export default class FilterStore {
             const fixData = this.groupBy2.fixStrcutTable(data);
             this.dataGroupby2 = fixData;
           } catch (error) {
-            console.log(error);
+            logger.log(error);
             this.dataGroupby2 = [];
           }
         }
@@ -531,9 +532,9 @@ export default class FilterStore {
     this.isLoading = true;
     const range = JSON.parse(this.cityPopSizeRange);
     const filterMatch = this.getFilter(null);
+    // logger.log(filterMatch);
     const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
     this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
-    // console.log(filter)
     fetchAggregatFilter(filter, 'main')
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
@@ -662,7 +663,7 @@ export default class FilterStore {
     this.isLoading = true;
     const arrFilters = this.getFilterIDB();
     this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
-    // console.log(arrFilters);
+    // logger.log(arrFilters);
     getFromDexie(arrFilters)
       .then((data: any[] | undefined) => {
         if (data !== null && data !== undefined) {
@@ -779,8 +780,8 @@ export default class FilterStore {
 }
 
 // autorun(() =>{
-//     console.log(store.todos[0])
-//     console.log(store.filter)
+//     logger.log(store.todos[0])
+//     logger.log(store.filter)
 // })
 
 // export default store

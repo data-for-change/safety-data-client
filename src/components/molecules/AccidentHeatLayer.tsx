@@ -7,6 +7,7 @@ import { toJS } from 'mobx';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
+// import logger from '../../services/logger';
 
 interface IProps {
   fitBoundsOnUpdate?: boolean;
@@ -22,7 +23,7 @@ const AccidentHeatLayer: FunctionComponent<IProps> = observer(({ fitBoundsOnUpda
   } else {
     reactMarkers = toJS(dataAllInjuries);
   }
-  // console.log("reactMarkers ", reactMarkers.length)
+  // logger.log("reactMarkers ", reactMarkers.length)
   const newArr: any[] = reactMarkers.map((x) => [x.latitude, x.longitude, x._id]);
   return (
     <HeatmapLayer

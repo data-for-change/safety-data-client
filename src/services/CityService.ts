@@ -11,7 +11,6 @@ export default class CityService {
       headers: {},
     };
     $.ajax(settings).done((response:any[]) => {
-      // console.log(response)
       collback(response);
     });
   }
@@ -24,7 +23,6 @@ export default class CityService {
       headers: {},
     };
     $.ajax(settings).done((response:any[]) => {
-      // console.log(response)
       collback(response);
     });
   }

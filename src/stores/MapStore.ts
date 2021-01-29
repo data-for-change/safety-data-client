@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { Map } from 'react-leaflet';
 import L from 'leaflet';
 import { fetchFilter } from '../services/AccidentService';
+import logger from '../services/logger';
 import RootStore from './RootStore';
 // import autorun  from "mobx"
 
@@ -63,11 +64,11 @@ export default class MapStore {
   // mapBounds: L.LatLngBounds = L.latLngBounds(INIT_BOUNDS);
   // @action
   // updateBounds = (bounds: L.LatLngBounds) => {
-  //   //console.log("updateBounds",bounds)
+  //   //logger.log("updateBounds",bounds)
   //   try {
   //     this.mapBounds = (bounds);
   //   } catch (error) {
-  //     console.error(error)
+  //     logger.error(error)
   //   }
   // }
   // @action
@@ -83,7 +84,7 @@ export default class MapStore {
         // if (bunds.contains(this.mapCenter))
         //   this.mapBounds = bunds;
         // else
-        //  console.log("worng bounds: ", bunds, this.mapCenter)
+        //  logger.log("worng bounds: ", bunds, this.mapCenter)
       } else {
         this.updateMapCenter(bunds.getCenter());
         // this.mapBounds = bunds;
@@ -120,7 +121,7 @@ export default class MapStore {
   }
 
   getBounds = (data: any[]) => {
-    // console.log("setBounds!")
+    // logger.log("setBounds!")
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);
     data.forEach((x) => {
@@ -200,7 +201,7 @@ export default class MapStore {
           && x.latitude <= north && x.longitude >= west && x.longitude <= east);
       this.updateDataMarkersInBounds(data);
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   }
 

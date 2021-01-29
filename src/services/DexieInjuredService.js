@@ -6,8 +6,8 @@ db.version(1).stores({
 });
 
 export async function insertToDexie(data) {
-  // console.log("insertToDexie")
-  // console.log(data)
+  // logger.log("insertToDexie")
+  // logger.log(data)
   await db.injuerd.bulkPut(data);
   // testInsertDexie()
 }
@@ -41,7 +41,7 @@ export async function getFromDexie(arrFilters) {
 
 // export async function testInsertDexie() {
 //     var id = await db1.tasks.put({date: Date.now(), description: 'Test Dexie', done: 0});
-//     console.log("Got id " + id);
+//     logger.log("Got id " + id);
 //     // Now lets add a bunch of tasks
 //     await db1.tasks.bulkPut([
 //         {date: Date.now(), description: 'Test Dexie bulkPut()', done: 1},

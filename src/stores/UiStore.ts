@@ -1,6 +1,7 @@
 import { observable, action, reaction } from 'mobx';
 import i18n from '../i18n';
 import RootStore from './RootStore';
+import logger from '../services/logger';
 // import autorun  from "mobx"
 
 export default class UiStore {
@@ -40,7 +41,7 @@ export default class UiStore {
         this.updateLanguage(lang);
       }
     } catch (error) {
-      console.log(error);
+      logger.log(error);
     }
   }
 

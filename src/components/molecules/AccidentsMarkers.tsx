@@ -5,6 +5,7 @@ import { toJS } from 'mobx';
 import AccidentsMarker from '../molecules/AccidentsMarker';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
+import logger from '../../services/logger';
 
 interface IProps { }
 const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
@@ -27,7 +28,7 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
       }
       return null;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return null;
     }
   });
