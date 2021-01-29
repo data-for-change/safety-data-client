@@ -42,7 +42,7 @@ export default class FilterStore {
     this.separator = FC.initSeparator();
     this.oneLane = FC.initOneLane();
     this.groupByDict = initGroupByDict();
-    initGroup2Dict(this.group2Dict);
+    this.group2Dict = initGroup2Dict();
     this.groupBy = this.groupByDict.TypeInjured;
     this.groupBy2 = this.group2Dict.Gender;
     // init data (on home page)

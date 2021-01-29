@@ -35,6 +35,7 @@ export default class GroupBy2 implements IGroupBy2 {
           const engVal = this.revTrnas(y.grp2);
           return (`"${engVal}":${y.count}`);
         }).join(',');
+        // eslint-disable-next-line no-underscore-dangle
         let xId = x._id;
         if (xId !== null && xId !== undefined && typeof (xId) === 'string') xId = xId.replace('"', '\\"');
         let sObject = `{"_id":"${xId}",${arr}}`;
@@ -46,18 +47,19 @@ export default class GroupBy2 implements IGroupBy2 {
 
     getBars = () => {
       // [{key:"male",color:"#8884d8"},{key:"female",color:"#82ca9d"}]
-      const res = Object.entries(this.vals).map(([key, x]: any[]) => ({ key: x.name, color: x.color }));
+      const res = Object.entries(this.vals).map(([x]: any[]) => ({ key: x.name, color: x.color }));
       return res;
     }
 
     getColumns= () => {
-      const res = Object.entries(this.vals).map(([key, x]: any[]) => (x.name));
+      const res = Object.entries(this.vals).map(([x]: any[]) => (x.name));
       res.unshift('_id');
       return res;
     }
 }
 
-export const initGroup2Dict = (dict: any) => {
+export const initGroup2Dict = () => {
+  const dict = {} as any;
   dict.Severity = new GroupBy2('Severity', 'injury_severity_hebrew');
   dict.Severity.vals['הרוג'] = new GroupBy2Val('dead', '#8884D8');
   dict.Severity.vals['פצוע קשה'] = new GroupBy2Val('severly-injured', '#82CA9D');
@@ -82,4 +84,5 @@ export const initGroup2Dict = (dict: any) => {
   dict.TypeInjured.vals['נוסע - אופנוע (לא נהג)'] = new GroupBy2Val('motorcycle-p', '#1258DC');
   dict.TypeInjured.vals['נהג - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
   dict.TypeInjured.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
+  return dict;
 };
