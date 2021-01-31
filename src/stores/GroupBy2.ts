@@ -47,12 +47,12 @@ export default class GroupBy2 implements IGroupBy2 {
 
     getBars = () => {
       // [{key:"male",color:"#8884d8"},{key:"female",color:"#82ca9d"}]
-      const res = Object.entries(this.vals).map(([x]: any[]) => ({ key: x.name, color: x.color }));
+      const res = Object.entries(this.vals).map(([key, x]: any[]) => ({ key: x.name, color: x.color }));
       return res;
     }
 
     getColumns= () => {
-      const res = Object.entries(this.vals).map(([x]: any[]) => (x.name));
+      const res = Object.entries(this.vals).map(([key, x]: any[]) => (x.name));
       res.unshift('_id');
       return res;
     }
