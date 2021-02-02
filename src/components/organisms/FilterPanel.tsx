@@ -23,14 +23,14 @@ const styles = {
   },
 };
 
-const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }) => {
+const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }: IProps) => {
   const [open, setOpen] = useState(true);
   const [showModel, setShowModal] = useState(false);
   const { t } = useTranslation();
   const showFilter = () => {
     setOpen(!open);
   };
-  const textHideButton = (open)? t('HideFilter'):t('ShowFilter');
+  const textHideButton = (open) ? t('HideFilter') : t('ShowFilter');
   return (
     <>
       <div style={styles.buttonStyle}>

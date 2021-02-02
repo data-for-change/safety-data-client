@@ -9,33 +9,25 @@ import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 
 interface IProps { }
-export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
-  const style = {
-    marginLeft: '0',
-    marginRight: '0',
-    marginTop: '20px',
-  };
-  return (
-    // <div className="row" style={style}>
-    <React.Fragment>
-      <div className="tabels-grid" >
-        <div className="grid-table-item1" >
-          <GroupTablesYears />
-        </div>
-        <div className="grid-table-item2">
-          <GroupTablesYears2 />
-        </div>
-        <div className="grid-table-item3">
-          <GroupTablesFilter />
-        </div>
-        {/* <div className="grid-table-item4"> */}
-        {/* </div> */}
+export const GroupByTablesPanel: FunctionComponent<IProps> = () => (
+  // <div className="row" style={style}>
+  <>
+    <div className="tabels-grid">
+      <div className="grid-table-item1">
+        <GroupTablesYears />
       </div>
-      <GroupTables2Grp />
-    </React.Fragment>
-  );
-};
-
+      <div className="grid-table-item2">
+        <GroupTablesYears2 />
+      </div>
+      <div className="grid-table-item3">
+        <GroupTablesFilter />
+      </div>
+      {/* <div className="grid-table-item4"> */}
+      {/* </div> */}
+    </div>
+    <GroupTables2Grp />
+  </>
+);
 const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
@@ -102,27 +94,26 @@ const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { groupBy, groupBy2, dataGroupby2 } = filterStore;
-  const columnsGrp2 = groupBy2.getColumns().map((x: any) => {
-    return { dataField: x, text: t(x) }
-  }
-  );
+  const columnsGrp2 = groupBy2.getColumns().map((x: any) => ({ dataField: x, text: t(x) }));
   const reactDataGrp2 = toJS(dataGroupby2);
   const show = (groupBy.text !== 'CityByPop');
   if (reactDataGrp2.length > 0) {
     return (
-      <React.Fragment>
+      <>
         { show
           && (
-            <SmallCard2 >
+            <SmallCard2>
               <div style={divStyle}>
                 <span style={styleLable}>
                   {' '}
-                  {t('GroupBy')}:
+                  {t('GroupBy')}
+                  :
                 </span>
                 <SelectGroupBy
                   id="Tables.Grp2"
                   labelText=""
-                />&nbsp;
+                />
+                &nbsp;
                 <SelectGroupBy2 id="Tables" />
               </div>
               <hr />
@@ -133,7 +124,7 @@ const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
               />
             </SmallCard2>
           )}
-      </React.Fragment>
+      </>
     );
   }
   return null;

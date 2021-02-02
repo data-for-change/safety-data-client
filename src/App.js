@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import HomePage from './components/pages/HomePage';
-import { CityPage } from './components/pages/CityPage';
+import CityPage from './components/pages/CityPage';
 import Header from './components/templates/Headr';
 // import Card from 'react-bootstrap/Card';
 import Footer from './components/templates/Footer';
@@ -15,40 +15,39 @@ const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'))
 
 
 function App() {
-   return (
-      <Router>
-         {/* <div> */}
-         {/* <Card display="flex" height="100%"> */}
-         <Header title="Safety Data" />
-         <div >
-            <Suspense fallback={<Loader />}>
-               <Switch>
-                  <Route
-                     path="/about"
-                     component={AboutPage}
-                  />
-                  <Route
-                     exact
-                     path="/city"
-                     component={CityPage}
-                  />
-                  <Route
-                     path="/update-img"
-                     component={UpdateImagePage}
-                  />
-                  <Route
-                     path="/"
-                     component={HomePage}
-                  />
-               </Switch>
-            </Suspense>
-         </div>
-         <Footer />
-         {/* </Card> */}
-         {/* </div> */}
-      </Router>
-   );
+  return (
+    <Router>
+      {/* <div> */}
+      {/* <Card display="flex" height="100%"> */}
+      <Header title="Safety Data" />
+      <div>
+        <Suspense fallback={<Loader />}>
+          <Switch>
+            <Route
+              path="/about"
+              component={AboutPage}
+            />
+            <Route
+              exact
+              path="/city"
+              component={CityPage}
+            />
+            <Route
+              path="/update-img"
+              component={UpdateImagePage}
+            />
+            <Route
+              path="/"
+              component={HomePage}
+            />
+          </Switch>
+        </Suspense>
+      </div>
+      <Footer />
+      {/* </Card> */}
+      {/* </div> */}
+    </Router>
+  );
 }
-
 
 export default App;

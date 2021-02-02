@@ -2,13 +2,14 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 
 interface IProps {
-    title?: string,
-    styleType?: number
-    width?: number
+  title?: string;
+  styleType?: number;
+  width?: number;
+  children: any;
 }
 const SmallCard: React.FC<IProps> = ({
   title, styleType = 0, width = 0, children,
-}) => {
+}: IProps) => {
   const styleWidth: any[] = [
     '15rem', '20rem', '25rem', '40rem',
   ];
