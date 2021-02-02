@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import HomePage from './components/pages/HomePage';
-import { CityPage } from './components/pages/CityPage';
+import CityPage from './components/pages/CityPage';
 import Header from './components/templates/Headr';
 // import Card from 'react-bootstrap/Card';
 import Footer from './components/templates/Footer';

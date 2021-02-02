@@ -110,51 +110,28 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    };
    // const { t } = useTranslation();
    const [showModel, setShowModal] = useState(false);
-   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-   const graph2Size = Math.min(600, graphSize);
-   React.useEffect(() => {
-      function handleResize() {
-         const size = getSize(window.innerWidth);
-         setGraphSize(size);
-      }
-      window.addEventListener('resize', handleResize);
-      return (() => { window.removeEventListener('resize', handleResize); });
-   });
    const { filterStore, uiStore } = useStore();
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
    const { chartType } = uiStore;
-   let chart = null;
-   if (chartType === 'BarChart') chart = <MyBarChart data={reactData3} width={graph2Size} height={graph2Size * 0.65} />;
-   else if (chartType === 'PieChart') chart = <MyPieChart data={reactData3} width={graph2Size * 0.65} />;
-
-   else chart = <MyTreeMap data={reactData3} />;
+   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} />;
    return (
-      <SmallCard2>
+      <SmallCard2 >
          <div style={styles.divStyle}>
             <SelectGroupBy id="Graphs.Main" />
-            <Button
-               className="btn-sm"
-               onClick={() => { setShowModal(!showModel); }}>
-               <img
-                  src={gearlogo}
-                  alt="settings" style={styles.iconStyle}
-               />
+            <Button onClick={() => { setShowModal(!showModel); }}>
+               <img src={gearlogo} alt="settings" style={styles.iconStyle} />
             </Button>
          </div>
-         <ConfigFilterModal
-            title="Chart Options"
-            showModal={showModel}
-            setShow={setShowModal}>
+         <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
             <ConfigChart />
          </ConfigFilterModal>
-         <hr />
          {chart}
       </SmallCard2>
-      // <SmallCard styleType={3}>
-      // </SmallCard>
    );
 });
+
+
 
 
 const CardChartGrpBy2: React.FC<IProps> = observer(() => {
