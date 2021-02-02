@@ -10,6 +10,7 @@ import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 import MyBarChart from '../molecules/MyBarChart';
 import MyPieChart from '../molecules/MyPieChart';
 import MyTreeMap from '../molecules/MyTreeMap';
+import ChartBar from '../molecules/ChartBar';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
 import gearlogo from '../../assets/gear2.png';
@@ -56,28 +57,40 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    return null;
 });
 
+// const CardChartYears: React.FC<IProps> = observer(() => {
+//    const { t } = useTranslation();
+//    const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
+//    React.useEffect(() => {
+//       function handleResize() {
+//          const size = getSize(window.innerWidth);
+//          setGraphSize(size);
+//       }
+//       window.addEventListener('resize', handleResize);
+//       return (() => { window.removeEventListener('resize', handleResize); });
+//    });
+//    const graph1Size = Math.min(380, graphSize);
+//    const { filterStore } = useStore();
+//    const { dataFilterdByYears, casualtiesNames } = filterStore;
+//    const reactData2 = toJS(dataFilterdByYears);
+//    return (
+//       <SmallCard2 header={`${t(casualtiesNames)} ${t('by-years')}`}>
+//          <MyBarChart
+//             data={reactData2}
+//             width={graph1Size}
+//             fill="#FE9772"
+//          />
+//       </SmallCard2>
+//    );
+// });
+
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
-   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-   React.useEffect(() => {
-      function handleResize() {
-         const size = getSize(window.innerWidth);
-         setGraphSize(size);
-      }
-      window.addEventListener('resize', handleResize);
-      return (() => { window.removeEventListener('resize', handleResize); });
-   });
-   const graph1Size = Math.min(380, graphSize);
    const { filterStore } = useStore();
    const { dataFilterdByYears, casualtiesNames } = filterStore;
    const reactData2 = toJS(dataFilterdByYears);
    return (
-      <SmallCard2 header={`${t(casualtiesNames)} ${t('by-years')}`}>
-         <MyBarChart
-            data={reactData2}
-            width={graph1Size}
-            fill="#FE9772"
-         />
+      <SmallCard2 styleType={2} title={`${t(casualtiesNames)} ${t('by-years')}`}>
+         <ChartBar data={reactData2} fill="#FE9772" />
       </SmallCard2>
    );
 });
@@ -142,6 +155,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
       // </SmallCard>
    );
 });
+
 
 const CardChartGrpBy2: React.FC<IProps> = observer(() => {
    const styleLable = {

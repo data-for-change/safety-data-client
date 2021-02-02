@@ -7,9 +7,12 @@ interface IProps {
   title: string;
   showModal: boolean;
   setShow: (show: boolean) => void;
+  children: any;
 }
 
-const ConfigFilterModal: React.FC<IProps> = ({ title, showModal, setShow, children }) => {
+const ConfigFilterModal: React.FC<IProps> = ({
+  title, showModal, setShow, children,
+}: IProps) => {
   const { t } = useTranslation();
   const handleClose = () => setShow(false);
   return (

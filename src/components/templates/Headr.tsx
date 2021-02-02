@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import LanguageSelector from '../molecules/LanguageSelector';
 import logo from '../../assets/safety-logo.png';
-import { useTranslation } from 'react-i18next';
 import NavigationList from '../molecules/NavigationList';
 
 
@@ -10,7 +8,6 @@ interface IProps {
    title: string
 }
 export const Header: React.FC<IProps> = ({ title }) => {
-   const { t } = useTranslation();
    return (
       <header style={{ marginBottom: '1rem' }}>
          <nav className="navbar navbar-expand-lg navbar-dark shadow">
@@ -43,10 +40,5 @@ export const Header: React.FC<IProps> = ({ title }) => {
       </header>
    );
 };
-// const getShowNavMenu = (width: number) => {
-//   let res = true;
-//   if (width <= 530) res = false;
-//   return res;
-// };
 
 export default Header;
