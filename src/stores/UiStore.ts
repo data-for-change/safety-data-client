@@ -85,7 +85,7 @@ export default class UiStore {
   chartType: string = 'BarChart';
 
   @observable
-  chartTypeList: string[] = ['BarChart', 'PieChart', 'TreeMap'];
+  chartTypeList: string[] = ['BarChart', 'PieChart', 'HorizontalBar'];
 
   @action
   updateChartType = (val: string) => {

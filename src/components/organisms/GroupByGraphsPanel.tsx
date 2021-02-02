@@ -103,8 +103,8 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
   const { filterStore, uiStore } = useStore();
   const { dataFilterd } = filterStore;
   const reactData3 = toJS(dataFilterd);
-  // const { chartType } = uiStore;
-  const chart = <ChartBar data={reactData3} fill="#8884d8" />;
+  const { chartType } = uiStore;
+  const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType}/>;
   return (
     <SmallCard styleType={3}>
       <div style={styles.divStyle}>
