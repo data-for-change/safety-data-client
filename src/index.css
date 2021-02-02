@@ -10,14 +10,74 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-body {
-  /* height: 100%; */
-}
-
 .dir-rtl {
   direction: rtl;
 }
 
 .dir-ltr {
   direction: ltr;
+}
+
+.filterLable {
+  padding-right: 0 !important;
+}
+
+#pageDropDown {
+  height: 2.2rem;
+}
+
+.form-select-sm {
+  border-radius: 2px;
+  height: 2rem;
+  width: 6rem;
+}
+
+.btn, .button-sm {
+  border-radius: 2px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.loader-con {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* TABS  */
+
+.nav-tabs {
+  border-bottom: solid black 2px;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  color: rgb(241, 24, 78);
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+  /* color: red; */
+  color: black;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
+  color: rgb(241, 24, 78);
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+/* IMAGES DESCRIPTION  */
+
+#main-tabs-tabpane-image>div>div>div.image-gallery.image-gallery-using-mouse>div>div.image-gallery-slide-wrapper.bottom.image-gallery-rtl>div>div>div.image-gallery-slide.center>div>span {
+  right: 0;
 }
