@@ -12,6 +12,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
 import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
 import { useStore } from '../../stores/storeConfig';
+import SmallCard2 from '../atoms/SmallCard2';
 
 const getColumnsByWidth = (width: number, t: any) => {
   const columns1 = [{
@@ -75,6 +76,7 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   const divStyle = {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginBottom: '1rem'
   };
   const reactMarkers = toJS(filterStore.dataAllInjuries);
   const { ExportCSVButton } = CSVExport;
@@ -90,30 +92,43 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   if (reactMarkers.length > 0) {
     return (
       <div>
-        <CasualtiesSumLabel length={reactMarkers.length} name={filterStore.cityResult} />
-        <ToolkitProvider
-          keyField="id"
-          data={reactMarkers}
-          columns={columns}
-          exportCSV
-        >
-          {
-            (props: any) => (
+        <SmallCard2>
+          <CasualtiesSumLabel
+            length={reactMarkers.length}
+            name={filterStore.cityResult}
+          />
+          <hr />
+          <ToolkitProvider
+            keyField="id"
+            data={reactMarkers}
+            columns={columns}
+            exportCSV>
+            {(props: any) => (
               <div>
-                <BootstrapTable {...props.baseProps} pagination={paginationFactory()} headerClasses="table-header" />
-                <hr />
                 <div style={divStyle}>
-                  <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
+                  <ExportCSVButton
+                    className="button-sm" {...props.csvProps}>
+                    {t('export-to-csv')}
+                  </ExportCSVButton>
                 </div>
-              </div>
-            )
-          }
-        </ToolkitProvider>
+                <BootstrapTable
+                  pagination={paginationFactory()}
+                  {...props.baseProps}
+                  headerClasses="table-header"
+                />
+                {/* <hr /> */}
+              </div>)}
+          </ToolkitProvider>
+        </SmallCard2>
       </div>
     );
   }
   return (
-    <CasualtiesSumLabel length={reactMarkers.length} name={filterStore.cityResult} />
+    <CasualtiesSumLabel
+      length={reactMarkers.length}
+      name={filterStore.cityResult}
+    />
   );
 });
+
 export default AccidentsTable;

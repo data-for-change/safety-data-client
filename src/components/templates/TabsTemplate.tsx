@@ -6,6 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import ErrorBoundary from '../atoms/ErrorBoundary';
 import { useStore } from '../../stores/storeConfig';
 import Loader from '../atoms/Loader';
+import SmallCard2 from '../atoms/SmallCard2';
 
 interface IProps {
   type: string;
@@ -19,7 +20,7 @@ const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const style = {
-    // marginTop: '20px',
+    marginTop: '1rem',
   };
   const { t } = useTranslation();
   const { mapStore, uiStore } = useStore();
@@ -55,7 +56,9 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={style} eventKey="map" title={t('Map')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-            <MapAccidents />
+            <SmallCard2>
+              <MapAccidents />
+            </SmallCard2>
           </Suspense>
         </ErrorBoundary>
       </Tab>

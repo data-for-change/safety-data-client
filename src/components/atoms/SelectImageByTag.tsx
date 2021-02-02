@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 interface PropsSelectImageByTag {
-    onChange: (val:string) => void;
+  onChange: (val: string) => void;
 }
 const styleSelect = {
   width: '150px',
@@ -21,6 +21,7 @@ const SelectImageByTag: React.FC<PropsSelectImageByTag> = observer(({ onChange }
         </Form.Label> */}
         <Form.Control
           as="select"
+          className="form-select form-select-sm"
           style={styleSelect}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => { onChange(e.target.value); }}
         >

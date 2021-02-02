@@ -5,9 +5,9 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
-    length:number,
-    name?: string
-  }
+  length: number,
+  name?: string
+}
 const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
@@ -15,7 +15,7 @@ const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
   const nameSpan = name ? `${name}- ` : '';
   if (length > 0) {
     return (
-      <h4>
+      <h5>
         {nameSpan}
         {t('Found')}
         {' '}
@@ -23,7 +23,7 @@ const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
         {' '}
         {t(casualtiesNames)}
         {' '}
-      </h4>
+      </h5>
     );
   }
   return (

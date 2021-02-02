@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 
 interface IProps {
-    isLoading: boolean,
-    isHeatMapHidden: boolean,
-    onClick: () => any
+  isLoading: boolean,
+  isHeatMapHidden: boolean,
+  onClick: () => any
 }
 const ButtonTuggleHeatLayer: React.FC<IProps> = ({ isLoading, isHeatMapHidden, onClick }) => {
   const { t } = useTranslation();
   return (
     <Button
+      className="btn-sm"
       variant="primary"
       disabled={isLoading}
       onClick={() => { onClick(); }}

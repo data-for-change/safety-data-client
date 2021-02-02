@@ -69,8 +69,8 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     <div className="App">
       <div className="container-fluid">
         <div className="row ">
-          <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div>
-          <main className="col-md-10">
+          {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
+          <main className="col-md-12">
             <CityLable />
             <TabsTemplate type="city" />
           </main>

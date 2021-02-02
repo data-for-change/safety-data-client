@@ -22,19 +22,21 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     updateGroupby(event.target.value);
   }, [updateGroupby]);
-
   return (
     <Form className="form-inline">
       <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
-        {lable}
-        <Form.Control
-          as="select"
-          value={groupBy.text}
-          onChange={onSelectChange}
-          className="form-select form-select-sm"
-        >
-          {Object.entries(groupByDict).map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
-        </Form.Control>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          {lable}
+          <Form.Control
+            as="select"
+            value={groupBy.text}
+            onChange={onSelectChange}
+            className="form-select form-select-sm"
+          >
+            {Object.entries(groupByDict)
+              .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
+          </Form.Control>
+        </div>
       </Form.Group>
     </Form>
   );

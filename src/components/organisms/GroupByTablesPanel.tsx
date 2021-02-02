@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
@@ -9,14 +9,13 @@ import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 
 interface IProps { }
-export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
-  const style = {
-    marginLeft: '0',
-    marginRight: '0',
-    marginTop: '20px',
-  };
+export const GroupByTablesPanel: React.FC<IProps> = () => {
+  // const style = {
+  //   marginLeft: '0',
+  //   marginRight: '0',
+  //   marginTop: '20px',
+  // };
   return (
-    // <div className="row" style={style}>
     <React.Fragment>
       <div className="tabels-grid" >
         <div className="grid-table-item1" >
@@ -36,7 +35,7 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
   );
 };
 
-const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
+const GroupTablesYears: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { dataByYears, casualtiesNames } = filterStore;
@@ -50,7 +49,7 @@ const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
   }
   return null;
 });
-const GroupTablesYears2: FunctionComponent<IProps> = observer(() => {
+const GroupTablesYears2: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { dataFilterdByYears, casualtiesNames } = filterStore;
@@ -64,10 +63,10 @@ const GroupTablesYears2: FunctionComponent<IProps> = observer(() => {
   }
   return null;
 });
-const GroupTablesFilter: FunctionComponent<IProps> = observer(() => {
+const GroupTablesFilter: React.FC<IProps> = observer(() => {
   const divStyle = {
-    // display: 'flex',
-    // flexWrap: 'wrap',
+    display: 'flex',
+    flexDirection: 'row',
   } as React.CSSProperties;
   const { filterStore } = useStore();
   const { dataFilterd, groupBy } = filterStore;
@@ -87,7 +86,7 @@ const GroupTablesFilter: FunctionComponent<IProps> = observer(() => {
   return null;
 });
 
-const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
+const GroupTables2Grp: React.FC<IProps> = observer(() => {
   const divStyle = {
     display: 'flex',
     // flexWrap: 'wrap',

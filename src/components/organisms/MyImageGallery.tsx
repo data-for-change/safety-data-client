@@ -10,6 +10,7 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 import ButtonToggle from '../atoms/ButtonToggle';
 import SelectImageByTag from '../atoms/SelectImageByTag';
 import { useStore } from '../../stores/storeConfig';
+import SmallCard2 from '../atoms/SmallCard2';
 
 interface Props {
   type: string;
@@ -50,18 +51,20 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     return true;
   };
   return (
-    <Card style={styleCard}>
+    // <Card style={styleCard}>
+    <SmallCard2>
       <Row>
-        <Col md={2}>
-          <SelectImageByTag onChange={(val:string) => setCurrTag(val)} />
+        <Col md={3}>
+          <SelectImageByTag onChange={(val: string) => setCurrTag(val)} />
         </Col>
-        <Col xs={12} md={8}>
+        <Col xs={12} md={6}>
           {isGotImages && <ImageTitle />}
         </Col>
-        <Col md={2} style={styleButCol}>
+        <Col md={3} style={styleButCol}>
           {isGotImages && <ButtonToggleHideDescription />}
         </Col>
       </Row>
+      <hr />
       {isGotImages && (
         <ImageGallery
           items={images}
@@ -70,14 +73,16 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
         />
       )}
       {!isGotImages && <ImageMsg />}
-    </Card>
+    </SmallCard2>
+    // {/* </Card> */}
   );
 });
 
 const styleButtonToggle = {
-  marginLeft: '3px',
-  marginRight: '3px',
-  marginBottom: '3px',
+  // marginLeft: '3px',
+  // marginRight: '3px',
+  // marginBottom: '3px',
+  width: 'auto'
 };
 const ButtonToggleHideDescription: React.FC<{}> = observer(() => {
   const { imageStore } = useStore();
@@ -106,7 +111,7 @@ const ImageTitle: React.FC<{}> = observer(() => {
   const { language } = uiStore;
   const titleKey = `title${language}`;
   // @ts-ignore
-  const title:string = (currImage !== null) ? currImage[titleKey] : '';
+  const title: string = (currImage !== null) ? currImage[titleKey] : '';
   return (
     <div style={styleTitle}>{title}</div>
   );

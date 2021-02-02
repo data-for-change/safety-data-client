@@ -10,7 +10,7 @@ const SmallCard2: React.FC<SmallCard2Props> = ({ children, header, sizeWidth }) 
    return (
       <div
          style={{ width: sizeWidth ? sizeWidth : '' }}
-         className="my-2 p-3 bg-white rounded shadow">
+         className=" p-3 bg-white rounded shadow">
          {cardHeader}
          {children}
       </div>
