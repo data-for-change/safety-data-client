@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 import GroupByTable from '../molecules/GroupByTable';
-import SmallCard from '../atoms/SmallCard';
+import SmallCard2 from '../atoms/SmallCard2';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 
@@ -16,12 +16,23 @@ export const GroupByTablesPanel: FunctionComponent<IProps> = () => {
     marginTop: '20px',
   };
   return (
-    <div className="row" style={style}>
-      <GroupTablesYears />
-      <GroupTablesYears2 />
-      <GroupTablesFilter />
+    // <div className="row" style={style}>
+    <React.Fragment>
+      <div className="tabels-grid" >
+        <div className="grid-table-item1" >
+          <GroupTablesYears />
+        </div>
+        <div className="grid-table-item2">
+          <GroupTablesYears2 />
+        </div>
+        <div className="grid-table-item3">
+          <GroupTablesFilter />
+        </div>
+        {/* <div className="grid-table-item4"> */}
+        {/* </div> */}
+      </div>
       <GroupTables2Grp />
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -32,9 +43,9 @@ const GroupTablesYears: FunctionComponent<IProps> = observer(() => {
   const reactData1 = toJS(dataByYears);
   if (reactData1.length > 0) {
     return (
-      <SmallCard title={`${t(casualtiesNames)} ${t('in-region')}, ${t('by-years')}`}>
+      <SmallCard2 header={`${t(casualtiesNames)} ${t('in-region')}, ${t('by-years')}`}>
         <GroupByTable data={reactData1} />
-      </SmallCard>
+      </SmallCard2>
     );
   }
   return null;
@@ -46,23 +57,31 @@ const GroupTablesYears2: FunctionComponent<IProps> = observer(() => {
   const reactData2 = toJS(dataFilterdByYears);
   if (reactData2.length > 0) {
     return (
-      <SmallCard title={`${t(casualtiesNames)} ${t('by-years')}`}>
+      <SmallCard2 header={`${t(casualtiesNames)} ${t('by-years')}`}>
         <GroupByTable data={reactData2} />
-      </SmallCard>
+      </SmallCard2>
     );
   }
   return null;
 });
 const GroupTablesFilter: FunctionComponent<IProps> = observer(() => {
+  const divStyle = {
+    // display: 'flex',
+    // flexWrap: 'wrap',
+  } as React.CSSProperties;
   const { filterStore } = useStore();
   const { dataFilterd, groupBy } = filterStore;
   const reactData = toJS(dataFilterd);
+
   if (reactData.length > 0) {
     return (
-      <SmallCard styleType={1}>
-        <SelectGroupBy id="Tables.Main" />
+      <SmallCard2>
+        <div style={divStyle}>
+          <SelectGroupBy id="Tables.Main" />
+        </div>
+        <hr />
         <GroupByTable data={reactData} dataName={groupBy.text} />
-      </SmallCard>
+      </SmallCard2>
     );
   }
   return null;
@@ -71,39 +90,50 @@ const GroupTablesFilter: FunctionComponent<IProps> = observer(() => {
 const GroupTables2Grp: FunctionComponent<IProps> = observer(() => {
   const divStyle = {
     display: 'flex',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
   } as React.CSSProperties;
   const styleLable = {
     fontWeight: 700,
-    marginTop: '5px',
-    marginLeft: '20px',
-    marginRight: '20px',
+    lineHeight: '40px',
+    marginLeft: '15px',
+    // marginTop: '5px',
+    // marginRight: '20px',
   };
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { groupBy, groupBy2, dataGroupby2 } = filterStore;
-  const columnsGrp2 = groupBy2.getColumns().map((x:any) => ({ dataField: x, text: t(x) }));
+  const columnsGrp2 = groupBy2.getColumns().map((x: any) => {
+    return { dataField: x, text: t(x) }
+  }
+  );
   const reactDataGrp2 = toJS(dataGroupby2);
   const show = (groupBy.text !== 'CityByPop');
   if (reactDataGrp2.length > 0) {
     return (
-      <div>
-        {show
-       && (
-       <SmallCard styleType={4}>
-         <div style={divStyle}>
-           <span style={styleLable}>
-             {' '}
-             {t('GroupBy')}
-             :
-           </span>
-           <SelectGroupBy id="Tables.Grp2" labelText="" />
-           <SelectGroupBy2 id="Tables" />
-         </div>
-         <GroupByTable data={reactDataGrp2} dataName={groupBy.text} columns={columnsGrp2} />
-       </SmallCard>
-       )}
-      </div>
+      <React.Fragment>
+        { show
+          && (
+            <SmallCard2 >
+              <div style={divStyle}>
+                <span style={styleLable}>
+                  {' '}
+                  {t('GroupBy')}:
+                </span>
+                <SelectGroupBy
+                  id="Tables.Grp2"
+                  labelText=""
+                />&nbsp;
+                <SelectGroupBy2 id="Tables" />
+              </div>
+              <hr />
+              <GroupByTable
+                data={reactDataGrp2}
+                dataName={groupBy.text}
+                columns={columnsGrp2}
+              />
+            </SmallCard2>
+          )}
+      </React.Fragment>
     );
   }
   return null;

@@ -5,8 +5,8 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
-    id: string,
-    labelText?: string,
+  id: string,
+  labelText?: string,
 }
 const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' }) => {
   const { t } = useTranslation();
@@ -31,6 +31,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
           as="select"
           value={groupBy.text}
           onChange={onSelectChange}
+          className="form-select form-select-sm"
         >
           {Object.entries(groupByDict).map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
         </Form.Control>

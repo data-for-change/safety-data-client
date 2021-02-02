@@ -22,8 +22,11 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
           as="select"
           value={groupBy2.text}
           onChange={onSelectChange}
+          className="form-select form-select-sm"
         >
-          {Object.entries(group2Dict).map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
+          {Object.entries(group2Dict)
+            .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))
+          }
         </Form.Control>
       </Form.Group>
     </Form>
