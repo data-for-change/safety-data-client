@@ -17,8 +17,6 @@ const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'))
 function App() {
    return (
       <Router>
-         {/* <div> */}
-         {/* <Card display="flex" height="100%"> */}
          <Header title="Safety Data" />
          <div >
             <Suspense fallback={<Loader />}>
@@ -44,8 +42,6 @@ function App() {
             </Suspense>
          </div>
          <Footer />
-         {/* </Card> */}
-         {/* </div> */}
       </Router>
    );
 }

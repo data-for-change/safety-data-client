@@ -98,16 +98,16 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
           exportCSV
         >
           {
-                    (props: any) => (
-                      <div>
-                        <BootstrapTable {...props.baseProps} pagination={paginationFactory()} headerClasses="table-header" />
-                        <hr />
-                        <div style={divStyle}>
-                          <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
-                        </div>
-                      </div>
-                    )
-                }
+            (props: any) => (
+              <div>
+                <BootstrapTable {...props.baseProps} pagination={paginationFactory()} headerClasses="table-header" />
+                <hr />
+                <div style={divStyle}>
+                  <ExportCSVButton className="button-sm" {...props.csvProps}>{t('export-to-csv')}</ExportCSVButton>
+                </div>
+              </div>
+            )
+          }
         </ToolkitProvider>
       </div>
     );
