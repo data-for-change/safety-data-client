@@ -22,6 +22,7 @@
     "react-bootstrap-table2-paginator": "^2.1.0",
     "react-bootstrap-table2-toolkit": "^2.1.2",
     "react-bootstrap-typeahead": "^3.4.7",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "^16.12.0",
     "react-i18next": "^11.3.3",
     "react-image-gallery": "^1.0.7",
