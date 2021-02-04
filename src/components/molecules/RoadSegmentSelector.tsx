@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {
-    isMultiple?: boolean
+  isMultiple?: boolean
 }
 const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { t } = useTranslation();
@@ -18,7 +18,11 @@ const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) 
           {t('RoadSegment')}
           :
         </Form.Label>
-        <Form.Control type="input" placeholder="" value={roadSegment.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }} />
+        <Form.Control
+          type="input"
+          placeholder=""
+          value={roadSegment.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
+        />
       </Form.Group>
 
     );

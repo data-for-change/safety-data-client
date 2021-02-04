@@ -15,8 +15,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const lable = (labelText !== '') ? (
     <Form.Label className="filterLable">
       {' '}
-      {t(labelText)}
-:
+      {t(labelText)}:
     </Form.Label>
   ) : null;
   const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {

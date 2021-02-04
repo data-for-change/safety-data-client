@@ -10,7 +10,7 @@ import { useStore } from '../../stores/storeConfig';
 import citisNamesHeb from '../../assets/cities_names_heb.json';
 
 interface IProps {
-    isMultiple?: boolean
+  isMultiple?: boolean
 }
 
 const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
@@ -19,12 +19,11 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   return (
     <Form.Group controlId="exampleForm.ControlCity">
       <Form.Label className="filterLable">
-        {t('City')}
-:
+        {t('City')}:
       </Form.Label>
       <Typeahead
         id="typeaheadCity"
-                // defaultSelected={[store.city]}
+        // defaultSelected={[store.city]}
         onChange={(selected: string[]) => {
           filterStore.updateCities(selected, true);
         }}

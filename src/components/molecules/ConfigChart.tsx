@@ -24,7 +24,8 @@ const ConfigChart: React.FC<IProps> = observer(() => {
           value={chartType}
           onChange={onSelectChange}
         >
-          {Object.entries(chartTypeList).map(([key, x]: any[]) => (<option value={x} key={key}>{t(x)}</option>))}
+          {Object.entries(chartTypeList)
+            .map(([key, x]: any[]) => (<option value={x} key={key}>{t(x)}</option>))}
         </Form.Control>
       </Form.Group>
       <Form.Group controlId="ConfigFile.ControlShowPercentageChart">
