@@ -11,6 +11,7 @@ import MyBarChart from '../molecules/MyBarChart';
 // import MyPieChart from '../molecules/MyPieChart';
 // import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/ChartBar';
+import ChartGroupBy2 from '../molecules/ChartGroupBy2';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
 import gearlogo from '../../assets/gear2.png';
@@ -88,39 +89,22 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
    const { chartType } = uiStore;
-   const chart = <ChartBar
-      data={reactData3}
-      fill="#8884d8"
-      chartType={chartType}
-   />;
+   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} />;
    return (
-      <SmallCard2 >
+      <SmallCard2>
          <div style={styles.divStyle}>
             <SelectGroupBy id="Graphs.Main" />
-            <Button
-               className="btn-sm"
-               onClick={() => { setShowModal(!showModel); }}>
-               <img
-                  src={gearlogo}
-                  alt="settings"
-                  style={styles.iconStyle}
-               />
+            <Button onClick={() => { setShowModal(!showModel); }}>
+               <img src={gearlogo} alt="settings" style={styles.iconStyle} />
             </Button>
          </div>
-         <ConfigFilterModal
-            title="Chart Options"
-            showModal={showModel}
-            setShow={setShowModal}
-         >
+         <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
             <ConfigChart />
          </ConfigFilterModal>
          {chart}
       </SmallCard2>
    );
 });
-
-
-
 
 const CardChartGrpBy2: React.FC<IProps> = observer(() => {
    const styleLable = {
@@ -134,20 +118,12 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
       flexWrap: 'wrap',
    } as React.CSSProperties;
    const { t } = useTranslation();
-   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-   React.useEffect(() => {
-      function handleResize() {
-         const size = getSize(window.innerWidth);
-         setGraphSize(size);
-      }
-      window.addEventListener('resize', handleResize);
-      return (() => { window.removeEventListener('resize', handleResize); });
-   });
-   const { filterStore } = useStore();
-   const { groupBy2, groupBy } = filterStore;
-   const barsGrp2 = groupBy2.getBars();
+   const { filterStore, uiStore } = useStore();
+   const { groupBy2 } = filterStore;
+   const { chartType } = uiStore;
+   const metaDAta = groupBy2.getBars();
    const reactDataGrp2 = toJS(filterStore.dataGroupby2);
-   const show = (groupBy.text !== 'CityByPop') && graphSize > 500;
+   const show = true;
    return (
       <div>
          {show
@@ -156,23 +132,80 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                   <div style={divConstolsRow}>
                      <span style={styleLable}>
                         {' '}
-                        {t('GroupBy')} :
-                     </span>
-                     <SelectGroupBy id="Graphs.Grp2" labelText="" /> &nbsp;
-                     <SelectGroupBy2 id="Graphs" />
+                        {t('GroupBy')}
+                        {' '}
+                  :
+                </span>
+                     <SelectGroupBy id="Graphs.Grp2" labelText="" />
+                     {' '}
+                &nbsp;
+                <SelectGroupBy2 id="Graphs" />
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
                   </div>
                   <hr />
-                  <MyBarChart
-                     data={reactDataGrp2}
-                     barsData={barsGrp2}
-                     width={graphSize}
-                     height={graphSize * 0.62}
-                     legendType="top"
-                  />
+                  <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
                </SmallCard2>
             )}
       </div>
    );
 });
+
+// const CardChartGrpBy2Old: React.FC<IProps> = observer(() => {
+//   const styleLable = {
+//     fontWeight: 700,
+//     marginTop: '5px',
+//     marginLeft: '20px',
+//     marginRight: '20px',
+//   };
+//   const divConstolsRow = {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//   } as React.CSSProperties;
+//   const { t } = useTranslation();
+//   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
+//   React.useEffect(() => {
+//     function handleResize() {
+//       const size = getSize(window.innerWidth);
+//       setGraphSize(size);
+//     }
+//     window.addEventListener('resize', handleResize);
+//     return (() => { window.removeEventListener('resize', handleResize); });
+//   });
+//   const { filterStore } = useStore();
+//   const { groupBy2, groupBy } = filterStore;
+//   const barsGrp2 = groupBy2.getBars();
+//   const reactDataGrp2 = toJS(filterStore.dataGroupby2);
+//   const show = (groupBy.text !== 'CityByPop') && graphSize > 500;
+//   return (
+//     <div>
+//       {show
+//             && (
+//             <SmallCard2>
+//               <div style={divConstolsRow}>
+//                 <span style={styleLable}>
+//                   {' '}
+//                   {t('GroupBy')}
+//                   {' '}
+//                   :
+//                 </span>
+//                 <SelectGroupBy id="Graphs.Grp2" labelText="" />
+//                 {' '}
+//                 &nbsp;
+//                 <SelectGroupBy2 id="Graphs" />
+//                 {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
+//               </div>
+//               <hr />
+//               <MyBarChart
+//                 data={reactDataGrp2}
+//                 barsData={barsGrp2}
+//                 width={graphSize}
+//                 height={graphSize * 0.62}
+//                 legendType="top"
+//               />
+//             </SmallCard2>
+//             )}
+//     </div>
+//   );
+// });
+
 export default GroupByGraphsPanel;

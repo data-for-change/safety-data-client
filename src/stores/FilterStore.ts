@@ -418,8 +418,29 @@ export default class FilterStore {
     const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year');
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
-        if (data !== undefined) this.dataByYears = data;
+        if (data !== undefined) {
+          const dataPadded = this.padDataYearsWith0(data);
+          this.dataByYears = dataPadded;
+        }
       });
+  }
+
+  /**
+   * convert parital array of years and count to full array
+   * if year is missing, add year and count = 0
+   * @param data array of years and counts, some of the years might be missing
+   */
+  padDataYearsWith0 = (data: any) => {
+    const yearsList = [];
+    for (let i = this.startYear; i <= this.endYear; i += 1) {
+      yearsList.push(i);
+    }
+    const data2 = yearsList.map((year) => {
+      const objDAta = data.find((x:any) => x._id === year);
+      const val = (objDAta) ? objDAta.count : 0;
+      return { _id: year, count: val };
+    });
+    return data2;
   }
 
   @action
@@ -429,7 +450,10 @@ export default class FilterStore {
     const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
-        if (data !== undefined) this.dataFilterdByYears = data;
+        if (data !== undefined) {
+          const dataPadded = this.padDataYearsWith0(data);
+          this.dataFilterdByYears = dataPadded;
+        }
       });
   }
 
@@ -475,6 +499,8 @@ export default class FilterStore {
             logger.log(error);
             this.dataGroupby2 = [];
           }
+        } else {
+          this.dataGroupby2 = [];
         }
       });
   }
