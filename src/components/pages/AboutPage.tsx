@@ -10,7 +10,7 @@ const AboutPage: React.FC<IProps> = () => {
       marginBottom: "10px",
    };
    return (
-      <main>
+      <div className="container" style={{ height: '40rem' }}>
          <div className="heb" style={style}>
             <div style={styleDiv}> Safety Data מציג נתונים על תאונות דרכים, בדגש על נפגעים בתאונות קשות וקטלניות.
             האתר מתמקד בניתוח בתאונות קטלניות, מיקוד זה הוא על פי "חזון אפס הרוגים בתאונות דרכים" ששואף להביא לאפס את הנפגעים בתאונות קשות וקטלניות.
@@ -33,7 +33,7 @@ const AboutPage: React.FC<IProps> = () => {
                מקור הנתונים על התאונות הוא הלמ"ס , דרך מנוע הנתונים של פרויקט <a href={'https://www.anyway.co.il'} target="_blank" rel="noopener noreferrer">Anyway</a>  של הסדנא לידע ציבורי. המפה באתר היא תודות לפרויקט <a href={'https://www.openstreetmap.org/'} target="_blank" rel="noopener noreferrer">OpenStreetMap</a>.
              </div>
          </div>
-      </main>
+      </div>
    );
 }
 export default AboutPage
