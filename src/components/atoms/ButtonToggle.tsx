@@ -12,7 +12,7 @@ interface IProps {
 }
 const ButtonToggle: React.FC<IProps> = ({
   condtion, textTrue, textFalse, width = 70, onClick,
-}) => {
+} : IProps) => {
   const { t } = useTranslation();
   // const style = { width: `${width}px` };
   return (
