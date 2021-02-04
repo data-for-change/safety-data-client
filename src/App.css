@@ -44,12 +44,6 @@
   font-size: 14px;
 }
 
-.filterLable {
-  font-weight: 700;
-  padding-right: 0.7em;
-  padding-left: 0.7em;
-}
-
 .table-header {
   background-color: var(--secondary-color);
 }
@@ -143,10 +137,6 @@ button.navbar-toggler {
   color: var(--onprimary-color)
 }
 
-.form-control {
-  border-radius: 2px;
-}
-
 a.nav-link {
   font-weight: 600;
   color: var(--onprimary-color)
@@ -172,7 +162,7 @@ a.nav-link {
 
 .grid-charts {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1rem;
 }
 

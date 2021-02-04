@@ -4,6 +4,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
+  height: auto;
 }
 
 code {
@@ -19,7 +20,11 @@ code {
 }
 
 .filterLable {
+  font-weight: 700;
   padding-right: 0 !important;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  /* border-bottom: 1px solid black; */
 }
 
 #pageDropDown {
@@ -32,12 +37,53 @@ code {
   width: 6rem;
 }
 
-.btn, .button-sm {
+.btn, .button-sm, .form-control, .modal-content {
   border-radius: 2px;
+}
+
+.filter-btn {
+  border-radius: 50%;
+  /* background-color: rgba(245, 30, 95, .6); */
+  /* background-color: var( --primary-old); */
+  background-color: rgba(56, 170, 236, .7);
+  height: 3rem;
+  /* line-height: 30px; */
+  color: white;
+  position: fixed;
+  left: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.filter-btn:hover {
+  background-color: rgb(56, 170, 236);
+}
+
+.filterControls {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-check-inline {
+  width: 35%;
 }
 
 a {
   text-decoration: none;
+}
+
+button.btn.btn-link {
+  text-decoration: none;
+  color: black !important;
+  font-weight: 600;
 }
 
 a:hover {
@@ -55,6 +101,12 @@ a:hover {
 
 .nav-tabs {
   border-bottom: solid black 2px;
+}
+
+@media screen and (max-width: 450px) {
+  .nav-tabs .nav-item {
+    font-size: 12px;
+  }
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -81,3 +133,5 @@ a:hover {
 #main-tabs-tabpane-image>div>div>div.image-gallery.image-gallery-using-mouse>div>div.image-gallery-slide-wrapper.bottom.image-gallery-rtl>div>div>div.image-gallery-slide.center>div>span {
   right: 0;
 }
+
+/* MODAL  */
