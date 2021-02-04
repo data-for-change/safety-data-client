@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
-import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ImageGallery from 'react-image-gallery';
@@ -15,15 +14,15 @@ import SmallCard2 from '../atoms/SmallCard2';
 interface Props {
   type: string;
 }
-const styleCard: React.CSSProperties = {
-  borderRadius: '5px',
-  padding: '5px',
-  margin: '7px',
-  width: '80%',
-};
-const styleButCol: React.CSSProperties = {
+// const styleCard: React.CSSProperties = {
+//   borderRadius: '5px',
+//   padding: '5px',
+//   margin: '7px',
+//   width: '80%',
+// };
+const styleCol: React.CSSProperties = {
   display: 'flex',
-  justifyContent: 'flex-end',
+  justifyContent: 'center',
 };
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
@@ -51,16 +50,15 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     return true;
   };
   return (
-    // <Card style={styleCard}>
     <SmallCard2>
-      <Row>
-        <Col md={3}>
+      <Row >
+        <Col md={3} style={styleCol}>
           <SelectImageByTag onChange={(val: string) => setCurrTag(val)} />
         </Col>
         <Col xs={12} md={6}>
           {isGotImages && <ImageTitle />}
         </Col>
-        <Col md={3} style={styleButCol}>
+        <Col md={3} style={styleCol}>
           {isGotImages && <ButtonToggleHideDescription />}
         </Col>
       </Row>
@@ -74,14 +72,10 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
       )}
       {!isGotImages && <ImageMsg />}
     </SmallCard2>
-    // {/* </Card> */}
   );
 });
 
 const styleButtonToggle = {
-  // marginLeft: '3px',
-  // marginRight: '3px',
-  // marginBottom: '3px',
   width: 'auto'
 };
 const ButtonToggleHideDescription: React.FC<{}> = observer(() => {
