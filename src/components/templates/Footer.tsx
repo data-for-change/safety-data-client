@@ -17,10 +17,6 @@ export const Footer: React.FC<IProps> = () => {
   return (
     <footer>
       <nav style={divStyle} >
-        {/* <Link to="/">{t('Home')}</Link>
-        <Link to="/city">{t('Cities')}</Link>
-        <Link to="/about">{t('About')}</Link> */}
-
         <NavigationList />
       </nav>
     </footer>
