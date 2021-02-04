@@ -8,8 +8,8 @@ import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
 import MyBarChart from '../molecules/MyBarChart';
-import MyPieChart from '../molecules/MyPieChart';
-import MyTreeMap from '../molecules/MyTreeMap';
+// import MyPieChart from '../molecules/MyPieChart';
+// import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/ChartBar';
 import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
@@ -27,13 +27,13 @@ const getSize = (width: number) => {
 };
 
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
-   const styles = {
-      divStyle: {
-         marginLeft: '0',
-         marginRight: '0',
-         marginTop: '20px',
-      },
-   };
+   // const styles = {
+   //    divStyle: {
+   //       marginLeft: '0',
+   //       marginRight: '0',
+   //       marginTop: '20px',
+   //    },
+   // };
    const { filterStore } = useStore();
    const { dataByYears } = filterStore;
    const reactData1 = toJS(dataByYears);
@@ -47,8 +47,8 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                <div className="grid-charts-item2">
                   <CardChartByGroup1 />
                </div>
-               <div className="grid-charts-item3">
-               </div>
+               {/* <div className="grid-charts-item3">
+               </div> */}
             </div>
             <CardChartGrpBy2 />
          </React.Fragment>
@@ -56,32 +56,6 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    }
    return null;
 });
-
-// const CardChartYears: React.FC<IProps> = observer(() => {
-//    const { t } = useTranslation();
-//    const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-//    React.useEffect(() => {
-//       function handleResize() {
-//          const size = getSize(window.innerWidth);
-//          setGraphSize(size);
-//       }
-//       window.addEventListener('resize', handleResize);
-//       return (() => { window.removeEventListener('resize', handleResize); });
-//    });
-//    const graph1Size = Math.min(380, graphSize);
-//    const { filterStore } = useStore();
-//    const { dataFilterdByYears, casualtiesNames } = filterStore;
-//    const reactData2 = toJS(dataFilterdByYears);
-//    return (
-//       <SmallCard2 header={`${t(casualtiesNames)} ${t('by-years')}`}>
-//          <MyBarChart
-//             data={reactData2}
-//             width={graph1Size}
-//             fill="#FE9772"
-//          />
-//       </SmallCard2>
-//    );
-// });
 
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
@@ -114,16 +88,30 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
    const { chartType } = uiStore;
-   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} />;
+   const chart = <ChartBar
+      data={reactData3}
+      fill="#8884d8"
+      chartType={chartType}
+   />;
    return (
       <SmallCard2 >
          <div style={styles.divStyle}>
             <SelectGroupBy id="Graphs.Main" />
-            <Button onClick={() => { setShowModal(!showModel); }}>
-               <img src={gearlogo} alt="settings" style={styles.iconStyle} />
+            <Button
+               className="btn-sm"
+               onClick={() => { setShowModal(!showModel); }}>
+               <img
+                  src={gearlogo}
+                  alt="settings"
+                  style={styles.iconStyle}
+               />
             </Button>
          </div>
-         <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
+         <ConfigFilterModal
+            title="Chart Options"
+            showModal={showModel}
+            setShow={setShowModal}
+         >
             <ConfigChart />
          </ConfigFilterModal>
          {chart}
