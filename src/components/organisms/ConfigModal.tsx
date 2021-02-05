@@ -16,7 +16,7 @@ interface IProps {
 
 
 
-const ConfigFilterModal: React.FC<IProps> = observer(({
+const ConfigModal: React.FC<IProps> = observer(({
   title, showModal, setShow, children, size, action
 }: IProps) => {
   const { t } = useTranslation();
@@ -37,7 +37,10 @@ const ConfigFilterModal: React.FC<IProps> = observer(({
     <Modal
       size={size}
       show={showModal}
-      onHide={handleClose}>
+      onHide={handleClose}
+      style= {{ top: '45px'}}
+      >
+      
       <Modal.Header closeButton>
         <Modal.Title>{t(title)}</Modal.Title>
       </Modal.Header>
@@ -53,4 +56,4 @@ const ConfigFilterModal: React.FC<IProps> = observer(({
     </Modal>
   );
 });
-export default ConfigFilterModal;
+export default ConfigModal;
