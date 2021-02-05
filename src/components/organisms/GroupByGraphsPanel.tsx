@@ -12,7 +12,7 @@ import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/ChartBar';
 import ChartGroupBy2 from '../molecules/ChartGroupBy2';
-import ConfigFilterModal from './ConfigFilterModal';
+import ConfigModal from './ConfigModal';
 import ConfigChart from '../molecules/ConfigChart';
 import gearlogo from '../../assets/gear2.png';
 import SmallCard2 from '../atoms/SmallCard2';
@@ -99,9 +99,9 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
                <img src={gearlogo} alt="settings" style={styles.iconStyle} />
             </Button>
          </div>
-         <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
+         <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
             <ConfigChart />
-         </ConfigFilterModal>
+         </ConfigModal>
          <div >
             {chart}
          </div>

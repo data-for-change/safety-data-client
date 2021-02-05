@@ -3,7 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 // import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { TabsTemplate } from './TabsTemplate';
-import FilterPanel from '../organisms/FilterPanel';
+// import FilterPanel from '../organisms/FilterPanel';
 import { useQuery, useTabFromQuery, useCityNameFromQuery } from '../../hooks/queryHooks';
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
