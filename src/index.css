@@ -19,12 +19,15 @@ code {
   direction: ltr;
 }
 
+.row, .col-md-4, .col-md-8 {
+  margin-top: 1rem;
+}
+
 .filterLable {
   font-weight: 700;
   padding-right: 0 !important;
   margin-right: 1rem;
   margin-left: 1rem;
-  /* border-bottom: 1px solid black; */
 }
 
 #pageDropDown {
@@ -43,11 +46,8 @@ code {
 
 .filter-btn {
   border-radius: 50%;
-  /* background-color: rgba(245, 30, 95, .6); */
-  /* background-color: var( --primary-old); */
   background-color: rgba(56, 170, 236, .7);
   height: 3rem;
-  /* line-height: 30px; */
   color: white;
   position: fixed;
   left: 7px;
