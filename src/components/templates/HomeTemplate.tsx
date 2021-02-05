@@ -72,7 +72,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
                         }, 1000);
                      }}
                      size="lg"
-                     title={t('Filters')}
+                     title={'Filters'}
                      setShow={setShowModal}
                      showModal={showModal}>
                      <FilterPanel />

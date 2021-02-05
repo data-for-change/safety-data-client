@@ -5,7 +5,6 @@ import { toJS } from 'mobx';
 import { Map, TileLayer } from 'react-leaflet';
 import AccidentsMarkers from '../molecules/AccidentsMarkers';
 import AccidentHeatLayer from '../molecules/AccidentHeatLayer';
-import ButtonTuggleHeatLayer from '../atoms/ButtonTuggleHeatLayer';
 import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
@@ -78,9 +77,11 @@ interface IPropsButtonTuggleHeatLayer { }
 const CurrButtonTuggleHeatLayer: React.FC<IPropsButtonTuggleHeatLayer> = observer(() => {
   const { mapStore, filterStore } = useStore();
   return (
-    <ButtonTuggleHeatLayer
-      isLoading={filterStore.isLoading}
-      isHeatMapHidden={mapStore.heatLayerHidden}
+    <ButtonToggle
+      condtion={mapStore.heatLayerHidden}
+      textTrue="HeatMap"
+      textFalse="Markers"
+      disabled={filterStore.isLoading}
       onClick={mapStore.toggleHeatLayer}
     />
   );
@@ -94,7 +95,6 @@ const ButtonToggleSmallMarkers: React.FC<{}> = observer(() => {
       condtion={useSmallMarkers}
       textTrue="big-markers"
       textFalse="small-markers"
-      width={120}
       onClick={toggleUseSmallMarkers}
     />
   );

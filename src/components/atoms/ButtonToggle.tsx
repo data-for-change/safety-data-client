@@ -7,19 +7,18 @@ interface IProps {
   condtion: boolean,
   textTrue: string,
   textFalse: string,
-  width?: number
+  disabled?: boolean,
   onClick: () => void
 }
 const ButtonToggle: React.FC<IProps> = ({
-  condtion, textTrue, textFalse, width = 70, onClick,
+  condtion, textTrue, textFalse, disabled = false ,onClick,
 } : IProps) => {
   const { t } = useTranslation();
-  // const style = { width: `${width}px` };
   return (
     <Button
-      // style={style}
       className="btn-sm"
       variant="primary"
+      disabled = {disabled}
       onClick={() => { onClick(); }}
     >
       {condtion ? t(textTrue) : t(textFalse)}
