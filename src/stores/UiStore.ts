@@ -45,6 +45,14 @@ export default class UiStore {
     }
   }
 
+  @observable
+  showFilterModal: boolean = false; 
+
+  @action
+  setShowFilterModal= (val: boolean) =>{
+    this.showFilterModal = val;
+  }
+
   /**
    * current page
    */
