@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
 import FilterRequest from './FilterRequest';
-import ConfigFilterModal from './ConfigFilterModal';
+//import ConfigFilterModal from './ConfigFilterModal';
 import ConfigFilter from '../molecules/ConfigFilter';
 import gearlogo from '../../assets/gear2.png';
 
