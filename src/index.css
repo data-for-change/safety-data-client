@@ -51,11 +51,12 @@ code {
   color: white;
   position: fixed;
   left: 7px;
+  bottom: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 10000;
+  z-index: 100;
 }
 
 .filter-btn:hover {
