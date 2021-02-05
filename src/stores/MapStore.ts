@@ -6,6 +6,12 @@ import logger from '../services/logger';
 import RootStore from './RootStore';
 // import autorun  from "mobx"
 
+/**
+ * bbox type - how to fetch data for map 
+ * NO_BBOX - when filter change, get all the points from server
+ * SERVER_BBOX - on every zoom / movment of the map get only relevent DEFAULT_BOUNDS
+ * LOCAL_BBOX - on zoom/ movment of map get relevent markers from memory (dataAllInjuries)
+ */
 export enum BBoxType {
   NO_BBOX,
   SERVER_BBOX,
@@ -182,7 +188,7 @@ export default class MapStore {
 
   getMarkersInBBox = () => {
     if (this.bboxType === BBoxType.LOCAL_BBOX) {
-      this.getMarkersInLocalBBox(0.1);
+      this.getMarkersInLocalBBox(0.02);
     } else if (this.bboxType === BBoxType.SERVER_BBOX) {
       this.submintGetMarkersBBox();
     }
@@ -199,6 +205,8 @@ export default class MapStore {
       const data = this.rootStore.filterStore.dataAllInjuries
         .filter((x) => x.latitude >= south
           && x.latitude <= north && x.longitude >= west && x.longitude <= east);
+      // const zoom = this.mapRef.current.leafletElement.getZoom();
+      // console.log(zoom, east -west ,data.length);     
       this.updateDataMarkersInBounds(data);
     } catch (error) {
       logger.error(error);
