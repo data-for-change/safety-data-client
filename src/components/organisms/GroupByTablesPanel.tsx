@@ -7,30 +7,28 @@ import GroupByTable from '../molecules/GroupByTable';
 import SmallCard2 from '../atoms/SmallCard2';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
+import { Col, Row } from 'react-bootstrap';
 
 interface IProps { }
 export const GroupByTablesPanel: React.FC<IProps> = () => {
-  // const style = {
-  //   marginLeft: '0',
-  //   marginRight: '0',
-  //   marginTop: '20px',
-  // };
   return (
     <React.Fragment>
-      <div className="tabels-grid" >
-        <div className="grid-table-item1" >
+      <Row>
+        <Col md={4} >
           <GroupTablesYears />
-        </div>
-        <div className="grid-table-item2">
+        </Col>
+        <Col md={4}>
           <GroupTablesYears2 />
-        </div>
-        <div className="grid-table-item3">
+        </Col>
+        <Col md={4}>
           <GroupTablesFilter />
-        </div>
-        {/* <div className="grid-table-item4"> */}
-        {/* </div> */}
-      </div>
-      <GroupTables2Grp />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12}>
+          <GroupTables2Grp />
+        </Col>
+      </Row>
     </React.Fragment>
   );
 };

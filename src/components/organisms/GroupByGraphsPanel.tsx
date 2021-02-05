@@ -7,7 +7,7 @@ import { useStore } from '../../stores/storeConfig';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 // import { RangeSlider } from '../atoms/RangeSlider'
-import MyBarChart from '../molecules/MyBarChart';
+// import MyBarChart from '../molecules/MyBarChart';
 // import MyPieChart from '../molecules/MyPieChart';
 // import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/ChartBar';
@@ -16,6 +16,8 @@ import ConfigFilterModal from './ConfigFilterModal';
 import ConfigChart from '../molecules/ConfigChart';
 import gearlogo from '../../assets/gear2.png';
 import SmallCard2 from '../atoms/SmallCard2';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 interface IProps { }
 const getSize = (width: number) => {
@@ -28,30 +30,28 @@ const getSize = (width: number) => {
 };
 
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
-   // const styles = {
-   //    divStyle: {
-   //       marginLeft: '0',
-   //       marginRight: '0',
-   //       marginTop: '20px',
-   //    },
-   // };
    const { filterStore } = useStore();
    const { dataByYears } = filterStore;
    const reactData1 = toJS(dataByYears);
+
+
+
    if (reactData1.length > 0) {
       return (
          <React.Fragment>
-            <div className="grid-charts" >
-               <div className="grid-charts-item1">
+            <Row>
+               <Col md={4}>
                   <CardChartYears />
-               </div>
-               <div className="grid-charts-item2">
+               </Col>
+               <Col md={8} >
                   <CardChartByGroup1 />
-               </div>
-               {/* <div className="grid-charts-item3">
-               </div> */}
-            </div>
-            <CardChartGrpBy2 />
+               </Col>
+            </Row>
+            <Row>
+               <Col md={12}>
+                  <CardChartGrpBy2 />
+               </Col>
+            </Row>
          </React.Fragment>
       );
    }
@@ -63,8 +63,9 @@ const CardChartYears: React.FC<IProps> = observer(() => {
    const { filterStore } = useStore();
    const { dataFilterdByYears, casualtiesNames } = filterStore;
    const reactData2 = toJS(dataFilterdByYears);
+
    return (
-      <SmallCard2 styleType={2} title={`${t(casualtiesNames)} ${t('by-years')}`}>
+      <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
          <ChartBar data={reactData2} fill="#FE9772" />
       </SmallCard2>
    );
@@ -91,7 +92,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { chartType } = uiStore;
    const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} />;
    return (
-      <SmallCard2>
+      <SmallCard2 >
          <div style={styles.divStyle}>
             <SelectGroupBy id="Graphs.Main" />
             <Button onClick={() => { setShowModal(!showModel); }}>
@@ -101,7 +102,9 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
          <ConfigFilterModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
             <ConfigChart />
          </ConfigFilterModal>
-         {chart}
+         <div >
+            {chart}
+         </div>
       </SmallCard2>
    );
 });
