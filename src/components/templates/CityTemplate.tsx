@@ -6,6 +6,8 @@ import { TabsTemplate } from './TabsTemplate';
 import FilterPanel from '../organisms/FilterPanel';
 import { useQuery, useTabFromQuery, useCityNameFromQuery } from '../../hooks/queryHooks';
 import { useStore } from '../../stores/storeConfig';
+import ConfigFilterModal from '../organisms/ConfigFilterModal';
+import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 
 export const CityLable: React.FC<{}> = observer(() => {
   const { filterStore } = useStore();
@@ -72,6 +74,8 @@ const CityTemplate: React.FC<IProps> = observer(() => {
           {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
           <main className="col-md-12">
             <CityLable />
+            <ButtonShowFilterModal />
+            <ConfigFilterModal />
             <TabsTemplate type="city" />
           </main>
         </div>
