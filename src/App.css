@@ -144,51 +144,9 @@ a.nav-link {
 
 /* HOME PAGE  */
 
-.home-page {
-  display: grid;
-  grid-template-columns: 15% 85%;
-  grid-gap: 0.5rem
-}
-
 /* TBALES TAB GRID   */
 
-.tabels-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 1rem
-}
-
 /* CHARTS TAB GRID  */
-
-.grid-charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 1rem;
-}
-
-.grid-charts-item1 {
-  /* width: 300px; */
-}
-
-/* .grid-table-item1 {
-  grid-column: 1/3;
-}
-
-.grid-table-item2 {
-  grid-column: 3/5;
-}
-
-.grid-table-item3 {
-  grid-column: 1/2;
-}
-
-.grid-table-item4 {
-  grid-column: 2/5;
-} */
-
-/* FORM GROP  */
-
-/* TABS  */
 
 /* FOOTER  */
 
