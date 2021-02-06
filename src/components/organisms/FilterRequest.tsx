@@ -10,6 +10,7 @@ import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import CitySelector from '../molecules/CitySelector';
 import StreetSelector from '../molecules/StreetSelector';
+import RoadNameSelector from '../molecules/RoadNameSelector';
 import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
 import SelectCityPop from '../atoms/SelectCityPop';
@@ -143,6 +144,7 @@ const CardFilterWhere = observer(() => {
             <div>
                <CitySelector isMultiple={isMultipleCities} />
                <StreetSelector />
+               <RoadNameSelector />
                <RoadSegmentSelector />
                <GroupCheckbox
                   formName="exampleForm"

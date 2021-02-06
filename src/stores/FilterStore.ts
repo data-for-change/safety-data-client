@@ -166,6 +166,14 @@ export default class FilterStore {
   }
 
   @observable
+  roads: string[] = [];
+
+  @action
+  setRoads = (names: string[]) => {
+    this.roads = names;
+  }
+
+  @observable
   cityPopSizeRange:string = '{"min":-1,"max":-1}';
 
   @action
@@ -602,6 +610,7 @@ export default class FilterStore {
     if (useBounds && bounds != null) filter += this.getfilterBounds(bounds);
     filter += FiterUtils.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
+    filter += this.getFilterFromNumArray(this.roads, 'road1');
     filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
     filter += FiterUtils.getMultiplefilter(this.injTypes);
     filter += FiterUtils.getMultiplefilter(this.genderTypes);
@@ -674,6 +683,15 @@ export default class FilterStore {
     if (arr.length > 0 && arr[0] !== '') {
       filter += ',{"$or": [';
       filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',');
+      filter += ']}';
+    }
+    return filter;
+  }
+  getFilterFromNumArray = (arr: string[], filterName: string) => {
+    let filter: string = '';
+    if (arr.length > 0) {
+      filter += ',{"$or": [';
+      filter += arr.map((x: string) => `{"${filterName}" : ${parseInt(x,10)}}`).join(',');
       filter += ']}';
     }
     return filter;
