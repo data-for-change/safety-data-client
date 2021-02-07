@@ -43,13 +43,20 @@ code {
   border-radius: 2px;
 }
 
+.dir-rtl .filter-btn {
+  left: 7px;
+}
+
+.dir-ltr .filter-btn {
+  right: 7px;
+}
+
 .filter-btn {
   border-radius: 50%;
   background-color: rgba(56, 170, 236, .7);
   height: 3rem;
   color: white;
   position: fixed;
-  left: 7px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,7 +64,7 @@ code {
   z-index: 100;
 }
 
-@media (min-width: 500px) {
+@media screen and (min-width: 500px) {
   .filter-btn {
     bottom: 30px;
   }
