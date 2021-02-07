@@ -1,56 +1,29 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
+import FilterRequest from '../organisms/FilterRequest';
+import { useStore } from '../../stores/storeConfig';
+import ConfigModal from "../organisms/ConfigModal";
 
 interface IProps {
-  title: string;
-  showModal: boolean;
-  setShow: (show: boolean) => void;
-  children: any;
-  size?: "sm" | "lg" | "xl" | undefined
-  action?: (val?: any) => void
-}
-
-
-
-const ConfigFilterModal: React.FC<IProps> = observer(({
-  title, showModal, setShow, children, size, action
-}: IProps) => {
-  const { t } = useTranslation();
-  const handleClose = () => setShow(false);
-  const { filterStore } = useStore();
-
-  const submitChanges = action ?
-    <Button
-      variant="primary"
-      onClick={action}
-      disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
-    >
-      {filterStore.isLoading ? t('Loading…') : t('Submit')}
-    </Button>
-    : null
-
-  return (
-    <Modal
-      size={size}
-      show={showModal}
-      onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{t(title)}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
-        {children}
-      </Modal.Body>
-      <Modal.Footer>
-        {submitChanges}
-        <Button variant="secondary" onClick={handleClose}>
-          {t('Close')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
+    activeCardKey?: number
+ }
+const ConfigFilterModal: React.FC<IProps> = observer(({activeCardKey = 0}) => {
+    const { filterStore, uiStore } = useStore();
+    const { showFilterModal, setShowFilterModal } = uiStore;
+    return (
+        <ConfigModal
+            action={() => {
+                filterStore.submitFilter();
+                setTimeout(() => {
+                    setShowFilterModal(!showFilterModal)
+                }, 1000);
+            }}
+            size="lg"
+            title={'Filters'}
+            setShow={setShowFilterModal}
+            showModal={showFilterModal}>
+             <FilterRequest activeCardKey={activeCardKey} />
+        </ConfigModal>
+    );
 });
 export default ConfigFilterModal;

@@ -10,6 +10,7 @@ import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import CitySelector from '../molecules/CitySelector';
 import StreetSelector from '../molecules/StreetSelector';
+import RoadNameSelector from '../molecules/RoadNameSelector';
 import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
 import SelectCityPop from '../atoms/SelectCityPop';
@@ -30,9 +31,8 @@ const STYLE_TOGGLE_NORMAL = {
 const years: string[] = ['2015', '2016', '2017', '2018', '2019']
 
 const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
-   const { t } = useTranslation();
    const { filterStore } = useStore();
-   const { injurySeverity, updateInjurySeverity, isLoading, isValidAllFilters } = filterStore;
+   const { injurySeverity, updateInjurySeverity, isLoading } = filterStore;
 
    return (
       <React.Fragment>
@@ -143,6 +143,7 @@ const CardFilterWhere = observer(() => {
             <div>
                <CitySelector isMultiple={isMultipleCities} />
                <StreetSelector />
+               <RoadNameSelector />
                <RoadSegmentSelector />
                <GroupCheckbox
                   formName="exampleForm"

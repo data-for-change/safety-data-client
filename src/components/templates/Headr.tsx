@@ -3,15 +3,25 @@ import LanguageSelector from '../molecules/LanguageSelector';
 import logo from '../../assets/safety-logo.png';
 import NavigationList from '../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-
 
 
 
 interface IProps {
    title: string
 }
+
+const styles = {
+   header: {
+      marginBottom: '1rem',
+      position: 'fixed' as 'fixed',
+      top: '0px',
+      width: '100%',
+      zIndex: 5000,
+   }
+};
+
 export const Header: React.FC<IProps> = ({ title }) => {
+
    return (
       <header style={{ marginBottom: '1rem' }}>
          <Navbar className="navbar" expand="lg">
@@ -37,7 +47,7 @@ export const Header: React.FC<IProps> = ({ title }) => {
             <div className="container-fluid">
                <img
                   src={logo}
-                  alt="Safety-Data logo"
+                  alt={`${title} logo`}
                   height="45"
                   width="188"
                />

@@ -1,6 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+// import { useTranslation } from 'react-i18next';
 import NavigationList from '../molecules/NavigationList';
 
 interface IProps { }
@@ -13,7 +12,6 @@ export const Footer: React.FC<IProps> = () => {
     color: 'var(--onprimary-color)',
     height: '4rem'
   } as CSSProperties
-  const { t } = useTranslation();
   return (
     <footer>
       <nav style={divStyle} >

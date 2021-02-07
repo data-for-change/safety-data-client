@@ -15,7 +15,12 @@ const StreetSelector: React.FC<IProps> = observer(() => {
           {t('Street')}
 :
         </Form.Label>
-        <Form.Control type="input" placeholder="" value={filterStore.streets.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { filterStore.updateStreets(e.target.value); }} />
+        <Form.Control 
+          type="input" 
+          placeholder="" 
+          value={filterStore.streets.toString()} 
+          onChange={(e: ChangeEvent<HTMLInputElement>) => { filterStore.updateStreets(e.target.value); }} 
+          />
       </Form.Group>
 
     );

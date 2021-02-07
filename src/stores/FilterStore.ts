@@ -166,6 +166,14 @@ export default class FilterStore {
   }
 
   @observable
+  roads: string[] = [];
+
+  @action
+  setRoads = (names: string[]) => {
+    this.roads = names;
+  }
+
+  @observable
   cityPopSizeRange:string = '{"min":-1,"max":-1}';
 
   @action
@@ -409,6 +417,9 @@ export default class FilterStore {
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
 
+  /**
+   * Dictionary with key-value list of the group-by  
+   */
   @observable
   groupByDict: any = {}
 
@@ -462,7 +473,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
-    // logger.log(filter);
+    logger.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterd = data;
@@ -602,6 +613,7 @@ export default class FilterStore {
     if (useBounds && bounds != null) filter += this.getfilterBounds(bounds);
     filter += FiterUtils.getMultiplefilter(this.dayNight);
     filter += this.getFilterStreets();
+    filter += this.getFilterFromNumArray(this.roads, 'road1');
     filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
     filter += FiterUtils.getMultiplefilter(this.injTypes);
     filter += FiterUtils.getMultiplefilter(this.genderTypes);
@@ -674,6 +686,15 @@ export default class FilterStore {
     if (arr.length > 0 && arr[0] !== '') {
       filter += ',{"$or": [';
       filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',');
+      filter += ']}';
+    }
+    return filter;
+  }
+  getFilterFromNumArray = (arr: string[], filterName: string) => {
+    let filter: string = '';
+    if (arr.length > 0) {
+      filter += ',{"$or": [';
+      filter += arr.map((x: string) => `{"${filterName}" : ${parseInt(x,10)}}`).join(',');
       filter += ']}';
     }
     return filter;
