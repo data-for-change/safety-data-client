@@ -6,9 +6,10 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
   data: readonly any[];
   chartType?: string;
+  height?: number;
   fill?: string;
 }
-const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', fill = '#8884d8' }: IProps) => {
+const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', height=220 , fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
   const labels = data.map((x) => x._id);
   const vals = data.map((x) => x.count);
@@ -41,7 +42,7 @@ const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', fil
     return (
       <Bar
         data={data3}
-        height={320}
+        height={height}
         options={options1}
       />
     );
@@ -56,7 +57,7 @@ const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', fil
   return (
     <Pie
       data={data3}
-      height={220}
+      height={height}
     />
   );
 });
