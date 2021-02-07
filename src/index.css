@@ -43,13 +43,20 @@ code {
   border-radius: 2px;
 }
 
+.dir-rtl .filter-btn {
+  left: 7px;
+}
+
+.dir-ltr .filter-btn {
+  right: 7px;
+}
+
 .filter-btn {
   border-radius: 50%;
   background-color: rgba(56, 170, 236, .7);
   height: 3rem;
   color: white;
   position: fixed;
-  left: 7px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,7 +64,7 @@ code {
   z-index: 100;
 }
 
-@media (min-width: 500px) {
+@media screen and (min-width: 500px) {
   .filter-btn {
     bottom: 30px;
   }
@@ -91,17 +98,13 @@ button.btn.btn-link {
   font-weight: 600;
 }
 
-a:hover {
-  text-decoration: none;
-}
-
-#basic-navbar-nav>div>a {
+#basic-navbar-nav>div>a, a.nav-link {
   font-weight: 600;
   color: var(--onprimary-color);
   opacity: 0.7;
 }
 
-#basic-navbar-nav>div>a:focus {
+#basic-navbar-nav>div>a:focus, #basic-navbar-nav>div>a:hover, a.nav-link:hover {
   font-weight: 600;
   color: rgb(255, 255, 255);
   opacity: 1;
@@ -118,6 +121,7 @@ a:hover {
 
 .nav-tabs {
   border-bottom: solid black 2px;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 450px) {
