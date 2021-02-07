@@ -36,7 +36,6 @@ code {
 
 .form-select-sm {
   border-radius: 2px;
-  height: 2rem;
   width: 6rem;
 }
 
@@ -88,6 +87,18 @@ button.btn.btn-link {
 
 a:hover {
   text-decoration: none;
+}
+
+#basic-navbar-nav>div>a {
+  font-weight: 600;
+  color: var(--onprimary-color);
+  opacity: 0.7;
+}
+
+#basic-navbar-nav>div>a:focus {
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+  opacity: 1;
 }
 
 .loader-con {
