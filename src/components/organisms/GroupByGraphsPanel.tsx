@@ -90,9 +90,9 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
    const { chartType } = uiStore;
-   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} />;
+   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} height={150} />;
    return (
-      <SmallCard2 >
+      <SmallCard2>
          <div style={styles.divStyle}>
             <SelectGroupBy id="Graphs.Main" />
             <Button onClick={() => { setShowModal(!showModel); }}>
