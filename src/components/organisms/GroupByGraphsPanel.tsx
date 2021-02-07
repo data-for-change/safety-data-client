@@ -20,14 +20,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 interface IProps { }
-const getSize = (width: number) => {
-   let size: number = 500;
-   if (width <= 350) size = 300;
-   else if (width <= 770) size = width * 0.8;
-   else if (width <= 1200) size = (width - 300) * 0.9;
-   else size = 1000;
-   return size;
-};
+// const getSize = (width: number) => {
+//    let size: number = 500;
+//    if (width <= 350) size = 300;
+//    else if (width <= 770) size = width * 0.8;
+//    else if (width <= 1200) size = (width - 300) * 0.9;
+//    else size = 1000;
+//    return size;
+// };
 
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    const { filterStore } = useStore();

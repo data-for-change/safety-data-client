@@ -31,9 +31,8 @@ const STYLE_TOGGLE_NORMAL = {
 const years: string[] = ['2015', '2016', '2017', '2018', '2019']
 
 const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
-   const { t } = useTranslation();
    const { filterStore } = useStore();
-   const { injurySeverity, updateInjurySeverity, isLoading, isValidAllFilters } = filterStore;
+   const { injurySeverity, updateInjurySeverity, isLoading } = filterStore;
 
    return (
       <React.Fragment>

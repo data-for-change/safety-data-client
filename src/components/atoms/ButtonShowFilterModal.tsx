@@ -12,6 +12,7 @@ const ButtonShowFilterModal: React.FC<IProps> = observer(() => {
     const filterIcon = <IconWithImage
         path={'https://static.thenounproject.com/png/40256-200.png'}
         style={{ lineHeight: '30px' }}
+        alt='open filter'
     />
 
     return (

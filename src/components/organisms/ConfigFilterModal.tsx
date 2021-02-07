@@ -1,11 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import FilterPanel from '../organisms/FilterPanel';
+import FilterRequest from '../organisms/FilterRequest';
 import { useStore } from '../../stores/storeConfig';
 import ConfigModal from "../organisms/ConfigModal";
 
-interface IProps { }
-const ConfigFilterModal: React.FC<IProps> = observer(() => {
+interface IProps {
+    activeCardKey?: number
+ }
+const ConfigFilterModal: React.FC<IProps> = observer(({activeCardKey = 0}) => {
     const { filterStore, uiStore } = useStore();
     const { showFilterModal, setShowFilterModal } = uiStore;
     return (
@@ -20,7 +22,7 @@ const ConfigFilterModal: React.FC<IProps> = observer(() => {
             title={'Filters'}
             setShow={setShowFilterModal}
             showModal={showFilterModal}>
-            <FilterPanel />
+             <FilterRequest activeCardKey={activeCardKey} />
         </ConfigModal>
     );
 });
