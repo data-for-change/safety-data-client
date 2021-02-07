@@ -20,7 +20,7 @@ const RoadNameSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
   return (
     <Form.Group controlId="filterForm.ControlRoad">
       <Form.Label className="filterLable">
-        {t('road-num')}:
+        {t('Road')}:
       </Form.Label>
       <Typeahead
         id="typeaheadCity"

@@ -37,6 +37,7 @@ export const initGroupByDict = () => {
   dictGroupBy.City = new GroupBy('City', 'accident_yishuv_name', 10);
   dictGroupBy.CityByPop = new GroupBy('CityByPop', 'accident_yishuv_name');
   dictGroupBy.Street = new GroupBy('Street', 'street1_hebrew', 10);
+  dictGroupBy.Road = new GroupBy('Road', 'road1', 10);
   dictGroupBy.AccidentType = new GroupBy('AccidentType', 'accident_type_hebrew');
   dictGroupBy.Vehicles = new GroupBy('Vehicles', 'vehicles');
   dictGroupBy.SpeedLimit = new GroupBy('SpeedLimit', 'speed_limit_hebrew');

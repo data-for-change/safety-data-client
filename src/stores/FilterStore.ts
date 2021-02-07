@@ -411,12 +411,16 @@ export default class FilterStore {
 
   @action
   updateGroupby = (key: string) => {
+    console.log(key)
     this.groupBy = this.groupByDict[key];
     if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
     else this.submitfilterdGroup(this.groupBy);
     this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
   }
 
+  /**
+   * Dictionary with key-value list of the group-by  
+   */
   @observable
   groupByDict: any = {}
 
@@ -470,7 +474,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
-    // logger.log(filter);
+    logger.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterd = data;
