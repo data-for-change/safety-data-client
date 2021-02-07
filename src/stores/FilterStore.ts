@@ -473,7 +473,7 @@ export default class FilterStore {
     const range = JSON.parse(this.cityPopSizeRange);
     const filtermatch = this.getFilter(null);
     const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
-    logger.log(filter);
+    // logger.log(filter);
     fetchAggregate(filter)
       .then((data: any[] | undefined) => {
         if (data !== undefined) this.dataFilterd = data;
