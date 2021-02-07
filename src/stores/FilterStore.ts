@@ -411,7 +411,6 @@ export default class FilterStore {
 
   @action
   updateGroupby = (key: string) => {
-    console.log(key)
     this.groupBy = this.groupByDict[key];
     if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
     else this.submitfilterdGroup(this.groupBy);
