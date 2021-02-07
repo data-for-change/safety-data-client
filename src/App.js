@@ -22,34 +22,33 @@ const styles = {
 function App() {
    return (
       <Router>
-           <Card display="flex" height="100%">
-           <Header title="Safety Data" />
-         <div style={styles.app}>
-            <Suspense fallback={<Loader />}>
-               <Switch>
-                  <Route
-                     path="/about"
-                     component={AboutPage}
-                  />
-                  <Route
-                     exact
-                     path="/city"
-                     component={CityPage}
-                  />
-                  <Route
-                     path="/update-img"
-                     component={UpdateImagePage}
-                  />
-                  <Route
-                     path="/"
-                     component={HomePage}
-                  />
-               </Switch>
-            </Suspense>
-         </div>
-         <Footer />
-           </Card>
-        
+         <Card display="flex" height="100%">
+            <Header title="Safety Data" />
+            <div style={styles.app}>
+               <Suspense fallback={<Loader />}>
+                  <Switch>
+                     <Route
+                        path="/about"
+                        component={AboutPage}
+                     />
+                     <Route
+                        exact
+                        path="/city"
+                        component={CityPage}
+                     />
+                     <Route
+                        path="/update-img"
+                        component={UpdateImagePage}
+                     />
+                     <Route
+                        path="/"
+                        component={HomePage}
+                     />
+                  </Switch>
+               </Suspense>
+            </div>
+            <Footer />
+         </Card>
       </Router>
    );
 }
