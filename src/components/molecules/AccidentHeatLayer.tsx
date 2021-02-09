@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import L from 'leaflet'
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import { useStore } from '../../stores/storeConfig';

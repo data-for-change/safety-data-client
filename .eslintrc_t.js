@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    "jest/globals": true,
   },
   extends: [
     'plugin:react/recommended',
@@ -23,15 +22,16 @@ module.exports = {
   plugins: [
     'react',
     '@typescript-eslint',
+    'jest',
   ],
   rules: {
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['warn', 'windows'],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "import/no-unresolved" : "off",
-    "import/extensions": ['error', "never" ],
-    'max-len': ["error", { "code": 130, "tabWidth": 4 }],
-    "radix": ["error", "as-needed"],
+    "import/extensions": ['warn', "never" ],
+    'max-len': ["warn", { "code": 130, "tabWidth": 4 }],
+    "radix": ["warn", "as-needed"],
   },
 };
