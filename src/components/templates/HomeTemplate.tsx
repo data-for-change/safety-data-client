@@ -23,7 +23,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
          pathname: '/home',
          search: `?tab=${currentTab}`,
       });
-   }, [currentTab]);
+   }, [currentTab, history]);
 
    useEffect(() => {
       setCurrentPage('home');
@@ -31,7 +31,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
       const tab = useTabFromQuery(query, 'charts');
       setCurrentTab(tab);
       setIsMultipleCities(true);
-   }, []);
+   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
    mapStore.isReadyToRenderMap = false;
 

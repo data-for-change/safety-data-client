@@ -28,7 +28,7 @@ const STYLE_TOGGLE_NORMAL = {
    color: '#007bff',
 };
 
-const years: string[] = ['2015', '2016', '2017', '2018', '2019']
+const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 
 const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
    const { filterStore } = useStore();
