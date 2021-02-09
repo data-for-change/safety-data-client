@@ -59,7 +59,7 @@ const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }: IProps) => {
          </ConfigFilterModal> */}
          <Collapse in={open}>
             <div id="example-collapse-text">
-               <FilterRequest activeCardKey={activeCardKey} />
+               <FilterRequest />
             </div>
          </Collapse>
       </React.Fragment>
