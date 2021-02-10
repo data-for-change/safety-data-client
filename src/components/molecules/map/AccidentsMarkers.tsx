@@ -2,10 +2,10 @@ import React, { FunctionComponent } from 'react';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import L from 'leaflet'
-import AccidentsMarker from '../molecules/AccidentsMarker';
-import { useStore } from '../../stores/storeConfig';
-import { BBoxType } from '../../stores/MapStore';
-import logger from '../../services/logger';
+import AccidentsMarker from './AccidentsMarker';
+import { useStore } from '../../../stores/storeConfig';
+import { BBoxType } from '../../../stores/MapStore';
+import logger from '../../../services/logger';
 
 interface IProps { }
 const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {

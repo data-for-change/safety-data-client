@@ -3,8 +3,8 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import L from 'leaflet'
 import { Map, TileLayer } from 'react-leaflet';
-import AccidentsMarkers from '../molecules/AccidentsMarkers';
-import AccidentHeatLayer from '../molecules/AccidentHeatLayer';
+import AccidentsMarkers from '../molecules/map/AccidentsMarkers';
+import AccidentHeatLayer from '../molecules/map/AccidentHeatLayer';
 import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';

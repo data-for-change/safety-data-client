@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 import { observer } from 'mobx-react';
 // import { useTranslation } from 'react-i18next';
-import { useStore } from '../../stores/storeConfig';
+import { useStore } from '../../../stores/storeConfig';
 
 // const data = [
 //   { name: 'Page A', uv: 4000, pv: 2400, amt: 2400,},

@@ -1,12 +1,12 @@
 import React from 'react';
 import L from 'leaflet';
 import { Marker } from 'react-leaflet';
-import AccidentPopUp from '../atoms/AccidentPopUp';
-import redMarker from '../../assets/marker-icon-2x-red.png';
-import orangeMarker from '../../assets/marker-icon-2x-orange2.png';
-import shadoMarker from '../../assets/marker-shadow.png';
-import redCMarker from '../../assets/circle_red_20.png';
-import orangeCMarker from '../../assets/circle_orange_20.png';
+import AccidentPopUp from '../../atoms/AccidentPopUp';
+import redMarker from '../../../assets/marker-icon-2x-red.png';
+import orangeMarker from '../../../assets/marker-icon-2x-orange2.png';
+import shadoMarker from '../../../assets/marker-shadow.png';
+import redCMarker from '../../../assets/circle_red_20.png';
+import orangeCMarker from '../../../assets/circle_orange_20.png';
 
 interface IProps {
     data: any,

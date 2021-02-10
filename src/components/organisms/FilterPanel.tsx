@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
-import FilterRequest from './FilterRequest';
+import FilterForm from './FilterForm';
 //import ConfigFilterModal from './ConfigFilterModal';
 import ConfigFilter from '../molecules/ConfigFilter';
 import gearlogo from '../../assets/gear2.png';
@@ -59,7 +59,7 @@ const FilterPanel: React.FC<IProps> = ({ activeCardKey = 0 }: IProps) => {
          </ConfigFilterModal> */}
          <Collapse in={open}>
             <div id="example-collapse-text">
-               <FilterRequest />
+               <FilterForm />
             </div>
          </Collapse>
       </React.Fragment>

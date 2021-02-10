@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import FilterRequest from '../organisms/FilterRequest';
+import FilterForm from '../organisms/FilterForm';
 import { useStore } from '../../stores/storeConfig';
 import ConfigModal from "../organisms/ConfigModal";
 
@@ -21,7 +21,7 @@ const ConfigFilterModal: React.FC<IProps> = observer(() => {
             title={'Filters'}
             setShow={setShowFilterModal}
             showModal={showFilterModal}>
-             <FilterRequest />
+             <FilterForm />
         </ConfigModal>
     );
 });

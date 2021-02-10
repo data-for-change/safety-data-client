@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import FormImageDetails from '../molecules/FormImageDetails';
-import CardEditImageFile from '../molecules/CardEditImageFile';
-import CardUploadImageFile from '../molecules/CardUploadImageFile';
+import FormImageDetails from '../molecules/image/FormImageDetails';
+import CardEditImageFile from '../molecules/image/CardEditImageFile';
+import CardUploadImageFile from '../molecules/image/CardUploadImageFile';
 
 interface IProps { }
 

@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
@@ -36,7 +36,7 @@ const STYLE_TOGGLE_NORMAL = {
 
 const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 
-const FilterRequest: React.FC<IProps> = observer(({ }) => {
+const FilterForm: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
    const { injurySeverity, updateInjurySeverity, isLoading, formCardKey } = filterStore;
    return (
@@ -350,4 +350,4 @@ const CardFilterWhatRoad = observer(() => {
       </Card>
    );
 });
-export default FilterRequest;
+export default FilterForm;
