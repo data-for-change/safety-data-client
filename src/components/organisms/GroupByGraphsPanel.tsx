@@ -103,6 +103,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
             <ConfigChart />
          </ConfigModal>
          <div >
+            <hr />
             {chart}
          </div>
       </SmallCard2>
