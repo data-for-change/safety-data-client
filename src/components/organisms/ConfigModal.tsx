@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -15,10 +15,11 @@ interface IProps {
 }
 
 
-
 const ConfigModal: React.FC<IProps> = observer(({
   title, showModal, setShow, children, size, action
 }: IProps) => {
+
+  console.log('MODAL')
   const { t } = useTranslation();
   const handleClose = () => setShow(false);
   const { filterStore } = useStore();
@@ -38,9 +39,9 @@ const ConfigModal: React.FC<IProps> = observer(({
       size={size}
       show={showModal}
       onHide={handleClose}
-      style= {{ top: '45px'}}
-      >
-      
+    // style={{ top: '45px' }}
+    >
+
       <Modal.Header closeButton>
         <Modal.Title>{t(title)}</Modal.Title>
       </Modal.Header>
@@ -56,4 +57,4 @@ const ConfigModal: React.FC<IProps> = observer(({
     </Modal>
   );
 });
-export default ConfigModal;
+export default React.memo(ConfigModal);

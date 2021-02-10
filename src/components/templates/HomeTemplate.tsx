@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
@@ -8,13 +8,14 @@ import TabsTemplate from './TabsTemplate';
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
+import { useMemos } from "../../hooks/myUseMemo";
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
-   const { currentTab, setCurrentPage, setCurrentTab } = uiStore;
+   const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
    const history = useHistory();
    const location = useLocation();
 
@@ -41,6 +42,9 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
       submitFilter();
    }, [submitFilter, updateCities]);
 
+
+   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
+
    return (
       <div className="App">
          <div className="container-fluid">
@@ -53,7 +57,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
                      <span>{t('Israel')}</span>
                      <ButtonShowFilterModal />
                   </h4>
-                  <ConfigFilterModal />
+                  {showFilterModal && memoConfigModal}
                   <TabsTemplate type="home" />
                </main>
             </div>
