@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
+import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 import Card from 'react-bootstrap/Card';
 // @ts-ignore
 import CitySelector from '../molecules/CitySelector';
@@ -19,26 +20,30 @@ import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import Loader from '../atoms/Loader';
 
 interface IProps {
-   activeCardKey: number
 }
 const STYLE_TOGGLE_WARNING = {
    color: '#dc3545',
+   cursor: 'pointer',
+   paddingRight: '15px',
+   paddingLeft: '15px',
 };
 const STYLE_TOGGLE_NORMAL = {
    color: '#007bff',
+   cursor: 'pointer',
+   paddingRight: '15px',
+   paddingLeft: '15px',
 };
 
-const years: string[] = ['2015', '2016', '2017', '2018', '2019']
+const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 
-const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
+const FilterRequest: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
-   const { injurySeverity, updateInjurySeverity, isLoading } = filterStore;
-
+   const { injurySeverity, updateInjurySeverity, isLoading, formCardKey } = filterStore;
    return (
       <React.Fragment>
          {isLoading ? <Loader /> :
             <Form>
-               <Accordion defaultActiveKey={activeCardKey.toString()}>
+               <Accordion defaultActiveKey={formCardKey.toString()}>
                   <CardFilterWhen />
                   <CardFilterWhere />
                   <CardFilterWho />
@@ -63,24 +68,42 @@ const FilterRequest: React.FC<IProps> = observer(({ activeCardKey = 0 }) => {
 //    {' '}
 // </Button> */}
 
+function CustomToggle({ children, style, eventKey, onClick }: any) {
+   const [hover, setHover]= useState(false);
+   const toggleHover =() => setHover(!hover);
+   const linkStyle = (hover)? {textDecoration: 'underline'}:{textDecoration: 'none'};
+   const onButtonClick = useAccordionToggle(eventKey, () => onClick(eventKey));
+   return (
+      <div>
+         <a style={{...style, ...linkStyle}} onClick={onButtonClick} 
+         onMouseEnter={toggleHover} 
+         onMouseLeave={toggleHover}>
+            {children}
+         </a>
+      </div>
+   );
+}
+
+
 const CardFilterWhen: React.FC<any> = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhen, startYear, setStartYear, endYear, setEndYear, dayNight, updateDayNight,
+      isValidWhen, startYear, setStartYear, endYear, setEndYear, 
+      dayNight, updateDayNight,
+      setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhen ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="0"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('When')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse eventKey="0" className="filterControls">
             <Card.Body>
@@ -119,23 +142,25 @@ const CardFilterWhen: React.FC<any> = observer(() => {
       </Card>
    );
 });
+
 const CardFilterWhere = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhere, roadTypes, updateRoadType, isMultipleCities, cityPopSizeRange, setCityPopSizeRange,
+      isValidWhere, roadTypes, updateRoadType, isMultipleCities, 
+      cityPopSizeRange, setCityPopSizeRange,
+      setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="1"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('Where')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
             eventKey="1"
@@ -164,7 +189,7 @@ const CardFilterWho = observer(() => {
    const location = useLocation();
    const { filterStore } = useStore();
    const { isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType, } = filterStore;
-   const { ageTypes, updateAgeType, populationTypes, updatePopulationType, } = filterStore;
+   const { ageTypes, updateAgeType, populationTypes, updatePopulationType, setFormCardKey } = filterStore;
 
    useEffect(() => {
       const query = useQuery(location);
@@ -179,13 +204,12 @@ const CardFilterWho = observer(() => {
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="2"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('Who')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
             eventKey="2"
@@ -219,19 +243,18 @@ const CardFilterWho = observer(() => {
 const CardFilterWhat = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
-   const { isValidWhat, accidentType, updateAccidentType } = filterStore;
+   const { isValidWhat, accidentType, updateAccidentType, setFormCardKey } = filterStore;
    const styleToggle = isValidWhat ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="3"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('What')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
             eventKey="3"
@@ -250,19 +273,18 @@ const CardFilterWhat = observer(() => {
 const CardFilterWhatVehicle = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
-   const { isValidWhatVehicle, vehicleType, updateVehicleType } = filterStore;
+   const { isValidWhatVehicle, vehicleType, updateVehicleType, setFormCardKey } = filterStore;
    const styleToggle = isValidWhatVehicle ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="4"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('WhatVehicle')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
             eventKey="4"
@@ -283,19 +305,18 @@ const CardFilterWhatRoad = observer(() => {
    const { filterStore } = useStore();
    const { isValidWhatRoad } = filterStore;
    const { speedLimit, updateSpeedLimit, roadWidth, updateRoadWidth, } = filterStore;
-   const { separator, updateSeparator, oneLane, updateOneLane, } = filterStore;
+   const { separator, updateSeparator, oneLane, updateOneLane, setFormCardKey } = filterStore;
    const styleToggle = isValidWhatRoad ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
       <Card>
          <Card.Header>
-            <Accordion.Toggle
-               as={Button}
-               variant="link"
+            <CustomToggle
                eventKey="5"
-               style={styleToggle}>
+               style={styleToggle}
+               onClick={setFormCardKey}> 
                {t('WhatRoad')}
-            </Accordion.Toggle>
+            </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
             eventKey="5"

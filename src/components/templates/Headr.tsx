@@ -23,12 +23,12 @@ const styles = {
 export const Header: React.FC<IProps> = ({ title }) => {
 
    return (
-      <header style={{ marginBottom: '1rem' }}>
+      <header style={styles.header}>
          <Navbar className="navbar" expand="lg">
             <div className="container-fluid">
                <img
                   src={logo}
-                  alt="Safety-Data logo"
+                  alt={`${title} logo`}
                   height="45"
                   width="188"
                />

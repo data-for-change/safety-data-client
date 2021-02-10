@@ -5,9 +5,8 @@ import { useStore } from '../../stores/storeConfig';
 import ConfigModal from "../organisms/ConfigModal";
 
 interface IProps {
-    activeCardKey?: number
  }
-const ConfigFilterModal: React.FC<IProps> = observer(({activeCardKey = 0}) => {
+const ConfigFilterModal: React.FC<IProps> = observer(() => {
     const { filterStore, uiStore } = useStore();
     const { showFilterModal, setShowFilterModal } = uiStore;
     return (
@@ -22,7 +21,7 @@ const ConfigFilterModal: React.FC<IProps> = observer(({activeCardKey = 0}) => {
             title={'Filters'}
             setShow={setShowFilterModal}
             showModal={showFilterModal}>
-             <FilterRequest activeCardKey={activeCardKey} />
+             <FilterRequest />
         </ConfigModal>
     );
 });
