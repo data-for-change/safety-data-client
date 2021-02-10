@@ -5,7 +5,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   height: auto;
-  /* background-color: rgb(238, 101, 101); */
 }
 
 code {
@@ -54,9 +53,9 @@ code {
 
 .filter-btn {
   border-radius: 50%;
-  background-color: rgba(56, 170, 236, .7);
+  background-color: var(--primary-second);
+  opacity: 0.8;
   height: 3rem;
-  color: white;
   position: fixed;
   bottom: 30px;
   display: flex;
@@ -64,6 +63,7 @@ code {
   align-items: center;
   cursor: pointer;
   z-index: 100;
+  margin: 1rem;
 }
 
 @media screen and (min-width: 500px) {
@@ -74,7 +74,8 @@ code {
 }
 
 .filter-btn:hover {
-  background-color: rgb(56, 170, 236);
+  /* background-color: rgb(56, 170, 236); */
+  opacity: 1;
 }
 
 .filterControls {
@@ -157,5 +158,20 @@ button.btn.btn-link {
 #main-tabs-tabpane-image>div>div>div.image-gallery.image-gallery-using-mouse>div>div.image-gallery-slide-wrapper.bottom.image-gallery-rtl>div>div>div.image-gallery-slide.center>div>span {
   right: 0;
 }
+
+/* span:hover {
+  position: relative;
+}
+
+span[aria-label]:hover:after {
+  content: attr(aria-label);
+  padding: 4px 8px;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  white-space: nowrap;
+  z-index: 20;
+  background: red;
+} */
 
 /* MODAL  */
