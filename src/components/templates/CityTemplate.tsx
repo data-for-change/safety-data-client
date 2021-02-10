@@ -8,6 +8,7 @@ import { useQuery, useTabFromQuery, useCityNameFromQuery } from '../../hooks/que
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
+import { useMemos } from '../../hooks/myUseMemo';
 
 export const CityLable: React.FC<{}> = observer(() => {
   const { filterStore } = useStore();
@@ -22,7 +23,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore, uiStore } = useStore();
   const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
-  const { currentTab, setCurrentTab, setCurrentPage } = uiStore;
+  const { currentTab, setCurrentTab, setCurrentPage, showFilterModal } = uiStore;
   const history = useHistory();
   const location = useLocation();
   useEffect(() => {
@@ -54,19 +55,13 @@ const CityTemplate: React.FC<IProps> = observer(() => {
       filterStore.submitFilter();
     }
   }, []);
-  useEffect(() => {
-    if (cityResult !== '') {
-      filterStore.submitFilter();
-    }
-  }, [cityResult]);
   // useEffect(() => {
   //   if (cityResult !== '') {
-  //     history.push({
-  //       pathname: '/city',
-  //       search: `?name=${cityResult}`,
-  //     });
+  //     filterStore.submitFilter();
   //   }
   // }, [cityResult]);
+
+  const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
   return (
     <div className="App">
       <div className="container-fluid">
@@ -75,7 +70,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
           <main className="col-md-12">
             <CityLable />
             <ButtonShowFilterModal />
-            <ConfigFilterModal />
+            {showFilterModal && memoConfigModal}
             <TabsTemplate type="city" />
           </main>
         </div>
