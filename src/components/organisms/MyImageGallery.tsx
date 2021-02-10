@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ButtonToggle from '../atoms/ButtonToggle';
-import SelectImageByTag from '../atoms/SelectImageByTag';
+import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 
@@ -28,7 +28,7 @@ const styleCol: React.CSSProperties = {
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   const { imageStore, uiStore } = useStore();
   const {
-    getImages, setCurrImage, imageList, setCurrTag,
+    getImages, setCurrImage, imageList, tagsArr, setCurrTag, currTag,
   } = imageStore;
   const { language } = uiStore;
   const isRTL = (language !== 'en');
@@ -49,11 +49,18 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
     if (arrayImagesProps.length > 0) setCurrImage(arrayImagesProps[currentIndex]);
     return true;
   };
+ 
   return (
     <SmallCard2>
       <Row >
         <Col md={3} style={styleCol}>
-          <SelectImageByTag onChange={(val: string) => setCurrTag(val)} />
+          <Select 
+            id='exampleForm.SelectTag'
+            value={currTag}
+            data={tagsArr} 
+            onChange={(val: string) => setCurrTag(val)} 
+          />
+          {/* <SelectImageByTag onChange={(val: string) => setCurrTag(val)} /> */}
         </Col>
         <Col xs={12} md={6}>
           {isGotImages && <ImageTitle />}

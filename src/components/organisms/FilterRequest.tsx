@@ -14,7 +14,7 @@ import StreetSelector from '../molecules/StreetSelector';
 import RoadNameSelector from '../molecules/RoadNameSelector';
 import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
-import SelectCityPop from '../atoms/SelectCityPop';
+import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import Loader from '../atoms/Loader';
@@ -148,7 +148,7 @@ const CardFilterWhere = observer(() => {
    const { filterStore } = useStore();
    const {
       isValidWhere, roadTypes, updateRoadType, isMultipleCities, 
-      cityPopSizeRange, setCityPopSizeRange,
+      cityPopSizeRange, setCityPopSizeRange, cityPopSizeArr,
       setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
@@ -175,7 +175,10 @@ const CardFilterWhere = observer(() => {
                   colFilter={roadTypes}
                   onChange={updateRoadType}
                />
-               <SelectCityPop
+               <Select
+                  label= {'city_size'}
+                  id={'cityForm.SelectPopSize'}
+                  data={cityPopSizeArr}
                   value={cityPopSizeRange}
                   onChange={(val: string) => setCityPopSizeRange(val)}
                />
