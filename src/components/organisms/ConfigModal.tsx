@@ -10,8 +10,8 @@ interface IProps {
   showModal: boolean;
   setShow: (show: boolean) => void;
   children: any;
-  size?: "sm" | "lg" | "xl" | undefined
-  action?: (val?: any) => void
+  size?: "sm" | "lg" | "xl" | undefined;
+  action?: (val?: any) => void;
 }
 
 

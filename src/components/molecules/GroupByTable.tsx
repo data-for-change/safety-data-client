@@ -7,9 +7,9 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 interface IProps {
-    dataName?:string
-    data: any[]
-    columns? :any[]
+    dataName?:string;
+    data: any[];
+    columns? :any[];
   }
 
 const foramtDataPrecision = (data: any[]) => {

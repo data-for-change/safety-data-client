@@ -1,9 +1,9 @@
 import React, { CSSProperties } from 'react'
 
 interface IProps {
-    path: string
-    style: CSSProperties | undefined
-    alt: string
+    path: string;
+    style: CSSProperties | undefined;
+    alt: string;
 }
 
 const IconWithImage: React.FC<IProps> = ({ path,alt, style }) => {
