@@ -10,7 +10,7 @@ module.exports = {
   ],
   rules: {
     'linebreak-style': ['warn', 'windows'],
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'max-len': ['warn', { code: 130, tabWidth: 4 }],
     '@typescript-eslint/no-unused-vars': 'error',
   },
