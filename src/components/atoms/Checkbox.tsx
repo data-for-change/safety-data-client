@@ -1,5 +1,5 @@
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 
@@ -18,4 +18,4 @@ const Checkbox: React.FC<IProps> = ({
     <Form.Check inline label={t(label)} type="checkbox" id={`cbox${group}${id}`} checked={checked} onChange={onChange} />
   );
 };
-export default Checkbox;
+export default memo(Checkbox);
