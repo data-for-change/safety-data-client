@@ -1,6 +1,5 @@
 import React from 'react';
 import { Bar, HorizontalBar, Pie } from 'react-chartjs-2';
-import { observer } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 
 interface IProps {
@@ -30,7 +29,7 @@ const getColorPallete = (chartType: string, length: number, defColor: string) =>
   return res;
 };
 
-const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', height = 220, fill = '#8884d8', }: IProps) => {
+const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 220, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
   const labels = data.map((x) => x._id);
   const vals = data.map((x) => x.count);
@@ -82,5 +81,5 @@ const ChartBar: React.FC<IProps> = observer(({ data, chartType = 'BarChart', hei
       height={height}
     />
   );
-});
+};
 export default ChartBar;
