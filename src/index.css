@@ -159,6 +159,11 @@ button.btn.btn-link {
   right: 0;
 }
 
+body>div.fade.modal.show {
+  margin-top: 3rem !important;
+  /* margin-bottom: 3rem !important; */
+}
+
 /* span:hover {
   position: relative;
 }
