@@ -52,13 +52,14 @@ const ChartGroupBy2: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart
     return (
       <HorizontalBar
         data={data3}
+        options={{ responsive: true, maintainAspectRatio: false, }}
       />
     );
   }
   return (
     <Pie
       data={data3}
-      height={220}
+      options={{ responsive: true, }}
     />
   );
 };

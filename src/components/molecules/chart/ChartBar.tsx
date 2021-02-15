@@ -29,7 +29,7 @@ const getColorPallete = (chartType: string, length: number, defColor: string) =>
   return res;
 };
 
-const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 100, fill = '#8884d8', }: IProps) => {
+const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
   const labels = data.map((x) => x._id);
   const vals = data.map((x) => x.count);
@@ -65,7 +65,7 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 100
     return (
       <Bar
         data={data3}
-        // height={height}
+        //height={height}
         options={options1}
       />
     );
@@ -74,13 +74,14 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 100
     return (
       <HorizontalBar
         data={data3}
+        options={{ responsive: true,  maintainAspectRatio: false,}}
       />
     );
   }
   return (
     <Pie
       data={data3}
-      height={height}
+      options={{ responsive: true,}}
     />
   );
 };
