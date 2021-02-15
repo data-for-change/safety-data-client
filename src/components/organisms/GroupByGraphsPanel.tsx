@@ -34,8 +34,6 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    const { dataByYears } = filterStore;
    const reactData1 = toJS(dataByYears);
 
-
-
    if (reactData1.length > 0) {
       return (
          <React.Fragment>
@@ -66,7 +64,9 @@ const CardChartYears: React.FC<IProps> = observer(() => {
 
    return (
       <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
-         <ChartBar data={reactData2} fill="#FE9772" />
+         <div style={{ height: '60vh', width: '100%' }}>
+            <ChartBar data={reactData2} fill="#FE9772" />
+         </div>
       </SmallCard2>
    );
 });
@@ -104,7 +104,9 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
          </ConfigModal>
          <div >
             <hr />
-            {chart}
+            <div style={{ width: '100%', height: '60vh' }} >
+               {chart}
+            </div>
          </div>
       </SmallCard2>
    );
@@ -147,7 +149,9 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
                   </div>
                   <hr />
-                  <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
+                  <div style={{ height: '60vh', width: '100%' }}>
+                     <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
+                  </div>
                </SmallCard2>
             )}
       </div>

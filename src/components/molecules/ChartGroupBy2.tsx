@@ -29,6 +29,8 @@ const ChartGroupBy2: React.FC<IProps> = observer(({ data, metaData, chartType = 
     datasets: datasets1,
   };
   const options1 = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       yAxes: [{
         ticks: {
@@ -42,7 +44,7 @@ const ChartGroupBy2: React.FC<IProps> = observer(({ data, metaData, chartType = 
     return (
       <Bar
         data={data3}
-        height={150}
+        // height={150}
         options={options1}
       />
     );
