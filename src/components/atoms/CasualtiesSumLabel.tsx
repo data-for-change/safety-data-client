@@ -11,8 +11,9 @@ interface IProps {
 const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { casualtiesNames } = filterStore;
+  const { casualtiesNames, isLoading } = filterStore;
   const nameSpan = name ? `${name}- ` : '';
+  if (isLoading) return <div> {t('Loading')} </div>
   if (length > 0) {
     return (
       <h5>
@@ -27,7 +28,7 @@ const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
     );
   }
   return (
-    <h4>{t('NoResultsFound')}</h4>
+    <h5>{t('NoResultsFound')}</h5>
   );
 });
 export default CasualtiesSumLabel;
