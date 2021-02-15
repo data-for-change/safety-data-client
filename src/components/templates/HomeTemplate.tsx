@@ -9,6 +9,8 @@ import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
+import { toJS } from 'mobx';
+import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -16,6 +18,8 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
    const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
+   const reactMarkers = toJS(filterStore.dataAllInjuries);
+
    const history = useHistory();
    const location = useLocation();
 
@@ -45,6 +49,8 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
 
    const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
 
+
+
    return (
       <div className="App">
          <div className="container-fluid">
@@ -54,7 +60,13 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
                      display: 'flex',
                      justifyContent: 'space-between'
                   }}>
-                     <span>{t('Israel')}</span>
+                     <span style={{ display: 'flex', fontSize: '1.25rem' }}>
+                        {t('Israel')}&nbsp;
+                        <CasualtiesSumLabel
+                           length={reactMarkers.length}
+                           name={filterStore.cityResult}
+                        />
+                     </span>
                      <ButtonShowFilterModal />
                   </h4>
                   {showFilterModal && memoConfigModal}

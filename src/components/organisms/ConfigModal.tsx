@@ -30,7 +30,7 @@ const ConfigModal: React.FC<IProps> = observer(({
       onClick={action}
       disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
     >
-      {filterStore.isLoading ? t('Loading…') : t('Submit')}
+      {filterStore.isLoading ? t('Loading') : t('Submit')}
     </Button>
     : null
 

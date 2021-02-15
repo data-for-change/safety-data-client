@@ -89,15 +89,17 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     window.addEventListener('resize', handleResize);
     return (() => { window.removeEventListener('resize', handleResize); });
   });
+
+  console.log(reactMarkers, filterStore.cityResult)
   if (reactMarkers.length > 0) {
     return (
       <div>
         <SmallCard2>
-          <CasualtiesSumLabel
-            length={reactMarkers.length}
-            name={filterStore.cityResult}
-          />
-          <hr />
+          {/* <CasualtiesSumLabel
+          length={reactMarkers.length}
+          name={filterStore.cityResult}
+          /> */}
+          {/* <hr /> */}
           <ToolkitProvider
             keyField="id"
             data={reactMarkers}
@@ -123,12 +125,13 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
       </div>
     );
   }
-  return (
-    <CasualtiesSumLabel
-      length={reactMarkers.length}
-      name={filterStore.cityResult}
-    />
-  );
+  return null
+  // return (
+  //   <CasualtiesSumLabel
+  //     length={reactMarkers.length}
+  //     name={filterStore.cityResult}
+  //   />
+  // );
 });
 
 export default AccidentsTable;

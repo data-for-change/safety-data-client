@@ -9,12 +9,20 @@ import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from '../../hooks/myUseMemo';
+import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
+import { toJS } from 'mobx';
 
 export const CityLable: React.FC<{}> = observer(() => {
   const { filterStore } = useStore();
   const { cityResult } = filterStore;
+  const reactMarkers = toJS(filterStore.dataAllInjuries);
+  console.log(filterStore.dataAllInjuries)
+
   return (
-    <h4>{cityResult}</h4>
+    <h4> <CasualtiesSumLabel
+      length={reactMarkers.length}
+      name={filterStore.cityResult}
+    /> </h4>
   );
 });
 
