@@ -3,6 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
 import IconWithImage from '../atoms/IconWithImage';
+import imgSrc from '../../assets/filter.png';
 
 interface IProps { }
 const ButtonShowFilterModal: React.FC<IProps> = observer(() => {
@@ -10,7 +11,7 @@ const ButtonShowFilterModal: React.FC<IProps> = observer(() => {
     const { uiStore } = useStore();
     const { showFilterModal, setShowFilterModal } = uiStore;
     const filterIcon = <IconWithImage
-        path={'https://static.thenounproject.com/png/40256-200.png'}
+        path={imgSrc}
         style={{ lineHeight: '30px' }}
         alt='open filter'
     />
