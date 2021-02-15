@@ -36,6 +36,15 @@ export default class ImageStore {
     const lang = this.rootStore.uiStore.language;
     this.getImagesByTag(tag, lang);
   }
+  tagsArr = [
+    { val: "כללי", text: 'general' },
+    { val: "הולכי רגל", text: 'pedestrian' },
+    { val: "רוכבי אופניים", text: 'cyclist' },
+    { val: "רוכבי אופנוע", text: 'motorcycle' },
+    { val: "מכוניות", text: 'car' },
+    { val: "אוטובוסים", text: 'bus' },
+    { val: "ילדים", text: 'kids' },
+  ];
 
   @observable
   currImage: IimageEntity| null = null;

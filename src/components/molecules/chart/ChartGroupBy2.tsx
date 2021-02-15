@@ -1,6 +1,5 @@
 import React from 'react';
 import { Bar, HorizontalBar, Pie } from 'react-chartjs-2';
-import { observer } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
 
 interface IProps {
@@ -9,7 +8,7 @@ interface IProps {
   chartType?: string;
 }
 
-const ChartGroupBy2: React.FC<IProps> = observer(({ data, metaData, chartType = 'BarChart' }: IProps) => {
+const ChartGroupBy2: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart' }: IProps) => {
   const { t } = useTranslation();
   const labels = data.map((x) => x._id);
   const datasets1 = metaData.map((x: any) => {
@@ -62,7 +61,6 @@ const ChartGroupBy2: React.FC<IProps> = observer(({ data, metaData, chartType = 
       height={220}
     />
   );
-});
-
+};
 
 export default ChartGroupBy2;

@@ -2,7 +2,7 @@
 /* eslint-disable space-before-blocks */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Popup } from 'react-leaflet';
+import { Popup} from 'react-leaflet';
 
 interface IProps {
     data: any,

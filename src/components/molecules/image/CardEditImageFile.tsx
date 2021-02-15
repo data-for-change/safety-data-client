@@ -7,8 +7,8 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import { useStore } from '../../stores/storeConfig';
-import { IimageEntity } from '../../stores/ImageEntity';
+import { useStore } from '../../../stores/storeConfig';
+import { IimageEntity } from '../../../stores/ImageEntity';
 
 interface IProps { }
 const styleSelect = {

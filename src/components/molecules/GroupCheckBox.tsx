@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import Checkbox from '../atoms/Checkbox';
 import { IColumnFilter } from '../../stores/ColumnFilter';
+import { useMemos } from "../../hooks/myUseMemo";
 
 interface IProps {
   formName: string,
@@ -36,25 +37,25 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
     </div>
   );
   const isvalid = (isAllValsFalse) ? feedback : null;
-
+  const list = arrTypes.map((fChecker, index) => {
+    return useMemos([fChecker.checked],<Checkbox
+    key={fChecker.label}
+    label={fChecker.label}
+    group={colFilter.name}
+    id={index}
+    checked={fChecker.checked}
+    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+      onGroupChange(index, e.target.checked);
+    }}
+  />);
+  });
   return (
     <Form.Group controlId={`${formName}.Control${name}`}>
       <Form.Label className="filterLable">
         {t(name)}
 :
       </Form.Label>
-      {arrTypes.map((fChecker, index) => (
-        <Checkbox
-          key={fChecker.label}
-          label={fChecker.label}
-          group={colFilter.name}
-          id={index}
-          checked={fChecker.checked}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            onGroupChange(index, e.target.checked);
-          }}
-        />
-      ))}
+      {list}
       {isvalid}
     </Form.Group>
   );

@@ -74,6 +74,13 @@ export const initGroup2Dict = () => {
   dict.RoadType.vals['לא-עירונית בצומת'] = new GroupBy2Val('non-urban-junction', '#1258DC');
   dict.RoadType.vals['לא-עירונית לא בצומת'] = new GroupBy2Val('non-urban-road', '#0A337F');
 
+  dict.Year = new GroupBy2('Year', 'accident_year');
+  dict.Year.vals[2015] = new GroupBy2Val('2015', '#82CA9D');
+  dict.Year.vals[2016] = new GroupBy2Val('2016', '#559E54');
+  dict.Year.vals[2017] = new GroupBy2Val('2017', '#559E54');
+  dict.Year.vals[2018] = new GroupBy2Val('2018', '#305A30');
+  dict.Year.vals[2019] = new GroupBy2Val('2019', '#305A30');
+
   dict.TypeInjured = new GroupBy2('TypeInjured', 'injured_type_hebrew');
   dict.TypeInjured.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
   dict.TypeInjured.vals['נהג - אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');
@@ -84,5 +91,6 @@ export const initGroup2Dict = () => {
   dict.TypeInjured.vals['נוסע - אופנוע (לא נהג)'] = new GroupBy2Val('motorcycle-p', '#1258DC');
   dict.TypeInjured.vals['נהג - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
   dict.TypeInjured.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
+
   return dict;
 };

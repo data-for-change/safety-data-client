@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
+// import Select from './Select';
 
 interface IProps {
   id: string,
@@ -21,8 +22,18 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     updateGroupby(event.target.value);
   }, [updateGroupby]);
+  //const data = Object.entries(groupByDict).map(([key, x]: any[])=> {return {val: x.text, text: x.text ,key: key }});
+  
   return (
-    <Form className="form-inline">
+  
+  //   <Select 
+  //   id= {`GrupForm.${id}.SelectGroupBy`}
+  //   label = {labelText}
+  //   data = {data}
+  //   value={groupBy.text}
+  //   onChange={updateGroupby}
+  // />
+     <Form className="form-inline">
       <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {lable}

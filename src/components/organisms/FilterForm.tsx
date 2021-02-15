@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useEffect, useState} from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
@@ -14,7 +14,7 @@ import StreetSelector from '../molecules/StreetSelector';
 import RoadNameSelector from '../molecules/RoadNameSelector';
 import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
-import SelectCityPop from '../atoms/SelectCityPop';
+import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import Loader from '../atoms/Loader';
@@ -36,7 +36,7 @@ const STYLE_TOGGLE_NORMAL = {
 
 const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 
-const FilterRequest: React.FC<IProps> = observer(({ }) => {
+const FilterForm: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
    const { injurySeverity, updateInjurySeverity, isLoading, formCardKey } = filterStore;
    return (
@@ -69,15 +69,15 @@ const FilterRequest: React.FC<IProps> = observer(({ }) => {
 // </Button> */}
 
 function CustomToggle({ children, style, eventKey, onClick }: any) {
-   const [hover, setHover]= useState(false);
-   const toggleHover =() => setHover(!hover);
-   const linkStyle = (hover)? {textDecoration: 'underline'}:{textDecoration: 'none'};
+   const [hover, setHover] = useState(false);
+   const toggleHover = () => setHover(!hover);
+   const linkStyle = (hover) ? { textDecoration: 'underline' } : { textDecoration: 'none' };
    const onButtonClick = useAccordionToggle(eventKey, () => onClick(eventKey));
    return (
       <div>
-         <a style={{...style, ...linkStyle}} onClick={onButtonClick} 
-         onMouseEnter={toggleHover} 
-         onMouseLeave={toggleHover}>
+         <a style={{ ...style, ...linkStyle }} onClick={onButtonClick}
+            onMouseEnter={toggleHover}
+            onMouseLeave={toggleHover}>
             {children}
          </a>
       </div>
@@ -89,7 +89,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhen, startYear, setStartYear, endYear, setEndYear, 
+      isValidWhen, startYear, setStartYear, endYear, setEndYear,
       dayNight, updateDayNight,
       setFormCardKey,
    } = filterStore;
@@ -101,7 +101,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
             <CustomToggle
                eventKey="0"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('When')}
             </CustomToggle>
          </Card.Header>
@@ -147,8 +147,8 @@ const CardFilterWhere = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhere, roadTypes, updateRoadType, isMultipleCities, 
-      cityPopSizeRange, setCityPopSizeRange,
+      isValidWhere, roadTypes, updateRoadType, isMultipleCities,
+      cityPopSizeRange, setCityPopSizeRange, cityPopSizeArr,
       setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
@@ -158,7 +158,7 @@ const CardFilterWhere = observer(() => {
             <CustomToggle
                eventKey="1"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('Where')}
             </CustomToggle>
          </Card.Header>
@@ -175,7 +175,10 @@ const CardFilterWhere = observer(() => {
                   colFilter={roadTypes}
                   onChange={updateRoadType}
                />
-               <SelectCityPop
+               <Select
+                  label={'city_size'}
+                  id={'cityForm.SelectPopSize'}
+                  data={cityPopSizeArr}
                   value={cityPopSizeRange}
                   onChange={(val: string) => setCityPopSizeRange(val)}
                />
@@ -207,7 +210,7 @@ const CardFilterWho = observer(() => {
             <CustomToggle
                eventKey="2"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('Who')}
             </CustomToggle>
          </Card.Header>
@@ -252,7 +255,7 @@ const CardFilterWhat = observer(() => {
             <CustomToggle
                eventKey="3"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('What')}
             </CustomToggle>
          </Card.Header>
@@ -282,7 +285,7 @@ const CardFilterWhatVehicle = observer(() => {
             <CustomToggle
                eventKey="4"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('WhatVehicle')}
             </CustomToggle>
          </Card.Header>
@@ -314,7 +317,7 @@ const CardFilterWhatRoad = observer(() => {
             <CustomToggle
                eventKey="5"
                style={styleToggle}
-               onClick={setFormCardKey}> 
+               onClick={setFormCardKey}>
                {t('WhatRoad')}
             </CustomToggle>
          </Card.Header>
@@ -347,4 +350,4 @@ const CardFilterWhatRoad = observer(() => {
       </Card>
    );
 });
-export default FilterRequest;
+export default FilterForm;

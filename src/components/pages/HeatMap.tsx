@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Map, TileLayer } from 'react-leaflet';
 import { observer } from 'mobx-react';
 import 'leaflet-css';
-import AccidentHeatLayer from '../molecules/AccidentHeatLayer';
+import AccidentHeatLayer from '../molecules/map/AccidentHeatLayer';
 
 interface IProps { }
 const INITIAL_ZOOM = 10;
