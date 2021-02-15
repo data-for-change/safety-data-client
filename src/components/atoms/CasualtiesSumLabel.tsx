@@ -12,7 +12,7 @@ const CasualtiesSumLabel: React.FC<IProps> = observer(({ length, name }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { casualtiesNames, isLoading } = filterStore;
-  const nameSpan = name ? `${name}- ` : '';
+  const nameSpan = name ? `${name}, ` : `${t('Israel')}, `;
   if (isLoading) return <div> {t('Loading')} </div>
   if (length > 0) {
     return (

@@ -61,7 +61,6 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
                      justifyContent: 'space-between'
                   }}>
                      <span style={{ display: 'flex', fontSize: '1.25rem' }}>
-                        {t('Israel')}&nbsp;
                         <CasualtiesSumLabel
                            length={reactMarkers.length}
                            name={filterStore.cityResult}
