@@ -14,7 +14,8 @@ import ChartBar from '../molecules/chart/ChartBar';
 import ChartGroupBy2 from '../molecules/chart/ChartGroupBy2';
 import ConfigModal from './ConfigModal';
 import ConfigChart from '../molecules/chart/ConfigChart';
-import gearlogo from '../../assets/gear2.png';
+import {useMemos} from '../../hooks/myUseMemo';
+import SvgIconSettings from '../../assets/SvgIconSettings';
 import SmallCard2 from '../atoms/SmallCard2';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -86,12 +87,6 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
          width: '100%',
          height: '60vh',
       },
-      iconStyle: {
-         height: '21px',
-         width: '21px',
-         paddingTop: '0px',
-         paddingBottom: '1px',
-      },
    };
    // const { t } = useTranslation();
    const [showModel, setShowModal] = useState(false);
@@ -100,12 +95,16 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const reactData3 = toJS(dataFilterd);
    const { chartType } = uiStore;
    const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} height={150} />;
+   const memoSettingsIcon = useMemos([], 
+      <SvgIconSettings color={'var(--onprimary-color)'} />
+      );
+   // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
    return (
       <SmallCard2>
          <div style={styles.divConfig}>
             <SelectGroupBy id="Graphs.Main" />
             <Button onClick={() => { setShowModal(!showModel); }}>
-               <img src={gearlogo} alt="settings" style={styles.iconStyle} />
+               {memoSettingsIcon}
             </Button>
          </div>
          <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
