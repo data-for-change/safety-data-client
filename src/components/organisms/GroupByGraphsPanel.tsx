@@ -61,10 +61,15 @@ const CardChartYears: React.FC<IProps> = observer(() => {
    const { filterStore } = useStore();
    const { dataFilterdByYears, casualtiesNames } = filterStore;
    const reactData2 = toJS(dataFilterdByYears);
-
+   const styles = {
+      divChart: {
+         width: '100%',
+         height: '60vh',
+      },
+   };
    return (
       <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
-         <div style={{ height: '60vh', width: '100%' }}>
+         <div style={styles.divChart}>
             <ChartBar data={reactData2} fill="#FE9772" />
          </div>
       </SmallCard2>
@@ -73,9 +78,13 @@ const CardChartYears: React.FC<IProps> = observer(() => {
 
 const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const styles = {
-      divStyle: {
+      divConfig: {
          display: 'flex',
          justifyContent: 'space-between',
+      },
+      divChart: {
+         width: '100%',
+         height: '60vh',
       },
       iconStyle: {
          height: '21px',
@@ -93,7 +102,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} height={150} />;
    return (
       <SmallCard2>
-         <div style={styles.divStyle}>
+         <div style={styles.divConfig}>
             <SelectGroupBy id="Graphs.Main" />
             <Button onClick={() => { setShowModal(!showModel); }}>
                <img src={gearlogo} alt="settings" style={styles.iconStyle} />
@@ -104,7 +113,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
          </ConfigModal>
          <div >
             <hr />
-            <div style={{ width: '100%', height: '60vh' }} >
+            <div style={styles.divChart} >
                {chart}
             </div>
          </div>
@@ -113,13 +122,19 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
 });
 
 const CardChartGrpBy2: React.FC<IProps> = observer(() => {
-   const styleLable = {
-      fontWeight: 700,
-      marginTop: '5px',
-      marginLeft: '20px',
-      marginRight: '20px',
-   };
-   const divConstolsRow = {
+   const styles = {
+      styleLable: {
+         fontWeight: 700,
+         marginTop: '5px',
+         marginLeft: '20px',
+         marginRight: '20px',
+      },
+      divChart: {
+         width: '100%',
+         height: '60vh',
+      },
+   }
+   const divConstolsRow= {
       display: 'flex',
       flexWrap: 'wrap',
    } as React.CSSProperties;
@@ -136,7 +151,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
             && (
                <SmallCard2>
                   <div style={divConstolsRow}>
-                     <span style={styleLable}>
+                     <span style={styles.styleLable}>
                         {' '}
                         {t('GroupBy')}
                         {' '}
@@ -149,7 +164,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
                   </div>
                   <hr />
-                  <div style={{ height: '60vh', width: '100%' }}>
+                  <div style={styles.divChart}>
                      <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
                   </div>
                </SmallCard2>
