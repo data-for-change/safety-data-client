@@ -24,6 +24,16 @@ export default class UiStore {
   updateLanguage = (lang: string) => {
     this.language = lang;
     localStorage.setItem('lang', JSON.stringify(lang));
+    const dir = (lang === 'en') ? 'ltr' : 'rtl';
+    this.setDirection(dir);
+  }
+
+  @observable 
+  direction :string = 'rtl';
+  
+  @action 
+  setDirection = (val:string) => {
+    this.direction = val;
   }
 
   reactionChangeLang = reaction(
