@@ -5,6 +5,7 @@ import 'chartjs-plugin-datalabels';
 
 interface IProps {
   data: readonly any[];
+  metaData?: any[];
   chartType?: string;
   height?: number;
   fill?: string;
@@ -31,27 +32,50 @@ const getColorPallete = (chartType: string, length: number, defColor: string) =>
   return res;
 };
 
-const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
+const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
-  const labels = data.map((x) => x._id);
-  const vals = data.map((x) => x.count);
-  const label = t('casualties');
-  const backgroundColor = getColorPallete(chartType, data.length, fill);
-  const align = (dir === 'rtl')? 'right' : 'center';
-  const data3 = {
-    labels,
-    datasets: [
-      {
-        label,
-        backgroundColor: backgroundColor,
-        borderColor: 'rgba(255,255,255,0.7)',
-        borderWidth: 1,
-        // hoverBackgroundColor: 0.7,
+  let dataChart;
+  // if metaData == undefined - chart of 1 group
+  if (metaData == undefined) {
+    const labels = data.map((x) => x._id);
+    const vals = data.map((x) => x.count);
+    const label = t('casualties');
+    const backgroundColor = getColorPallete(chartType, data.length, fill);
+    dataChart = {
+      labels,
+      datasets: [
+        {
+          label,
+          backgroundColor: backgroundColor,
+          borderColor: 'rgba(255,255,255,0.7)',
+          borderWidth: 1,
+          // hoverBackgroundColor: 0.7,
+          hoverBorderColor: 'rgba(255,99,132,1)',
+          data: vals,
+        },
+      ],
+    };
+  }
+  else {
+    const labels = data.map((x) => x._id);
+    const datasets1 = metaData.map((x: any) => {
+      const name = t(x.key);
+      const fill = x.color;
+      const vals = data.map((row) => row[x.key]);
+      return {
+        label: name,
+        backgroundColor: fill,
+        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
         hoverBorderColor: 'rgba(255,99,132,1)',
         data: vals,
-      },
-    ],
+      };
+    });
+    dataChart = {
+      labels,
+      datasets: datasets1,
+    };
   };
+  const align = (dir === 'rtl') ? 'right' : 'center';
   const options1 = {
     responsive: true,
     maintainAspectRatio: false,
@@ -74,7 +98,7 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60,
   if (chartType === 'BarChart') {
     return (
       <Bar
-        data={data3}
+        data={dataChart}
         //height={height}
         options={options1}
       />
@@ -83,16 +107,16 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60,
   if (chartType === 'HorizontalBar') {
     return (
       <HorizontalBar
-        data={data3}
+        data={dataChart}
         options={
           {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
               datalabels: {
-                 display: true,
-                 color: 'white',
-                 align: align
+                display: true,
+                color: 'white',
+                align: align
               }
             }
           }}
@@ -101,16 +125,17 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60,
   }
   return (
     <Pie
-      data={data3}
-      options={{ 
-        responsive: true, 
+      data={dataChart}
+      options={{
+        responsive: true,
         plugins: {
           datalabels: {
-             display: true,
-             color: 'white',
-             align: align
+            display: true,
+            color: 'white',
+            align: align
           }
-        }}}
+        }
+      }}
     />
   );
 };

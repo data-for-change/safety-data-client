@@ -147,7 +147,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { filterStore, uiStore } = useStore();
    const { groupBy2 } = filterStore;
-   const { chartType } = uiStore;
+   const { chartType, direction } = uiStore;
    const metaDAta = groupBy2.getBars();
    const reactDataGrp2 = toJS(filterStore.dataGroupby2);
    const show = true;
@@ -171,7 +171,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                   </div>
                   <hr />
                   <div style={styles.divChart}>
-                     <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
+                     <ChartBar data={reactDataGrp2} metaData={metaDAta} chartType={chartType} dir={direction}/>
                   </div>
                </SmallCard2>
             )}
