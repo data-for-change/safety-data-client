@@ -6,12 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
-// import { RangeSlider } from '../atoms/RangeSlider'
-// import MyBarChart from '../molecules/MyBarChart';
-// import MyPieChart from '../molecules/MyPieChart';
-// import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/chart/ChartBar';
-import ChartGroupBy2 from '../molecules/chart/ChartGroupBy2';
 import ConfigModal from './ConfigModal';
 import ConfigChart from '../molecules/chart/ConfigChart';
 import {useMemos} from '../../hooks/myUseMemo';
@@ -178,63 +173,5 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
       </div>
    );
 });
-
-// const CardChartGrpBy2Old: React.FC<IProps> = observer(() => {
-//   const styleLable = {
-//     fontWeight: 700,
-//     marginTop: '5px',
-//     marginLeft: '20px',
-//     marginRight: '20px',
-//   };
-//   const divConstolsRow = {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//   } as React.CSSProperties;
-//   const { t } = useTranslation();
-//   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-//   React.useEffect(() => {
-//     function handleResize() {
-//       const size = getSize(window.innerWidth);
-//       setGraphSize(size);
-//     }
-//     window.addEventListener('resize', handleResize);
-//     return (() => { window.removeEventListener('resize', handleResize); });
-//   });
-//   const { filterStore } = useStore();
-//   const { groupBy2, groupBy } = filterStore;
-//   const barsGrp2 = groupBy2.getBars();
-//   const reactDataGrp2 = toJS(filterStore.dataGroupby2);
-//   const show = (groupBy.text !== 'CityByPop') && graphSize > 500;
-//   return (
-//     <div>
-//       {show
-//             && (
-//             <SmallCard2>
-//               <div style={divConstolsRow}>
-//                 <span style={styleLable}>
-//                   {' '}
-//                   {t('GroupBy')}
-//                   {' '}
-//                   :
-//                 </span>
-//                 <SelectGroupBy id="Graphs.Grp2" labelText="" />
-//                 {' '}
-//                 &nbsp;
-//                 <SelectGroupBy2 id="Graphs" />
-//                 {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
-//               </div>
-//               <hr />
-//               <MyBarChart
-//                 data={reactDataGrp2}
-//                 barsData={barsGrp2}
-//                 width={graphSize}
-//                 height={graphSize * 0.62}
-//                 legendType="top"
-//               />
-//             </SmallCard2>
-//             )}
-//     </div>
-//   );
-// });
 
 export default GroupByGraphsPanel;

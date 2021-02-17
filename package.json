@@ -31,7 +31,6 @@
     "react-leaflet-heatmap-layer": "^2.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.2",
-    "recharts": "^1.8.5",
     "tslib": "^1.14.1"
   },
   "scripts": {
@@ -62,7 +61,6 @@
     "@types/react-image-gallery": "^0.9.3",
     "@types/react-leaflet": "^2.5.2",
     "@types/react-router-dom": "^5.1.7",
-    "@types/recharts": "^1.8.19",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
     "eslint-config-airbnb": "^18.2.1",
