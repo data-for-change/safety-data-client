@@ -1,12 +1,14 @@
 import React from 'react';
-import { Bar, HorizontalBar, Pie } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
+import { Bar, HorizontalBar, Pie } from 'react-chartjs-2';
+import 'chartjs-plugin-datalabels';
 
 interface IProps {
   data: readonly any[];
   chartType?: string;
   height?: number;
   fill?: string;
+  dir: string;
 }
 
 const getColorPallete = (chartType: string, length: number, defColor: string) => {
@@ -29,12 +31,13 @@ const getColorPallete = (chartType: string, length: number, defColor: string) =>
   return res;
 };
 
-const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60, fill = '#8884d8', }: IProps) => {
+const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
   const labels = data.map((x) => x._id);
   const vals = data.map((x) => x.count);
   const label = t('casualties');
-  let backgroundColor = getColorPallete(chartType, data.length, fill);
+  const backgroundColor = getColorPallete(chartType, data.length, fill);
+  const align = (dir === 'rtl')? 'right' : 'center';
   const data3 = {
     labels,
     datasets: [
@@ -60,6 +63,13 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60,
         },
       }],
     },
+    plugins: {
+      datalabels: {
+        display: true,
+        color: 'white',
+        align: align
+      }
+    }
   };
   if (chartType === 'BarChart') {
     return (
@@ -74,14 +84,33 @@ const ChartBar: React.FC<IProps> = ({ data, chartType = 'BarChart', height = 60,
     return (
       <HorizontalBar
         data={data3}
-        options={{ responsive: true,  maintainAspectRatio: false,}}
+        options={
+          {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              datalabels: {
+                 display: true,
+                 color: 'white',
+                 align: align
+              }
+            }
+          }}
       />
     );
   }
   return (
     <Pie
       data={data3}
-      options={{ responsive: true,}}
+      options={{ 
+        responsive: true, 
+        plugins: {
+          datalabels: {
+             display: true,
+             color: 'white',
+             align: align
+          }
+        }}}
     />
   );
 };

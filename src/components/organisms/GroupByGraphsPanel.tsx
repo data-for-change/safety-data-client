@@ -59,8 +59,9 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
 
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
-   const { filterStore } = useStore();
+   const { filterStore, uiStore } = useStore();
    const { dataFilterdByYears, casualtiesNames } = filterStore;
+   const { direction } = uiStore;
    const reactData2 = toJS(dataFilterdByYears);
    const styles = {
       divChart: {
@@ -71,7 +72,7 @@ const CardChartYears: React.FC<IProps> = observer(() => {
    return (
       <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
          <div style={styles.divChart}>
-            <ChartBar data={reactData2} fill="#FE9772" />
+            <ChartBar data={reactData2} fill="#FE9772" dir={direction} />
          </div>
       </SmallCard2>
    );
@@ -93,8 +94,14 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { filterStore, uiStore } = useStore();
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
-   const { chartType } = uiStore;
-   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} height={150} />;
+   const { chartType, direction } = uiStore;
+   const chart = <ChartBar 
+      data={reactData3} 
+      fill="#8884d8" 
+      chartType={chartType} 
+      height={150} 
+      dir={direction}
+      />;
    const memoSettingsIcon = useMemos([], 
       <SvgIconSettings color={'var(--onprimary-color)'} />
       );
