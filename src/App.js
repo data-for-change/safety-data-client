@@ -8,6 +8,7 @@ import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
 import './i18n';
 import './App.css';
+import Drawer from './components/organisms/Drawer';
 
 
 const AboutPage = lazy(() => import('./components/pages/AboutPage'));
@@ -15,14 +16,15 @@ const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'))
 
 const styles = {
    app: {
-      marginTop: '53px',
+      marginTop: '44px',
    }
 };
 
 function App() {
    return (
       <Router>
-         <Card display="flex" height="100%">
+         {/* <Card display="flex" height="100%"> */}
+         <div style={{ height: "100%" }}>
             <Header title="Safety Data" />
             <div style={styles.app}>
                <Suspense fallback={<Loader />}>
@@ -48,7 +50,8 @@ function App() {
                </Suspense>
             </div>
             <Footer />
-         </Card>
+         </div>
+         {/* </Card> */}
       </Router>
    );
 }

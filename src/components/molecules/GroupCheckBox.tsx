@@ -8,7 +8,7 @@ import { useMemos } from "../../hooks/myUseMemo";
 
 interface IProps {
   formName: string,
-  colFilter : IColumnFilter,
+  colFilter: IColumnFilter,
   onChange: (aType: number, val: boolean) => void
 }
 
@@ -38,26 +38,27 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
   );
   const isvalid = (isAllValsFalse) ? feedback : null;
   const list = arrTypes.map((fChecker, index) => {
-    return useMemos([fChecker.checked],<Checkbox
-    key={fChecker.label}
-    label={fChecker.label}
-    group={colFilter.name}
-    id={index}
-    checked={fChecker.checked}
-    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-      onGroupChange(index, e.target.checked);
-    }}
-  />);
+    return useMemos([fChecker.checked], <Checkbox
+      key={fChecker.label}
+      label={fChecker.label}
+      group={colFilter.name}
+      id={index}
+      checked={fChecker.checked}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+        onGroupChange(index, e.target.checked);
+      }}
+    />);
   });
   return (
-    <Form.Group controlId={`${formName}.Control${name}`}>
-      <Form.Label className="filterLable">
-        {t(name)}
-:
+    <div className="injury-level-form">
+      <Form.Group controlId={`${formName}.Control${name}`}>
+        <Form.Label className="filterLable">
+          {t(name)}:
       </Form.Label>
-      {list}
-      {isvalid}
-    </Form.Group>
+        {list}
+        {isvalid}
+      </Form.Group>
+    </div>
   );
 });
 export default GroupCheckbox;

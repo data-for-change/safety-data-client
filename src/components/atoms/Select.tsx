@@ -16,11 +16,11 @@ const styleSelect = {
 
 const Select: React.FC<IProps> = ({ label, id, data, value, onChange }) => {
   const { t } = useTranslation();
-  const opttions = data.map((x:any, index)=> <option value={x.val} key={index}>{t(x.text)}</option>)
+  const opttions = data.map((x: any, index) => <option value={x.val} key={index}>{t(x.text)}</option>)
   return (
     <div>
       <Form.Group as={Col} controlId={id}>
-        {label && <Form.Label className="filterLable">
+        {label && <Form.Label className="selectLabel">
           {t(label)}:
         </Form.Label>}
         <Form.Control

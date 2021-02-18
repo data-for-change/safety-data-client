@@ -16,15 +16,12 @@ const ButtonShowFilterModal: React.FC<IProps> = observer(() => {
     />
 
     return (
-        <>
-            <span
-                title="Filter"
-                // aria-label="This is information"
-                className="btn-sm filter-btn"
-                onClick={() => setShowFilterModal(!showFilterModal)}>
-                {filterIcon}
-            </span>
-        </>
+        <span
+            title="Filter"
+            className="btn-sm filter-btn"
+            onClick={() => setShowFilterModal(!showFilterModal)}>
+            {filterIcon}
+        </span>
     );
 });
 export default ButtonShowFilterModal;

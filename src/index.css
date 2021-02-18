@@ -11,6 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.card {
+  border-radius: 0px;
+}
+
 .dir-rtl {
   direction: rtl;
 }
@@ -24,6 +28,13 @@ code {
 }
 
 .filterLable {
+  font-weight: 700;
+  padding-right: 0 !important;
+  /* margin-right: 1rem;
+  margin-left: 1rem; */
+}
+
+.selectLabel {
   font-weight: 700;
   padding-right: 0 !important;
   margin-right: 1rem;
@@ -58,12 +69,13 @@ code {
   height: 3rem;
   position: fixed;
   bottom: 30px;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
   cursor: pointer;
   z-index: 100;
   margin: 1rem;
+  display: none;
 }
 
 @media screen and (min-width: 500px) {
@@ -89,7 +101,7 @@ code {
 }
 
 .form-check-inline {
-  width: 35%;
+  /* width: 35%; */
 }
 
 a {
@@ -131,6 +143,14 @@ button.btn.btn-link {
 @media screen and (max-width: 450px) {
   .nav-tabs .nav-item {
     font-size: 12px;
+  }
+  /* .navbar-collapse {} */
+}
+
+@media screen and (min-width: 980px) {
+  .navbar-collapse {
+    display: flex;
+    justify-content: space-between;
   }
 }
 

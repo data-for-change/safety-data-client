@@ -14,7 +14,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const { filterStore } = useStore();
   const { groupByDict, groupBy, updateGroupby } = filterStore;
   const lable = (labelText !== '') ? (
-    <Form.Label className="filterLable">
+    <Form.Label className="selectLabel">
       {' '}
       {t(labelText)}:
     </Form.Label>
@@ -23,17 +23,17 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
     updateGroupby(event.target.value);
   }, [updateGroupby]);
   //const data = Object.entries(groupByDict).map(([key, x]: any[])=> {return {val: x.text, text: x.text ,key: key }});
-  
+
   return (
-  
-  //   <Select 
-  //   id= {`GrupForm.${id}.SelectGroupBy`}
-  //   label = {labelText}
-  //   data = {data}
-  //   value={groupBy.text}
-  //   onChange={updateGroupby}
-  // />
-     <Form className="form-inline">
+
+    //   <Select 
+    //   id= {`GrupForm.${id}.SelectGroupBy`}
+    //   label = {labelText}
+    //   data = {data}
+    //   value={groupBy.text}
+    //   onChange={updateGroupby}
+    // />
+    <Form className="form-inline">
       <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {lable}

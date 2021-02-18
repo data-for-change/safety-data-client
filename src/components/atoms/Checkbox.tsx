@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 
 interface IProps {
-    label: string,
-    group: string,
-    id:number,
-    checked: boolean,
-    onChange: (e: ChangeEvent<HTMLInputElement>) => any
-  }
+  label: string,
+  group: string,
+  id: number,
+  checked: boolean,
+  onChange: (e: ChangeEvent<HTMLInputElement>) => any
+}
 const Checkbox: React.FC<IProps> = ({
   group, label, id, checked, onChange,
 }) => {

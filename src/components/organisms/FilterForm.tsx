@@ -312,7 +312,7 @@ const CardFilterWhatRoad = observer(() => {
    const styleToggle = isValidWhatRoad ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
-      <Card>
+      <Card >
          <Card.Header>
             <CustomToggle
                eventKey="5"
