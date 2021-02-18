@@ -179,8 +179,9 @@ export default class FilterStore {
       this.roads = names;
    }
 
+   CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
    @observable
-   cityPopSizeRange: string = '{"min":-1,"max":-1}';
+   cityPopSizeRange: string = this.CITY_POP_SIZE_ALL;
 
    @action
    setCityPopSizeRange = (range: string) => {

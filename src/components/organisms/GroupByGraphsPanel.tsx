@@ -52,6 +52,16 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    return null;
 });
 
+const foramtDataPrecision = (data: any[]) => {
+   const data2 = data.map((x) => {
+     if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
+       return { _id : x._id, count: x.count.toFixed(1) };
+     }
+     return { _id : x._id, count: x.count};
+   });
+   return data2;
+ };
+
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { filterStore, uiStore } = useStore();
@@ -88,10 +98,11 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const [showModel, setShowModal] = useState(false);
    const { filterStore, uiStore } = useStore();
    const { dataFilterd } = filterStore;
-   const reactData3 = toJS(dataFilterd);
+   const reactData = toJS(dataFilterd);
+   const dataFormated = foramtDataPrecision(reactData);
    const { chartType, direction } = uiStore;
    const chart = <ChartBar 
-      data={reactData3} 
+      data={dataFormated} 
       fill="#8884d8" 
       chartType={chartType} 
       height={150} 

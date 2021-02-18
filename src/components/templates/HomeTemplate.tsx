@@ -10,9 +10,10 @@ import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
 import { toJS } from 'mobx';
-import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
+// import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
 import FilterForm from "../organisms/FilterForm";
 import WithSidebarTemplate from './WithSidebarTemplate';
+import InfoPanel from '../molecules/InfoPanel';
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -20,7 +21,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
    const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
-   const reactMarkers = toJS(filterStore.dataAllInjuries);
+   
 
    const history = useHistory();
    const location = useLocation();
@@ -51,7 +52,6 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
 
    const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
 
-
    return (
       <WithSidebarTemplate>
          {/* <div className="row"> */}
@@ -62,19 +62,17 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
                marginTop: '0.7rem'
             }}>
                <span style={{ display: 'flex', fontSize: '1.25rem' }}>
-                  {t('Israel')}&nbsp;
+                  {/* {t('Israel')}&nbsp;
                         <CasualtiesSumLabel
                      length={reactMarkers.length}
                      name={filterStore.cityResult}
-                  />
+                  /> */}
                </span>
                <ButtonShowFilterModal />
             </h4>
             {showFilterModal && memoConfigModal}
             <TabsTemplate type="home" />
          </div>
-         {/* </div> */}
-      </WithSidebarTemplate>
-   );
-});
-export default HomeTemplate;
+         </WithSidebarTemplate>
+   )
+         })

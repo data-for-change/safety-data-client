@@ -10,7 +10,6 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
-import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 
