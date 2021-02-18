@@ -11,6 +11,8 @@ import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
 import { toJS } from 'mobx';
 import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
+import FilterForm from "../organisms/FilterForm";
+import WithSidebarTemplate from './WithSidebarTemplate';
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -50,31 +52,29 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
 
 
-
    return (
-      <div className="App">
-         <div className="container-fluid">
-            <div className="row ">
-               <main className="col-md-12">
-                  <h4 className="sub-title" style={{
-                     display: 'flex',
-                     justifyContent: 'space-between'
-                  }}>
-                     <span style={{ display: 'flex', fontSize: '1.25rem' }}>
-                        {t('Israel')}&nbsp;
+      <WithSidebarTemplate>
+         {/* <div className="row"> */}
+         <div>
+            <h4 className="sub-title" style={{
+               display: 'flex',
+               justifyContent: 'space-between',
+               marginTop: '0.7rem'
+            }}>
+               <span style={{ display: 'flex', fontSize: '1.25rem' }}>
+                  {t('Israel')}&nbsp;
                         <CasualtiesSumLabel
-                           length={reactMarkers.length}
-                           name={filterStore.cityResult}
-                        />
-                     </span>
-                     <ButtonShowFilterModal />
-                  </h4>
-                  {showFilterModal && memoConfigModal}
-                  <TabsTemplate type="home" />
-               </main>
-            </div>
+                     length={reactMarkers.length}
+                     name={filterStore.cityResult}
+                  />
+               </span>
+               <ButtonShowFilterModal />
+            </h4>
+            {showFilterModal && memoConfigModal}
+            <TabsTemplate type="home" />
          </div>
-      </div>
+         {/* </div> */}
+      </WithSidebarTemplate>
    );
 });
 export default HomeTemplate;

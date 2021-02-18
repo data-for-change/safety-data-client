@@ -11,6 +11,7 @@ import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
 import { toJS } from 'mobx';
+import WithSidebarTemplate from './WithSidebarTemplate';
 
 export const CityLable: React.FC<{}> = observer(() => {
   const { filterStore } = useStore();
@@ -71,19 +72,21 @@ const CityTemplate: React.FC<IProps> = observer(() => {
 
   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
   return (
-    <div className="App">
-      <div className="container-fluid">
-        <div className="row ">
-          {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
-          <main className="col-md-12">
-            <CityLable />
-            <ButtonShowFilterModal />
-            {showFilterModal && memoConfigModal}
-            <TabsTemplate type="city" />
-          </main>
-        </div>
+    <WithSidebarTemplate>
+      <div className="App">
+        {/* <div className="container-fluid">
+          <div className="row "> */}
+        {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
+        {/* <div > */}
+        <CityLable />
+        <ButtonShowFilterModal />
+        {showFilterModal && memoConfigModal}
+        <TabsTemplate type="city" />
+        {/* </div> */}
+        {/* </div>
+        </div> */}
       </div>
-    </div>
+    </WithSidebarTemplate>
   );
 });
 export default CityTemplate;
