@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
+import MySelect from './MySelect';
 // import Select from './Select';
 
 interface IProps {
@@ -13,17 +14,23 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { groupByDict, groupBy, updateGroupby } = filterStore;
-  const lable = (labelText !== '') ? (
-    <Form.Label className="selectLabel">
-      {' '}
-      {t(labelText)}:
-    </Form.Label>
-  ) : null;
-  const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+  // const lable = (labelText !== '') ? (
+  //   <Form.Label className="selectLabel">
+  //     {' '}
+  //     {t(labelText)}:
+  //   </Form.Label>
+  // ) : null;
+  const onSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     updateGroupby(event.target.value);
   }, [updateGroupby]);
   //const data = Object.entries(groupByDict).map(([key, x]: any[])=> {return {val: x.text, text: x.text ,key: key }});
 
+  const fixData = Object.entries(groupByDict).map(([key, item]: any) => {
+    return {
+      value: key,
+      text: item.text
+    }
+  })
   return (
 
     //   <Select 
@@ -33,22 +40,32 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
     //   value={groupBy.text}
     //   onChange={updateGroupby}
     // />
-    <Form className="form-inline">
-      <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {lable}
-          <Form.Control
-            as="select"
-            value={groupBy.text}
-            onChange={onSelectChange}
-            className="form-select form-select-sm"
-          >
-            {Object.entries(groupByDict)
-              .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
-          </Form.Control>
-        </div>
-      </Form.Group>
-    </Form>
+    <>
+      <MySelect
+        onChange={onSelectChange}
+        label={labelText}
+        data={fixData}
+        valProp="value"
+        contentProp="text"
+        deafaultVal={groupBy.text}
+      />
+    </>
+    // <Form className="form-inline">
+    //   <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
+    //     <div style={{ display: 'flex', flexDirection: 'row' }}>
+    //       {lable}
+    //       <Form.Control
+    //         as="select"
+    //         value={groupBy.text}
+    //         onChange={onSelectChange}
+    //         className="form-select form-select-sm"
+    //       >
+    //         {Object.entries(groupByDict)
+    //           .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
+    //       </Form.Control>
+    //     </div>
+    //   </Form.Group>
+    // </Form>
   );
 });
 export default SelectGroupBy;
