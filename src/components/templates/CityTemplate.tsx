@@ -9,22 +9,8 @@ import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from '../../hooks/myUseMemo';
-import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
+import InfoPanel from '../molecules/InfoPanel';
 import { toJS } from 'mobx';
-
-export const CityLable: React.FC<{}> = observer(() => {
-  const { filterStore } = useStore();
-  const { cityResult } = filterStore;
-  const reactMarkers = toJS(filterStore.dataAllInjuries);
-  console.log(filterStore.dataAllInjuries)
-
-  return (
-    <h4> <CasualtiesSumLabel
-      length={reactMarkers.length}
-      name={filterStore.cityResult}
-    /> </h4>
-  );
-});
 
 interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
@@ -76,7 +62,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
         <div className="row ">
           {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
           <main className="col-md-12">
-            <CityLable />
+            <InfoPanel />
             <ButtonShowFilterModal />
             {showFilterModal && memoConfigModal}
             <TabsTemplate type="city" />

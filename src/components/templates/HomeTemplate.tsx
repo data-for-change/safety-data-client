@@ -10,7 +10,7 @@ import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
 import { toJS } from 'mobx';
-import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
+import InfoPanel from '../molecules/InfoPanel';
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
@@ -18,7 +18,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
    const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
-   const reactMarkers = toJS(filterStore.dataAllInjuries);
+   
 
    const history = useHistory();
    const location = useLocation();
@@ -49,25 +49,15 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
 
    const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
 
-
-
    return (
       <div className="App">
          <div className="container-fluid">
             <div className="row ">
                <main className="col-md-12">
-                  <h4 className="sub-title" style={{
-                     display: 'flex',
-                     justifyContent: 'space-between'
-                  }}>
-                     <span style={{ display: 'flex', fontSize: '1.25rem' }}>
-                        <CasualtiesSumLabel
-                           length={reactMarkers.length}
-                           name={filterStore.cityResult}
-                        />
-                     </span>
+                  <div>
+                     <InfoPanel />
                      <ButtonShowFilterModal />
-                  </h4>
+                  </div>
                   {showFilterModal && memoConfigModal}
                   <TabsTemplate type="home" />
                </main>
