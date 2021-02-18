@@ -10,7 +10,6 @@ import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import InfoPanel from '../molecules/InfoPanel';
-import { toJS } from 'mobx';
 import WithSidebarTemplate from './WithSidebarTemplate';
 
 interface IProps { }
@@ -60,12 +59,10 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   return (
     <WithSidebarTemplate>
       <div className="App">
-        {/* <div className="container-fluid">
-          <div className="row "> */}
-        {/* <div className="p-2 col-md-2"><FilterPanel activeCardKey={1} /></div> */}
-        {/* <div > */}
-        {/* <CityLable /> */}
-        <ButtonShowFilterModal />
+        <div>
+          <InfoPanel />
+          <ButtonShowFilterModal />
+        </div>
         {showFilterModal && memoConfigModal}
         <TabsTemplate type="city" />
         {/* </div> */}

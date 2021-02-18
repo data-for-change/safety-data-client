@@ -192,6 +192,7 @@ footer {
   width: 250px;
   overflow-x: hidden;
   background-color: var(--primary-color);
+  position: fixed;
 }
 
 .filters {

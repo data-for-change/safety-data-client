@@ -11,32 +11,39 @@ interface IProps {
 const WhereTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const {cities, cityPopSizeRange, cityPopSizeArr, roads, CITY_POP_SIZE_ALL} = filterStore;
+  const { cities, cityPopSizeRange, cityPopSizeArr, roads, CITY_POP_SIZE_ALL } = filterStore;
   let res = t('Israel');
   if (cities.length > 0) {
-     res = (cities.length === 1) ? cities[0] : t('several-cities');
+    res = (cities.length === 1) ? cities[0] : t('several-cities');
   } else if (cityPopSizeRange !== CITY_POP_SIZE_ALL) {
-     const cityPopSizeObj = cityPopSizeArr.find((obj:any) => {return obj.val === cityPopSizeRange});
-     if (cityPopSizeObj) 
-        res = `${t('city_size')} ${t(cityPopSizeObj.text)}`;
+    const cityPopSizeObj = cityPopSizeArr.find((obj: any) => { return obj.val === cityPopSizeRange });
+    if (cityPopSizeObj)
+      res = `${t('city_size')} ${t(cityPopSizeObj.text)}`;
   } else if (roads.length > 0) {
-     res = (roads.length === 1) ? `${t('Road')} ${roads[0]}` : t('several-roads');
-  } 
+    res = (roads.length === 1) ? `${t('Road')} ${roads[0]}` : t('several-roads');
+  }
   return (
     <span>{res}</span>
   )
 });
 
 const InfoPanel: React.FC<IProps> = observer(({ }) => {
+  const styles = {
+    div: {
+      marginTop: '1rem',
+      marginLeft: '1rem',
+      marginRight: '1rem'
+    }
+  }
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { casualtiesNames, dataAllInjuries, isLoading } = filterStore;
   const reactMarkers = toJS(dataAllInjuries);
   const length = reactMarkers.length;
-  if (isLoading) return <div> {t('Loading')} </div>
+  if (isLoading) return <div style={styles.div}> {t('Loading')} </div>
   if (length > 0) {
     return (
-      <h5>
+      <h5 style={styles.div}>
         <WhereTitle />{', '}
         {t('Found')}
         {' '}
@@ -48,7 +55,7 @@ const InfoPanel: React.FC<IProps> = observer(({ }) => {
     );
   }
   return (
-    <h5>{t('NoResultsFound')}</h5>
+    <h5 style={styles.div}>{t('NoResultsFound')}</h5>
   );
 });
 export default InfoPanel;
