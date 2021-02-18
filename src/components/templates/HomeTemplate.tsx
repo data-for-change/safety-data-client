@@ -21,7 +21,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
    const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
-   
+
 
    const history = useHistory();
    const location = useLocation();
@@ -73,6 +73,8 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
             {showFilterModal && memoConfigModal}
             <TabsTemplate type="home" />
          </div>
-         </WithSidebarTemplate>
+      </WithSidebarTemplate>
    )
-         })
+})
+
+export default HomeTemplate
