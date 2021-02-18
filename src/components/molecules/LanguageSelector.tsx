@@ -7,7 +7,7 @@ const LanguageSelector = observer(() => {
    const { uiStore } = useStore();
    const style: any = document.getElementById('style-direction');
    if (style !== null) {
-      if (uiStore.language === 'he') {
+      if (uiStore.direction === 'rtl') {
          style.href = './bootstrap.rtl.min.css';
          // changeLanguage('he')
          document.body.classList.remove('dir-ltr');

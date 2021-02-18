@@ -6,15 +6,11 @@ import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
-// import { RangeSlider } from '../atoms/RangeSlider'
-// import MyBarChart from '../molecules/MyBarChart';
-// import MyPieChart from '../molecules/MyPieChart';
-// import MyTreeMap from '../molecules/MyTreeMap';
 import ChartBar from '../molecules/chart/ChartBar';
-import ChartGroupBy2 from '../molecules/chart/ChartGroupBy2';
 import ConfigModal from './ConfigModal';
 import ConfigChart from '../molecules/chart/ConfigChart';
-import gearlogo from '../../assets/gear2.png';
+import {useMemos} from '../../hooks/myUseMemo';
+import SvgIconSettings from '../../assets/SvgIconSettings';
 import SmallCard2 from '../atoms/SmallCard2';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -58,14 +54,20 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
 
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
-   const { filterStore } = useStore();
+   const { filterStore, uiStore } = useStore();
    const { dataFilterdByYears, casualtiesNames } = filterStore;
+   const { direction } = uiStore;
    const reactData2 = toJS(dataFilterdByYears);
-
+   const styles = {
+      divChart: {
+         width: '100%',
+         height: '60vh',
+      },
+   };
    return (
       <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
-         <div style={{ height: '60vh', width: '100%' }}>
-            <ChartBar data={reactData2} fill="#FE9772" />
+         <div style={styles.divChart}>
+            <ChartBar data={reactData2} fill="#FE9772" dir={direction} />
          </div>
       </SmallCard2>
    );
@@ -73,15 +75,13 @@ const CardChartYears: React.FC<IProps> = observer(() => {
 
 const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const styles = {
-      divStyle: {
+      divConfig: {
          display: 'flex',
          justifyContent: 'space-between',
       },
-      iconStyle: {
-         height: '21px',
-         width: '21px',
-         paddingTop: '0px',
-         paddingBottom: '1px',
+      divChart: {
+         width: '100%',
+         height: '60vh',
       },
    };
    // const { t } = useTranslation();
@@ -89,14 +89,24 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const { filterStore, uiStore } = useStore();
    const { dataFilterd } = filterStore;
    const reactData3 = toJS(dataFilterd);
-   const { chartType } = uiStore;
-   const chart = <ChartBar data={reactData3} fill="#8884d8" chartType={chartType} height={150} />;
+   const { chartType, direction } = uiStore;
+   const chart = <ChartBar 
+      data={reactData3} 
+      fill="#8884d8" 
+      chartType={chartType} 
+      height={150} 
+      dir={direction}
+      />;
+   const memoSettingsIcon = useMemos([], 
+      <SvgIconSettings color={'var(--onprimary-color)'} />
+      );
+   // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
    return (
       <SmallCard2>
-         <div style={styles.divStyle}>
+         <div style={styles.divConfig}>
             <SelectGroupBy id="Graphs.Main" />
             <Button onClick={() => { setShowModal(!showModel); }}>
-               <img src={gearlogo} alt="settings" style={styles.iconStyle} />
+               {memoSettingsIcon}
             </Button>
          </div>
          <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
@@ -104,7 +114,7 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
          </ConfigModal>
          <div >
             <hr />
-            <div style={{ width: '100%', height: '60vh' }} >
+            <div style={styles.divChart} >
                {chart}
             </div>
          </div>
@@ -113,20 +123,26 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
 });
 
 const CardChartGrpBy2: React.FC<IProps> = observer(() => {
-   const styleLable = {
-      fontWeight: 700,
-      marginTop: '5px',
-      marginLeft: '20px',
-      marginRight: '20px',
-   };
-   const divConstolsRow = {
+   const styles = {
+      styleLable: {
+         fontWeight: 700,
+         marginTop: '5px',
+         marginLeft: '20px',
+         marginRight: '20px',
+      },
+      divChart: {
+         width: '100%',
+         height: '60vh',
+      },
+   }
+   const divConstolsRow= {
       display: 'flex',
       flexWrap: 'wrap',
    } as React.CSSProperties;
    const { t } = useTranslation();
    const { filterStore, uiStore } = useStore();
    const { groupBy2 } = filterStore;
-   const { chartType } = uiStore;
+   const { chartType, direction } = uiStore;
    const metaDAta = groupBy2.getBars();
    const reactDataGrp2 = toJS(filterStore.dataGroupby2);
    const show = true;
@@ -136,7 +152,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
             && (
                <SmallCard2>
                   <div style={divConstolsRow}>
-                     <span style={styleLable}>
+                     <span style={styles.styleLable}>
                         {' '}
                         {t('GroupBy')}
                         {' '}
@@ -149,71 +165,13 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
                   </div>
                   <hr />
-                  <div style={{ height: '60vh', width: '100%' }}>
-                     <ChartGroupBy2 data={reactDataGrp2} metaData={metaDAta} chartType={chartType} />
+                  <div style={styles.divChart}>
+                     <ChartBar data={reactDataGrp2} metaData={metaDAta} chartType={chartType} dir={direction}/>
                   </div>
                </SmallCard2>
             )}
       </div>
    );
 });
-
-// const CardChartGrpBy2Old: React.FC<IProps> = observer(() => {
-//   const styleLable = {
-//     fontWeight: 700,
-//     marginTop: '5px',
-//     marginLeft: '20px',
-//     marginRight: '20px',
-//   };
-//   const divConstolsRow = {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//   } as React.CSSProperties;
-//   const { t } = useTranslation();
-//   const [graphSize, setGraphSize] = useState(getSize(window.innerWidth));
-//   React.useEffect(() => {
-//     function handleResize() {
-//       const size = getSize(window.innerWidth);
-//       setGraphSize(size);
-//     }
-//     window.addEventListener('resize', handleResize);
-//     return (() => { window.removeEventListener('resize', handleResize); });
-//   });
-//   const { filterStore } = useStore();
-//   const { groupBy2, groupBy } = filterStore;
-//   const barsGrp2 = groupBy2.getBars();
-//   const reactDataGrp2 = toJS(filterStore.dataGroupby2);
-//   const show = (groupBy.text !== 'CityByPop') && graphSize > 500;
-//   return (
-//     <div>
-//       {show
-//             && (
-//             <SmallCard2>
-//               <div style={divConstolsRow}>
-//                 <span style={styleLable}>
-//                   {' '}
-//                   {t('GroupBy')}
-//                   {' '}
-//                   :
-//                 </span>
-//                 <SelectGroupBy id="Graphs.Grp2" labelText="" />
-//                 {' '}
-//                 &nbsp;
-//                 <SelectGroupBy2 id="Graphs" />
-//                 {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
-//               </div>
-//               <hr />
-//               <MyBarChart
-//                 data={reactDataGrp2}
-//                 barsData={barsGrp2}
-//                 width={graphSize}
-//                 height={graphSize * 0.62}
-//                 legendType="top"
-//               />
-//             </SmallCard2>
-//             )}
-//     </div>
-//   );
-// });
 
 export default GroupByGraphsPanel;
