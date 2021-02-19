@@ -187,18 +187,25 @@ footer {
 .sidebar {
   /* display: flex;
   justify-content: center; */
-  max-height: 600px;
+  /* max-height: 600px;
   padding: 1rem 0.5rem;
   width: 250px;
   overflow-x: hidden;
   background-color: var(--primary-color);
-  position: fixed;
+  position: fixed; */
+  background-color: var(--primary-color);
 }
 
 .filters {
-  max-height: 500px;
+  /* max-height: 100rem;
   overflow-x: hidden;
-  background-color: white;
+  background-color: white; */
+}
+
+.collapse,
+.collapsing {
+  overflow: auto;
+  max-height: 25vh;
 }
 
 .sidebar ::-webkit-scrollbar {
