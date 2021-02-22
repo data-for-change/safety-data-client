@@ -92,9 +92,9 @@ export const initInjTypes = () => {
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, ['הולך רגל']));
   col.arrTypes.push(new FilterChecker('cyclist', false, ['נהג - אופניים', 'נוסע - אופניים (לא נהג)']));
+  col.arrTypes.push(new FilterChecker('other', false, ['נהג - רכב לא ידוע', 'נוסע - רכב לא ידוע']));
   col.arrTypes.push(new FilterChecker('motorcycle', false, ['נהג - אופנוע', 'נוסע - אופנוע (לא נהג)']));
   col.arrTypes.push(new FilterChecker('wheels4+', false, ['נהג - רכב בעל 4 גלגלים ויותר', 'נוסע - רכב בעל 4 גלגלים ויותר']));
-  col.arrTypes.push(new FilterChecker('other', false, ['נהג - רכב לא ידוע', 'נוסע - רכב לא ידוע']));
   return col;
 };
 
