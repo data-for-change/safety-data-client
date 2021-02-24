@@ -8,13 +8,19 @@ import ButtonMenu from '../ButtonMenu.tsx';
 configure({ adapter: new Adapter() });
 
 describe('ButtonMenu Test', () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallow(<ButtonMenu t={(key) => key} />);
+  });
   test('bottom menu has 3 items ver1', () => {
-    const wrapper = shallow(<ButtonMenu t={(key) => key} />);
     expect(wrapper.find(Dropdown.Menu).children()).toHaveLength(3);
   });
 
   test('bottom menu has 3 items ver2', () => {
-    const wrapper = shallow(<ButtonMenu t={(key) => key} />);
     expect(wrapper.find(Link)).toHaveLength(3);
+  });
+
+  test('bottom menu Dropdown.Toggle', () => {
+    expect(wrapper.find(Dropdown.Toggle)).toHaveLength(1);
   });
 });
