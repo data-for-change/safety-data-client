@@ -2,9 +2,12 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-it('App render no crash', () => {
-  render(<App />);
+describe("App Test", () =>{
+  it('App render no crash', () => {
+    render(<App />);
+  });
 });
+
 
 // test('renders learn react link', () => {
 //   const { getByText } = render(<App />);
