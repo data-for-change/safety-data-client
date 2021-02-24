@@ -39,8 +39,8 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   const destkey = `text${language}`;
   const arrayImagesProps = toJS(imageList);
   const images = arrayImagesProps.map((x: any) => ({
-    original: x.filename,
-    thumbnail: x.filename,
+    original: '/api/v1/img/' + x.filename,
+    thumbnail: '/api/v1/img/' + x.filename,
     originalTitle: x[titleKey],
     description: x[destkey],
   }));
