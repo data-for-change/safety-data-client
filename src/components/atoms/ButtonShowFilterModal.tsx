@@ -6,6 +6,7 @@ import { useStore } from '../../stores/storeConfig';
 // import imgSrc from '../../assets/filter.png';
 import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconFilter from '../../assets/SvgIconFilter';
+import '../../styles/filter-btn.css'
 
 interface IProps { }
 const ButtonShowFilterModal: React.FC<IProps> = observer(() => {

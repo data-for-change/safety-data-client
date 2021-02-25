@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react';
 // import { useTranslation } from 'react-i18next';
 import NavigationList from '../molecules/NavigationList';
-
+import '../../styles/footer.css'
 interface IProps { }
 export const Footer: React.FC<IProps> = () => {
   const divStyle = {

@@ -5,6 +5,7 @@ import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
 import SmallCard2 from '../atoms/SmallCard2';
+import '../../styles/sidebar.css'
 
 const Drawer: React.FC<any> = observer((props) => {
    // console.log('Drawer')

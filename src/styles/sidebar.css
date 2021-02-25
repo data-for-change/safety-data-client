@@ -1,0 +1,38 @@
+.sidebar {
+   /* display: flex;
+   justify-content: center; */
+   max-height: 600px;
+   padding: 1rem 0.5rem;
+   width: 250px;
+   overflow-x: hidden;
+   background-color: var(--primary-color);
+   position: fixed;
+}
+
+.filters {
+   max-height: 500px;
+   overflow-x: hidden;
+   background-color: white;
+}
+
+.sidebar ::-webkit-scrollbar {
+   width: 10px;
+}
+
+/* Track */
+
+.sidebar ::-webkit-scrollbar-track {
+   background: #f1f1f1;
+}
+
+/* Handle */
+
+.sidebar ::-webkit-scrollbar-thumb {
+   background: #888;
+}
+
+/* Handle on hover */
+
+.sidebar ::-webkit-scrollbar-thumb:hover {
+   background: #555;
+}

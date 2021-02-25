@@ -2,11 +2,11 @@
 /* eslint-disable space-before-blocks */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Popup} from 'react-leaflet';
+import { Popup } from 'react-leaflet';
 
 interface IProps {
-    data: any,
-    language: string
+  data: any,
+  language: string
 }
 
 const AccidentsPopUp: React.FC<IProps> = (({ data: x, language }) => {
@@ -14,13 +14,13 @@ const AccidentsPopUp: React.FC<IProps> = (({ data: x, language }) => {
     color: '#004ba0',
   };
   const { t } = useTranslation();
-  if (x.injured_type_hebrew !== undefined){
+  if (x.injured_type_hebrew !== undefined) {
     return (
       <Popup>
         <div className={`text${language}`}>
           <div><span style={pStyle}>{t('When')}:</span> {x.accident_timestamp}, {x.day_in_week_hebrew}, {x.day_night_hebrew}</div>
           <div><span style={pStyle}>{t('Who')}:</span> {x.injured_type_hebrew}, {x.injury_severity_hebrew}, {x.vehicle_vehicle_type_hebrew ? `${x.vehicle_vehicle_type_hebrew}, ` : ''} {x.sex_hebrew}, {x.age_group_hebrew}, {x.population_type_hebrew}</div>
-          <div><span style={pStyle}>{t('Where')}:</span> 
+          <div><span style={pStyle}>{t('Where')}:</span>
             {x.accident_yishuv_name ? `${x.accident_yishuv_name}, ` : ''}
             {x.street1_hebrew ? `${x.street1_hebrew}, ` : ''}
             {x.street2_hebrew ? `${x.street2_hebrew}, ` : ''}

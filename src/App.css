@@ -9,36 +9,6 @@
   --primary-second: rgba(250, 52, 118, 0.911)
 }
 
-.grid-with-drawer {
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-}
-
-.grid-with-drawer .grid-drawer {
-  /* background-color: var(--primary-color); */
-  background-color: white;
-  /* margin: 0.5rem; */
-  margin-top: 0.5rem;
-}
-
-.grid-with-drawer .grid-main {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  /* padding: 1rem; */
-}
-
-@media screen and (max-width: 1000px) {
-  .grid-with-drawer .grid-drawer {
-    display: none;
-  }
-  .grid-with-drawer .grid-main {
-    grid-column: 4 span;
-  }
-  .filter-btn {
-    display: block;
-  }
-}
-
 .heb {
   direction: rtl;
 }
@@ -53,18 +23,6 @@
 
 .languageSelector {
   padding: 3px;
-}
-
-.App-footer {
-  background-color: var(--primary-color);
-  color: var(--onprimary-color);
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  padding: 2px 10px;
-  font-size: 15px;
-  display: flex;
-  justify-content: space-between;
 }
 
 .groupByTable {
@@ -149,78 +107,6 @@
 
 .image-gallery-description {
   display: var(--image-gallery-description-visable);
-}
-
-/* NEW STYLE  */
-
-/* NAVBAR  */
-
-.navbar-toggler {
-  color: white;
-}
-
-button.navbar-toggler {
-  border: 2px solid white;
-}
-
-.navbar {
-  background-color: var(--primary-color);
-  color: var(--onprimary-color)
-}
-
-/* HOME PAGE  */
-
-/* TBALES TAB GRID   */
-
-/* CHARTS TAB GRID  */
-
-/* FOOTER  */
-
-footer {
-  bottom: 0;
-  left: 0;
-  /* margin-top: 2rem; */
-}
-
-/* DRAWER */
-
-.sidebar {
-  /* display: flex;
-  justify-content: center; */
-  max-height: 600px;
-  padding: 1rem 0.5rem;
-  width: 250px;
-  overflow-x: hidden;
-  background-color: var(--primary-color);
-  position: fixed;
-}
-
-.filters {
-  max-height: 500px;
-  overflow-x: hidden;
-  background-color: white;
-}
-
-.sidebar ::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-
-.sidebar ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-
-.sidebar ::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-
-.sidebar ::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 
 .injury-level-form {

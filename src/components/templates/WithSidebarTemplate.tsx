@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import Drawer from '../organisms/Drawer'
+import '../../styles/grid-with-drawer.css'
 
 interface Props extends PropsWithChildren<any> { }
 

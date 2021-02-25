@@ -3,7 +3,7 @@ import LanguageSelector from '../molecules/LanguageSelector';
 import logo from '../../assets/safety-logo.png';
 import NavigationList from '../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar'
-
+import '../../styles/tabs.css'
 
 
 interface IProps {
