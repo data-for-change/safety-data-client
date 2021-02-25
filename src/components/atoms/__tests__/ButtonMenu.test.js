@@ -1,11 +1,8 @@
 import React from 'react';
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { shallow } from 'enzyme';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
 import ButtonMenu from '../ButtonMenu.tsx';
-
-configure({ adapter: new Adapter() });
 
 describe('ButtonMenu Test', () => {
   let wrapper;

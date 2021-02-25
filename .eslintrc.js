@@ -17,6 +17,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'max-len': ['warn', { code: 130, tabWidth: 4 }],
     '@typescript-eslint/no-unused-vars': 'error',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/*.test.js', '**/*.test.jsx'] }],
   },
 };
 
