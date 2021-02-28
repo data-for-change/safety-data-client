@@ -16,7 +16,7 @@
    /* padding: 1rem; */
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1050px) {
    .grid-with-drawer .grid-drawer {
       display: none;
    }

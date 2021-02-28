@@ -18,6 +18,7 @@ import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import Loader from '../atoms/Loader';
+import MySelect from '../atoms/MySelect';
 
 interface IProps {
 }
@@ -108,7 +109,26 @@ const CardFilterWhen: React.FC<any> = observer(() => {
          <Accordion.Collapse eventKey="0" className="filterControls">
             <Card.Body>
                <div>
-                  <Form.Row>
+                  <MySelect
+                     label={t('FromYear')}
+                     deafaultVal={String(startYear)}
+                     data={years}
+                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
+                  />
+                  <MySelect
+                     label={t('ToYear')}
+                     deafaultVal={String(endYear)}
+                     data={years}
+                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
+                  />
+
+                  {/* data: any[]
+                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
+                  valProp: string
+                  contentProp: string
+                  deafaultVal?: string
+                  label?: string */}
+                  {/* <Form.Row>
                      <Form.Group as={Col} controlId="exampleForm.ControlSelectStartYear">
                         <Form.Label className="filterLable">
                            {' '}
@@ -134,7 +154,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
 
                         </Form.Control>
                      </Form.Group>
-                  </Form.Row>
+                  </Form.Row> */}
                   <GroupCheckbox formName="exampleForm" colFilter={dayNight} onChange={updateDayNight} />
                </div>
             </Card.Body>
@@ -152,6 +172,8 @@ const CardFilterWhere = observer(() => {
       setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
+
+   console.log(cityPopSizeArr)
    return (
       <Card>
          <Card.Header>
@@ -175,12 +197,19 @@ const CardFilterWhere = observer(() => {
                   colFilter={roadTypes}
                   onChange={updateRoadType}
                />
-               <Select
+               {/* <Select
                   label={'city_size'}
                   id={'cityForm.SelectPopSize'}
                   data={cityPopSizeArr}
                   value={cityPopSizeRange}
                   onChange={(val: string) => setCityPopSizeRange(val)}
+               /> */}
+               <MySelect
+                  label={'city_size'}
+                  data={cityPopSizeArr}
+                  valProp="val"
+                  contentProp="text"
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCityPopSizeRange(event.target.value)}
                />
             </div>
          </Accordion.Collapse>

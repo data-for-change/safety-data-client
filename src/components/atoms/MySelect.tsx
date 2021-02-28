@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 interface Props {
    data: any[]
    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
-   valProp: string
-   contentProp: string
+   valProp?: string
+   contentProp?: string
    deafaultVal?: string
    label?: string
 }
@@ -18,7 +18,11 @@ const MySelect: React.FC<Props> = ({ label, onChange, data, valProp, contentProp
          {label && <label> {t(label)} </label>}
          <select className="my-select" onChange={onChange} defaultValue={deafaultVal}>
             {data.map((item) => {
-               return <option key={item[valProp]} value={item[valProp]}>{t(item[contentProp])}</option>
+               return <option
+                  key={valProp ? item[valProp] : item}
+                  value={valProp ? item[valProp] : item}>
+                  {t(contentProp ? item[contentProp] : item)}
+               </option>
             })}
          </select>
       </div>

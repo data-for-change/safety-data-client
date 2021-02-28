@@ -28,7 +28,7 @@ const ButtonMenu: React.FC<IProps> = observer((() => {
         <Dropdown.Toggle variant="success" id="dropdown-basic" style={styleButton}>
           <img src={menuIcon} alt="menu" height="25" width="25" />
         </Dropdown.Toggle>
-        <Dropdown.Menu alignRight={alignRight}>
+        <Dropdown.Menu alignRight={alignRight} id="bottom-menu">
           <Dropdown.Item as="button"><Link style={styleLink} to="/">{t('Home')}</Link></Dropdown.Item>
           <Dropdown.Item as="button"><Link style={styleLink} to="/city">{t('Cities')}</Link></Dropdown.Item>
           <Dropdown.Item as="button"><Link style={styleLink} to="/about">{t('About')}</Link></Dropdown.Item>

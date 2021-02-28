@@ -2,6 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
 import Form from 'react-bootstrap/Form'
+import MySelect from '../atoms/MySelect';
 
 const LanguageSelector = observer(() => {
    const { uiStore } = useStore();
@@ -21,7 +22,18 @@ const LanguageSelector = observer(() => {
    }
    return (
       <React.Fragment>
-         <Form className="form-inline">
+
+         <MySelect
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+               uiStore.updateLanguage(e.target.value)
+            }}
+            //  label={labelText}
+            data={[{ value: 'he', text: 'Hebrew' }, { value: 'en', text: 'English' }]}
+            valProp="value"
+            contentProp="text"
+            deafaultVal={'he'}
+         />
+         {/* <Form className="form-inline">
             <Form.Group>
                <Form.Control
                   style={{ width: '7rem' }}
@@ -35,7 +47,7 @@ const LanguageSelector = observer(() => {
                   <option value="en">English</option>
                </Form.Control>
             </Form.Group>
-         </Form>
+         </Form> */}
          {/* <select
             className="form-select-sm"
             onChange={(e) => {
