@@ -9,7 +9,7 @@ import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 import ChartBar from '../molecules/chart/ChartBar';
 import ConfigModal from './ConfigModal';
 import ConfigChart from '../molecules/chart/ConfigChart';
-import {useMemos} from '../../hooks/myUseMemo';
+import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
 import SmallCard2 from '../atoms/SmallCard2';
 import Row from 'react-bootstrap/Row';
@@ -54,13 +54,13 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
 
 const foramtDataPrecision = (data: any[]) => {
    const data2 = data.map((x) => {
-     if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
-       return { _id : x._id, count: x.count.toFixed(1) };
-     }
-     return { _id : x._id, count: x.count};
+      if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
+         return { _id: x._id, count: x.count.toFixed(1) };
+      }
+      return { _id: x._id, count: x.count };
    });
    return data2;
- };
+};
 
 const CardChartYears: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
@@ -101,16 +101,16 @@ const CardChartByGroup1: React.FC<IProps> = observer(() => {
    const reactData = toJS(dataFilterd);
    const dataFormated = foramtDataPrecision(reactData);
    const { chartType, direction } = uiStore;
-   const chart = <ChartBar 
-      data={dataFormated} 
-      fill="#8884d8" 
-      chartType={chartType} 
-      height={150} 
+   const chart = <ChartBar
+      data={dataFormated}
+      fill="#8884d8"
+      chartType={chartType}
+      height={150}
       dir={direction}
-      />;
-   const memoSettingsIcon = useMemos([], 
+   />;
+   const memoSettingsIcon = useMemos([],
       <SvgIconSettings color={'var(--onprimary-color)'} />
-      );
+   );
    // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
    return (
       <SmallCard2>
@@ -146,7 +146,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
          height: '60vh',
       },
    }
-   const divConstolsRow= {
+   const divConstolsRow = {
       display: 'flex',
       flexWrap: 'wrap',
    } as React.CSSProperties;
@@ -163,12 +163,12 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
             && (
                <SmallCard2>
                   <div style={divConstolsRow}>
-                     <span style={styles.styleLable}>
+                     {/* <span style={styles.styleLable}>
                         {' '}
                         {t('GroupBy')}
                         {' '}
                   :
-                </span>
+                </span> */}
                      <SelectGroupBy id="Graphs.Grp2" labelText="" />
                      {' '}
                 &nbsp;
@@ -177,7 +177,7 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
                   </div>
                   <hr />
                   <div style={styles.divChart}>
-                     <ChartBar data={reactDataGrp2} metaData={metaDAta} chartType={chartType} dir={direction}/>
+                     <ChartBar data={reactDataGrp2} metaData={metaDAta} chartType={chartType} dir={direction} />
                   </div>
                </SmallCard2>
             )}

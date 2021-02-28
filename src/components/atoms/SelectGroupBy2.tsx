@@ -24,30 +24,14 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
   })
 
   return (
-    <>
-      <MySelect
-        onChange={onSelectChange}
-        data={fixData}
-        valProp="value"
-        contentProp="text"
-        deafaultVal={groupBy2.text}
-      />
-    </>
-    // <Form className="form-inline">
-    //   <Form.Group controlId={`GrupForm.${id}.SelectGroupBy2`}>
-    //     {/* <Form.Label className="filterLable"> {t('GroupBy')}:</Form.Label> */}
-    //     <Form.Control
-    //       as="select"
-    //       value={groupBy2.text}
-    //       onChange={onSelectChange}
-    //       className="form-select form-select-sm"
-    //     >
-    //       {Object.entries(group2Dict)
-    //         .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))
-    //       }
-    //     </Form.Control>
-    //   </Form.Group>
-    // </Form>
+    <MySelect
+      onChange={onSelectChange}
+      data={fixData}
+      // label={t('GroupBy')}
+      valProp="value"
+      contentProp="text"
+      deafaultVal={groupBy2.text}
+    />
   );
 });
 export default SelectGroupBy2;

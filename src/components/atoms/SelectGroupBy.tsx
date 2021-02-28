@@ -14,16 +14,10 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { groupByDict, groupBy, updateGroupby } = filterStore;
-  // const lable = (labelText !== '') ? (
-  //   <Form.Label className="selectLabel">
-  //     {' '}
-  //     {t(labelText)}:
-  //   </Form.Label>
-  // ) : null;
+
   const onSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     updateGroupby(event.target.value);
   }, [updateGroupby]);
-  //const data = Object.entries(groupByDict).map(([key, x]: any[])=> {return {val: x.text, text: x.text ,key: key }});
 
   const fixData = Object.entries(groupByDict).map(([key, item]: any) => {
     return {
@@ -32,40 +26,14 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
     }
   })
   return (
-
-    //   <Select 
-    //   id= {`GrupForm.${id}.SelectGroupBy`}
-    //   label = {labelText}
-    //   data = {data}
-    //   value={groupBy.text}
-    //   onChange={updateGroupby}
-    // />
-    <>
-      <MySelect
-        onChange={onSelectChange}
-        label={labelText}
-        data={fixData}
-        valProp="value"
-        contentProp="text"
-        deafaultVal={groupBy.text}
-      />
-    </>
-    // <Form className="form-inline">
-    //   <Form.Group controlId={`GrupForm.${id}.SelectGroupBy`}>
-    //     <div style={{ display: 'flex', flexDirection: 'row' }}>
-    //       {lable}
-    //       <Form.Control
-    //         as="select"
-    //         value={groupBy.text}
-    //         onChange={onSelectChange}
-    //         className="form-select form-select-sm"
-    //       >
-    //         {Object.entries(groupByDict)
-    //           .map(([key, x]: any[]) => (<option value={x.text} key={key}>{t(x.text)}</option>))}
-    //       </Form.Control>
-    //     </div>
-    //   </Form.Group>
-    // </Form>
+    <MySelect
+      onChange={onSelectChange}
+      label={t('GroupBy')}
+      data={fixData}
+      valProp="value"
+      contentProp="text"
+      deafaultVal={groupBy.text}
+    />
   );
 });
 export default SelectGroupBy;

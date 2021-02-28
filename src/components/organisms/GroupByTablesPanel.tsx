@@ -109,11 +109,11 @@ const GroupTables2Grp: React.FC<IProps> = observer(() => {
           && (
             <SmallCard2>
               <div style={divStyle}>
-                <span style={styleLable}>
+                {/* <span style={styleLable}>
                   {' '}
                   {t('GroupBy')}
                   :
-                </span>
+                </span> */}
                 <SelectGroupBy
                   id="Tables.Grp2"
                   labelText=""
