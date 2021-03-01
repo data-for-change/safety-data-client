@@ -4,7 +4,7 @@ import FilterForm from './FilterForm'
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
-import SmallCard2 from '../atoms/SmallCard2';
+// import SmallCard2 from '../atoms/SmallCard2';
 import '../../styles/sidebar.css'
 
 const Drawer: React.FC<any> = observer((props) => {
@@ -20,7 +20,7 @@ const Drawer: React.FC<any> = observer((props) => {
          </div>
          <Button
             style={{ margin: '0.5rem' }}
-            variant="light"
+            variant="primary"
             onClick={() => filterStore.submitFilter()}
             disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
          >

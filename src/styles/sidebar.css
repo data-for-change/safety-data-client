@@ -1,18 +1,20 @@
 .sidebar {
    /* display: flex;
    justify-content: center; */
-   max-height: 600px;
+   /* max-height: 520px; */
    padding: 1rem 0.5rem;
    width: 250px;
-   overflow-x: hidden;
-   background-color: var(--primary-color);
+   /* overflow-x: hidden; */
+   /* background-color: var(--primary-color); */
    position: fixed;
+   /* border: 2px solid rgb(189, 189, 189); */
 }
 
 .filters {
-   max-height: 500px;
+   max-height: 450px;
    overflow-x: hidden;
    background-color: white;
+   border-bottom: 2px solid rgb(189, 189, 189);
 }
 
 .sidebar ::-webkit-scrollbar {
