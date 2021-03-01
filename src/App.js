@@ -49,7 +49,7 @@ function App() {
                   </Switch>
                </Suspense>
             </div>
-            <Footer />
+            {/* <Footer /> */}
          </div>
          {/* </Card> */}
       </Router>
