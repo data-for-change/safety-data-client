@@ -8,13 +8,14 @@ interface Props {
    contentProp?: string
    deafaultVal?: string
    label?: string
+   style?: any
 }
 
-const MySelect: React.FC<Props> = ({ label, onChange, data, valProp, contentProp, deafaultVal }) => {
+const MySelect: React.FC<Props> = ({ style, label, onChange, data, valProp, contentProp, deafaultVal }) => {
    const { t } = useTranslation();
 
    return (
-      <div className="select-wrapper" >
+      <div className="select-wrapper" style={style && style} >
          {label && <label> {t(label)} </label>}
          <select className="form-select form-select-sm" onChange={onChange} defaultValue={deafaultVal}>
             {data.map((item) => {
