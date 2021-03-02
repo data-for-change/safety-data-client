@@ -1,5 +1,5 @@
 .nav-tabs {
-   border-bottom: solid black 2px;
+   border-bottom: solid black 1px;
    font-weight: 600;
 }
 
@@ -7,8 +7,12 @@
    color: white;
 }
 
+.nav .nav-tabs {
+   border-bottom: 1px solid black !important;
+}
+
 button.navbar-toggler {
-   border: 2px solid white;
+   border: 1px solid white;
 }
 
 .navbar {
