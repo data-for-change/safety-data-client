@@ -1,4 +1,6 @@
-.select-wrapper {}
+.select-wrapper {
+   /* display: inline; */
+}
 
 .form-select-sm {
    margin-left: 0.5rem;

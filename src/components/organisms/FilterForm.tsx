@@ -19,20 +19,21 @@ import { useStore } from '../../stores/storeConfig';
 import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import Loader from '../atoms/Loader';
 import MySelect from '../atoms/MySelect';
+import '../../styles/accordion.css'
 
 interface IProps {
 }
 const STYLE_TOGGLE_WARNING = {
-   color: '#dc3545',
-   cursor: 'pointer',
-   paddingRight: '15px',
-   paddingLeft: '15px',
+   // color: '#dc3545',
+   // cursor: 'pointer',
+   // paddingRight: '15px',
+   // paddingLeft: '15px',
 };
 const STYLE_TOGGLE_NORMAL = {
    color: '#007bff',
    cursor: 'pointer',
-   paddingRight: '15px',
-   paddingLeft: '15px',
+   // paddingRight: '15px',
+   // paddingLeft: '15px',
 };
 
 const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
@@ -109,18 +110,20 @@ const CardFilterWhen: React.FC<any> = observer(() => {
          <Accordion.Collapse eventKey="0" className="filterControls">
             <Card.Body>
                <div>
-                  <MySelect
-                     label={t('FromYear')}
-                     deafaultVal={String(startYear)}
-                     data={years}
-                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
-                  />
-                  <MySelect
-                     label={t('ToYear')}
-                     deafaultVal={String(endYear)}
-                     data={years}
-                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
-                  />
+                  <div className="accordion-when-selects">
+                     <MySelect
+                        label={t('FromYear')}
+                        deafaultVal={String(startYear)}
+                        data={years}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
+                     />
+                     <MySelect
+                        label={t('ToYear')}
+                        deafaultVal={String(endYear)}
+                        data={years}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
+                     />
+                  </div>
 
                   {/* data: any[]
                   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
@@ -205,6 +208,7 @@ const CardFilterWhere = observer(() => {
                   onChange={(val: string) => setCityPopSizeRange(val)}
                /> */}
                <MySelect
+                  style={{ display: 'flex-end', alignItems: 'center' }}
                   label={'city_size'}
                   data={cityPopSizeArr}
                   valProp="val"
