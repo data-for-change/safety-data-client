@@ -17,7 +17,6 @@ import GroupCheckbox from '../molecules/GroupCheckBox';
 import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
-import Loader from '../atoms/Loader';
 import MySelect from '../atoms/MySelect';
 import '../../styles/accordion.css'
 
@@ -40,25 +39,24 @@ const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 
 const FilterForm: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
-   const { injurySeverity, updateInjurySeverity, isLoading, formCardKey } = filterStore;
+   const { injurySeverity, updateInjurySeverity, formCardKey } = filterStore;
    return (
       <React.Fragment>
-         {isLoading ? <Loader /> :
-            <Form>
-               <Accordion defaultActiveKey={formCardKey.toString()}>
-                  <CardFilterWhen />
-                  <CardFilterWhere />
-                  <CardFilterWho />
-                  <CardFilterWhat />
-                  <CardFilterWhatVehicle />
-                  <CardFilterWhatRoad />
-               </Accordion>
-               <GroupCheckbox
-                  formName="exampleForm"
-                  colFilter={injurySeverity}
-                  onChange={updateInjurySeverity}
-               />
-            </Form>}
+         <Form>
+            <Accordion defaultActiveKey={formCardKey.toString()}>
+               <CardFilterWhen />
+               <CardFilterWhere />
+               <CardFilterWho />
+               <CardFilterWhat />
+               <CardFilterWhatVehicle />
+               <CardFilterWhatRoad />
+            </Accordion>
+            <GroupCheckbox
+               formName="exampleForm"
+               colFilter={injurySeverity}
+               onChange={updateInjurySeverity}
+            />
+         </Form>
       </React.Fragment>
    );
 });
