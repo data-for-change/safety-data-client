@@ -214,14 +214,14 @@ export default class MapStore {
   }
 
   submintGetMarkersBBox = () => {
-    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
-    const mapBounds = this.mapRef.current.leafletElement.getBounds();
-    const filter = this.rootStore.filterStore.getFilter(mapBounds, true);
-    fetchFilter(filter, 'latlon')
-      .then((data: any[] | undefined) => {
-        if (data !== null && data !== undefined) {
-          this.updateDataMarkersInBounds(data);
-        }
-      });
+    // if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
+    // const mapBounds = this.mapRef.current.leafletElement.getBounds();
+    // const filter = this.rootStore.filterStore.getFilterForPost(mapBounds, true);
+    // fetchFilter(filter, 'latlon')
+    //   .then((data: any[] | undefined) => {
+    //     if (data !== null && data !== undefined) {
+    //       this.updateDataMarkersInBounds(data);
+    //     }
+    //   });
   }
 }

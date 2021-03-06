@@ -105,3 +105,25 @@ export const getMultiplefilter = (colFilter: IColumnFilter) => {
   }
   return filter;
 };
+
+export const getfilterCity = (cities : string[]) => {
+  let filter: string = '';
+  if (cities.length > 0) {
+     filter += ',{"$or": [';
+     filter += cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',');
+     filter += ']}';
+  }
+  return filter;
+}
+
+export const getFilterStreets = (streets : string[]) => {
+  let filter: string = '';
+  if (streets.length > 0 && streets[0] !== '') {
+     filter += ',{"$or": [';
+     filter += streets.map((x: string) => `{"street1_hebrew" : "${x.trim()}"}`).join(',');
+     filter += ',';
+     filter += streets.map((x: string) => `{"street2_hebrew" : "${x.trim()}"}`).join(',');
+     filter += ']}';
+  }
+  return filter;
+}
