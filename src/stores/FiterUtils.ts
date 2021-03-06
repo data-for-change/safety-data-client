@@ -127,3 +127,19 @@ export const getFilterStreets = (streets : string[]) => {
   }
   return filter;
 }
+
+export const getFilterFromArray = (filterName: string, valArr : string[]) => {
+  let filter: string = '';
+  if (valArr.length > 0 && valArr[0] !== '') {
+     filter += `&${filterName}=`;
+     filter += valArr.map((x: string) => `${x.trim()}`).join(',');
+  }
+  return filter;
+}
+
+export const  getfilterBounds = (mapBounds: L.LatLngBounds) => {
+      let filter: string = '';
+      filter += `,{"latitude":  { "$gte" : "${mapBounds.getSouth()}","$lte": "${mapBounds.getNorth()}"}}`;
+      filter += `,{"longitude":  { "$gte" : "${mapBounds.getWest()}","$lte": "${mapBounds.getEast()}"}}`;
+      return filter;
+   }
