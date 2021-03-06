@@ -14,9 +14,9 @@ export default class FilterChecker implements IFilterChecker {
 
     label: string;
 
-    filters: string[];
+    filters: any[];
 
-    constructor(label: string, valid: boolean, filters: string[]) {
+    constructor(label: string, valid: boolean, filters: any[]) {
       this.label = label;
       this.checked = valid;
       this.filters = filters;
