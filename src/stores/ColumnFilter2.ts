@@ -118,7 +118,7 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('truck', false,
     [24,25,5,6,7]));
   col.arrTypes.push(new FilterChecker('tractor', false, [14]));
-  col.arrTypes.push(new FilterChecker('train', false, ['רכבת']));
+  col.arrTypes.push(new FilterChecker('train', false, [16]));
   col.arrTypes.push(new FilterChecker('other', false, [17]));
   return col;
 };
