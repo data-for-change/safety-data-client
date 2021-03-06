@@ -1,15 +1,15 @@
 import {
    observable, action, computed,
 } from 'mobx';
-import { IColumnFilter } from './ColumnFilter';
-import * as FiterUtils from './FiterUtils';
-import * as FC from './ColumnFilter';
+import { IColumnFilter } from './ColumnFilter2';
+import * as FiterUtils from './FiterUtils2';
+import * as FC from './ColumnFilter2';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
 import RootStore from './RootStore';
-import { fetchAggregate, fetchAggregatFilter} from '../services/AccidentService';
-import { fetchGetList , fetchGetGroupBy} from '../services/AccidentService';
+import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
+import { fetchGetList, fetchGetGroupBy } from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import logger from '../services/logger';
@@ -20,7 +20,7 @@ import Casualty from './Casualty';
 export default class FilterStore {
    appInitialized = false
 
-   useGetFetch = false;
+   useGetFetch = true;
 
    constructor(rootStore: RootStore) {
       // init app data
@@ -46,7 +46,7 @@ export default class FilterStore {
       this.oneLane = FC.initOneLane();
       //initn Group-by dictionary
       this.groupByDict = initGroupByDict(this.useGetFetch);
-      this.group2Dict = initGroup2Dict();
+      this.group2Dict = initGroup2Dict(this.useGetFetch);
       this.groupBy = this.groupByDict.TypeInjured;
       this.groupBy2 = this.group2Dict.Gender;
       // init data (on home page)
@@ -445,15 +445,29 @@ export default class FilterStore {
 
    @action
    submitGroupByYears = () => {
-      const filtermatch = this.getfilterBySeverityAndCity();
-      const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year');
-      fetchAggregate(filter)
-         .then((data: any[] | undefined) => {
-            if (data !== undefined) {
-               const dataPadded = this.padDataYearsWith0(data);
-               this.dataByYears = dataPadded;
-            }
-         });
+      if (this.useGetFetch) {
+         const filtermatch = this.getfilterBySeverityAndCity();
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year');
+         fetchGetGroupBy(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined) {
+                  const dataPadded = this.padDataYearsWith0(data);
+                  this.dataByYears = dataPadded;
+               }
+            });
+      }
+      else {
+         const filtermatch = this.getfilterBySeverityAndCity();
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year');
+         fetchAggregate(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined) {
+                  const dataPadded = this.padDataYearsWith0(data);
+                  this.dataByYears = dataPadded;
+               }
+            });
+      }
+
    }
 
    /**
@@ -476,18 +490,32 @@ export default class FilterStore {
 
    @action
    submitfilterdGroupByYears = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      if (this.useGetFetch) {
+         const range = JSON.parse(this.cityPopSizeRange);
+         const filtermatch = this.getFilterQueryString(null);
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
+         fetchGetGroupBy(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined) {
+                  const dataPadded = this.padDataYearsWith0(data);
+                  this.dataFilterdByYears = dataPadded;
+               }
+            });
+      } else {
+         const range = JSON.parse(this.cityPopSizeRange);
 
-      const filtermatch = this.getFilterForPost(null);
-      const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
-      fetchAggregate(filter)
-         .then((data: any[] | undefined) => {
-            if (data !== undefined) {
-               const dataPadded = this.padDataYearsWith0(data);
-               this.dataFilterdByYears = dataPadded;
-            }
-         });
+         const filtermatch = this.getFilterForPost(null);
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
+         fetchAggregate(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined) {
+                  const dataPadded = this.padDataYearsWith0(data);
+                  this.dataFilterdByYears = dataPadded;
+               }
+            });
+      }
    }
+
 
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
@@ -528,24 +556,46 @@ export default class FilterStore {
 
    @action
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
-      const range = JSON.parse(this.cityPopSizeRange);
-      const filtermatch = this.getFilterForPost(null);
-      const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
-      // logger.log(filter)
-      fetchAggregate(filter)
-         .then((data: any[] | undefined) => {
-            if (data !== undefined && data.length > 0) {
-               try {
-                  const fixData = this.groupBy2.fixStrcutTable(data);
-                  this.dataGroupby2 = fixData;
-               } catch (error) {
-                  logger.log(error);
+      if (this.useGetFetch) {
+         const range = JSON.parse(this.cityPopSizeRange);
+         const filtermatch = this.getFilterQueryString(null);
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
+         // logger.log(filter)
+         fetchGetGroupBy(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined && data.length > 0) {
+                  try {
+                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     this.dataGroupby2 = fixData;
+                  } catch (error) {
+                     logger.log(error);
+                     this.dataGroupby2 = [];
+                  }
+               } else {
                   this.dataGroupby2 = [];
                }
-            } else {
-               this.dataGroupby2 = [];
-            }
-         });
+            });
+      } else {
+         const range = JSON.parse(this.cityPopSizeRange);
+         const filtermatch = this.getFilterForPost(null);
+         const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
+         // logger.log(filter)
+         fetchAggregate(filter)
+            .then((data: any[] | undefined) => {
+               if (data !== undefined && data.length > 0) {
+                  try {
+                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     this.dataGroupby2 = fixData;
+                  } catch (error) {
+                     logger.log(error);
+                     this.dataGroupby2 = [];
+                  }
+               } else {
+                  this.dataGroupby2 = [];
+               }
+            });
+      }
+
    }
 
    @observable
@@ -600,7 +650,7 @@ export default class FilterStore {
    submintMainDataFilter = () => {
       this.isLoading = true;
       const range = JSON.parse(this.cityPopSizeRange);
-      if(this.useGetFetch){
+      if (this.useGetFetch) {
          const filterMatch = this.getFilterQueryString(null);
          // logger.log(filterMatch);
          const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
@@ -629,7 +679,7 @@ export default class FilterStore {
                this.isLoading = false;
             });
       }
-    
+
    }
 
    submintGetMarkerFirstStep = () => {
@@ -662,9 +712,9 @@ export default class FilterStore {
       filter += FiterUtils.getFilterFromArray('city', this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
-      filter += FiterUtils.getFilterFromArray('str', this.streets); 
-      filter += FiterUtils.getFilterFromArray('rd', this.roads); 
-      filter += FiterUtils.getFilterFromArray('rds', this.roadSegment); 
+      filter += FiterUtils.getFilterFromArray('str', this.streets);
+      filter += FiterUtils.getFilterFromArray('rd', this.roads);
+      filter += FiterUtils.getFilterFromArray('rds', this.roadSegment);
       filter += FiterUtils.getMultiplefilter(this.injTypes);
       filter += FiterUtils.getMultiplefilter(this.genderTypes);
       filter += FiterUtils.getMultiplefilter(this.ageTypes);
@@ -709,11 +759,11 @@ export default class FilterStore {
       colFilter.updateFilter(aType, val);
       if (colFilter.allTypesOption === -1) colFilter.arrTypes[aType].checked = val;
       else if (aType === colFilter.allTypesOption) {
-        colFilter.arrTypes
-          .forEach((x, index) => x.checked = (index === colFilter.allTypesOption) ? val : !val);
+         colFilter.arrTypes
+            .forEach((x, index) => x.checked = (index === colFilter.allTypesOption) ? val : !val);
       } else {
-        colFilter.arrTypes[colFilter.allTypesOption].checked = false;
-        colFilter.arrTypes[aType].checked = val;
+         colFilter.arrTypes[colFilter.allTypesOption].checked = false;
+         colFilter.arrTypes[aType].checked = val;
       }
    }
 
@@ -725,25 +775,6 @@ export default class FilterStore {
       filter += FiterUtils.getFilterFromArray('city', this.cities);
       return filter;
    }
-
-   // getfilterBySeverityAndCity = () => {
-   //    let filter = '{"$and" : [';
-   //    filter += '{"accident_year":{"$gte":2015}}';
-   //    filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-   //    filter += this.getfilterCity();
-   //    filter += ']}';
-   //    return filter;
-   // }
-
-   // getfilterCity = () => {
-   //    let filter: string = '';
-   //    if (this.cities.length > 0) {
-   //       filter += ',{"$or": [';
-   //       filter += this.cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',');
-   //       filter += ']}';
-   //    }
-   //    return filter;
-   // }
 
    getFilterFromArray = (arr: string[], filterName: string) => {
       let filter: string = '';

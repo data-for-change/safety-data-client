@@ -96,7 +96,7 @@ export const getFilterFromArray = (filterName: string, valArr : string[]) => {
   let filter: string = '';
   if (valArr.length > 0 && valArr[0] !== '') {
      filter += `&${filterName}=`;
-     filter += valArr.map((x: string) => `${x.trim()}`).join(',');
+     filter += valArr.map((x: string) => `"${x.trim()}"`).join(',');
   }
   return filter;
 }
@@ -106,4 +106,25 @@ export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
   filter += `&lon=${mapBounds.getWest()},${mapBounds.getEast()}`;
   return filter;
 }
-
+// don't use this - for post filter
+export const getFilterStreets = (streets : string[]) => {
+  let filter: string = '';
+  if (streets.length > 0 && streets[0] !== '') {
+     filter += ',{"$or": [';
+     filter += streets.map((x: string) => `{"street1_hebrew" : "${x.trim()}"}`).join(',');
+     filter += ',';
+     filter += streets.map((x: string) => `{"street2_hebrew" : "${x.trim()}"}`).join(',');
+     filter += ']}';
+  }
+  return filter;
+}
+// don't use this - for post filter
+export const getfilterCity = (cities : string[]) => {
+  let filter: string = '';
+  if (cities.length > 0) {
+     filter += ',{"$or": [';
+     filter += cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',');
+     filter += ']}';
+  }
+  return filter;
+}
