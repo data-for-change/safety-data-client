@@ -45,7 +45,7 @@ export default class FilterStore {
       this.separator = FC.initSeparator();
       this.oneLane = FC.initOneLane();
       //initn Group-by dictionary
-      this.groupByDict = initGroupByDict();
+      this.groupByDict = initGroupByDict(this.useGetFetch);
       this.group2Dict = initGroup2Dict();
       this.groupBy = this.groupByDict.TypeInjured;
       this.groupBy2 = this.group2Dict.Gender;

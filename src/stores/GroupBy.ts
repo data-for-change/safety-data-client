@@ -22,32 +22,37 @@ export default class GroupBy implements IGroupBy {
   }
 }
 
-// export const initGroupByDict = () => {
-//   const dictGroupBy:any = {};
-//   dictGroupBy.Severity = new GroupBy('Severity', 'sev');
-//   dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injt');
-//   dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vcl');
-//   dictGroupBy.Gender = new GroupBy('Gender', 'sex');
-//   dictGroupBy.Age = new GroupBy('Age', 'age');
-//   dictGroupBy.Year = new GroupBy('Year', 'year');
-//   dictGroupBy.Month = new GroupBy('Month', 'mn');
-//   dictGroupBy.DayNight = new GroupBy('DayNight', 'dn');
-//   dictGroupBy.WeekDay = new GroupBy('WeekDay', 'wd');
-//   dictGroupBy.RoadType = new GroupBy('RoadType', 'rt');
-//   dictGroupBy.City = new GroupBy('City', 'city', 10);
-//   dictGroupBy.CityByPop = new GroupBy('CityByPop', 'accident_yishuv_name');
-//   dictGroupBy.Street = new GroupBy('Street', 'str', 10);
-//   dictGroupBy.Road = new GroupBy('Road', 'rd', 10);
-//   dictGroupBy.AccidentType = new GroupBy('AccidentType', 'acc');
-//   dictGroupBy.Vehicles = new GroupBy('Vehicles', 'vcli');
-//   dictGroupBy.SpeedLimit = new GroupBy('SpeedLimit', 'sp');
-//   dictGroupBy.RoadWidth = new GroupBy('RoadWidth', 'rw');
-//   dictGroupBy.Separator = new GroupBy('Separator', 'ml');
-//   dictGroupBy.OneLane = new GroupBy('OneLane', 'ol');
-//   return dictGroupBy;
-// };
+export const initGroupByDict = (useGetFetch: boolean) =>{
+  if (useGetFetch) return initGroupByDictForGet();
+  else return initGroupByDictForPost();
+}
 
-export const initGroupByDict = () => {
+const initGroupByDictForGet = () => {
+  const dictGroupBy:any = {};
+  dictGroupBy.Severity = new GroupBy('Severity', 'sev');
+  dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injt');
+  dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vcl');
+  dictGroupBy.Gender = new GroupBy('Gender', 'sex');
+  dictGroupBy.Age = new GroupBy('Age', 'age');
+  dictGroupBy.Year = new GroupBy('Year', 'year');
+  dictGroupBy.Month = new GroupBy('Month', 'mn');
+  dictGroupBy.DayNight = new GroupBy('DayNight', 'dn');
+  dictGroupBy.WeekDay = new GroupBy('WeekDay', 'wd');
+  dictGroupBy.RoadType = new GroupBy('RoadType', 'rt');
+  dictGroupBy.City = new GroupBy('City', 'city', 10);
+  dictGroupBy.CityByPop = new GroupBy('CityByPop', 'accident_yishuv_name');
+  dictGroupBy.Street = new GroupBy('Street', 'str', 10);
+  dictGroupBy.Road = new GroupBy('Road', 'rd', 10);
+  dictGroupBy.AccidentType = new GroupBy('AccidentType', 'acc');
+  dictGroupBy.Vehicles = new GroupBy('Vehicles', 'vcli');
+  dictGroupBy.SpeedLimit = new GroupBy('SpeedLimit', 'sp');
+  dictGroupBy.RoadWidth = new GroupBy('RoadWidth', 'rw');
+  dictGroupBy.Separator = new GroupBy('Separator', 'ml');
+  dictGroupBy.OneLane = new GroupBy('OneLane', 'ol');
+  return dictGroupBy;
+};
+
+const initGroupByDictForPost = () => {
   const dictGroupBy:any = {};
   dictGroupBy.Severity = new GroupBy('Severity', 'injury_severity_hebrew');
   dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injured_type_hebrew');
