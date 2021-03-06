@@ -40,7 +40,7 @@ const initGroupByDictForGet = () => {
   dictGroupBy.WeekDay = new GroupBy('WeekDay', 'wd');
   dictGroupBy.RoadType = new GroupBy('RoadType', 'rt');
   dictGroupBy.City = new GroupBy('City', 'city', 10);
-  dictGroupBy.CityByPop = new GroupBy('CityByPop', 'accident_yishuv_name');
+  dictGroupBy.CityByPop = new GroupBy('CityByPop', 'cpop');
   dictGroupBy.Street = new GroupBy('Street', 'str', 10);
   dictGroupBy.Road = new GroupBy('Road', 'rd', 10);
   dictGroupBy.AccidentType = new GroupBy('AccidentType', 'acc');

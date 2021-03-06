@@ -490,8 +490,8 @@ export default class FilterStore {
 
    @action
    submitfilterdGroupByYears = () => {
+      const range = JSON.parse(this.cityPopSizeRange);
       if (this.useGetFetch) {
-         const range = JSON.parse(this.cityPopSizeRange);
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
          fetchGetGroupBy(filter)
@@ -502,8 +502,6 @@ export default class FilterStore {
                }
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange);
-
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
          fetchAggregate(filter)

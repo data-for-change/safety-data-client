@@ -11,7 +11,7 @@ export const getFilterGroupBy =
     let filter = filterMatch;
     filter += `&gb=${groupName}`;
     if (groupName2 !== '') {
-      filter +=`,${groupName2}`
+      filter +=`&gb2=${groupName2}`
     }
     if (limit !== 0)
       filter +=`&lim=${limit}`
