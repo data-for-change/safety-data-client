@@ -27,10 +27,9 @@ export default class GroupBy2 implements IGroupBy2 {
       return res;
     }
 
-    // input like {_id: 2015, count: Array(2)}
-    // output like {_id: "2015", male: 264, female: 92}
+    // input sample: {count : [{grp2: "זכר", count: 3},  {grp2: "נקבה", count: 2} ]}
+    // output sample: {_id: "2015", male: 3, female: 2}
     fixStrcutTable = (data: any[]) => {
-      console.log(data);
       const res = data.map((x) => {
         const arr = x.count.map((y: any) => {
           const engVal = this.revTrnas(y.grp2);
