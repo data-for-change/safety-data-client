@@ -647,11 +647,9 @@ export default class FilterStore {
 
    submintMainDataFilter = () => {
       this.isLoading = true;
-      const range = JSON.parse(this.cityPopSizeRange);
       if (this.useGetFetch) {
-         const filterMatch = this.getFilterQueryString(null);
-         // logger.log(filterMatch);
-         const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
+         const filter = this.getFilterQueryString(null);
+         // logger.log(filter);
          this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
          fetchGetList(filter, 'main')
             .then((data: any[] | undefined) => {
@@ -663,9 +661,10 @@ export default class FilterStore {
                this.isLoading = false;
             });
       } else {
-         const filterMatch = this.getFilterForPost(null);
-         // logger.log(filterMatch);
-         const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
+         const range = JSON.parse(this.cityPopSizeRange);
+         const filter = this.getFilterForPost(null);
+         // logger.log(filter);
+         // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
          this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
          fetchAggregatFilter(filter, 'main')
             .then((data: any[] | undefined) => {
@@ -682,8 +681,8 @@ export default class FilterStore {
 
    submintGetMarkerFirstStep = () => {
       const range = JSON.parse(this.cityPopSizeRange);
-      const filterMatch = this.getFilterForPost(null);
-      const filter = FiterUtils.getAggFilter(filterMatch, range.min, range.max);
+      const filter = this.getFilterForPost(null);
+      // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
       fetchAggregatFilter(filter, 'latlon')
          .then((data: any[] | undefined) => {
             if (data !== null && data !== undefined) {
@@ -724,6 +723,8 @@ export default class FilterStore {
       filter += FiterUtils.getMultiplefilter(this.roadWidth);
       filter += FiterUtils.getMultiplefilter(this.separator);
       filter += FiterUtils.getMultiplefilter(this.oneLane);
+      const range = JSON.parse(this.cityPopSizeRange);
+      filter += FiterUtils.getFilterByCityPop(range.min, range.max)
       return filter;
    }
 

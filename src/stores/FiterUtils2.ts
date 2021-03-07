@@ -18,10 +18,10 @@ export const getFilterGroupBy =
     return filter;
   };
 
-// filter accidents using aggrgation pipline
-export const getAggFilter = (filterMatch: string, popMin: number, popMax: number) => {
-  let filter = filterMatch;
-  if (popMin >= 0 && popMax > 0) {
+// get filter by city population 
+export const getFilterByCityPop = (popMin: number, popMax: number) => {
+  let filter = '';
+  if (popMin >= 0 && popMax > popMin) {
     //&p1=200000&p2=500000
     filter += `&p1=${popMin}&p2=${popMax}`;
   }
