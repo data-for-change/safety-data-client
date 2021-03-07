@@ -432,9 +432,11 @@ export default class FilterStore {
    @action
    updateGroupby = (key: string) => {
       this.groupBy = this.groupByDict[key];
-      if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+      if (!this.useGetFetch && this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupBy);
-      this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      if (this.groupBy.text !== 'CityByPop') {
+         this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      }
    }
 
    /**
