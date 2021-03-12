@@ -1,5 +1,7 @@
 {
   "test": "Test translation",
+  "Hebrew" : "עברית",
+  "English" : "English",
   "Home": "Home",
   "HeatMap": "Heat Map",
   "Markers": "Markers",
