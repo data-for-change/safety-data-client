@@ -33,6 +33,7 @@ export default class FilterStore {
       // where
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road','rd', false);
+      this.roadSegment = new ColumnFilterArray('RoadSegment','rds', true);
       this.cities = new ColumnFilterArray('City','city',true);
       this.streets = new ColumnFilterArray('Street','st', true);
       // who
@@ -180,11 +181,11 @@ export default class FilterStore {
    ];
 
    @observable
-   roadSegment: string[] = [];
+   roadSegment: ColumnFilterArray;
 
    @action
    updateRoadSegment = (names: string) => {
-      this.roadSegment = names.split(',');
+      this.roadSegment.setFilter(names.split(','));
    }
 
    @observable
@@ -631,7 +632,7 @@ export default class FilterStore {
          const filter = this.getFilterQueryString(null);
          this.setFiltersText(true);
          // logger.log(filter);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          fetchGetList(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -646,7 +647,7 @@ export default class FilterStore {
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          fetchAggregatFilter(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -693,7 +694,7 @@ export default class FilterStore {
       filter += FiterUtils.getMultiplefilter(this.dayNight);
       filter += this.streets.getFilter();
       filter += this.roads.getFilter(); 
-      filter += FiterUtils.getFilterFromArray('rds', this.roadSegment);
+      filter += this.roadSegment.getFilter();
       filter += FiterUtils.getMultiplefilter(this.injTypes);
       filter += FiterUtils.getMultiplefilter(this.genderTypes);
       filter += FiterUtils.getMultiplefilter(this.ageTypes);
@@ -726,7 +727,7 @@ export default class FilterStore {
       filter += FiterUtils.getMultiplefilter(this.dayNight);
       // filter += FiterUtils.getFilterStreets(this.streets);
       // filter += this.getFilterFromNumArray(this.roads, 'road1');
-      filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
+      // filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
       filter += FiterUtils.getMultiplefilter(this.injTypes);
       filter += FiterUtils.getMultiplefilter(this.genderTypes);
       filter += FiterUtils.getMultiplefilter(this.ageTypes);
@@ -793,7 +794,7 @@ export default class FilterStore {
    submitMainDataFilterLocalDb = () => {
       this.isLoading = true;
       const arrFilters = this.getFilterIDB();
-      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
+      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
       // logger.log(arrFilters);
       getFromDexie(arrFilters)
          .then((data: any[] | undefined) => {
@@ -821,7 +822,7 @@ export default class FilterStore {
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
       this.getMultiplefilterIDB(arrFilters, this.dayNight);
-      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment);
+      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment.arrValues);
       this.getMultiplefilterIDB(arrFilters, this.roadTypes);
       this.getMultiplefilterIDB(arrFilters, this.injTypes);
       this.getMultiplefilterIDB(arrFilters, this.genderTypes);
@@ -846,7 +847,7 @@ export default class FilterStore {
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
       this.getMultiplefilterIDB(arrFilters, this.dayNight);
-      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment);
+      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment.arrValues);
       this.getMultiplefilterIDB(arrFilters, this.roadTypes);
       this.getMultiplefilterIDB(arrFilters, this.injTypes);
       this.getMultiplefilterIDB(arrFilters, this.genderTypes);

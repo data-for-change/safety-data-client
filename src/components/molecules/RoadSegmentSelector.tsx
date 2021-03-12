@@ -21,7 +21,7 @@ const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) 
         <Form.Control
           type="input"
           placeholder=""
-          value={roadSegment.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
+          value={roadSegment.arrValues.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
         />
       </Form.Group>
 
