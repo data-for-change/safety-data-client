@@ -32,7 +32,8 @@ export default class FilterStore {
       this.dayNight = FC.initDayNight();
       // where
       this.roadTypes = FC.initRoadTypes();
-      this.roads = new ColumnFilterArray('Road','rd') ;
+      this.roads = new ColumnFilterArray('Road','rd', false);
+      this.streets = new ColumnFilterArray('Street','st', true);
       // who
       this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
@@ -134,7 +135,7 @@ export default class FilterStore {
    updateCities = (names: string[], updateCityResult: boolean) => {
       this.cities = names;
       if (this.cities.length === 0) {
-         this.streets = [];
+         this.streets.arrValues = [];
       } else if (updateCityResult) {
          [this.cityResult] = this.cities;
       }
@@ -144,11 +145,11 @@ export default class FilterStore {
    cityResult: string = '';
 
    @observable
-   streets: string[] = [];
+   streets: ColumnFilterArray;
 
    @action
    updateStreets = (names: string) => {
-      this.streets = names.split(',');
+      this.streets.setFilter(names.split(','));
    }
 
    @observable
@@ -688,7 +689,7 @@ export default class FilterStore {
       filter += FiterUtils.getFilterFromArray('city', this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
-      filter += FiterUtils.getFilterFromArray('str', this.streets);
+      filter += this.streets.getFilter();
       filter += this.roads.getFilter(); 
       filter += FiterUtils.getFilterFromArray('rds', this.roadSegment);
       filter += FiterUtils.getMultiplefilter(this.injTypes);
@@ -720,7 +721,7 @@ export default class FilterStore {
       filter += FiterUtils.getfilterCity(this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
-      filter += FiterUtils.getFilterStreets(this.streets);
+      // filter += FiterUtils.getFilterStreets(this.streets);
       // filter += this.getFilterFromNumArray(this.roads, 'road1');
       filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
       filter += FiterUtils.getMultiplefilter(this.injTypes);
@@ -889,8 +890,8 @@ export default class FilterStore {
    }
 
    getFilterStreetsIDB = (arrFilters: any[]) => {
-      if (this.streets.length > 0 && this.streets[0] !== '') {
-         const filter1 = { filterName: 'street1_hebrew', values: this.streets.map((x: string) => x.trim()) };
+      if (this.streets.arrValues.length > 0 && this.streets.arrValues[0] !== '') {
+         const filter1 = { filterName: 'street1_hebrew', values: this.streets.arrValues.map((x: string) => x.trim()) };
          arrFilters.push(filter1);
          // const filter2 = { filterName: "street2_hebrew", values: this.streets.map((x: string) => {x.trim()}) }
          // arrFilters.push(filter2)

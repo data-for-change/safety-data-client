@@ -5,6 +5,7 @@ export interface IColumnFilterArray {
   name: string;
   queryColName: string;
   arrValues: string[];
+  isStringValues: boolean;
   setFilter: (values: string[]) => void;
   getFilter: () => string;
   //text is updated ofter filter submit
@@ -26,10 +27,13 @@ export class ColumnFilterArray implements IColumnFilterArray {
   @observable
   text: string;
 
-  constructor(name: string, queryColName: string) {
+  isStringValues: boolean;
+
+  constructor(name: string, queryColName: string, isStringValues: boolean) {
     this.name = name;
     this.queryColName = queryColName;
     this.arrValues = [];
+    this.isStringValues = isStringValues;
     this.text = '';
   }
 
@@ -42,7 +46,12 @@ export class ColumnFilterArray implements IColumnFilterArray {
     let filter: string = '';
     if (this.arrValues.length > 0 && this.arrValues[0] !== '') {
        filter += `&${this.queryColName}=`;
-       filter += this.arrValues.map((x: string) => x).join(',');
+       if ( this.isStringValues) {
+        filter += this.arrValues.map((x: string) => `"${x.trim()}"`).join(',');
+       } else {
+        filter += this.arrValues.map((x: string) => x).join(',');
+       }
+     
     }
     return filter;
   }
