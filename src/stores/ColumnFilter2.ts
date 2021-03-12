@@ -4,6 +4,7 @@ import dataYearsUnfilterdInit from '../assets/data-by-years.json';
 import dataYearsfilterdInit from '../assets/data-by-years-filtred.json';
 import dataGrpBy1Init from '../assets/data-by-grp1.json';
 import dataGrp2Init from '../assets/data-by-grp2.json';
+import i18n from '../i18n';
 
 export interface IColumnFilter {
   name: string;
@@ -13,6 +14,9 @@ export interface IColumnFilter {
   allTypesOption: number;
   isAllValsFalse: boolean;
   updateFilter: (aType: number, checked: boolean) => void;
+  //text is updated ofter filter submit
+  text: string;
+  setText: (ignoreIfAll: boolean) => void;
 }
 /**  filter group of boolaen filters
 *  each group represnt one column in the database that can get
@@ -28,12 +32,16 @@ export class ColumnFilter implements IColumnFilter {
 
   allTypesOption: number;
 
+  @observable
+  text: string;
+
   constructor(name: string, dbColName: string, allTypesOption: number = -1) {
     this.name = name;
     this.dbColName = dbColName;
     this.arrTypes = [];
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
+    this.text = '';
   }
 
   /**
@@ -54,6 +62,15 @@ export class ColumnFilter implements IColumnFilter {
     } else {
       this.arrTypes[this.allTypesOption].checked = false;
       this.arrTypes[aType].checked = checked;
+    }
+  }
+
+  @action
+  setText = (ignoreIfAll: boolean) => {
+    if (ignoreIfAll) {
+      this.text = this.arrTypes.filter((x, index)=> x.checked && index !== this.allTypesOption).map(x=>i18n.t(x.label)).join(', ');
+    } else {
+      this.text = this.arrTypes.filter(x=>x.checked).map(x=>i18n.t(x.label)).join(', ');
     }
   }
 }
