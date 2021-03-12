@@ -7,9 +7,9 @@ import { useStore } from '../../stores/storeConfig';
 interface IProps {}
 const StreetSelector: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
-  const { streets } = filterStore;
+  const { streets, cities } = filterStore;
   const { t } = useTranslation();
-  if (filterStore.cities.length > 0) {
+  if (cities.arrValues.length > 0) {
     return (
       <Form.Group controlId="exampleForm.ControlStreet">
         <Form.Label className="filterLable">
@@ -19,7 +19,7 @@ const StreetSelector: React.FC<IProps> = observer(() => {
         <Form.Control 
           type="input" 
           placeholder="" 
-          value={filterStore.streets.arrValues.toString()} 
+          value={streets.arrValues.toString()} 
           onChange={(e: ChangeEvent<HTMLInputElement>) => { filterStore.updateStreets(e.target.value); }} 
           />
       </Form.Group>

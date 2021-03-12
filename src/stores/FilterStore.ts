@@ -33,6 +33,7 @@ export default class FilterStore {
       // where
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road','rd', false);
+      this.cities = new ColumnFilterArray('City','city',true);
       this.streets = new ColumnFilterArray('Street','st', true);
       // who
       this.injTypes = FC.initInjTypes();
@@ -129,15 +130,15 @@ export default class FilterStore {
 
 
    @observable
-   cities: string[] = [];
+   cities: ColumnFilterArray;
 
    @action
    updateCities = (names: string[], updateCityResult: boolean) => {
-      this.cities = names;
-      if (this.cities.length === 0) {
+      this.cities.setFilter(names);
+      if (this.cities.arrValues.length === 0) {
          this.streets.arrValues = [];
       } else if (updateCityResult) {
-         [this.cityResult] = this.cities;
+         [this.cityResult] = this.cities.arrValues;
       }
    }
 
@@ -359,7 +360,7 @@ export default class FilterStore {
       // looger.log("updateAllInjuries ",data.length)
       this.setMarkersLoadStep(2);
       this.dataAllInjuries = data;
-      this.rootStore.mapStore.setBounds(data, this.cities);
+      this.rootStore.mapStore.setBounds(data, this.cities.arrValues);
       if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX) {
          this.rootStore.mapStore.getMarkersInLocalBBox(0.1);
       }
@@ -630,7 +631,7 @@ export default class FilterStore {
          const filter = this.getFilterQueryString(null);
          this.setFiltersText(true);
          // logger.log(filter);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
          fetchGetList(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -645,7 +646,7 @@ export default class FilterStore {
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
          fetchAggregatFilter(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -672,12 +673,12 @@ export default class FilterStore {
    }
 
    submitCityNameAndLocation = () => {
-      if (this.cities.length >= 1) {
-         const city = this.cities[0];
+      if (this.cities.arrValues.length >= 1) {
+         const city = this.cities.arrValues[0];
          const srvCity = new CityService();
          srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenterByCity);
          const index = 0;
-         this.cityResult = this.cities[index];
+         this.cityResult = this.cities.arrValues[index];
       } else this.cityResult = '';
    }
 
@@ -686,7 +687,8 @@ export default class FilterStore {
       let filter = '?';
       filter += `sy=${this.startYear}&ey=${this.endYear}`;
       filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getFilterFromArray('city', this.cities);
+      filter += this.cities.getFilter();
+      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
       filter += this.streets.getFilter();
@@ -711,6 +713,7 @@ export default class FilterStore {
    setFiltersText = (ignoreIfAll: boolean ) => {
       this.injTypes.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
+      this.cities.setText();
       this.roads.setText();
    }
 
@@ -718,7 +721,7 @@ export default class FilterStore {
       let filter = '{"$and" : [';
       filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
       filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getfilterCity(this.cities);
+      // filter += FiterUtils.getfilterCity(this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
       // filter += FiterUtils.getFilterStreets(this.streets);
@@ -757,7 +760,8 @@ export default class FilterStore {
       let filter = '?';
       filter += `sy=${this.startYear}`;
       filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getFilterFromArray('city', this.cities);
+      filter += this.cities.getFilter();
+      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
    }
 
@@ -789,7 +793,7 @@ export default class FilterStore {
    submitMainDataFilterLocalDb = () => {
       this.isLoading = true;
       const arrFilters = this.getFilterIDB();
-      this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment);
       // logger.log(arrFilters);
       getFromDexie(arrFilters)
          .then((data: any[] | undefined) => {
@@ -883,8 +887,8 @@ export default class FilterStore {
    }
 
    getfilterCityIDB = (arrFilters: any[]) => {
-      if (this.cities.length > 0) {
-         const filter = { filterName: 'accident_yishuv_name', values: this.cities };
+      if (this.cities.arrValues.length > 0) {
+         const filter = { filterName: 'accident_yishuv_name', values: this.cities.arrValues };
          arrFilters.push(filter);
       }
    }
