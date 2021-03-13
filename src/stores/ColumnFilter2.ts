@@ -228,8 +228,8 @@ export const initVehicleTypesFull = () => {
 
 export const initGenderTypes = () => {
   const col: IColumnFilter = new ColumnFilter('Gender', 'sex');
-  col.arrTypes.push(new FilterChecker('female', true, [1]));
-  col.arrTypes.push(new FilterChecker('male', true, [2]));
+  col.arrTypes.push(new FilterChecker('female', true, [2]));
+  col.arrTypes.push(new FilterChecker('male', true, [1]));
   return col;
 };
 
