@@ -697,9 +697,9 @@ export default class FilterStore {
       filter += this.roads.getFilter(); 
       filter += this.roadSegment.getFilter();
       filter += this.injTypes.getQueryString();
-      filter += FiterUtils.getMultiplefilter(this.genderTypes);
-      filter += FiterUtils.getMultiplefilter(this.ageTypes);
-      filter += FiterUtils.getMultiplefilter(this.populationTypes);
+      filter += this.genderTypes.getQueryString();
+      filter += this.ageTypes.getQueryString();
+      filter += this.populationTypes.getQueryString();
       filter += FiterUtils.getMultiplefilter(this.accidentType);
       filter += FiterUtils.getMultiplefilter(this.vehicleType);
       filter += FiterUtils.getMultiplefilter(this.roadTypes);
@@ -724,7 +724,9 @@ export default class FilterStore {
      const params = new URLSearchParams(location.search);
      params.set('tab',  this.rootStore.uiStore.currentTab);
      this.injTypes.setBrowserQueryString(params);
-     // console.log(params.toString()); 
+     this.genderTypes.setBrowserQueryString(params);
+     this.ageTypes.setBrowserQueryString(params);
+     this.populationTypes.setBrowserQueryString(params);
      window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
