@@ -631,6 +631,7 @@ export default class FilterStore {
       if (this.useGetFetch) {
          const filter = this.getFilterQueryString(null);
          this.setFiltersText(true);
+         this.setBrowserQueryString();
          // logger.log(filter);
          this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          fetchGetList(filter, 'main')
@@ -695,7 +696,7 @@ export default class FilterStore {
       filter += this.streets.getFilter();
       filter += this.roads.getFilter(); 
       filter += this.roadSegment.getFilter();
-      filter += FiterUtils.getMultiplefilter(this.injTypes);
+      filter += this.injTypes.getQueryString();
       filter += FiterUtils.getMultiplefilter(this.genderTypes);
       filter += FiterUtils.getMultiplefilter(this.ageTypes);
       filter += FiterUtils.getMultiplefilter(this.populationTypes);
@@ -716,6 +717,15 @@ export default class FilterStore {
       this.genderTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
+   }
+
+   @action 
+   setBrowserQueryString =() =>{
+     const params = new URLSearchParams(location.search);
+     params.set('tab',  this.rootStore.uiStore.currentTab);
+     this.injTypes.setBrowserQueryString(params);
+     // console.log(params.toString()); 
+     window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
