@@ -63,6 +63,14 @@ export default class UiStore {
     this.showFilterModal = val;
   }
 
+  @action
+  setStoreByQuery = () =>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    console.log(tabParam)
+    
+  }
+  
   /**
    * current page
    */
