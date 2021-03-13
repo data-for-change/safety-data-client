@@ -10,6 +10,11 @@ export interface IColumnFilter {
   name: string;
   dbColName: string;
   arrTypes: IFilterChecker[];
+  //
+  queryVals: string[];
+  setQueryVals: () => void;
+  getQueryString: () => string;
+  setBrowserQueryString: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
@@ -27,6 +32,8 @@ export class ColumnFilter implements IColumnFilter {
 
   dbColName: string;
 
+  queryVals: string[];
+
   @observable
   arrTypes: IFilterChecker[];
 
@@ -39,6 +46,7 @@ export class ColumnFilter implements IColumnFilter {
     this.name = name;
     this.dbColName = dbColName;
     this.arrTypes = [];
+    this.queryVals = [];
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
     this.text = '';
@@ -63,14 +71,63 @@ export class ColumnFilter implements IColumnFilter {
       this.arrTypes[this.allTypesOption].checked = false;
       this.arrTypes[aType].checked = checked;
     }
+    this.setQueryVals();
+  }
+
+  /**
+   * return sentence foe query-string from Multiplefilter of booleans,
+   * for example : &injt=4,5 
+   * @param colFilter column filter with name and chekcd list of values
+   */
+  @action
+  setQueryVals = () => {
+    let allChecked: boolean = true;
+    let arrfilter: string[] = [];
+    if (this.allTypesOption > -1 && this.arrTypes[this.allTypesOption].checked) allChecked = true;
+    else {
+      // in case there is allTypesOption , it want be copied to arrfilter
+      // as it is not checked
+      const iterator = this.arrTypes.values();
+      for (const filterCheck of iterator) {
+        if (filterCheck.checked) {
+          arrfilter = [...arrfilter, ...filterCheck.filters];
+        } else {
+          allChecked = false;
+        }
+      }
+    }
+    if (allChecked) arrfilter = [];
+    this.queryVals = arrfilter;
+  };
+
+  /**
+   * 
+   * @returns query string for the server
+   */
+  getQueryString =() =>{
+    const vals = this.queryVals.join(',');
+    let res =  (this.queryVals.length == 0)? '': `&${this.dbColName}=${vals}`;
+    return res;
+  }
+  /**
+  * set parmas of the browser QueryString
+  * @param params 
+  */
+  setBrowserQueryString = (params: URLSearchParams) =>{
+    if (this.queryVals.length === 0) {
+      params.delete(this.dbColName);
+    } else {
+      const vals = this.queryVals.join(',');
+      params.set(this.dbColName, vals);
+    }
   }
 
   @action
   setText = (ignoreIfAll: boolean) => {
     if (ignoreIfAll) {
-      this.text = this.arrTypes.filter((x, index)=> x.checked && index !== this.allTypesOption).map(x=>i18n.t(x.label)).join(', ');
+      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption).map(x => i18n.t(x.label)).join(', ');
     } else {
-      this.text = this.arrTypes.filter(x=>x.checked).map(x=>i18n.t(x.label)).join(', ');
+      this.text = this.arrTypes.filter(x => x.checked).map(x => i18n.t(x.label)).join(', ');
     }
   }
 }
@@ -110,10 +167,10 @@ export const initInjTypes = () => {
   const col: IColumnFilter = new ColumnFilter('Vehicle', 'injt', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, [1]));
-  col.arrTypes.push(new FilterChecker('cyclist', false, [6,7]));
-  col.arrTypes.push(new FilterChecker('other', false, [8,9]));
-  col.arrTypes.push(new FilterChecker('motorcycle', false, [4,5]));
-  col.arrTypes.push(new FilterChecker('wheels4+', false, [2,3]));
+  col.arrTypes.push(new FilterChecker('cyclist', false, [6, 7]));
+  col.arrTypes.push(new FilterChecker('other', false, [8, 9]));
+  col.arrTypes.push(new FilterChecker('motorcycle', false, [4, 5]));
+  col.arrTypes.push(new FilterChecker('wheels4+', false, [2, 3]));
   return col;
 };
 
@@ -126,14 +183,14 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('e-scooter', false, [21]));
   col.arrTypes.push(new FilterChecker('e-bike', false, [23]));
   col.arrTypes.push(new FilterChecker('motorcycle', false,
-    [8,9,10,19]));
+    [8, 9, 10, 19]));
   col.arrTypes.push(new FilterChecker('car', false, [1]));
   col.arrTypes.push(new FilterChecker('taxi', false, [12]));
-  col.arrTypes.push(new FilterChecker('bus', false, [11,18]));
+  col.arrTypes.push(new FilterChecker('bus', false, [11, 18]));
   col.arrTypes.push(new FilterChecker('tranzit', false, [2]));
   col.arrTypes.push(new FilterChecker('tender', false, [3]));
   col.arrTypes.push(new FilterChecker('truck', false,
-    [24,25,5,6,7]));
+    [24, 25, 5, 6, 7]));
   col.arrTypes.push(new FilterChecker('tractor', false, [14]));
   col.arrTypes.push(new FilterChecker('train', false, [16]));
   col.arrTypes.push(new FilterChecker('other', false, [17]));
