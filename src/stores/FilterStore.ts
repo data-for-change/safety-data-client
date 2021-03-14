@@ -688,11 +688,11 @@ export default class FilterStore {
       //?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
       let filter = '?';
       filter += `sy=${this.startYear}&ey=${this.endYear}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
+      filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
-      filter += FiterUtils.getMultiplefilter(this.dayNight);
+      filter += this.dayNight.getFilter();
       filter += this.streets.getFilter();
       filter += this.roads.getFilter(); 
       filter += this.roadSegment.getFilter();
