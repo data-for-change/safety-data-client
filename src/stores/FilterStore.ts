@@ -712,6 +712,11 @@ export default class FilterStore {
       return filter;
    }
 
+
+   /**
+    * set filters text - used in info-panel to show current filter
+    * @param ignoreIfAll - if true and if all option is cheked return blank
+    */
    setFiltersText = (ignoreIfAll: boolean ) => {
       this.injTypes.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
@@ -719,10 +724,14 @@ export default class FilterStore {
       this.roads.setText();
    }
 
+   /**
+    * set the QueryString of the browser by current filter
+    */
    @action 
    setBrowserQueryString =() =>{
      const params = new URLSearchParams(location.search);
      params.set('tab',  this.rootStore.uiStore.currentTab);
+     this.injurySeverity.setBrowserQueryString(params);
      this.injTypes.setBrowserQueryString(params);
      this.genderTypes.setBrowserQueryString(params);
      this.ageTypes.setBrowserQueryString(params);
