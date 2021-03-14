@@ -9,10 +9,13 @@ import Loader from './components/atoms/Loader';
 import './i18n';
 import './App.css';
 import Drawer from './components/organisms/Drawer';
-
+// import MyFilters from './components/pages/MyFilters';
+// import { useTranslate } from './hooks/transelate'
 
 const AboutPage = lazy(() => import('./components/pages/AboutPage'));
 const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
+const MyFilters = lazy(() => import('./components/pages/MyFilters'))
+
 
 const styles = {
    app: {
@@ -30,6 +33,11 @@ function App() {
                <Suspense fallback={<Loader />}>
                   <Switch>
                      <Route
+                        exact
+                        path="/my-filters"
+                        component={MyFilters}
+                     />
+                     <Route
                         path="/about"
                         component={AboutPage}
                      />
@@ -46,6 +54,8 @@ function App() {
                         path="/"
                         component={HomePage}
                      />
+
+
                   </Switch>
                </Suspense>
             </div>
