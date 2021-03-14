@@ -45,9 +45,9 @@
   "0-10K": "0-10K",
   "Street": "Street",
   "ChooseCity": "Choose a City...",
-  "several-cities" : "Several Cities",
+  "several-cities": "Several Cities",
   "Road": "Road",
-  "several-roads" : "Several Roads",
+  "several-roads": "Several Roads",
   "RoadSegment": "Road Segment",
   "Who": "Who",
   "Severity": "Severity",
@@ -178,5 +178,8 @@
   "hide-description": "Hide Text",
   "show-description": "Show Text",
   "not-found-images": "No photos found for this category",
-  "Filters": "Filters"
+  "Filters": "Filters",
+  "My-Filters": "My-Filters",
+  "Filter": "Filter",
+  "Save": "Save"
 }
