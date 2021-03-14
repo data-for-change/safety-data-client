@@ -25,12 +25,12 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const history = useHistory();
    const location = useLocation();
 
-   useEffect(() => {
-      history.push({
-         pathname: '/home',
-         search: `?tab=${currentTab}`,
-      });
-   }, [currentTab, history]);
+   // useEffect(() => {
+   //    history.push({
+   //       pathname: '/home',
+   //       search: `?tab=${currentTab}`,
+   //    });
+   // }, [currentTab, history]);
 
    useEffect(() => {
       setCurrentPage('home');

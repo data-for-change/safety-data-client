@@ -28,15 +28,15 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     }
     return () => setIsUpdateFromUrl(true); // unmount
   }, []);
-  useEffect(() => {
-    if (cityResult !== '') {
-      history.push({
-        pathname: '/city',
-        search: `?name=${cityResult}&tab=${currentTab}`,
-      });
-      filterStore.submitFilter();
-    }
-  }, [cityResult, currentTab]);
+  // useEffect(() => {
+  //   if (cityResult !== '') {
+  //     history.push({
+  //       pathname: '/city',
+  //       search: `?name=${cityResult}&tab=${currentTab}`,
+  //     });
+  //     filterStore.submitFilter();
+  //   }
+  // }, [cityResult, currentTab]);
   useEffect(() => {
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
