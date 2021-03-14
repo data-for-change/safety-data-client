@@ -28,7 +28,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   return (
     <MySelect
       onChange={onSelectChange}
-      label={t('GroupBy')}
+      label={'GroupBy'}
       data={fixData}
       valProp="value"
       contentProp="text"

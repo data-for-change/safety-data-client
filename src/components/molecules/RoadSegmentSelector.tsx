@@ -11,7 +11,7 @@ const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) 
   const { t } = useTranslation();
   const { filterStore } = useStore();
   const { cities, roadSegment, updateRoadSegment } = filterStore;
-  if (cities.length === 0) {
+  if (cities.arrValues.length === 0) {
     return (
       <Form.Group controlId="exampleForm.ControlRoadSegment">
         <Form.Label className="filterLable">
@@ -21,7 +21,7 @@ const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) 
         <Form.Control
           type="input"
           placeholder=""
-          value={roadSegment.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
+          value={roadSegment.arrValues.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
         />
       </Form.Group>
 

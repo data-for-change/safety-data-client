@@ -111,7 +111,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
                      />
                      <MySelect
-                        label={t('ToYear')}
+                        label={'ToYear'}
                         deafaultVal={String(endYear)}
                         data={years}
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}

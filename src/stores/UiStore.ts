@@ -28,11 +28,11 @@ export default class UiStore {
     this.setDirection(dir);
   }
 
-  @observable 
-  direction :string = 'rtl';
-  
-  @action 
-  setDirection = (val:string) => {
+  @observable
+  direction: string = 'rtl';
+
+  @action
+  setDirection = (val: string) => {
     this.direction = val;
   }
 
@@ -56,11 +56,19 @@ export default class UiStore {
   }
 
   @observable
-  showFilterModal: boolean = false; 
+  showFilterModal: boolean = false;
 
   @action
-  setShowFilterModal= (val: boolean) =>{
+  setShowFilterModal = (val: boolean) => {
     this.showFilterModal = val;
+  }
+
+  @action
+  setStoreByQuery = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    console.log(tabParam)
+
   }
 
   /**
@@ -80,24 +88,36 @@ export default class UiStore {
   @action
   setCurrentTab = (tabName: string) => {
     this.currentTab = tabName;
+    this.setBrowserQueryString();
   }
+
+  /**
+      * set the QueryString of the browser by current filter
+      */
+  @action
+  setBrowserQueryString = () => {
+    const params = new URLSearchParams(location.search);
+    params.set('tab', this.currentTab);
+    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+  }
+
 
   @observable
   searchParams: string = '';
 
-  @action
-  setSearchParams = () => {
-    let res = '';
-    if (this.currentPage === 'home') {
-      res += `?tab=${this.currentTab}`;
-    } else {
-      res += `?name=${this.rootStore.filterStore.cityResult}`;
-      res += `&tab=${this.currentTab}`;
-    }
-    // if (!this.rootStore.filterStore.injTypes.isAllValsFalse()) {
-    // }
-    this.searchParams = res;
-  }
+  // @action
+  // setSearchParams = () => {
+  //   let res = '';
+  //   if (this.currentPage === 'home') {
+  //     res += `?tab=${this.currentTab}`;
+  //   } else {
+  //     res += `?name=${this.rootStore.filterStore.cityResult}`;
+  //     res += `&tab=${this.currentTab}`;
+  //   }
+  //   // if (!this.rootStore.filterStore.injTypes.isAllValsFalse()) {
+  //   // }
+  //   this.searchParams = res;
+  // }
 
   @observable
   chartType: string = 'BarChart';

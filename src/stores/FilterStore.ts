@@ -4,6 +4,7 @@ import {
 import { IColumnFilter } from './ColumnFilter2';
 import * as FiterUtils from './FiterUtils2';
 import * as FC from './ColumnFilter2';
+import {ColumnFilterArray, IColumnFilterArray} from './ColumnFilterArray';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
@@ -31,6 +32,10 @@ export default class FilterStore {
       this.dayNight = FC.initDayNight();
       // where
       this.roadTypes = FC.initRoadTypes();
+      this.roads = new ColumnFilterArray('Road','rd', false);
+      this.roadSegment = new ColumnFilterArray('RoadSegment','rds', true);
+      this.cities = new ColumnFilterArray('City','city',true);
+      this.streets = new ColumnFilterArray('Street','st', true);
       // who
       this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
@@ -126,61 +131,35 @@ export default class FilterStore {
 
 
    @observable
-   cities: string[] = [];
+   cities: ColumnFilterArray;
 
    @action
    updateCities = (names: string[], updateCityResult: boolean) => {
-      this.cities = names;
-      if (this.cities.length === 0) {
-         this.streets = [];
+      this.cities.setFilter(names);
+      if (this.cities.arrValues.length === 0) {
+         this.streets.arrValues = [];
       } else if (updateCityResult) {
-         [this.cityResult] = this.cities;
+         [this.cityResult] = this.cities.arrValues;
       }
    }
 
    @observable
    cityResult: string = '';
 
-   // @computed get cityResult() {
-   //   let res = (this.cities.length >= 1) ? this.cities[0] : '';
-   //   if (window.location.pathname === '/city' && this.onInitCityPage && res === '')
-   //   {
-   //     res = 'תל אביב -יפו';
-   //     this.onInitCityPage = false;
-   //   }
-   //   return res;
-   // };
-
-   // @observable
-   // onInitCityPage = true;
-
-   // setAddressBar = autorun(() => {
-   //   if (window.history.pushState && window.location.pathname === '/city') {
-   //     const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?name=${this.cityResult}`;
-   //     window.history.pushState({ path: newurl }, '', newurl);
-   //   }
-   // });
-
-   // submitCityFilter = autorun(() => {
-   //   if (window.location.pathname === '/city' && this.cityResult !== '') {
-   //     this.submitFilter();
-   //   }
-   // });
-
    @observable
-   streets: string[] = [];
+   streets: ColumnFilterArray;
 
    @action
    updateStreets = (names: string) => {
-      this.streets = names.split(',');
+      this.streets.setFilter(names.split(','));
    }
 
    @observable
-   roads: string[] = [];
+   roads: ColumnFilterArray;
 
    @action
    setRoads = (names: string[]) => {
-      this.roads = names;
+      this.roads.setFilter(names);
    }
 
    CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
@@ -202,11 +181,11 @@ export default class FilterStore {
    ];
 
    @observable
-   roadSegment: string[] = [];
+   roadSegment: ColumnFilterArray;
 
    @action
    updateRoadSegment = (names: string) => {
-      this.roadSegment = names.split(',');
+      this.roadSegment.setFilter(names.split(','));
    }
 
    @observable
@@ -382,7 +361,7 @@ export default class FilterStore {
       // looger.log("updateAllInjuries ",data.length)
       this.setMarkersLoadStep(2);
       this.dataAllInjuries = data;
-      this.rootStore.mapStore.setBounds(data, this.cities);
+      this.rootStore.mapStore.setBounds(data, this.cities.arrValues);
       if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX) {
          this.rootStore.mapStore.getMarkersInLocalBBox(0.1);
       }
@@ -651,8 +630,10 @@ export default class FilterStore {
       this.isLoading = true;
       if (this.useGetFetch) {
          const filter = this.getFilterQueryString(null);
+         this.setFiltersText(true);
+         this.setBrowserQueryString();
          // logger.log(filter);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          fetchGetList(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -667,7 +648,7 @@ export default class FilterStore {
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          fetchAggregatFilter(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
@@ -694,12 +675,12 @@ export default class FilterStore {
    }
 
    submitCityNameAndLocation = () => {
-      if (this.cities.length >= 1) {
-         const city = this.cities[0];
+      if (this.cities.arrValues.length >= 1) {
+         const city = this.cities.arrValues[0];
          const srvCity = new CityService();
          srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenterByCity);
          const index = 0;
-         this.cityResult = this.cities[index];
+         this.cityResult = this.cities.arrValues[index];
       } else this.cityResult = '';
    }
 
@@ -707,39 +688,69 @@ export default class FilterStore {
       //?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
       let filter = '?';
       filter += `sy=${this.startYear}&ey=${this.endYear}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getFilterFromArray('city', this.cities);
+      filter += this.injurySeverity.getFilter();
+      filter += this.cities.getFilter();
+      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
-      filter += FiterUtils.getMultiplefilter(this.dayNight);
-      filter += FiterUtils.getFilterFromArray('str', this.streets);
-      filter += FiterUtils.getFilterFromArray('rd', this.roads);
-      filter += FiterUtils.getFilterFromArray('rds', this.roadSegment);
-      filter += FiterUtils.getMultiplefilter(this.injTypes);
-      filter += FiterUtils.getMultiplefilter(this.genderTypes);
-      filter += FiterUtils.getMultiplefilter(this.ageTypes);
-      filter += FiterUtils.getMultiplefilter(this.populationTypes);
-      filter += FiterUtils.getMultiplefilter(this.accidentType);
-      filter += FiterUtils.getMultiplefilter(this.vehicleType);
-      filter += FiterUtils.getMultiplefilter(this.roadTypes);
-      filter += FiterUtils.getMultiplefilter(this.speedLimit);
-      filter += FiterUtils.getMultiplefilter(this.roadWidth);
-      filter += FiterUtils.getMultiplefilter(this.separator);
-      filter += FiterUtils.getMultiplefilter(this.oneLane);
+      filter += this.dayNight.getFilter();
+      filter += this.streets.getFilter();
+      filter += this.roads.getFilter(); 
+      filter += this.roadSegment.getFilter();
+      filter += this.injTypes.getFilter();
+      filter += this.genderTypes.getFilter();
+      filter += this.ageTypes.getFilter();
+      filter += this.populationTypes.getFilter();
+      filter += this.accidentType.getFilter();
+      filter += this.vehicleType.getFilter();
+      filter += this.roadTypes.getFilter();
+      filter += this.speedLimit.getFilter();
+      filter += this.roadWidth.getFilter();
+      filter += this.separator.getFilter();
+      filter += this.oneLane.getFilter();
       const range = JSON.parse(this.cityPopSizeRange);
       filter += FiterUtils.getFilterByCityPop(range.min, range.max)
       return filter;
+   }
+
+
+   /**
+    * set filters text - used in info-panel to show current filter
+    * @param ignoreIfAll - if true and if all option is cheked return blank
+    */
+   setFiltersText = (ignoreIfAll: boolean ) => {
+      this.injTypes.setText(ignoreIfAll);
+      this.genderTypes.setText(ignoreIfAll);
+      this.cities.setText();
+      this.roads.setText();
+   }
+
+   /**
+    * set the QueryString of the browser by current filter
+    */
+   @action 
+   setBrowserQueryString =() =>{
+     const params = new URLSearchParams(location.search);
+     params.set('tab',  this.rootStore.uiStore.currentTab);
+     this.injurySeverity.setBrowserQueryString(params);
+     this.injTypes.setBrowserQueryString(params);
+     this.genderTypes.setBrowserQueryString(params);
+     this.ageTypes.setBrowserQueryString(params);
+     this.populationTypes.setBrowserQueryString(params);
+     this.cities.setBrowserQueryString(params);
+     this.roads.setBrowserQueryString(params);
+     window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
       let filter = '{"$and" : [';
       filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
       filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getfilterCity(this.cities);
+      // filter += FiterUtils.getfilterCity(this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += FiterUtils.getMultiplefilter(this.dayNight);
-      filter += FiterUtils.getFilterStreets(this.streets);
-      filter += this.getFilterFromNumArray(this.roads, 'road1');
-      filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
+      // filter += FiterUtils.getFilterStreets(this.streets);
+      // filter += this.getFilterFromNumArray(this.roads, 'road1');
+      // filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
       filter += FiterUtils.getMultiplefilter(this.injTypes);
       filter += FiterUtils.getMultiplefilter(this.genderTypes);
       filter += FiterUtils.getMultiplefilter(this.ageTypes);
@@ -757,7 +768,7 @@ export default class FilterStore {
 
    @action
    updateFilters = (colFilter: IColumnFilter, aType: number, val: boolean) => {
-      colFilter.updateFilter(aType, val);
+      colFilter.setFilter(aType, val);
       if (colFilter.allTypesOption === -1) colFilter.arrTypes[aType].checked = val;
       else if (aType === colFilter.allTypesOption) {
          colFilter.arrTypes
@@ -773,7 +784,8 @@ export default class FilterStore {
       let filter = '?';
       filter += `sy=${this.startYear}`;
       filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      filter += FiterUtils.getFilterFromArray('city', this.cities);
+      filter += this.cities.getFilter();
+      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
    }
 
@@ -805,7 +817,7 @@ export default class FilterStore {
    submitMainDataFilterLocalDb = () => {
       this.isLoading = true;
       const arrFilters = this.getFilterIDB();
-      this.rootStore.mapStore.updateIsSetBounds(this.cities, this.roadSegment);
+      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
       // logger.log(arrFilters);
       getFromDexie(arrFilters)
          .then((data: any[] | undefined) => {
@@ -833,7 +845,7 @@ export default class FilterStore {
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
       this.getMultiplefilterIDB(arrFilters, this.dayNight);
-      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment);
+      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment.arrValues);
       this.getMultiplefilterIDB(arrFilters, this.roadTypes);
       this.getMultiplefilterIDB(arrFilters, this.injTypes);
       this.getMultiplefilterIDB(arrFilters, this.genderTypes);
@@ -858,7 +870,7 @@ export default class FilterStore {
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
       this.getMultiplefilterIDB(arrFilters, this.dayNight);
-      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment);
+      this.getFilterFromArrayIDb(arrFilters, 'road_segment_name', this.roadSegment.arrValues);
       this.getMultiplefilterIDB(arrFilters, this.roadTypes);
       this.getMultiplefilterIDB(arrFilters, this.injTypes);
       this.getMultiplefilterIDB(arrFilters, this.genderTypes);
@@ -893,21 +905,21 @@ export default class FilterStore {
             if (x === 'null') return null;
             return x;
          });
-         const filter = { filterName: colFilter.dbColName, values: filterVals };
+         const filter = { filterName: colFilter.queryColName, values: filterVals };
          arrFilters.push(filter);
       }
    }
 
    getfilterCityIDB = (arrFilters: any[]) => {
-      if (this.cities.length > 0) {
-         const filter = { filterName: 'accident_yishuv_name', values: this.cities };
+      if (this.cities.arrValues.length > 0) {
+         const filter = { filterName: 'accident_yishuv_name', values: this.cities.arrValues };
          arrFilters.push(filter);
       }
    }
 
    getFilterStreetsIDB = (arrFilters: any[]) => {
-      if (this.streets.length > 0 && this.streets[0] !== '') {
-         const filter1 = { filterName: 'street1_hebrew', values: this.streets.map((x: string) => x.trim()) };
+      if (this.streets.arrValues.length > 0 && this.streets.arrValues[0] !== '') {
+         const filter1 = { filterName: 'street1_hebrew', values: this.streets.arrValues.map((x: string) => x.trim()) };
          arrFilters.push(filter1);
          // const filter2 = { filterName: "street2_hebrew", values: this.streets.map((x: string) => {x.trim()}) }
          // arrFilters.push(filter2)

@@ -4,15 +4,24 @@ import dataYearsUnfilterdInit from '../assets/data-by-years.json';
 import dataYearsfilterdInit from '../assets/data-by-years-filtred.json';
 import dataGrpBy1Init from '../assets/data-by-grp1.json';
 import dataGrp2Init from '../assets/data-by-grp2.json';
+import i18n from '../i18n';
 
 export interface IColumnFilter {
   name: string;
-  dbColName: string;
+  queryColName: string;
   arrTypes: IFilterChecker[];
+  //array of values to be sent as query to server
+  arrValues: string[];
+  setQueryVals: () => void;
+  setFilter: (aType: number, checked: boolean) => void;
+  getFilter: () => string;
+  setBrowserQueryString: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
-  updateFilter: (aType: number, checked: boolean) => void;
+  //text is updated ofter filter submit
+  text: string;
+  setText: (ignoreIfAll: boolean) => void;
 }
 /**  filter group of boolaen filters
 *  each group represnt one column in the database that can get
@@ -21,19 +30,26 @@ export interface IColumnFilter {
 export class ColumnFilter implements IColumnFilter {
   name: string;
 
-  dbColName: string;
+  queryColName: string;
+
+  arrValues: string[];
 
   @observable
   arrTypes: IFilterChecker[];
 
   allTypesOption: number;
 
+  @observable
+  text: string;
+
   constructor(name: string, dbColName: string, allTypesOption: number = -1) {
     this.name = name;
-    this.dbColName = dbColName;
+    this.queryColName = dbColName;
     this.arrTypes = [];
+    this.arrValues = [];
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
+    this.text = '';
   }
 
   /**
@@ -45,7 +61,7 @@ export class ColumnFilter implements IColumnFilter {
   }
 
   @action
-  updateFilter = (aType: number, checked: boolean) => {
+  setFilter = (aType: number, checked: boolean) => {
     // in case this filter group has no option for "select all" - update the value
     if (this.allTypesOption === -1) this.arrTypes[aType].checked = checked;
     // in case this filter has opthion for "select all"
@@ -55,6 +71,64 @@ export class ColumnFilter implements IColumnFilter {
       this.arrTypes[this.allTypesOption].checked = false;
       this.arrTypes[aType].checked = checked;
     }
+    this.setQueryVals();
+  }
+
+  /**
+   * return sentence foe query-string from Multiplefilter of booleans,
+   * for example : &injt=4,5 
+   * @param colFilter column filter with name and chekcd list of values
+   */
+  @action
+  setQueryVals = () => {
+    let allChecked: boolean = true;
+    let arrfilter: string[] = [];
+    if (this.allTypesOption > -1 && this.arrTypes[this.allTypesOption].checked) allChecked = true;
+    else {
+      // in case there is allTypesOption , it want be copied to arrfilter
+      // as it is not checked
+      const iterator = this.arrTypes.values();
+      for (const filterCheck of iterator) {
+        if (filterCheck.checked) {
+          arrfilter = [...arrfilter, ...filterCheck.filters];
+        } else {
+          allChecked = false;
+        }
+      }
+    }
+    if (allChecked) arrfilter = [];
+    this.arrValues = arrfilter;
+  };
+
+  /**
+   * 
+   * @returns query string for the server
+   */
+  getFilter =() =>{
+    const vals = this.arrValues.join(',');
+    let res =  (this.arrValues.length == 0)? '': `&${this.queryColName}=${vals}`;
+    return res;
+  }
+  /**
+  * set parmas of the browser QueryString
+  * @param params 
+  */
+  setBrowserQueryString = (params: URLSearchParams) =>{
+    if (this.arrValues.length === 0) {
+      params.delete(this.queryColName);
+    } else {
+      const vals = this.arrValues.join(',');
+      params.set(this.queryColName, vals);
+    }
+  }
+
+  @action
+  setText = (ignoreIfAll: boolean) => {
+    if (ignoreIfAll) {
+      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption).map(x => i18n.t(x.label)).join(', ');
+    } else {
+      this.text = this.arrTypes.filter(x => x.checked).map(x => i18n.t(x.label)).join(', ');
+    }
   }
 }
 
@@ -62,6 +136,7 @@ export const initInjurySeverity = () => {
   const col: IColumnFilter = new ColumnFilter('Severity', 'sev');
   col.arrTypes.push(new FilterChecker('dead', true, [1]));
   col.arrTypes.push(new FilterChecker('severly-injured', false, [2]));
+  col.setQueryVals();
   return col;
 };
 
@@ -93,10 +168,10 @@ export const initInjTypes = () => {
   const col: IColumnFilter = new ColumnFilter('Vehicle', 'injt', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, [1]));
-  col.arrTypes.push(new FilterChecker('cyclist', false, [6,7]));
-  col.arrTypes.push(new FilterChecker('other', false, [8,9]));
-  col.arrTypes.push(new FilterChecker('motorcycle', false, [4,5]));
-  col.arrTypes.push(new FilterChecker('wheels4+', false, [2,3]));
+  col.arrTypes.push(new FilterChecker('cyclist', false, [6, 7]));
+  col.arrTypes.push(new FilterChecker('other', false, [8, 9]));
+  col.arrTypes.push(new FilterChecker('motorcycle', false, [4, 5]));
+  col.arrTypes.push(new FilterChecker('wheels4+', false, [2, 3]));
   return col;
 };
 
@@ -109,14 +184,14 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('e-scooter', false, [21]));
   col.arrTypes.push(new FilterChecker('e-bike', false, [23]));
   col.arrTypes.push(new FilterChecker('motorcycle', false,
-    [8,9,10,19]));
+    [8, 9, 10, 19]));
   col.arrTypes.push(new FilterChecker('car', false, [1]));
   col.arrTypes.push(new FilterChecker('taxi', false, [12]));
-  col.arrTypes.push(new FilterChecker('bus', false, [11,18]));
+  col.arrTypes.push(new FilterChecker('bus', false, [11, 18]));
   col.arrTypes.push(new FilterChecker('tranzit', false, [2]));
   col.arrTypes.push(new FilterChecker('tender', false, [3]));
   col.arrTypes.push(new FilterChecker('truck', false,
-    [24,25,5,6,7]));
+    [24, 25, 5, 6, 7]));
   col.arrTypes.push(new FilterChecker('tractor', false, [14]));
   col.arrTypes.push(new FilterChecker('train', false, [16]));
   col.arrTypes.push(new FilterChecker('other', false, [17]));
@@ -154,8 +229,8 @@ export const initVehicleTypesFull = () => {
 
 export const initGenderTypes = () => {
   const col: IColumnFilter = new ColumnFilter('Gender', 'sex');
-  col.arrTypes.push(new FilterChecker('female', true, [1]));
-  col.arrTypes.push(new FilterChecker('male', true, [2]));
+  col.arrTypes.push(new FilterChecker('female', true, [2]));
+  col.arrTypes.push(new FilterChecker('male', true, [1]));
   return col;
 };
 

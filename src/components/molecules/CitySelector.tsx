@@ -15,6 +15,7 @@ interface IProps {
 
 const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { filterStore } = useStore();
+  const { cities, updateCities} = filterStore;
   const { t } = useTranslation();
   return (
     <Form.Group controlId="exampleForm.ControlCity">
@@ -25,11 +26,11 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
         id="typeaheadCity"
         // defaultSelected={[store.city]}
         onChange={(selected: string[]) => {
-          filterStore.updateCities(selected, true);
+          updateCities(selected, true);
         }}
         options={citisNamesHeb}
         multiple={isMultiple}
-        selected={filterStore.cities}
+        selected={cities.arrValues}
       />
     </Form.Group>
   );

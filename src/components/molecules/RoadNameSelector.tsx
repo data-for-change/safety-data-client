@@ -16,6 +16,7 @@ interface IProps {
 const RoadNameSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
   const { filterStore } = useStore();
   const {roads, setRoads} = filterStore;
+  const {arrValues} = roads;
   const { t } = useTranslation();
   return (
     <Form.Group controlId="filterForm.ControlRoad">
@@ -33,7 +34,7 @@ const RoadNameSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
         }}
         options={roadNames}
         multiple={isMultiple}
-        selected={roads}
+        selected={arrValues}
       />
     </Form.Group>
   );
