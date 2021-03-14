@@ -16,7 +16,7 @@ interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore, uiStore } = useStore();
-  const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
+  const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl, setStoreByQuery } = filterStore;
   const { currentTab, setCurrentTab, setCurrentPage, showFilterModal } = uiStore;
   const history = useHistory();
   const location = useLocation();
@@ -40,11 +40,12 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   useEffect(() => {
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
-      const query = useQuery(location);
-      const cityName = useCityNameFromQuery(query, 'תל אביב -יפו');
-      const tab = useTabFromQuery(query, 'map');
-      filterStore.updateCities(cityName, true);
-      setCurrentTab(tab);
+      setStoreByQuery('map','תל אביב -יפו');
+      // const query = useQuery(location);
+      // const cityName = useCityNameFromQuery(query, );
+      // const tab = useTabFromQuery(query, 'map');
+      // filterStore.updateCities(cityName, true);
+      // setCurrentTab(tab);
       // cityResult = cityName[0];
       filterStore.submitFilter();
     }

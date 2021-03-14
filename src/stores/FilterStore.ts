@@ -4,7 +4,7 @@ import {
 import { IColumnFilter } from './ColumnFilter2';
 import * as FiterUtils from './FiterUtils2';
 import * as FC from './ColumnFilter2';
-import {ColumnFilterArray, IColumnFilterArray} from './ColumnFilterArray';
+import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
@@ -16,6 +16,7 @@ import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import logger from '../services/logger';
 import { BBoxType } from './MapStore';
 import Casualty from './Casualty';
+import citisNamesHeb from '../assets/cities_names_heb.json';
 // import autorun  from "mobx"
 
 export default class FilterStore {
@@ -32,10 +33,10 @@ export default class FilterStore {
       this.dayNight = FC.initDayNight();
       // where
       this.roadTypes = FC.initRoadTypes();
-      this.roads = new ColumnFilterArray('Road','rd', false);
-      this.roadSegment = new ColumnFilterArray('RoadSegment','rds', true);
-      this.cities = new ColumnFilterArray('City','city',true);
-      this.streets = new ColumnFilterArray('Street','st', true);
+      this.roads = new ColumnFilterArray('Road', 'rd', false);
+      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
+      this.cities = new ColumnFilterArray('City', 'city', true);
+      this.streets = new ColumnFilterArray('Street', 'st', true);
       // who
       this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
@@ -694,7 +695,7 @@ export default class FilterStore {
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += this.dayNight.getFilter();
       filter += this.streets.getFilter();
-      filter += this.roads.getFilter(); 
+      filter += this.roads.getFilter();
       filter += this.roadSegment.getFilter();
       filter += this.injTypes.getFilter();
       filter += this.genderTypes.getFilter();
@@ -717,7 +718,7 @@ export default class FilterStore {
     * set filters text - used in info-panel to show current filter
     * @param ignoreIfAll - if true and if all option is cheked return blank
     */
-   setFiltersText = (ignoreIfAll: boolean ) => {
+   setFiltersText = (ignoreIfAll: boolean) => {
       this.injTypes.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
       this.cities.setText();
@@ -727,19 +728,54 @@ export default class FilterStore {
    /**
     * set the QueryString of the browser by current filter
     */
-   @action 
-   setBrowserQueryString =() =>{
-     const params = new URLSearchParams(location.search);
-     params.set('tab',  this.rootStore.uiStore.currentTab);
-     this.injurySeverity.setBrowserQueryString(params);
-     this.injTypes.setBrowserQueryString(params);
-     this.genderTypes.setBrowserQueryString(params);
-     this.ageTypes.setBrowserQueryString(params);
-     this.populationTypes.setBrowserQueryString(params);
-     this.cities.setBrowserQueryString(params);
-     this.roads.setBrowserQueryString(params);
-     window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+   @action
+   setBrowserQueryString = () => {
+      const params = new URLSearchParams(location.search);
+      params.set('tab', this.rootStore.uiStore.currentTab);
+      this.injurySeverity.setBrowserQueryString(params);
+      this.injTypes.setBrowserQueryString(params);
+      this.genderTypes.setBrowserQueryString(params);
+      this.ageTypes.setBrowserQueryString(params);
+      this.populationTypes.setBrowserQueryString(params);
+      this.cities.setBrowserQueryString(params);
+      this.roads.setBrowserQueryString(params);
+      window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
+
+   @action
+   setStoreByQuery = (defTab: string, defCity?: string) => {
+      const params = new URLSearchParams(window.location.search);
+      const tab = this.getValFromQuery(params, 'tab', defTab);
+      if (tab) this.rootStore.uiStore.setCurrentTab(tab);
+      const citis = this.getCityNameFromQuery(params, defCity);
+      console.log("citis:" ,citis)
+      if (citis) this.updateCities(citis, true);
+   }
+
+   // get name by url query parmas
+   getValFromQuery(query: URLSearchParams, name: string, defVal?: string) {
+      const val = query.get(name);
+      const res = (val !== null) ? val : defVal;
+      return res;
+   }
+
+   // get city name by url query parmas
+   getCityNameFromQuery(query: URLSearchParams, defVal: string|undefined) {
+      let res = (defVal)? [defVal]: [];
+      const name = query.get('city');
+      const name1 ="חיפה";
+      console.log("name:" ,name, name1);
+      const eq1 = name === name1;
+      console.log ("eq", eq1);
+      let found = false;
+      if (name !== null) found = citisNamesHeb.includes(name);
+      if (found) {
+         console.log("found:" ,name)
+         res = [citisNamesHeb.find((element) => element === name!)!];
+      }
+      return res;
+   }
+
 
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
       let filter = '{"$and" : [';
