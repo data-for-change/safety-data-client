@@ -727,6 +727,8 @@ export default class FilterStore {
      this.genderTypes.setBrowserQueryString(params);
      this.ageTypes.setBrowserQueryString(params);
      this.populationTypes.setBrowserQueryString(params);
+     this.cities.setBrowserQueryString(params);
+     this.roads.setBrowserQueryString(params);
      window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 

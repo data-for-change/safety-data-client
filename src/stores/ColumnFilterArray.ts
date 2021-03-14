@@ -6,6 +6,7 @@ export interface IColumnFilterArray {
   queryColName: string;
   arrValues: string[];
   isStringValues: boolean;
+  setBrowserQueryString: (param: URLSearchParams) => void;
   setFilter: (values: string[]) => void;
   getFilter: () => string;
   //text is updated ofter filter submit
@@ -42,16 +43,30 @@ export class ColumnFilterArray implements IColumnFilterArray {
     this.arrValues = values;
   }
 
+  setBrowserQueryString = (params: URLSearchParams) => {
+    if (this.arrValues.length > 0 && this.arrValues[0] !== '') {
+      let vals = '';
+      if (this.isStringValues) {
+        vals += this.arrValues.map((x: string) => `"${x.trim()}"`).join(',');
+      } else {
+        vals += this.arrValues.map((x: string) => x).join(',');
+      }
+      params.set(this.queryColName, vals);
+    } else {
+      params.delete(this.queryColName);
+    }
+  }
+
   getFilter = () => {
     let filter: string = '';
     if (this.arrValues.length > 0 && this.arrValues[0] !== '') {
-       filter += `&${this.queryColName}=`;
-       if ( this.isStringValues) {
+      filter += `&${this.queryColName}=`;
+      if (this.isStringValues) {
         filter += this.arrValues.map((x: string) => `"${x.trim()}"`).join(',');
-       } else {
+      } else {
         filter += this.arrValues.map((x: string) => x).join(',');
-       }
-     
+      }
+
     }
     return filter;
   }
