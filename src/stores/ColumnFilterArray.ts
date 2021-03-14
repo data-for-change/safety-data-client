@@ -4,6 +4,7 @@ import { observable, action } from 'mobx';
 export interface IColumnFilterArray {
   name: string;
   queryColName: string;
+  //array of values to be sent as query to server
   arrValues: string[];
   isStringValues: boolean;
   setBrowserQueryString: (param: URLSearchParams) => void;

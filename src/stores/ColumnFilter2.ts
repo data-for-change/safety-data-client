@@ -8,17 +8,17 @@ import i18n from '../i18n';
 
 export interface IColumnFilter {
   name: string;
-  dbColName: string;
+  queryColName: string;
   arrTypes: IFilterChecker[];
-  //
-  queryVals: string[];
+  //array of values to be sent as query to server
+  arrValues: string[];
   setQueryVals: () => void;
-  getQueryString: () => string;
+  setFilter: (aType: number, checked: boolean) => void;
+  getFilter: () => string;
   setBrowserQueryString: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
-  updateFilter: (aType: number, checked: boolean) => void;
   //text is updated ofter filter submit
   text: string;
   setText: (ignoreIfAll: boolean) => void;
@@ -30,9 +30,9 @@ export interface IColumnFilter {
 export class ColumnFilter implements IColumnFilter {
   name: string;
 
-  dbColName: string;
+  queryColName: string;
 
-  queryVals: string[];
+  arrValues: string[];
 
   @observable
   arrTypes: IFilterChecker[];
@@ -44,9 +44,9 @@ export class ColumnFilter implements IColumnFilter {
 
   constructor(name: string, dbColName: string, allTypesOption: number = -1) {
     this.name = name;
-    this.dbColName = dbColName;
+    this.queryColName = dbColName;
     this.arrTypes = [];
-    this.queryVals = [];
+    this.arrValues = [];
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
     this.text = '';
@@ -61,7 +61,7 @@ export class ColumnFilter implements IColumnFilter {
   }
 
   @action
-  updateFilter = (aType: number, checked: boolean) => {
+  setFilter = (aType: number, checked: boolean) => {
     // in case this filter group has no option for "select all" - update the value
     if (this.allTypesOption === -1) this.arrTypes[aType].checked = checked;
     // in case this filter has opthion for "select all"
@@ -97,16 +97,16 @@ export class ColumnFilter implements IColumnFilter {
       }
     }
     if (allChecked) arrfilter = [];
-    this.queryVals = arrfilter;
+    this.arrValues = arrfilter;
   };
 
   /**
    * 
    * @returns query string for the server
    */
-  getQueryString =() =>{
-    const vals = this.queryVals.join(',');
-    let res =  (this.queryVals.length == 0)? '': `&${this.dbColName}=${vals}`;
+  getFilter =() =>{
+    const vals = this.arrValues.join(',');
+    let res =  (this.arrValues.length == 0)? '': `&${this.queryColName}=${vals}`;
     return res;
   }
   /**
@@ -114,11 +114,11 @@ export class ColumnFilter implements IColumnFilter {
   * @param params 
   */
   setBrowserQueryString = (params: URLSearchParams) =>{
-    if (this.queryVals.length === 0) {
-      params.delete(this.dbColName);
+    if (this.arrValues.length === 0) {
+      params.delete(this.queryColName);
     } else {
-      const vals = this.queryVals.join(',');
-      params.set(this.dbColName, vals);
+      const vals = this.arrValues.join(',');
+      params.set(this.queryColName, vals);
     }
   }
 

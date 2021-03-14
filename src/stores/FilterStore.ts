@@ -696,17 +696,17 @@ export default class FilterStore {
       filter += this.streets.getFilter();
       filter += this.roads.getFilter(); 
       filter += this.roadSegment.getFilter();
-      filter += this.injTypes.getQueryString();
-      filter += this.genderTypes.getQueryString();
-      filter += this.ageTypes.getQueryString();
-      filter += this.populationTypes.getQueryString();
-      filter += FiterUtils.getMultiplefilter(this.accidentType);
-      filter += FiterUtils.getMultiplefilter(this.vehicleType);
-      filter += FiterUtils.getMultiplefilter(this.roadTypes);
-      filter += FiterUtils.getMultiplefilter(this.speedLimit);
-      filter += FiterUtils.getMultiplefilter(this.roadWidth);
-      filter += FiterUtils.getMultiplefilter(this.separator);
-      filter += FiterUtils.getMultiplefilter(this.oneLane);
+      filter += this.injTypes.getFilter();
+      filter += this.genderTypes.getFilter();
+      filter += this.ageTypes.getFilter();
+      filter += this.populationTypes.getFilter();
+      filter += this.accidentType.getFilter();
+      filter += this.vehicleType.getFilter();
+      filter += this.roadTypes.getFilter();
+      filter += this.speedLimit.getFilter();
+      filter += this.roadWidth.getFilter();
+      filter += this.separator.getFilter();
+      filter += this.oneLane.getFilter();
       const range = JSON.parse(this.cityPopSizeRange);
       filter += FiterUtils.getFilterByCityPop(range.min, range.max)
       return filter;
@@ -759,7 +759,7 @@ export default class FilterStore {
 
    @action
    updateFilters = (colFilter: IColumnFilter, aType: number, val: boolean) => {
-      colFilter.updateFilter(aType, val);
+      colFilter.setFilter(aType, val);
       if (colFilter.allTypesOption === -1) colFilter.arrTypes[aType].checked = val;
       else if (aType === colFilter.allTypesOption) {
          colFilter.arrTypes
@@ -896,7 +896,7 @@ export default class FilterStore {
             if (x === 'null') return null;
             return x;
          });
-         const filter = { filterName: colFilter.dbColName, values: filterVals };
+         const filter = { filterName: colFilter.queryColName, values: filterVals };
          arrFilters.push(filter);
       }
    }

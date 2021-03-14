@@ -1,5 +1,5 @@
 
-import { IColumnFilter } from './ColumnFilter';
+import { IColumnFilter } from './ColumnFilter2';
 
 export const getFilterGroupBy =
   (filterMatch: string,
@@ -86,7 +86,7 @@ export const getMultiplefilter = (colFilter: IColumnFilter) => {
   }
   if (allChecked) filter = '';
   else {
-    filter += `&${colFilter.dbColName}=`;
+    filter += `&${colFilter.queryColName}=`;
     filter += arrfilter.join(',');
   }
   return filter;
