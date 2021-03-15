@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
 // import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { TabsTemplate } from './TabsTemplate';
 // import FilterPanel from '../organisms/FilterPanel';
-import { useQuery, useTabFromQuery, useCityNameFromQuery } from '../../hooks/queryHooks';
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../organisms/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
@@ -17,9 +15,8 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore, uiStore } = useStore();
   const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl, setStoreByQuery } = filterStore;
-  const { currentTab, setCurrentTab, setCurrentPage, showFilterModal } = uiStore;
-  const history = useHistory();
-  const location = useLocation();
+  const { setCurrentPage, showFilterModal } = uiStore;
+
   useEffect(() => {
     setCurrentPage('city');
     filterStore.isMultipleCities = false;
@@ -41,12 +38,6 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
       setStoreByQuery('map','תל אביב -יפו');
-      // const query = useQuery(location);
-      // const cityName = useCityNameFromQuery(query, );
-      // const tab = useTabFromQuery(query, 'map');
-      // filterStore.updateCities(cityName, true);
-      // setCurrentTab(tab);
-      // cityResult = cityName[0];
       filterStore.submitFilter();
     }
   }, []);
