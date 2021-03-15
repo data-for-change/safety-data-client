@@ -40,6 +40,7 @@ const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
 const FilterForm: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
    const { injurySeverity, updateInjurySeverity, formCardKey } = filterStore;
+   // console.log(injurySeverity)
    return (
       <React.Fragment>
          <Form>
@@ -60,13 +61,7 @@ const FilterForm: React.FC<IProps> = observer(({ }) => {
       </React.Fragment>
    );
 });
-// {/* <Button
-//    variant="primary"
-//    disabled={isLoading || !isValidAllFilters}
-//    onClick={() => { filterStore.submitFilter(); }}>
-//    {isLoading ? t('Loading…') : t('Submit')}
-//    {' '}
-// </Button> */}
+
 
 function CustomToggle({ children, style, eventKey, onClick }: any) {
    const [hover, setHover] = useState(false);
@@ -122,40 +117,6 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
                      />
                   </div>
-
-                  {/* data: any[]
-                  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
-                  valProp: string
-                  contentProp: string
-                  deafaultVal?: string
-                  label?: string */}
-                  {/* <Form.Row>
-                     <Form.Group as={Col} controlId="exampleForm.ControlSelectStartYear">
-                        <Form.Label className="filterLable">
-                           {' '}
-                           {t('FromYear')}:
-                        </Form.Label>
-                        <Form.Control
-                           as="select"
-                           defaultValue={startYear}
-                           onChange={(e: ChangeEvent<HTMLInputElement>) => { setStartYear(e.target.value); }}>
-                           {years.map((year) => <option key={year}>{year}</option>)}
-                        </Form.Control>
-                     </Form.Group>
-                     <Form.Group as={Col} controlId="exampleForm.ControlSelectEndYear">
-                        <Form.Label className="filterLable">
-                           {' '}
-                           {t('ToYear')}:
-                     </Form.Label>
-                        <Form.Control
-                           as="select"
-                           defaultValue={endYear}
-                           onChange={(e: ChangeEvent<HTMLInputElement>) => { setEndYear(e.target.value); }}>
-                           {years.map((year, i) => <option key={year + i} >{year}</option>)}
-
-                        </Form.Control>
-                     </Form.Group>
-                  </Form.Row> */}
                   <GroupCheckbox formName="exampleForm" colFilter={dayNight} onChange={updateDayNight} />
                </div>
             </Card.Body>
@@ -174,7 +135,7 @@ const CardFilterWhere = observer(() => {
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
-   console.log(cityPopSizeArr)
+   // console.log(cityPopSizeArr)
    return (
       <Card>
          <Card.Header>
@@ -198,13 +159,6 @@ const CardFilterWhere = observer(() => {
                   colFilter={roadTypes}
                   onChange={updateRoadType}
                />
-               {/* <Select
-                  label={'city_size'}
-                  id={'cityForm.SelectPopSize'}
-                  data={cityPopSizeArr}
-                  value={cityPopSizeRange}
-                  onChange={(val: string) => setCityPopSizeRange(val)}
-               /> */}
                <MySelect
                   style={{ display: 'flex-end', alignItems: 'center' }}
                   label={'city_size'}

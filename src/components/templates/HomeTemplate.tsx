@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router-dom';
 import { observer } from 'mobx-react';
@@ -20,7 +20,6 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter, } = filterStore;
    const { currentTab, setCurrentPage, setCurrentTab, showFilterModal } = uiStore;
-
 
    const history = useHistory();
    const location = useLocation();

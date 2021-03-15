@@ -46,10 +46,10 @@
   "10K-20K": "10K-20K",
   "0-10K": "0-10K",
   "ChooseCity": "בחרו יישוב...",
-  "several-cities" : "מספר ישובים",
+  "several-cities": "מספר ישובים",
   "Street": "רחוב",
   "Road": "כביש",
-  "several-roads" : "מספר כבישים",
+  "several-roads": "מספר כבישים",
   "RoadSegment": "קטע כביש",
   "Who": "מי",
   "Severity": "חומרה",
@@ -181,5 +181,8 @@
   "hide-description": "הסתר תאור",
   "show-description": "הצג תאור",
   "not-found-images": "לא נמצאו תמונות לקטגוריה זו",
-  "Filters": "סינונים"
+  "Filters": "סינונים",
+  "My-Filters": "סינונים שלי",
+  "Filter": "סינון",
+  "Save": "שמור"
 }

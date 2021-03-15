@@ -4,16 +4,15 @@ import FilterForm from './FilterForm'
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
-// import SmallCard2 from '../atoms/SmallCard2';
 import '../../styles/sidebar.css'
 
 const Drawer: React.FC<any> = observer((props) => {
-   // console.log('Drawer')
    const { t } = useTranslation();
    const { filterStore } = useStore();
 
+   // console.log(filterStore)
+
    return (
-      // <SmallCard2>
       <div className="sidebar">
          <div className="filters">
             <FilterForm />
@@ -25,6 +24,14 @@ const Drawer: React.FC<any> = observer((props) => {
             disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
          >
             {filterStore.isLoading ? t('Loading') : t('Submit')}
+         </Button>
+         <Button
+            style={{ margin: '0.5rem' }}
+            variant="info"
+            onClick={() => alert('action in filter store to collect filters')}
+            disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
+         >
+            {t('Save')}  {t('Filter')}
          </Button>
       </div>
    )

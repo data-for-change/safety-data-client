@@ -22,6 +22,11 @@ const NavigationList: React.FC<any> = () => {
             to="/about">
             {t('About')}
          </Link>
+         <Link
+            className="nav-link"
+            to="/my-filters">
+            {t('My-Filters')}
+         </Link>
       </React.Fragment>
    )
 }

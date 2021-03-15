@@ -10,7 +10,7 @@ const AboutPage: React.FC<IProps> = () => {
       marginBottom: "10px",
    };
    return (
-      <div className="container" style={{ height: '40rem' }}>
+      <div className="container" style={{ height: '40rem', marginTop: '5rem' }}>
          <div className="heb" style={style}>
             <div style={styleDiv}> Safety Data מציג נתונים על תאונות דרכים, בדגש על נפגעים בתאונות קשות וקטלניות.
             האתר מתמקד בניתוח בתאונות קטלניות, מיקוד זה הוא על פי "חזון אפס הרוגים בתאונות דרכים" ששואף להביא לאפס את הנפגעים בתאונות קשות וקטלניות.
