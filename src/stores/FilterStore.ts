@@ -752,12 +752,19 @@ export default class FilterStore {
       const params = new URLSearchParams(location.search);
       params.set('tab', this.rootStore.uiStore.currentTab);
       this.injurySeverity.setBrowserQueryString(params);
+      this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
       this.genderTypes.setBrowserQueryString(params);
       this.ageTypes.setBrowserQueryString(params);
       this.populationTypes.setBrowserQueryString(params);
       this.cities.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
+      this.accidentType.setBrowserQueryString(params);
+      this.vehicleType.setBrowserQueryString(params);
+      this.speedLimit.setBrowserQueryString(params);
+      this.roadWidth.setBrowserQueryString(params);
+      this.separator.setBrowserQueryString(params);
+      this.oneLane.setBrowserQueryString(params);
       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
@@ -766,6 +773,7 @@ export default class FilterStore {
       const params = new URLSearchParams(window.location.search);
       const tab = this.getValFromQuery(params, 'tab', defTab);
       this.injurySeverity.setValuesByQuery(params);
+      this.dayNight.setValuesByQuery(params);
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
@@ -773,6 +781,12 @@ export default class FilterStore {
       this.genderTypes.setValuesByQuery(params);
       this.ageTypes.setValuesByQuery(params);
       this.populationTypes.setValuesByQuery(params);
+      this.accidentType.setValuesByQuery(params);
+      this.vehicleType.setValuesByQuery(params);
+      this.speedLimit.setValuesByQuery(params);
+      this.roadWidth.setValuesByQuery(params);
+      this.separator.setValuesByQuery(params);
+      this.oneLane.setValuesByQuery(params);
    }
 
    // get name by url query parmas
