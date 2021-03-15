@@ -703,14 +703,18 @@ export default class FilterStore {
          this.cityResult = this.cities.arrValues[index];
       } else this.cityResult = '';
    }
-
+   /**
+    * get filter query string for the server request. 
+    * @param bounds gis bound (rect) to filter
+    * @param useBounds if true will use gis bound to filter reqest
+    * @returns query string , for example ?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
+    */
    getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
-      //?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
+      //the oreder of the fileds is importnet for indexing in server
       let filter = '?';
       filter += `sy=${this.startYear}&ey=${this.endYear}`;
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
-      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += this.dayNight.getFilter();
       filter += this.streets.getFilter();
@@ -768,6 +772,11 @@ export default class FilterStore {
       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
+   /**
+    * udpate the store (and gui) using given qurey from the browser (on load time)
+    * @param defTab default tab to dispaly
+    * @param defCity default city to choose. (can be null)
+    */
    @action
    setStoreByQuery = (defTab: string, defCity?: string) => {
       const params = new URLSearchParams(window.location.search);
@@ -796,27 +805,28 @@ export default class FilterStore {
       return res;
    }
 
+   // old code - backup for post req
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
       let filter = '{"$and" : [';
       filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
+      // filter += FiterUtils.getMultiplefilter(this.injurySeverity);
       // filter += FiterUtils.getfilterCity(this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
-      filter += FiterUtils.getMultiplefilter(this.dayNight);
+      //filter += FiterUtils.getMultiplefilter(this.dayNight);
       // filter += FiterUtils.getFilterStreets(this.streets);
       // filter += this.getFilterFromNumArray(this.roads, 'road1');
       // filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
-      filter += FiterUtils.getMultiplefilter(this.injTypes);
-      filter += FiterUtils.getMultiplefilter(this.genderTypes);
-      filter += FiterUtils.getMultiplefilter(this.ageTypes);
-      filter += FiterUtils.getMultiplefilter(this.populationTypes);
-      filter += FiterUtils.getMultiplefilter(this.accidentType);
-      filter += FiterUtils.getMultiplefilter(this.vehicleType);
-      filter += FiterUtils.getMultiplefilter(this.roadTypes);
-      filter += FiterUtils.getMultiplefilter(this.speedLimit);
-      filter += FiterUtils.getMultiplefilter(this.roadWidth);
-      filter += FiterUtils.getMultiplefilter(this.separator);
-      filter += FiterUtils.getMultiplefilter(this.oneLane);
+      // filter += FiterUtils.getMultiplefilter(this.injTypes);
+      // filter += FiterUtils.getMultiplefilter(this.genderTypes);
+      // filter += FiterUtils.getMultiplefilter(this.ageTypes);
+      // filter += FiterUtils.getMultiplefilter(this.populationTypes);
+      // filter += FiterUtils.getMultiplefilter(this.accidentType);
+      // filter += FiterUtils.getMultiplefilter(this.vehicleType);
+      // filter += FiterUtils.getMultiplefilter(this.roadTypes);
+      // filter += FiterUtils.getMultiplefilter(this.speedLimit);
+      // filter += FiterUtils.getMultiplefilter(this.roadWidth);
+      // filter += FiterUtils.getMultiplefilter(this.separator);
+      // filter += FiterUtils.getMultiplefilter(this.oneLane);
       filter += ']}';
       return filter;
    }
@@ -834,11 +844,10 @@ export default class FilterStore {
       }
    }
 
-
    getfilterBySeverityAndCity = () => {
       let filter = '?';
       filter += `sy=${this.startYear}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
+      filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
