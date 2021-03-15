@@ -3,7 +3,7 @@ import { observable} from 'mobx';
 export interface IFilterChecker {
     checked: boolean;
     label: string;
-    filters: string[];
+    filters: any[];
 }
 /**
  * filter that represnt a check - box in gui

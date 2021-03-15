@@ -16,14 +16,15 @@ export interface IColumnFilter {
   setFilter: (aType: number, checked: boolean) => void;
   getFilter: () => string;
   setBrowserQueryString: (param: URLSearchParams) => void;
+  setValuesByQuery: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
-  //text is updated ofter filter submit
+  //text is updated after filter submit
   text: string;
   setText: (ignoreIfAll: boolean) => void;
 }
-/**  filter group of boolaen filters
+/**  filter group of boolaen filters that are check-box in the gui
 *  each group represnt one column in the database that can get
 * several fixd values
 */
@@ -62,7 +63,7 @@ export class ColumnFilter implements IColumnFilter {
 
   @action
   setFilter = (aType: number, checked: boolean) => {
-    // in case this filter group has no option for "select all" - update the value
+    // in case this filter group has no "select all" option - update the value
     if (this.allTypesOption === -1) this.arrTypes[aType].checked = checked;
     // in case this filter has opthion for "select all"
     else if (aType === this.allTypesOption) {
@@ -75,7 +76,7 @@ export class ColumnFilter implements IColumnFilter {
   }
 
   /**
-   * return sentence foe query-string from Multiplefilter of booleans,
+   * return sentence for query-string from Multiplefilter of booleans,
    * for example : &injt=4,5 
    * @param colFilter column filter with name and chekcd list of values
    */
@@ -104,22 +105,40 @@ export class ColumnFilter implements IColumnFilter {
    * 
    * @returns query string for the server
    */
-  getFilter =() =>{
+  getFilter = () => {
     const vals = this.arrValues.join(',');
-    let res =  (this.arrValues.length == 0)? '': `&${this.queryColName}=${vals}`;
+    let res = (this.arrValues.length == 0) ? '' : `&${this.queryColName}=${vals}`;
     return res;
   }
+
   /**
   * set parmas of the browser QueryString
   * @param params 
   */
-  setBrowserQueryString = (params: URLSearchParams) =>{
+  setBrowserQueryString = (params: URLSearchParams) => {
     if (this.arrValues.length === 0) {
       params.delete(this.queryColName);
     } else {
       const vals = this.arrValues.join(',');
       params.set(this.queryColName, vals);
     }
+  }
+
+  /**
+   * set arrValues by url query parmas
+   * @param params queryString from the browser
+   */
+  @action
+  setValuesByQuery(params: URLSearchParams) {
+    const vals = params.get(this.queryColName);
+    if (vals !== null) {
+      const valsArr = vals.split(',').map(Number);
+      this.arrTypes.forEach(checker => {
+        const found = checker.filters.some(r => valsArr.includes(r));
+        checker.checked = found;
+      });
+    }
+    this.setQueryVals();
   }
 
   @action

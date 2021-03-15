@@ -748,8 +748,8 @@ export default class FilterStore {
       const tab = this.getValFromQuery(params, 'tab', defTab);
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
-      console.log("citis:" ,citis)
       if (citis) this.updateCities(citis, true);
+      this.injTypes.setValuesByQuery(params);
    }
 
    // get name by url query parmas
@@ -763,14 +763,9 @@ export default class FilterStore {
    getCityNameFromQuery(query: URLSearchParams, defVal: string|undefined) {
       let res = (defVal)? [defVal]: [];
       const name = query.get('city');
-      const name1 ="חיפה";
-      console.log("name:" ,name, name1);
-      const eq1 = name === name1;
-      console.log ("eq", eq1);
       let found = false;
       if (name !== null) found = citisNamesHeb.includes(name);
       if (found) {
-         console.log("found:" ,name)
          res = [citisNamesHeb.find((element) => element === name!)!];
       }
       return res;
