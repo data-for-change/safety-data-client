@@ -765,10 +765,14 @@ export default class FilterStore {
    setStoreByQuery = (defTab: string, defCity?: string) => {
       const params = new URLSearchParams(window.location.search);
       const tab = this.getValFromQuery(params, 'tab', defTab);
+      this.injurySeverity.setValuesByQuery(params);
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
       this.injTypes.setValuesByQuery(params);
+      this.genderTypes.setValuesByQuery(params);
+      this.ageTypes.setValuesByQuery(params);
+      this.populationTypes.setValuesByQuery(params);
    }
 
    // get name by url query parmas
