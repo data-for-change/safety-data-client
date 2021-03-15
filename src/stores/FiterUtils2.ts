@@ -70,7 +70,7 @@ export const getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax
 export const getMultiplefilter = (colFilter: IColumnFilter) => {
   let filter: string = '';
   let allChecked: boolean = true;
-  let arrfilter: string[] = [];
+  let arrfilter: number[] = [];
   if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) allChecked = true;
   else {
     // in case there is allTypesOption , it want be copied to arrfilter

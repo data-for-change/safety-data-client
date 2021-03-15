@@ -922,7 +922,7 @@ export default class FilterStore {
          return;
       }
       let allChecked: boolean = true;
-      let arrfilter: string[] = [];
+      let arrfilter: number[] = [];
       const iterator = colFilter.arrTypes.values();
       for (const filterCheck of iterator) {
          if (filterCheck.checked) {
@@ -932,8 +932,8 @@ export default class FilterStore {
          }
       }
       if (!allChecked) {
-         const filterVals = arrfilter.map((x: string) => {
-            if (x === 'null') return null;
+         const filterVals = arrfilter.map((x: number) => {
+            if (x === -1) return null;
             return x;
          });
          const filter = { filterName: colFilter.queryColName, values: filterVals };
