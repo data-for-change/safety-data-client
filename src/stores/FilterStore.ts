@@ -144,6 +144,25 @@ export default class FilterStore {
       }
    }
 
+   // get city name by url query parmas
+   getCityNameFromQuery(query: URLSearchParams, defVal: string | undefined) {
+      let res = (defVal) ? [defVal] : [];
+      const name = query.get('city');
+      let found = false;
+      if (name !== null) {
+         const arr = name.split(',');
+         if (arr.length > 1 && this.isMultipleCities) {
+            res = arr;
+         } else {
+            found = citisNamesHeb.includes(name);
+            if (found) {
+               res = [citisNamesHeb.find((element) => element === name!)!];
+            }
+         }
+      }
+      return res;
+   }
+
    @observable
    cityResult: string = '';
 
@@ -758,19 +777,6 @@ export default class FilterStore {
       const res = (val !== null) ? val : defVal;
       return res;
    }
-
-   // get city name by url query parmas
-   getCityNameFromQuery(query: URLSearchParams, defVal: string|undefined) {
-      let res = (defVal)? [defVal]: [];
-      const name = query.get('city');
-      let found = false;
-      if (name !== null) found = citisNamesHeb.includes(name);
-      if (found) {
-         res = [citisNamesHeb.find((element) => element === name!)!];
-      }
-      return res;
-   }
-
 
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
       let filter = '{"$and" : [';
