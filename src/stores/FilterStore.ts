@@ -743,9 +743,14 @@ export default class FilterStore {
     */
    setFiltersText = (ignoreIfAll: boolean) => {
       this.injTypes.setText(ignoreIfAll);
+      this.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
+      this.ageTypes.setText(ignoreIfAll);
+      this.roadTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
+      this.accidentType.setText(ignoreIfAll);
+      this.vehicleType.setText(ignoreIfAll);
    }
 
    /**

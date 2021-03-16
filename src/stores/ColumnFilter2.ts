@@ -144,7 +144,12 @@ export class ColumnFilter implements IColumnFilter {
   @action
   setText = (ignoreIfAll: boolean) => {
     if (ignoreIfAll) {
-      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption).map(x => i18n.t(x.label)).join(', ');
+      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption)
+      .map(x => i18n.t(x.label)).join(', ');
+      //in case all is cheked and no "allTypesOption" - text is ''
+      if (this.allTypesOption === -1 && this.arrValues.length === 0){
+        this.text = '';
+      }
     } else {
       this.text = this.arrTypes.filter(x => x.checked).map(x => i18n.t(x.label)).join(', ');
     }

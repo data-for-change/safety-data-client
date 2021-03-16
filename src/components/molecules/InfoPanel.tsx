@@ -8,6 +8,15 @@ import { useStore } from '../../stores/storeConfig';
 interface IProps {
 }
 
+const WhenTitle: React.FC<{}> = observer(() => {
+  const { filterStore } = useStore();
+  const { dayNight } = filterStore;
+  let res = (dayNight.text !=='')? `, ${dayNight.text}`:'';
+  return (
+    <span>{res}</span>
+  )
+});
+
 const WhereTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
@@ -31,8 +40,28 @@ const WhereTitle: React.FC<{}> = observer(() => {
 const WhoTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injTypes } = filterStore;
-  let res = (injTypes.text !=='')? ', ' + injTypes.text:'';
+  const { injTypes, genderTypes, ageTypes } = filterStore;
+  let res = (injTypes.text !=='')? `, ${injTypes.text}`:'';
+  if (genderTypes.text != '') res += `, ${genderTypes.text}`;
+  if (ageTypes.text != '') res += `, ${t('Age')}: ${ageTypes.text}`;
+  return (
+    <span>{res}</span>
+  )
+});
+
+const WhatTitle: React.FC<{}> = observer(() => {
+  const { filterStore } = useStore();
+  const { accidentType } = filterStore;
+  let res = (accidentType.text !=='')? `, ${accidentType.text}`:'';
+  return (
+    <span>{res}</span>
+  )
+});
+
+const WhatVehicleTitle: React.FC<{}> = observer(() => {
+  const { filterStore } = useStore();
+  const { vehicleType } = filterStore;
+  let res = (vehicleType.text !=='')? `, ${vehicleType.text}`:'';
   return (
     <span>{res}</span>
   )
@@ -56,7 +85,11 @@ const InfoPanel: React.FC<IProps> = observer(({ }) => {
     return (
       <h5 style={styles.div}>
         <WhereTitle />
-        <WhoTitle />{', '}
+        <WhoTitle />
+        <WhenTitle />
+        <WhatTitle />
+        <WhatVehicleTitle />
+        {', '}
         {t('Found')}
         {' '}
         {length}
