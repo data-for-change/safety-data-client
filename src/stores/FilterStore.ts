@@ -760,7 +760,7 @@ export default class FilterStore {
    setBrowserQueryString = () => {
       const params = new URLSearchParams(location.search);
       params.set('tab', this.rootStore.uiStore.currentTab);
-      this.injurySeverity.setBrowserQueryString(params);
+      this.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
       this.genderTypes.setBrowserQueryString(params);

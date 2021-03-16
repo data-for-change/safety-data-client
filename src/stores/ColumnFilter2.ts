@@ -12,10 +12,11 @@ export interface IColumnFilter {
   arrTypes: IFilterChecker[];
   //array of values to be sent as query to server
   arrValues: number[];
+  isArrValuesEmptyOnAllCheck : boolean;
   setQueryVals: () => void;
   setFilter: (aType: number, checked: boolean) => void;
   getFilter: () => string;
-  setBrowserQueryString: (param: URLSearchParams) => void;
+  setBrowserQueryString: (param: URLSearchParams, delIfEmpthy?: boolean) => void;
   setValuesByQuery: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
@@ -34,6 +35,7 @@ export class ColumnFilter implements IColumnFilter {
   queryColName: string;
 
   arrValues: number[];
+  isArrValuesEmptyOnAllCheck : boolean;
 
   @observable
   arrTypes: IFilterChecker[];
@@ -43,11 +45,12 @@ export class ColumnFilter implements IColumnFilter {
   @observable
   text: string;
 
-  constructor(name: string, dbColName: string, allTypesOption: number = -1) {
+  constructor(name: string, dbColName: string, allTypesOption: number = -1, isEmptyValsOnAllCheck: boolean= true) {
     this.name = name;
     this.queryColName = dbColName;
     this.arrTypes = [];
     this.arrValues = [];
+    this.isArrValuesEmptyOnAllCheck= isEmptyValsOnAllCheck;
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
     this.text = '';
@@ -97,7 +100,7 @@ export class ColumnFilter implements IColumnFilter {
         }
       }
     }
-    if (allChecked) arrfilter = [];
+    if (allChecked && this.isArrValuesEmptyOnAllCheck) arrfilter = [];
     this.arrValues = arrfilter;
   };
 
@@ -115,8 +118,8 @@ export class ColumnFilter implements IColumnFilter {
   * set parmas of the browser QueryString
   * @param params 
   */
-  setBrowserQueryString = (params: URLSearchParams) => {
-    if (this.arrValues.length === 0) {
+  setBrowserQueryString = (params: URLSearchParams, delIfEmpthy: boolean=true) => {
+    if (this.arrValues.length === 0 && delIfEmpthy) {
       params.delete(this.queryColName);
     } else {
       const vals = this.arrValues.join(',');
@@ -157,7 +160,7 @@ export class ColumnFilter implements IColumnFilter {
 }
 
 export const initInjurySeverity = () => {
-  const col: IColumnFilter = new ColumnFilter('Severity', 'sev');
+  const col: IColumnFilter = new ColumnFilter('Severity', 'sev', -1, false);
   col.arrTypes.push(new FilterChecker('dead', true, [1]));
   col.arrTypes.push(new FilterChecker('severly-injured', false, [2]));
   col.setQueryVals();
