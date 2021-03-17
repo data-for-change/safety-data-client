@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-// import i18n from '../i18n';
+import i18n from '../i18n';
 
 export interface IColumnFilterCombo {
   name: string;
@@ -106,7 +106,34 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
   }
 }
 
+export class ColumnFilterComboValText extends ColumnFilterCombo {
+  isEmpty = () => {
+    return (this.allTypesOption >= 0 && this.queryValue === this.arrTypes[this.allTypesOption].val);
+  }
+  @action
+  setText = () => {
+    let res = '';
+    if (!this.isEmpty()) {
+      const foundObject = this.arrTypes.find((obj: any) => { return obj.val === this.queryValue });
+      if (foundObject) {
+        res = `${i18n.t(foundObject.text)}`;
+      }
+      this.text = res;
+    }
+  }
+}
+
 const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
+const CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
+const cityPopSizeArr = [
+  { val: '{"min":-1,"max":-1}', text: 'all' },
+  { val: '{"min":200000,"max":1000000}', text: '200K-1000K' },
+  { val: '{"min":100000,"max":200000}', text: '100K-200K' },
+  { val: '{"min":50000,"max":100000}', text: '50K-100K' },
+  { val: '{"min":20000,"max":50000}', text: '20K-50K' },
+  { val: '{"min":10000,"max":20000}', text: '10K-20K' },
+  { val: '{"min":0,"max":10000}', text: '0-10K' },
+];
 
 export const initStartYear = () => {
   const col: ColumnFilterCombo = new ColumnFilterCombo('FromYear', 'sy', -1, years, 2015);
@@ -115,5 +142,10 @@ export const initStartYear = () => {
 
 export const initEndYear = () => {
   const col: ColumnFilterCombo = new ColumnFilterCombo('ToYear', 'ey', -1, years, 2019);
+  return col;
+};
+
+export const initCityPopSize = () => {
+  const col: ColumnFilterComboValText = new ColumnFilterComboValText('city_size', 'p1', 0, cityPopSizeArr, CITY_POP_SIZE_ALL);
   return col;
 };

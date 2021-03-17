@@ -127,12 +127,11 @@ const CardFilterWhere = observer(() => {
    const { filterStore } = useStore();
    const {
       isValidWhere, roadTypes, updateRoadType, isMultipleCities,
-      cityPopSizeRange, setCityPopSizeRange, cityPopSizeArr,
+      cityPopSizeRange, setCityPopSizeRange,
       setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhere ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
-   // console.log(cityPopSizeArr)
    return (
       <Card>
          <Card.Header>
@@ -159,7 +158,7 @@ const CardFilterWhere = observer(() => {
                <MySelect
                   style={{ display: 'flex-end', alignItems: 'center' }}
                   label={'city_size'}
-                  data={cityPopSizeArr}
+                  data={cityPopSizeRange.arrTypes}
                   valProp="val"
                   contentProp="text"
                   onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCityPopSizeRange(event.target.value)}

@@ -5,7 +5,7 @@ import { IColumnFilter } from './ColumnFilter2';
 import * as FiterUtils from './FiterUtils2';
 import * as FC from './ColumnFilter2';
 import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
-import { ColumnFilterCombo, initStartYear, initEndYear } from './ColumnFilterCombo';
+import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
@@ -40,6 +40,7 @@ export default class FilterStore {
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
       this.cities = new ColumnFilterArray('City', 'city', true);
       this.streets = new ColumnFilterArray('Street', 'st', true);
+      this.cityPopSizeRange = initCityPopSize();
       // who
       this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
@@ -185,23 +186,14 @@ export default class FilterStore {
       this.roads.setFilter(names);
    }
 
-   CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
    @observable
-   cityPopSizeRange: string = this.CITY_POP_SIZE_ALL;
+   cityPopSizeRange: ColumnFilterCombo;
 
    @action
    setCityPopSizeRange = (range: string) => {
-      this.cityPopSizeRange = range;
+      this.cityPopSizeRange.setFilter(range);
    }
-   cityPopSizeArr = [
-      { val: '{"min":-1,"max":-1}', text: 'all' },
-      { val: '{"min":200000,"max":1000000}', text: '200K-1000K' },
-      { val: '{"min":100000,"max":200000}', text: '100K-200K' },
-      { val: '{"min":50000,"max":100000}', text: '50K-100K' },
-      { val: '{"min":20000,"max":50000}', text: '20K-50K' },
-      { val: '{"min":10000,"max":20000}', text: '10K-20K' },
-      { val: '{"min":0,"max":10000}', text: '0-10K' },
-   ];
+
 
    @observable
    roadSegment: ColumnFilterArray;
@@ -494,7 +486,7 @@ export default class FilterStore {
 
    @action
    submitfilterdGroupByYears = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
@@ -521,7 +513,7 @@ export default class FilterStore {
 
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
@@ -544,7 +536,7 @@ export default class FilterStore {
 
    @action
    submitfilterdGroupByPop = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterForPost(null);
       const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
       // logger.log(filter);
@@ -559,7 +551,7 @@ export default class FilterStore {
    @action
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
       if (this.useGetFetch) {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
@@ -578,7 +570,7 @@ export default class FilterStore {
                }
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
@@ -667,7 +659,7 @@ export default class FilterStore {
                this.isLoading = false;
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
@@ -686,7 +678,7 @@ export default class FilterStore {
    }
 
    submintGetMarkerFirstStep = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filter = this.getFilterForPost(null);
       // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
       fetchAggregatFilter(filter, 'latlon')
@@ -735,7 +727,7 @@ export default class FilterStore {
       filter += this.roadWidth.getFilter();
       filter += this.separator.getFilter();
       filter += this.oneLane.getFilter();
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       filter += FiterUtils.getFilterByCityPop(range.min, range.max)
       return filter;
    }
@@ -756,6 +748,7 @@ export default class FilterStore {
       this.roadTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
+      this.cityPopSizeRange.setText();
       this.accidentType.setText(ignoreIfAll);
       this.vehicleType.setText(ignoreIfAll);
    }
