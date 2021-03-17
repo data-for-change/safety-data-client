@@ -30,7 +30,7 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
       // label={t('GroupBy')}
       valProp="value"
       contentProp="text"
-      deafaultVal={groupBy2.text}
+      value={groupBy2.text}
     />
   );
 });
