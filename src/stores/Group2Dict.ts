@@ -1,0 +1,136 @@
+import { observable, action } from 'mobx';
+import GroupBy2 from './GroupBy2';
+import GroupBy2Val from './GroupBy2Val';
+
+export default class GroupBy2Dict {
+    dict: any;
+    queryColName: string;
+
+    @observable
+    groupBy2: GroupBy2;
+
+    constructor(useGetFetch: boolean, colName: string,  defautVal: string) {
+        if (useGetFetch) {
+            this.dict = initGroup2DictForGet();
+        } else {
+            this.dict = initGroup2DictForPost();
+        }
+        this.queryColName = colName;
+        this.groupBy2 = this.dict.get(defautVal);
+        this.setArrGroups();
+    }
+
+    @action
+    setFilter = (key: string) => {
+        this.groupBy2 = this.dict.get(key);
+    }
+
+    @observable
+    arrGroups: any[] = [];
+
+    @action
+    setArrGroups = () => {
+        this.arrGroups = Array.from(this.dict, ([key, item]) => ({ value: key, text: item.text }));
+    }
+
+
+    setBrowserQueryString = () => {
+        const params = new URLSearchParams(location.search);
+        params.set(this.queryColName, this.groupBy2.name);
+        window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+    }
+
+    @action
+    setValuesByQuery = (params: URLSearchParams) => {
+        const val = params.get(this.queryColName);
+        if (val !== null) {
+             this.setFilter(val);
+        }
+    }
+}
+
+// export const initGroup2Dict = (useGetFetch: boolean) => {
+//     if (useGetFetch) return initGroup2DictForGet();
+//     else return initGroup2DictForPost();
+//   };
+
+const initGroup2DictForGet = () => {
+    const dict = new Map()
+    const sev = new GroupBy2('Severity', 'sev');
+    sev.vals['הרוג'] = new GroupBy2Val('dead', '#8884D8');
+    sev.vals['פצוע קשה'] = new GroupBy2Val('severly-injured', '#82CA9D');
+    dict.set(sev.name, sev);
+
+    const gen = new GroupBy2('Gender', 'sex');
+    gen.vals['זכר'] = new GroupBy2Val('male', '#8884D8');
+    gen.vals['נקבה'] = new GroupBy2Val('female', '#82CA9D');
+    dict.set(gen.name, gen);
+
+    const roadt = new GroupBy2('RoadType', 'rt');
+    roadt.vals['עירונית בצומת'] = new GroupBy2Val('urban-junction', '#559E54');
+    roadt.vals['עירונית לא בצומת'] = new GroupBy2Val('urban-road', '#305A30');
+    roadt.vals['לא-עירונית בצומת'] = new GroupBy2Val('non-urban-junction', '#1258DC');
+    roadt.vals['לא-עירונית לא בצומת'] = new GroupBy2Val('non-urban-road', '#0A337F');
+    dict.set(roadt.name, roadt);
+
+    const year = new GroupBy2('Year', 'year');
+    year.vals[2015] = new GroupBy2Val('2015', '#82CA9D');
+    year.vals[2016] = new GroupBy2Val('2016', '#559E54');
+    year.vals[2017] = new GroupBy2Val('2017', '#559E54');
+    year.vals[2018] = new GroupBy2Val('2018', '#305A30');
+    year.vals[2019] = new GroupBy2Val('2019', '#305A30');
+    dict.set(year.name, year);
+
+    const injt = new GroupBy2('TypeInjured', 'injt');
+    injt.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
+    injt.vals['נהג - אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');
+    injt.vals['נוסע - אופניים (לא נהג)'] = new GroupBy2Val('cyclist-p', '#559E54');
+    injt.vals['נהג - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    injt.vals['נוסע - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    injt.vals['נהג - אופנוע'] = new GroupBy2Val('motorcycle-d', '#1258DC');
+    injt.vals['נוסע - אופנוע (לא נהג)'] = new GroupBy2Val('motorcycle-p', '#1258DC');
+    injt.vals['נהג - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
+    injt.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
+    dict.set(injt.name, injt);
+
+    return dict;
+}
+
+
+const initGroup2DictForPost = () => {
+
+    const dict = {} as any;
+    dict.Severity = new GroupBy2('Severity', 'injury_severity_hebrew');
+    dict.Severity.vals['הרוג'] = new GroupBy2Val('dead', '#8884D8');
+    dict.Severity.vals['פצוע קשה'] = new GroupBy2Val('severly-injured', '#82CA9D');
+
+    dict.Gender = new GroupBy2('Gender', 'sex_hebrew');
+    dict.Gender.vals['זכר'] = new GroupBy2Val('male', '#8884D8');
+    dict.Gender.vals['נקבה'] = new GroupBy2Val('female', '#82CA9D');
+
+    dict.RoadType = new GroupBy2('RoadType', 'road_type_hebrew');
+    dict.RoadType.vals['עירונית בצומת'] = new GroupBy2Val('urban-junction', '#559E54');
+    dict.RoadType.vals['עירונית לא בצומת'] = new GroupBy2Val('urban-road', '#305A30');
+    dict.RoadType.vals['לא-עירונית בצומת'] = new GroupBy2Val('non-urban-junction', '#1258DC');
+    dict.RoadType.vals['לא-עירונית לא בצומת'] = new GroupBy2Val('non-urban-road', '#0A337F');
+
+    dict.Year = new GroupBy2('Year', 'accident_year');
+    dict.Year.vals[2015] = new GroupBy2Val('2015', '#82CA9D');
+    dict.Year.vals[2016] = new GroupBy2Val('2016', '#559E54');
+    dict.Year.vals[2017] = new GroupBy2Val('2017', '#559E54');
+    dict.Year.vals[2018] = new GroupBy2Val('2018', '#305A30');
+    dict.Year.vals[2019] = new GroupBy2Val('2019', '#305A30');
+
+    dict.TypeInjured = new GroupBy2('TypeInjured', 'injured_type_hebrew');
+    dict.TypeInjured.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
+    dict.TypeInjured.vals['נהג - אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');
+    dict.TypeInjured.vals['נוסע - אופניים (לא נהג)'] = new GroupBy2Val('cyclist-p', '#559E54');
+    dict.TypeInjured.vals['נהג - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    dict.TypeInjured.vals['נוסע - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    dict.TypeInjured.vals['נהג - אופנוע'] = new GroupBy2Val('motorcycle-d', '#1258DC');
+    dict.TypeInjured.vals['נוסע - אופנוע (לא נהג)'] = new GroupBy2Val('motorcycle-p', '#1258DC');
+    dict.TypeInjured.vals['נהג - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
+    dict.TypeInjured.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
+
+    return dict;
+}
