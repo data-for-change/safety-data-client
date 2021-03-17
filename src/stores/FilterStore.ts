@@ -93,7 +93,6 @@ export default class FilterStore {
       this.formCardKey = value;
    }
 
-
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // Severity
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,6 +368,18 @@ export default class FilterStore {
    // data
    // ////////////////////////////////////////////////////////////////////////////////////////////
    @observable
+   injuriesCount: number = 0;
+
+   @action
+   setInjuriesCount = (val: number) => {
+       this.injuriesCount  = val;
+       this.isLoadingInjuriesCount = false;
+   }
+   
+   @observable
+   isLoadingInjuriesCount: boolean = false;
+
+   @observable
    dataAllInjuries: Casualty[] = [];
 
    @action
@@ -399,6 +410,11 @@ export default class FilterStore {
    // casualties groupd by yeras, filterd on main filter
    @observable
    dataFilterdByYears: any[] = []
+
+   @action
+   setDataFilterdByYears = (data: any[]) =>{
+      this.dataFilterdByYears = data;
+   }
 
    // casualties groupd by some group, filterd on main filter
    @observable
@@ -484,8 +500,14 @@ export default class FilterStore {
       return data2;
    }
 
+   getCountFromGroupByRes = (data: any[]) => {
+      const res = data.reduce((b:number, x: any ) => b + x.count, 0);
+      return res;
+   }
+
    @action
    submitfilterdGroupByYears = () => {
+      this.isLoadingInjuriesCount = true;
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
@@ -494,7 +516,9 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
-                  this.dataFilterdByYears = dataPadded;
+                  this.setDataFilterdByYears(dataPadded) ;
+                  const count = this.getCountFromGroupByRes(data);
+                  this.setInjuriesCount(count);
                }
             });
       } else {
@@ -504,7 +528,9 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
-                  this.dataFilterdByYears = dataPadded;
+                  this.setDataFilterdByYears(dataPadded);
+                  const count = this.getCountFromGroupByRes(data);
+                  this.setInjuriesCount(count);
                }
             });
       }

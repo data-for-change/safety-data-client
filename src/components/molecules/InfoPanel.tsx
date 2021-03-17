@@ -76,11 +76,9 @@ const InfoPanel: React.FC<IProps> = observer(({ }) => {
   }
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { casualtiesNames, dataAllInjuries, isLoading, injTypes} = filterStore;
-  const reactMarkers = toJS(dataAllInjuries);
-  const length = reactMarkers.length;
-  if (isLoading) return <div style={styles.div}> {t('Loading')} </div>
-  if (length > 0) {
+  const { casualtiesNames, isLoadingInjuriesCount: isLoadingCountInjuries, injuriesCount} = filterStore;
+  if (isLoadingCountInjuries) return <div style={styles.div}> {t('Loading')} </div>
+  if (injuriesCount > 0) {
     return (
       <h5 style={styles.div}>
         <WhereTitle />
@@ -91,7 +89,7 @@ const InfoPanel: React.FC<IProps> = observer(({ }) => {
         {', '}
         {t('Found')}
         {' '}
-        {length}
+        {injuriesCount}
         {' '}
         {t(casualtiesNames)}
         {' '}
