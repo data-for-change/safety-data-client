@@ -40,9 +40,10 @@ const WhereTitle: React.FC<{}> = observer(() => {
 const WhoTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injTypes, genderTypes, ageTypes } = filterStore;
+  const { injTypes, genderTypes, ageTypes, populationTypes } = filterStore;
   let res = (injTypes.text !=='')? `, ${injTypes.text}`:'';
   if (genderTypes.text != '') res += `, ${genderTypes.text}`;
+  if (populationTypes.text != '') res += `, ${populationTypes.text}`;
   if (ageTypes.text != '') res += `, ${t('Age')}: ${ageTypes.text}`;
   return (
     <span>{res}</span>

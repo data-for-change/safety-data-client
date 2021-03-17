@@ -752,6 +752,7 @@ export default class FilterStore {
       this.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
       this.ageTypes.setText(ignoreIfAll);
+      this.populationTypes.setText(ignoreIfAll);
       this.roadTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
