@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import GroupBy from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupBy2Val from './GroupBy2Val';
 
@@ -7,18 +8,18 @@ export default class GroupMap {
     queryColName: string;
 
     @observable
-    groupBy2: GroupBy2;
+    groupBy: GroupBy2|GroupBy;
 
     constructor(map: Map<string,any>, colName: string,  defautVal: string) {
         this.dict = map;
         this.queryColName = colName;
-        this.groupBy2 = this.dict.get(defautVal);
+        this.groupBy = this.dict.get(defautVal);
         this.setArrGroups();
     }
 
     @action
     setFilter = (key: string) => {
-        this.groupBy2 = this.dict.get(key);
+        this.groupBy = this.dict.get(key);
     }
 
     @observable
@@ -29,10 +30,13 @@ export default class GroupMap {
         this.arrGroups = Array.from(this.dict, ([key, item]) => ({ value: key, text: item.text }));
     }
 
-
     setBrowserQueryString = () => {
         const params = new URLSearchParams(location.search);
-        params.set(this.queryColName, this.groupBy2.name);
+        if (this.groupBy instanceof GroupBy){
+            params.set(this.queryColName, (this.groupBy as GroupBy).value);
+        } else if (this.groupBy instanceof GroupBy2) {
+            params.set(this.queryColName, (this.groupBy as GroupBy2).name);
+        }
         window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
     }
 
@@ -91,7 +95,6 @@ const initGroup2DictForGet = () => {
 
     return dict;
 }
-
 
 const initGroup2DictForPost = () => {
 

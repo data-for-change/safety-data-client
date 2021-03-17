@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
+import GroupBy2 from '../../stores/GroupBy2';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 import ChartBar from '../molecules/chart/ChartBar';
@@ -153,9 +154,9 @@ const CardChartGrpBy2: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { filterStore, uiStore } = useStore();
    const { group2Dict } = filterStore;
-   const { groupBy2 } = group2Dict;
+   const { groupBy } = group2Dict;
    const { chartType, direction } = uiStore;
-   const metaDAta = groupBy2.getBars();
+   const metaDAta = (groupBy as GroupBy2).getBars();
    const reactDataGrp2 = toJS(filterStore.dataGroupby2);
    const show = true;
    return (

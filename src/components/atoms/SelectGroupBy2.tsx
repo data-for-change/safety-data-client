@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Form from 'react-bootstrap/Form';
-import { useStore } from '../../stores/storeConfig';
-import MySelect from './MySelect';
 
+import { useStore } from '../../stores/storeConfig';
+import GroupBy2 from '../../stores/GroupBy2';
+import MySelect from './MySelect';
 
 interface IProps { id: string }
 
@@ -17,6 +17,7 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
   }, [updateGroupBy2]);
 
   const fixData = group2Dict.arrGroups;
+  const val = (group2Dict.groupBy as GroupBy2).name;
 
   return (
     <MySelect
@@ -25,7 +26,7 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
       // label={t('GroupBy')}
       valProp="value"
       contentProp="text"
-      value={group2Dict.groupBy2.name}
+      value={val}
     />
   );
 });
