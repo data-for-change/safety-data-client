@@ -1,9 +1,9 @@
 import {
    observable, action, computed,
 } from 'mobx';
-import { IColumnFilter } from './ColumnFilter2';
+import { IColumnFilter } from './ColumnFilterCheckBoxList';
+import * as FC from './ColumnFilterCheckBoxList';
 import * as FiterUtils from './FiterUtils2';
-import * as FC from './ColumnFilter2';
 import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
 import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
