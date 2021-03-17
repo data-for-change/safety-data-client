@@ -5,6 +5,7 @@ import { IColumnFilter } from './ColumnFilter2';
 import * as FiterUtils from './FiterUtils2';
 import * as FC from './ColumnFilter2';
 import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
+import { ColumnFilterCombo, initStartYear, initEndYear } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2, { initGroup2Dict } from './GroupBy2';
@@ -30,6 +31,8 @@ export default class FilterStore {
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when
+      this.startYear = initStartYear();
+      this.endYear = initEndYear();
       this.dayNight = FC.initDayNight();
       // where
       this.roadTypes = FC.initRoadTypes();
@@ -225,19 +228,19 @@ export default class FilterStore {
    // when
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    @observable
-   startYear: number = 2015;
+   startYear: ColumnFilterCombo;
 
    @action
    setStartYear = (year: string) => {
-      this.startYear = parseInt(year);
+      this.startYear.setFilter(parseInt(year));
    }
 
    @observable
-   endYear: number = 2019;
+   endYear: ColumnFilterCombo;
 
    @action
    setEndYear = (year: string) => {
-      this.endYear = parseInt(year);
+      this.endYear.setFilter(parseInt(year));
    }
 
    @observable
@@ -478,7 +481,7 @@ export default class FilterStore {
     */
    padDataYearsWith0 = (data: any) => {
       const yearsList = [];
-      for (let i = this.startYear; i <= this.endYear; i += 1) {
+      for (let i = Number(this.startYear.queryValue); i <= Number(this.endYear.queryValue); i += 1) {
          yearsList.push(i);
       }
       const data2 = yearsList.map((year) => {
@@ -712,7 +715,8 @@ export default class FilterStore {
    getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
       //the oreder of the fileds is importnet for indexing in server
       let filter = '?';
-      filter += `sy=${this.startYear}&ey=${this.endYear}`;
+      filter += this.startYear.getFilter();
+      filter += this.endYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
@@ -742,6 +746,8 @@ export default class FilterStore {
     * @param ignoreIfAll - if true and if all option is cheked return blank
     */
    setFiltersText = (ignoreIfAll: boolean) => {
+      this.startYear.setText();
+      this.endYear.setText();
       this.injTypes.setText(ignoreIfAll);
       this.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
@@ -760,6 +766,8 @@ export default class FilterStore {
    setBrowserQueryString = () => {
       const params = new URLSearchParams(location.search);
       params.set('tab', this.rootStore.uiStore.currentTab);
+      this.startYear.setBrowserQueryString(params, false);
+      this.endYear.setBrowserQueryString(params, false);
       this.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
@@ -786,6 +794,8 @@ export default class FilterStore {
    setStoreByQuery = (defTab: string, defCity?: string) => {
       const params = new URLSearchParams(window.location.search);
       const tab = this.getValFromQuery(params, 'tab', defTab);
+      this.startYear.setValuesByQuery(params);
+      this.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
       this.dayNight.setValuesByQuery(params);
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
@@ -851,7 +861,7 @@ export default class FilterStore {
 
    getfilterBySeverityAndCity = () => {
       let filter = '?';
-      filter += `sy=${this.startYear}`;
+      filter += this.startYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
@@ -909,7 +919,7 @@ export default class FilterStore {
 
    getFilterIDB = () => {
       const arrFilters: any[] = [];
-      const years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() };
+      const years = { filterName: 'accident_year', startYear: this.startYear.queryValue.toString(), endYear: this.endYear.queryValue.toString() };
       arrFilters.push(years);
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
@@ -934,7 +944,7 @@ export default class FilterStore {
       const arrFilters: any[] = [];
       const bbox = { filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast };
       arrFilters.push(bbox);
-      const years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() };
+      const years = { filterName: 'accident_year', startYear: this.startYear.queryValue.toString(), endYear: this.endYear.queryValue.toString() };
       arrFilters.push(years);
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);

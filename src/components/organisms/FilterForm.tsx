@@ -35,8 +35,6 @@ const STYLE_TOGGLE_NORMAL = {
    // paddingLeft: '15px',
 };
 
-const years: string[] = ['2015', '2016', '2017', '2018', '2019'];
-
 const FilterForm: React.FC<IProps> = observer(({ }) => {
    const { filterStore } = useStore();
    const { injurySeverity, updateInjurySeverity, formCardKey } = filterStore;
@@ -89,7 +87,6 @@ const CardFilterWhen: React.FC<any> = observer(() => {
       setFormCardKey,
    } = filterStore;
    const styleToggle = isValidWhen ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
-
    return (
       <Card>
          <Card.Header>
@@ -105,15 +102,15 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                <div>
                   <div className="accordion-when-selects">
                      <MySelect
-                        label={t('FromYear')}
-                        deafaultVal={String(startYear)}
-                        data={years}
+                        label={'FromYear'}
+                        value={String(startYear.queryValue)}
+                        data={startYear.arrTypes}
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
                      />
                      <MySelect
                         label={'ToYear'}
-                        deafaultVal={String(endYear)}
-                        data={years}
+                        value={String(endYear.queryValue)}
+                        data={endYear.arrTypes}
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
                      />
                   </div>
