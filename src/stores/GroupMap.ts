@@ -2,19 +2,15 @@ import { observable, action } from 'mobx';
 import GroupBy2 from './GroupBy2';
 import GroupBy2Val from './GroupBy2Val';
 
-export default class GroupBy2Dict {
-    dict: any;
+export default class GroupMap {
+    dict: Map<string,any>;
     queryColName: string;
 
     @observable
     groupBy2: GroupBy2;
 
-    constructor(useGetFetch: boolean, colName: string,  defautVal: string) {
-        if (useGetFetch) {
-            this.dict = initGroup2DictForGet();
-        } else {
-            this.dict = initGroup2DictForPost();
-        }
+    constructor(map: Map<string,any>, colName: string,  defautVal: string) {
+        this.dict = map;
         this.queryColName = colName;
         this.groupBy2 = this.dict.get(defautVal);
         this.setArrGroups();
@@ -49,10 +45,10 @@ export default class GroupBy2Dict {
     }
 }
 
-// export const initGroup2Dict = (useGetFetch: boolean) => {
-//     if (useGetFetch) return initGroup2DictForGet();
-//     else return initGroup2DictForPost();
-//   };
+export const initGroup2Map = (useGetFetch: boolean) => {
+    if (useGetFetch) return initGroup2DictForGet();
+    else return initGroup2DictForPost();
+  };
 
 const initGroup2DictForGet = () => {
     const dict = new Map()

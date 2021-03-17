@@ -9,7 +9,7 @@ import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from '
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
 import GroupBy2 from './GroupBy2';
-import Group2Dict from './Group2Dict';
+import GroupMap, {initGroup2Map} from './GroupMap';
 import RootStore from './RootStore';
 import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
 import { fetchGetList, fetchGetGroupBy } from '../services/AccidentService';
@@ -57,7 +57,8 @@ export default class FilterStore {
       this.oneLane = FC.initOneLane();
       //initn Group-by dictionary
       this.groupByDict = initGroupByDict(this.useGetFetch);
-      this.group2Dict = new Group2Dict(this.useGetFetch, 'gb2', 'sex');
+      const mapGroupBy2 = initGroup2Map(this.useGetFetch);
+      this.group2Dict = new GroupMap(mapGroupBy2, 'gb2', 'sex');
       this.groupBy = this.groupByDict.TypeInjured;
 
       // init data (on home page)
@@ -637,7 +638,7 @@ export default class FilterStore {
    }
 
    @observable
-   group2Dict: Group2Dict;
+   group2Dict: GroupMap;
 
    // //////////////////////////////////////////////////////////////////////////////////////////////
    // filters actions
