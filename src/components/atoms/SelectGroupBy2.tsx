@@ -11,17 +11,12 @@ interface IProps { id: string }
 const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { group2Dict, groupBy2, updateGroupBy2 } = filterStore;
+  const { group2Dict, updateGroupBy2 } = filterStore;
   const onSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     updateGroupBy2(event.target.value);
   }, [updateGroupBy2]);
 
-  const fixData = Object.entries(group2Dict).map(([key, item]: any) => {
-    return {
-      value: key,
-      text: item.text
-    }
-  })
+  const fixData = group2Dict.arrGroups;
 
   return (
     <MySelect
@@ -30,7 +25,7 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
       // label={t('GroupBy')}
       valProp="value"
       contentProp="text"
-      value={groupBy2.text}
+      value={group2Dict.groupBy2.name}
     />
   );
 });

@@ -20,15 +20,23 @@ export default class GroupBy implements IGroupBy {
     this.value = value;
     this.limit = limit;
   }
+
+  /**
+  * set parmas of the browser QueryString
+  * @param params 
+  */
+  setBrowserQueryString = (params: URLSearchParams) => {
+    params.set('gb', this.value);
+  }
 }
 
-export const initGroupByDict = (useGetFetch: boolean) =>{
+export const initGroupByDict = (useGetFetch: boolean) => {
   if (useGetFetch) return initGroupByDictForGet();
   else return initGroupByDictForPost();
 }
 
 const initGroupByDictForGet = () => {
-  const dictGroupBy:any = {};
+  const dictGroupBy: any = {};
   dictGroupBy.Severity = new GroupBy('Severity', 'sev');
   dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injt');
   dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vcl');
@@ -53,7 +61,7 @@ const initGroupByDictForGet = () => {
 };
 
 const initGroupByDictForPost = () => {
-  const dictGroupBy:any = {};
+  const dictGroupBy: any = {};
   dictGroupBy.Severity = new GroupBy('Severity', 'injury_severity_hebrew');
   dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injured_type_hebrew');
   dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vehicle_vehicle_type_hebrew');

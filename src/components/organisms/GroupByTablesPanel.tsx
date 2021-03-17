@@ -98,8 +98,8 @@ const GroupTables2Grp: React.FC<IProps> = observer(() => {
   };
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { groupBy, groupBy2, dataGroupby2 } = filterStore;
-  const columnsGrp2 = groupBy2.getColumns().map((x: any) => ({ dataField: x, text: t(x) }));
+  const { groupBy, group2Dict, dataGroupby2 } = filterStore;
+  const columnsGrp2 = group2Dict.groupBy2.getColumns().map((x: any) => ({ dataField: x, text: t(x) }));
   const reactDataGrp2 = toJS(dataGroupby2);
   const show = (groupBy.text !== 'CityByPop');
   if (reactDataGrp2.length > 0) {

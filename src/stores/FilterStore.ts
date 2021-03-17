@@ -8,7 +8,8 @@ import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
 import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupByDict } from './GroupBy';
-import GroupBy2, { initGroup2Dict } from './GroupBy2';
+import GroupBy2 from './GroupBy2';
+import Group2Dict from './Group2Dict';
 import RootStore from './RootStore';
 import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
 import { fetchGetList, fetchGetGroupBy } from '../services/AccidentService';
@@ -56,9 +57,9 @@ export default class FilterStore {
       this.oneLane = FC.initOneLane();
       //initn Group-by dictionary
       this.groupByDict = initGroupByDict(this.useGetFetch);
-      this.group2Dict = initGroup2Dict(this.useGetFetch);
+      this.group2Dict = new Group2Dict(this.useGetFetch, 'gb2', 'sex');
       this.groupBy = this.groupByDict.TypeInjured;
-      this.groupBy2 = this.group2Dict.Gender;
+
       // init data (on home page)
       this.dataByYears = FC.initDataYreasUnfilterd();
       this.dataFilterdByYears = FC.initDataYreasfilterd();
@@ -442,12 +443,19 @@ export default class FilterStore {
    @action
    updateGroupby = (key: string) => {
       this.groupBy = this.groupByDict[key];
+      this.setBrowserQueryStringGroupBy();
       if (!this.useGetFetch && this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupBy);
       if (this.groupBy.text !== 'CityByPop') {
-         this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+         this.submitfilterdGroup2(this.groupBy, this.group2Dict.groupBy2.name);
       }
    }
+   setBrowserQueryStringGroupBy= () => {
+      const params = new URLSearchParams(location.search);
+      this.groupBy.setBrowserQueryString(params);
+      window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+   }
+   
 
    /**
     * Dictionary with key-value list of the group-by  
@@ -585,7 +593,7 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
-                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     const fixData = this.group2Dict.groupBy2.fixStrcutTable(data);
                      this.dataGroupby2 = fixData;
                   } catch (error) {
                      logger.log(error);
@@ -604,7 +612,7 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
-                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     const fixData = this.group2Dict.groupBy2.fixStrcutTable(data);
                      this.dataGroupby2 = fixData;
                   } catch (error) {
                      logger.log(error);
@@ -618,17 +626,18 @@ export default class FilterStore {
 
    }
 
-   @observable
-   groupBy2: GroupBy2;
+   // @observable
+   // groupBy2: GroupBy2;
 
    @action
    updateGroupBy2 = (key: string) => {
-      this.groupBy2 = this.group2Dict[key];
-      this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      this.group2Dict.setFilter(key);
+      this.group2Dict.setBrowserQueryString();
+      this.submitfilterdGroup2(this.groupBy, this.group2Dict.groupBy2.name);
    }
 
    @observable
-   group2Dict: any = {}
+   group2Dict: Group2Dict;
 
    // //////////////////////////////////////////////////////////////////////////////////////////////
    // filters actions
@@ -661,7 +670,7 @@ export default class FilterStore {
       this.submitfilterdGroupByYears();
       if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupBy);
-      this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      this.submitfilterdGroup2(this.groupBy, this.group2Dict.groupBy2.name);
       this.setCasualtiesNames(this.injurySeverity);
       const lang = this.rootStore.uiStore.language;
       if (this.rootStore.uiStore.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, lang);
@@ -802,6 +811,7 @@ export default class FilterStore {
       this.roadWidth.setBrowserQueryString(params);
       this.separator.setBrowserQueryString(params);
       this.oneLane.setBrowserQueryString(params);
+      this.groupBy.setBrowserQueryString(params);
       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
    }
 
@@ -831,6 +841,8 @@ export default class FilterStore {
       this.roadWidth.setValuesByQuery(params);
       this.separator.setValuesByQuery(params);
       this.oneLane.setValuesByQuery(params);
+      //update groupby
+      this.group2Dict.setValuesByQuery(params);
    }
 
    // get name by url query parmas
