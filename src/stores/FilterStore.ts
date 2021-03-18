@@ -833,6 +833,7 @@ export default class FilterStore {
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
+      this.roadTypes.setValuesByQuery(params);
       this.injTypes.setValuesByQuery(params);
       this.genderTypes.setValuesByQuery(params);
       this.ageTypes.setValuesByQuery(params);
