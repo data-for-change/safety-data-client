@@ -564,6 +564,9 @@ export default class FilterStore {
 
    }
 
+   /**
+    * deprecated function
+    */
    @action
    submitfilterdGroupByPop = () => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
@@ -665,7 +668,8 @@ export default class FilterStore {
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
       this.submitfilterdGroupByYears();
-      if ((this.groupByDict.groupBy as GroupBy).text === 'CityByPop') this.submitfilterdGroupByPop();
+      console.log((this.groupByDict.groupBy as GroupBy).text);
+      if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
