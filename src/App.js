@@ -14,7 +14,7 @@ import Drawer from './components/organisms/Drawer';
 
 const AboutPage = lazy(() => import('./components/pages/AboutPage'));
 const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
-const MyFilters = lazy(() => import('./components/pages/MyFilters'))
+// const MyFilters = lazy(() => import('./components/pages/MyFilters'))
 
 
 const styles = {
@@ -32,11 +32,11 @@ function App() {
             <div style={styles.app}>
                <Suspense fallback={<Loader />}>
                   <Switch>
-                     <Route
+                     {/* <Route
                         exact
                         path="/my-filters"
                         component={MyFilters}
-                     />
+                     /> */}
                      <Route
                         path="/about"
                         component={AboutPage}

@@ -25,14 +25,14 @@ const Drawer: React.FC<any> = observer((props) => {
          >
             {filterStore.isLoading ? t('Loading') : t('Submit')}
          </Button>
-         <Button
+         {/* <Button
             style={{ margin: '0.5rem' }}
             variant="info"
             onClick={() => alert('action in filter store to collect filters')}
             disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
          >
             {t('Save')}  {t('Filter')}
-         </Button>
+         </Button> */}
       </div>
    )
    {/* </SmallCard2> */ }
