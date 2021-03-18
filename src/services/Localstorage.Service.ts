@@ -1,11 +1,16 @@
-export class LocalStorageService {
+export interface FilterLocalStorage {
+   url: string
+   description: string
+}
 
-   static getLoaclStorage(key: string) {
+export class LocalStorageService<T> {
+
+   getLoaclStorage(key: string) {
       let data = localStorage.getItem(key)
-      return data ? JSON.parse(data) : {}
+      return data ? JSON.parse(data) : []
    }
 
-   static setLocalStorage(key: string, data: any) {
+   setLocalStorage(key: string, data: T[]) {
       localStorage.setItem(key, JSON.stringify(data))
    }
 
