@@ -31,7 +31,7 @@ const LanguageSelector = observer(() => {
             data={[{ value: 'he', text: 'Hebrew' }, { value: 'en', text: 'English' }]}
             valProp="value"
             contentProp="text"
-            deafaultVal={'he'}
+            value={uiStore.language}
          />
          {/* <Form className="form-inline">
             <Form.Group>

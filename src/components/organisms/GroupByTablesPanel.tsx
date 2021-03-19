@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
+import GroupBy2 from '../../stores/GroupBy2';
 import GroupByTable from '../molecules/GroupByTable';
 import SmallCard2 from '../atoms/SmallCard2';
 import SelectGroupBy from '../atoms/SelectGroupBy';
@@ -67,9 +68,9 @@ const GroupTablesFilter: React.FC<IProps> = observer(() => {
     flexDirection: 'row',
   } as React.CSSProperties;
   const { filterStore } = useStore();
-  const { dataFilterd, groupBy } = filterStore;
+  const { dataFilterd, groupByDict } = filterStore;
   const reactData = toJS(dataFilterd);
-
+  
   if (reactData.length > 0) {
     return (
       <SmallCard2>
@@ -77,7 +78,7 @@ const GroupTablesFilter: React.FC<IProps> = observer(() => {
           <SelectGroupBy id="Tables.Main" />
         </div>
         <hr />
-        <GroupByTable data={reactData} dataName={groupBy.text} />
+        <GroupByTable data={reactData} dataName={groupByDict.groupBy.text} />
       </SmallCard2>
     );
   }
@@ -98,10 +99,10 @@ const GroupTables2Grp: React.FC<IProps> = observer(() => {
   };
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { groupBy, groupBy2, dataGroupby2 } = filterStore;
-  const columnsGrp2 = groupBy2.getColumns().map((x: any) => ({ dataField: x, text: t(x) }));
+  const { groupByDict, group2Dict, dataGroupby2 } = filterStore;
+  const columnsGrp2 = (group2Dict.groupBy as GroupBy2).getColumns().map((x: any) => ({ dataField: x, text: t(x) }));
   const reactDataGrp2 = toJS(dataGroupby2);
-  const show = (groupBy.text !== 'CityByPop');
+  const show = (groupByDict.groupBy.text !== 'CityByPop');
   if (reactDataGrp2.length > 0) {
     return (
       <>
@@ -124,7 +125,7 @@ const GroupTables2Grp: React.FC<IProps> = observer(() => {
               <hr />
               <GroupByTable
                 data={reactDataGrp2}
-                dataName={groupBy.text}
+                dataName={groupByDict.groupBy.text}
                 columns={columnsGrp2}
               />
             </SmallCard2>

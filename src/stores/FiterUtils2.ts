@@ -1,5 +1,5 @@
 
-import { IColumnFilter } from './ColumnFilter2';
+import { IColumnFilter } from './ColumnFilterCheckBoxList';
 
 export const getFilterGroupBy =
   (filterMatch: string,
@@ -62,45 +62,6 @@ export const getFilterGroupByPop = (filterMatch: string, popMin = 200000, popMax
   return filter;
 };
 
-/**
- * return sentence foe query-string from Multiplefilter of booleans,
- * for example : &injt=4,5 
- * @param colFilter column filter with name and chekcd list of values
- */
-export const getMultiplefilter = (colFilter: IColumnFilter) => {
-  let filter: string = '';
-  let allChecked: boolean = true;
-  let arrfilter: string[] = [];
-  if (colFilter.allTypesOption > -1 && colFilter.arrTypes[colFilter.allTypesOption].checked) allChecked = true;
-  else {
-    // in case there is allTypesOption , it want be copied to arrfilter
-    // as it is not checked
-    const iterator = colFilter.arrTypes.values();
-    for (const filterCheck of iterator) {
-      if (filterCheck.checked) {
-        arrfilter = [...arrfilter, ...filterCheck.filters];
-      } else {
-        allChecked = false;
-      }
-    }
-  }
-  if (allChecked) filter = '';
-  else {
-    filter += `&${colFilter.queryColName}=`;
-    filter += arrfilter.join(',');
-  }
-  return filter;
-};
-
-export const getFilterFromArray = (filterName: string, valArr : string[]) => {
-  let filter: string = '';
-  if (valArr.length > 0 && valArr[0] !== '') {
-     filter += `&${filterName}=`;
-     filter += valArr.map((x: string) => `"${x.trim()}"`).join(',');
-  }
-  return filter;
-}
-
 export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
   let filter = `&lat=${mapBounds.getSouth()},${mapBounds.getNorth()}`;
   filter += `&lon=${mapBounds.getWest()},${mapBounds.getEast()}`;
@@ -109,22 +70,10 @@ export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
 // don't use this - for post filter
 export const getFilterStreets = (streets : string[]) => {
   let filter: string = '';
-  if (streets.length > 0 && streets[0] !== '') {
-     filter += ',{"$or": [';
-     filter += streets.map((x: string) => `{"street1_hebrew" : "${x.trim()}"}`).join(',');
-     filter += ',';
-     filter += streets.map((x: string) => `{"street2_hebrew" : "${x.trim()}"}`).join(',');
-     filter += ']}';
-  }
   return filter;
 }
 // don't use this - for post filter
 export const getfilterCity = (cities : string[]) => {
   let filter: string = '';
-  if (cities.length > 0) {
-     filter += ',{"$or": [';
-     filter += cities.map((x: string) => `{"accident_yishuv_name" : "${x}"}`).join(',');
-     filter += ']}';
-  }
   return filter;
 }

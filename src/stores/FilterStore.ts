@@ -1,13 +1,15 @@
 import {
    observable, action, computed,
 } from 'mobx';
-import { IColumnFilter } from './ColumnFilter2';
+import { IColumnFilter } from './ColumnFilterCheckBoxList';
+import * as FC from './ColumnFilterCheckBoxList';
 import * as FiterUtils from './FiterUtils2';
-import * as FC from './ColumnFilter2';
 import { ColumnFilterArray, IColumnFilterArray } from './ColumnFilterArray';
+import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
-import GroupBy, { initGroupByDict } from './GroupBy';
-import GroupBy2, { initGroup2Dict } from './GroupBy2';
+import GroupBy, { initGroupMap } from './GroupBy';
+import GroupBy2 from './GroupBy2';
+import GroupMap, { initGroup2Map } from './GroupMap';
 import RootStore from './RootStore';
 import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
 import { fetchGetList, fetchGetGroupBy } from '../services/AccidentService';
@@ -17,6 +19,7 @@ import logger from '../services/logger';
 import { BBoxType } from './MapStore';
 import Casualty from './Casualty';
 import { FilterLocalStorage, LocalStorageService } from '../services/Localstorage.Service';
+import citisNamesHeb from '../assets/cities_names_heb.json';
 // import autorun  from "mobx"
 
 
@@ -33,6 +36,8 @@ export default class FilterStore {
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when
+      this.startYear = initStartYear();
+      this.endYear = initEndYear();
       this.dayNight = FC.initDayNight();
       // where
       this.roadTypes = FC.initRoadTypes();
@@ -40,6 +45,7 @@ export default class FilterStore {
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
       this.cities = new ColumnFilterArray('City', 'city', true);
       this.streets = new ColumnFilterArray('Street', 'st', true);
+      this.cityPopSizeRange = initCityPopSize();
       // who
       this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
@@ -54,10 +60,11 @@ export default class FilterStore {
       this.separator = FC.initSeparator();
       this.oneLane = FC.initOneLane();
       //initn Group-by dictionary
-      this.groupByDict = initGroupByDict(this.useGetFetch);
-      this.group2Dict = initGroup2Dict(this.useGetFetch);
-      this.groupBy = this.groupByDict.TypeInjured;
-      this.groupBy2 = this.group2Dict.Gender;
+      const map: Map<string, any> = initGroupMap(this.useGetFetch);
+      this.groupByDict = new GroupMap(map, 'gb', 'injt');
+      const mapGroupBy2 = initGroup2Map(this.useGetFetch);
+      this.group2Dict = new GroupMap(mapGroupBy2, 'gb2', 'sex');
+
       // init data (on home page)
       this.dataByYears = FC.initDataYreasUnfilterd();
       this.dataFilterdByYears = FC.initDataYreasfilterd();
@@ -106,7 +113,6 @@ export default class FilterStore {
    @action setFormCardKey = (value: number) => {
       this.formCardKey = value;
    }
-
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // Severity
@@ -162,6 +168,25 @@ export default class FilterStore {
       }
    }
 
+   // get city name by url query parmas
+   getCityNameFromQuery(query: URLSearchParams, defVal: string | undefined) {
+      let res = (defVal) ? [defVal] : [];
+      const name = query.get('city');
+      let found = false;
+      if (name !== null) {
+         const arr = name.split(',');
+         if (arr.length > 1 && this.isMultipleCities) {
+            res = arr;
+         } else {
+            found = citisNamesHeb.includes(name);
+            if (found) {
+               res = [citisNamesHeb.find((element) => element === name!)!];
+            }
+         }
+      }
+      return res;
+   }
+
    @observable
    cityResult: string = '';
 
@@ -181,23 +206,14 @@ export default class FilterStore {
       this.roads.setFilter(names);
    }
 
-   CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
    @observable
-   cityPopSizeRange: string = this.CITY_POP_SIZE_ALL;
+   cityPopSizeRange: ColumnFilterCombo;
 
    @action
    setCityPopSizeRange = (range: string) => {
-      this.cityPopSizeRange = range;
+      this.cityPopSizeRange.setFilter(range);
    }
-   cityPopSizeArr = [
-      { val: '{"min":-1,"max":-1}', text: 'all' },
-      { val: '{"min":200000,"max":1000000}', text: '200K-1000K' },
-      { val: '{"min":100000,"max":200000}', text: '100K-200K' },
-      { val: '{"min":50000,"max":100000}', text: '50K-100K' },
-      { val: '{"min":20000,"max":50000}', text: '20K-50K' },
-      { val: '{"min":10000,"max":20000}', text: '10K-20K' },
-      { val: '{"min":0,"max":10000}', text: '0-10K' },
-   ];
+
 
    @observable
    roadSegment: ColumnFilterArray;
@@ -224,19 +240,19 @@ export default class FilterStore {
    // when
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    @observable
-   startYear: number = 2015;
+   startYear: ColumnFilterCombo;
 
    @action
    setStartYear = (year: string) => {
-      this.startYear = parseInt(year);
+      this.startYear.setFilter(parseInt(year));
    }
 
    @observable
-   endYear: number = 2019;
+   endYear: ColumnFilterCombo;
 
    @action
    setEndYear = (year: string) => {
-      this.endYear = parseInt(year);
+      this.endYear.setFilter(parseInt(year));
    }
 
    @observable
@@ -373,6 +389,18 @@ export default class FilterStore {
    // data
    // ////////////////////////////////////////////////////////////////////////////////////////////
    @observable
+   injuriesCount: number = 0;
+
+   @action
+   setInjuriesCount = (val: number) => {
+      this.injuriesCount = val;
+      this.isLoadingInjuriesCount = false;
+   }
+
+   @observable
+   isLoadingInjuriesCount: boolean = false;
+
+   @observable
    dataAllInjuries: Casualty[] = [];
 
    @action
@@ -404,6 +432,11 @@ export default class FilterStore {
    @observable
    dataFilterdByYears: any[] = []
 
+   @action
+   setDataFilterdByYears = (data: any[]) => {
+      this.dataFilterdByYears = data;
+   }
+
    // casualties groupd by some group, filterd on main filter
    @observable
    dataFilterd: any[] = []
@@ -424,16 +457,18 @@ export default class FilterStore {
    // //////////////////////////////////////////////////////////////////////////////////////////////
    // group by
    // //////////////////////////////////////////////////////////////////////////////////////////////
-   @observable
-   groupBy: GroupBy;
+   // @observable
+   // groupBy: GroupBy;
 
    @action
    updateGroupby = (key: string) => {
-      this.groupBy = this.groupByDict[key];
-      if (!this.useGetFetch && this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
-      else this.submitfilterdGroup(this.groupBy);
-      if (this.groupBy.text !== 'CityByPop') {
-         this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      this.groupByDict.setFilter(key);
+      this.groupByDict.setBrowserQueryString();
+      if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+      else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+      if (this.groupByDict.groupBy.text !== 'CityByPop') {
+         const gb2 = (this.group2Dict.groupBy as GroupBy2).name
+         this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2);
       }
    }
 
@@ -441,7 +476,7 @@ export default class FilterStore {
     * Dictionary with key-value list of the group-by  
     */
    @observable
-   groupByDict: any = {}
+   groupByDict: GroupMap;
 
    @action
    submitGroupByYears = () => {
@@ -477,7 +512,7 @@ export default class FilterStore {
     */
    padDataYearsWith0 = (data: any) => {
       const yearsList = [];
-      for (let i = this.startYear; i <= this.endYear; i += 1) {
+      for (let i = Number(this.startYear.queryValue); i <= Number(this.endYear.queryValue); i += 1) {
          yearsList.push(i);
       }
       const data2 = yearsList.map((year) => {
@@ -488,9 +523,15 @@ export default class FilterStore {
       return data2;
    }
 
+   getCountFromGroupByRes = (data: any[]) => {
+      const res = data.reduce((b: number, x: any) => b + x.count, 0);
+      return res;
+   }
+
    @action
    submitfilterdGroupByYears = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      this.isLoadingInjuriesCount = true;
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
@@ -498,7 +539,9 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
-                  this.dataFilterdByYears = dataPadded;
+                  this.setDataFilterdByYears(dataPadded);
+                  const count = this.getCountFromGroupByRes(data);
+                  this.setInjuriesCount(count);
                }
             });
       } else {
@@ -508,7 +551,9 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
-                  this.dataFilterdByYears = dataPadded;
+                  this.setDataFilterdByYears(dataPadded);
+                  const count = this.getCountFromGroupByRes(data);
+                  this.setInjuriesCount(count);
                }
             });
       }
@@ -517,7 +562,7 @@ export default class FilterStore {
 
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
@@ -538,9 +583,12 @@ export default class FilterStore {
 
    }
 
+   /**
+    * deprecated function
+    */
    @action
    submitfilterdGroupByPop = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterForPost(null);
       const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
       // logger.log(filter);
@@ -555,7 +603,7 @@ export default class FilterStore {
    @action
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
       if (this.useGetFetch) {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
@@ -563,7 +611,7 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
-                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
                      this.dataGroupby2 = fixData;
                   } catch (error) {
                      logger.log(error);
@@ -574,7 +622,7 @@ export default class FilterStore {
                }
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
@@ -582,7 +630,7 @@ export default class FilterStore {
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
-                     const fixData = this.groupBy2.fixStrcutTable(data);
+                     const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
                      this.dataGroupby2 = fixData;
                   } catch (error) {
                      logger.log(error);
@@ -596,17 +644,19 @@ export default class FilterStore {
 
    }
 
-   @observable
-   groupBy2: GroupBy2;
+   // @observable
+   // groupBy2: GroupBy2;
 
    @action
    updateGroupBy2 = (key: string) => {
-      this.groupBy2 = this.group2Dict[key];
-      this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      this.group2Dict.setFilter(key);
+      this.group2Dict.setBrowserQueryString();
+      const gb2name = (this.group2Dict.groupBy as GroupBy2).name
+      this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2name);
    }
 
    @observable
-   group2Dict: any = {}
+   group2Dict: GroupMap;
 
    // //////////////////////////////////////////////////////////////////////////////////////////////
    // filters actions
@@ -637,9 +687,10 @@ export default class FilterStore {
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
       this.submitfilterdGroupByYears();
-      if (this.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
-      else this.submitfilterdGroup(this.groupBy);
-      this.submitfilterdGroup2(this.groupBy, this.groupBy2.name);
+      console.log((this.groupByDict.groupBy as GroupBy).text);
+      if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+      else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+      this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
       const lang = this.rootStore.uiStore.language;
       if (this.rootStore.uiStore.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, lang);
@@ -663,7 +714,7 @@ export default class FilterStore {
                this.isLoading = false;
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange);
+         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
@@ -682,7 +733,7 @@ export default class FilterStore {
    }
 
    submintGetMarkerFirstStep = () => {
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filter = this.getFilterForPost(null);
       // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
       fetchAggregatFilter(filter, 'latlon')
@@ -702,14 +753,19 @@ export default class FilterStore {
          this.cityResult = this.cities.arrValues[index];
       } else this.cityResult = '';
    }
-
+   /**
+    * get filter query string for the server request. 
+    * @param bounds gis bound (rect) to filter
+    * @param useBounds if true will use gis bound to filter reqest
+    * @returns query string , for example ?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
+    */
    getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
-      //?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
+      //the oreder of the fileds is importnet for indexing in server
       let filter = '?';
-      filter += `sy=${this.startYear}&ey=${this.endYear}`;
+      filter += this.startYear.getFilter();
+      filter += this.endYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
-      // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
       filter += this.dayNight.getFilter();
       filter += this.streets.getFilter();
@@ -726,7 +782,7 @@ export default class FilterStore {
       filter += this.roadWidth.getFilter();
       filter += this.separator.getFilter();
       filter += this.oneLane.getFilter();
-      const range = JSON.parse(this.cityPopSizeRange);
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       filter += FiterUtils.getFilterByCityPop(range.min, range.max)
       return filter;
    }
@@ -737,10 +793,19 @@ export default class FilterStore {
     * @param ignoreIfAll - if true and if all option is cheked return blank
     */
    setFiltersText = (ignoreIfAll: boolean) => {
+      this.startYear.setText();
+      this.endYear.setText();
       this.injTypes.setText(ignoreIfAll);
+      this.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
+      this.ageTypes.setText(ignoreIfAll);
+      this.populationTypes.setText(ignoreIfAll);
+      this.roadTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
+      this.cityPopSizeRange.setText();
+      this.accidentType.setText(ignoreIfAll);
+      this.vehicleType.setText(ignoreIfAll);
    }
 
    /**
@@ -750,37 +815,88 @@ export default class FilterStore {
    setBrowserQueryString = () => {
       const params = new URLSearchParams(location.search);
       params.set('tab', this.rootStore.uiStore.currentTab);
-      this.injurySeverity.setBrowserQueryString(params);
+      this.startYear.setBrowserQueryString(params, false);
+      this.endYear.setBrowserQueryString(params, false);
+      this.injurySeverity.setBrowserQueryString(params, false);
+      this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
       this.genderTypes.setBrowserQueryString(params);
       this.ageTypes.setBrowserQueryString(params);
       this.populationTypes.setBrowserQueryString(params);
       this.cities.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
+      this.accidentType.setBrowserQueryString(params);
+      this.vehicleType.setBrowserQueryString(params);
+      this.speedLimit.setBrowserQueryString(params);
+      this.roadWidth.setBrowserQueryString(params);
+      this.separator.setBrowserQueryString(params);
+      this.oneLane.setBrowserQueryString(params);
       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+
+      this.groupByDict.setBrowserQueryString();
    }
 
+   /**
+    * udpate the store (and gui) using given qurey from the browser (on load time)
+    * @param defTab default tab to dispaly
+    * @param defCity default city to choose. (can be null)
+    */
+   @action
+   setStoreByQuery = (defTab: string, defCity?: string) => {
+      const params = new URLSearchParams(window.location.search);
+      const tab = this.getValFromQuery(params, 'tab', defTab);
+      this.startYear.setValuesByQuery(params);
+      this.endYear.setValuesByQuery(params);
+      this.injurySeverity.setValuesByQuery(params);
+      this.dayNight.setValuesByQuery(params);
+      if (tab) this.rootStore.uiStore.setCurrentTab(tab);
+      const citis = this.getCityNameFromQuery(params, defCity);
+      if (citis) this.updateCities(citis, true);
+      this.roadTypes.setValuesByQuery(params);
+      this.injTypes.setValuesByQuery(params);
+      this.genderTypes.setValuesByQuery(params);
+      this.ageTypes.setValuesByQuery(params);
+      this.populationTypes.setValuesByQuery(params);
+      this.accidentType.setValuesByQuery(params);
+      this.vehicleType.setValuesByQuery(params);
+      this.speedLimit.setValuesByQuery(params);
+      this.roadWidth.setValuesByQuery(params);
+      this.separator.setValuesByQuery(params);
+      this.oneLane.setValuesByQuery(params);
+      //update groupby
+      this.groupByDict.setValuesByQuery(params);
+      this.group2Dict.setValuesByQuery(params);
+   }
+
+   // get name by url query parmas
+   getValFromQuery(query: URLSearchParams, name: string, defVal?: string) {
+      const val = query.get(name);
+      const res = (val !== null) ? val : defVal;
+      return res;
+   }
+
+   // old code - backup for post req
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {
       let filter = '{"$and" : [';
       filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
+      // filter += FiterUtils.getMultiplefilter(this.injurySeverity);
       // filter += FiterUtils.getfilterCity(this.cities);
       if (useBounds && bounds != null) filter += FiterUtils.getfilterBounds(bounds);
-      filter += FiterUtils.getMultiplefilter(this.dayNight);
+      //filter += FiterUtils.getMultiplefilter(this.dayNight);
       // filter += FiterUtils.getFilterStreets(this.streets);
       // filter += this.getFilterFromNumArray(this.roads, 'road1');
       // filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
-      filter += FiterUtils.getMultiplefilter(this.injTypes);
-      filter += FiterUtils.getMultiplefilter(this.genderTypes);
-      filter += FiterUtils.getMultiplefilter(this.ageTypes);
-      filter += FiterUtils.getMultiplefilter(this.populationTypes);
-      filter += FiterUtils.getMultiplefilter(this.accidentType);
-      filter += FiterUtils.getMultiplefilter(this.vehicleType);
-      filter += FiterUtils.getMultiplefilter(this.roadTypes);
-      filter += FiterUtils.getMultiplefilter(this.speedLimit);
-      filter += FiterUtils.getMultiplefilter(this.roadWidth);
-      filter += FiterUtils.getMultiplefilter(this.separator);
-      filter += FiterUtils.getMultiplefilter(this.oneLane);
+      // filter += FiterUtils.getMultiplefilter(this.injTypes);
+      // filter += FiterUtils.getMultiplefilter(this.genderTypes);
+      // filter += FiterUtils.getMultiplefilter(this.ageTypes);
+      // filter += FiterUtils.getMultiplefilter(this.populationTypes);
+      // filter += FiterUtils.getMultiplefilter(this.accidentType);
+      // filter += FiterUtils.getMultiplefilter(this.vehicleType);
+      // filter += FiterUtils.getMultiplefilter(this.roadTypes);
+      // filter += FiterUtils.getMultiplefilter(this.speedLimit);
+      // filter += FiterUtils.getMultiplefilter(this.roadWidth);
+      // filter += FiterUtils.getMultiplefilter(this.separator);
+      // filter += FiterUtils.getMultiplefilter(this.oneLane);
       filter += ']}';
       return filter;
    }
@@ -798,11 +914,10 @@ export default class FilterStore {
       }
    }
 
-
    getfilterBySeverityAndCity = () => {
       let filter = '?';
-      filter += `sy=${this.startYear}`;
-      filter += FiterUtils.getMultiplefilter(this.injurySeverity);
+      filter += this.startYear.getFilter();
+      filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
@@ -859,7 +974,7 @@ export default class FilterStore {
 
    getFilterIDB = () => {
       const arrFilters: any[] = [];
-      const years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() };
+      const years = { filterName: 'accident_year', startYear: this.startYear.queryValue.toString(), endYear: this.endYear.queryValue.toString() };
       arrFilters.push(years);
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
@@ -884,7 +999,7 @@ export default class FilterStore {
       const arrFilters: any[] = [];
       const bbox = { filterName: 'bbox', p1: bounds.getSouthWest, p2: bounds.getNorthEast };
       arrFilters.push(bbox);
-      const years = { filterName: 'accident_year', startYear: this.startYear.toString(), endYear: this.endYear.toString() };
+      const years = { filterName: 'accident_year', startYear: this.startYear.queryValue.toString(), endYear: this.endYear.queryValue.toString() };
       arrFilters.push(years);
       this.getfilterCityIDB(arrFilters);
       this.getFilterStreetsIDB(arrFilters);
@@ -910,7 +1025,7 @@ export default class FilterStore {
          return;
       }
       let allChecked: boolean = true;
-      let arrfilter: string[] = [];
+      let arrfilter: number[] = [];
       const iterator = colFilter.arrTypes.values();
       for (const filterCheck of iterator) {
          if (filterCheck.checked) {
@@ -920,8 +1035,8 @@ export default class FilterStore {
          }
       }
       if (!allChecked) {
-         const filterVals = arrfilter.map((x: string) => {
-            if (x === 'null') return null;
+         const filterVals = arrfilter.map((x: number) => {
+            if (x === -1) return null;
             return x;
          });
          const filter = { filterName: colFilter.queryColName, values: filterVals };

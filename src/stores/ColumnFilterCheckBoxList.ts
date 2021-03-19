@@ -11,19 +11,21 @@ export interface IColumnFilter {
   queryColName: string;
   arrTypes: IFilterChecker[];
   //array of values to be sent as query to server
-  arrValues: string[];
+  arrValues: number[];
+  isArrValuesEmptyOnAllCheck : boolean;
   setQueryVals: () => void;
   setFilter: (aType: number, checked: boolean) => void;
   getFilter: () => string;
-  setBrowserQueryString: (param: URLSearchParams) => void;
+  setBrowserQueryString: (param: URLSearchParams, delIfEmpthy?: boolean) => void;
+  setValuesByQuery: (param: URLSearchParams) => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
-  //text is updated ofter filter submit
+  //text is updated after filter submit
   text: string;
   setText: (ignoreIfAll: boolean) => void;
 }
-/**  filter group of boolaen filters
+/**  filter group of boolaen filters that are check-box in the gui
 *  each group represnt one column in the database that can get
 * several fixd values
 */
@@ -32,7 +34,8 @@ export class ColumnFilter implements IColumnFilter {
 
   queryColName: string;
 
-  arrValues: string[];
+  arrValues: number[];
+  isArrValuesEmptyOnAllCheck : boolean;
 
   @observable
   arrTypes: IFilterChecker[];
@@ -42,11 +45,12 @@ export class ColumnFilter implements IColumnFilter {
   @observable
   text: string;
 
-  constructor(name: string, dbColName: string, allTypesOption: number = -1) {
+  constructor(name: string, dbColName: string, allTypesOption: number = -1, isEmptyValsOnAllCheck: boolean= true) {
     this.name = name;
     this.queryColName = dbColName;
     this.arrTypes = [];
     this.arrValues = [];
+    this.isArrValuesEmptyOnAllCheck= isEmptyValsOnAllCheck;
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
     this.text = '';
@@ -62,7 +66,7 @@ export class ColumnFilter implements IColumnFilter {
 
   @action
   setFilter = (aType: number, checked: boolean) => {
-    // in case this filter group has no option for "select all" - update the value
+    // in case this filter group has no "select all" option - update the value
     if (this.allTypesOption === -1) this.arrTypes[aType].checked = checked;
     // in case this filter has opthion for "select all"
     else if (aType === this.allTypesOption) {
@@ -75,14 +79,14 @@ export class ColumnFilter implements IColumnFilter {
   }
 
   /**
-   * return sentence foe query-string from Multiplefilter of booleans,
+   * return sentence for query-string from Multiplefilter of booleans,
    * for example : &injt=4,5 
    * @param colFilter column filter with name and chekcd list of values
    */
   @action
   setQueryVals = () => {
     let allChecked: boolean = true;
-    let arrfilter: string[] = [];
+    let arrfilter: number [] = [];
     if (this.allTypesOption > -1 && this.arrTypes[this.allTypesOption].checked) allChecked = true;
     else {
       // in case there is allTypesOption , it want be copied to arrfilter
@@ -96,7 +100,7 @@ export class ColumnFilter implements IColumnFilter {
         }
       }
     }
-    if (allChecked) arrfilter = [];
+    if (allChecked && this.isArrValuesEmptyOnAllCheck) arrfilter = [];
     this.arrValues = arrfilter;
   };
 
@@ -104,17 +108,18 @@ export class ColumnFilter implements IColumnFilter {
    * 
    * @returns query string for the server
    */
-  getFilter =() =>{
+  getFilter = () => {
     const vals = this.arrValues.join(',');
-    let res =  (this.arrValues.length == 0)? '': `&${this.queryColName}=${vals}`;
+    let res = (this.arrValues.length == 0) ? '' : `&${this.queryColName}=${vals}`;
     return res;
   }
+
   /**
   * set parmas of the browser QueryString
   * @param params 
   */
-  setBrowserQueryString = (params: URLSearchParams) =>{
-    if (this.arrValues.length === 0) {
+  setBrowserQueryString = (params: URLSearchParams, delIfEmpthy: boolean=true) => {
+    if (this.arrValues.length === 0 && delIfEmpthy) {
       params.delete(this.queryColName);
     } else {
       const vals = this.arrValues.join(',');
@@ -122,10 +127,32 @@ export class ColumnFilter implements IColumnFilter {
     }
   }
 
+  /**
+   * set arrValues by url query parmas
+   * @param params queryString from the browser
+   */
+  @action
+  setValuesByQuery(params: URLSearchParams) {
+    const vals = params.get(this.queryColName);
+    if (vals !== null) {
+      const valsArr = vals.split(',').map(Number);
+      this.arrTypes.forEach(checker => {
+        const found = checker.filters.some(r => valsArr.includes(r));
+        checker.checked = found;
+      });
+    }
+    this.setQueryVals();
+  }
+
   @action
   setText = (ignoreIfAll: boolean) => {
     if (ignoreIfAll) {
-      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption).map(x => i18n.t(x.label)).join(', ');
+      this.text = this.arrTypes.filter((x, index) => x.checked && index !== this.allTypesOption)
+      .map(x => i18n.t(x.label)).join(', ');
+      //in case all is cheked and no "allTypesOption" - text is ''
+      if (this.allTypesOption === -1 && this.arrValues.length === 0){
+        this.text = '';
+      }
     } else {
       this.text = this.arrTypes.filter(x => x.checked).map(x => i18n.t(x.label)).join(', ');
     }
@@ -133,7 +160,7 @@ export class ColumnFilter implements IColumnFilter {
 }
 
 export const initInjurySeverity = () => {
-  const col: IColumnFilter = new ColumnFilter('Severity', 'sev');
+  const col: IColumnFilter = new ColumnFilter('Severity', 'sev', -1, false);
   col.arrTypes.push(new FilterChecker('dead', true, [1]));
   col.arrTypes.push(new FilterChecker('severly-injured', false, [2]));
   col.setQueryVals();
@@ -178,7 +205,7 @@ export const initInjTypes = () => {
 export const initVehicleTypes = () => {
   const col: IColumnFilter = new ColumnFilter('VehicleType', 'vcl', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
+  col.arrTypes.push(new FilterChecker('pedestrian', false, [-1]));
   col.arrTypes.push(new FilterChecker('mobilityscooter', false, [22]));
   col.arrTypes.push(new FilterChecker('bicycle', false, [15]));
   col.arrTypes.push(new FilterChecker('e-scooter', false, [21]));
@@ -200,29 +227,29 @@ export const initVehicleTypes = () => {
 
 export const initVehicleTypesFull = () => {
   const col: IColumnFilter = new ColumnFilter('VehicleType', 'vehicle_vehicle_type_hebrew', 0);
-  col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
-  col.arrTypes.push(new FilterChecker('mobilityscooter', false, ['קלנועית חשמלית']));
-  col.arrTypes.push(new FilterChecker('bicycle', false, ['אופניים']));
-  col.arrTypes.push(new FilterChecker('e-scooter', false, ['קורקינט חשמלי']));
-  col.arrTypes.push(new FilterChecker('e-bike', false, ['אופניים חשמליים']));
-  col.arrTypes.push(new FilterChecker('motorcycle1', false, ['אופנוע 51 עד 125 סמ"ק']));
-  col.arrTypes.push(new FilterChecker('motorcycle2', false, ['אופנוע 126 עד 400 סמ"ק']));
-  col.arrTypes.push(new FilterChecker('motorcycle3', false, ['אופנוע 401+ סמ"ק']));
-  col.arrTypes.push(new FilterChecker('car', false, ['רכב נוסעים פרטי']));
-  col.arrTypes.push(new FilterChecker('taxi', false, ['מונית']));
-  col.arrTypes.push(new FilterChecker('tranzit', false, ['משא עד 3.5 טון - אחוד (טרנזיט)']));
-  col.arrTypes.push(new FilterChecker('tender', false, ['משא עד 3.5  טון - לא אחוד (טנדר)']));
-  col.arrTypes.push(new FilterChecker('minbuss', false, ['אוטובוס זעיר']));
-  col.arrTypes.push(new FilterChecker('bus', false, ['אוטובוס']));
-  col.arrTypes.push(new FilterChecker('truck1', false, ['משא 3.6 עד 9.9 טון']));
-  col.arrTypes.push(new FilterChecker('truck2', false, ['משא 10.0 עד 12.0 טון']));
-  col.arrTypes.push(new FilterChecker('truck3', false, ['משא 12.1 עד 15.9 טון']));
-  col.arrTypes.push(new FilterChecker('truck4', false, ['משא 16.0 עד 33.9 טון']));
-  col.arrTypes.push(new FilterChecker('truck5', false, ['משא 34.0+ טון']));
-  col.arrTypes.push(new FilterChecker('tractor', false, ['טרקטור']));
-  col.arrTypes.push(new FilterChecker('train', false, ['רכבת']));
-  col.arrTypes.push(new FilterChecker('other', false, ['אחר ולא ידוע']));
+  // col.arrTypes.push(new FilterChecker('all', true, []));
+  // col.arrTypes.push(new FilterChecker('pedestrian', false, ['null']));
+  // col.arrTypes.push(new FilterChecker('mobilityscooter', false, ['קלנועית חשמלית']));
+  // col.arrTypes.push(new FilterChecker('bicycle', false, ['אופניים']));
+  // col.arrTypes.push(new FilterChecker('e-scooter', false, ['קורקינט חשמלי']));
+  // col.arrTypes.push(new FilterChecker('e-bike', false, ['אופניים חשמליים']));
+  // col.arrTypes.push(new FilterChecker('motorcycle1', false, ['אופנוע 51 עד 125 סמ"ק']));
+  // col.arrTypes.push(new FilterChecker('motorcycle2', false, ['אופנוע 126 עד 400 סמ"ק']));
+  // col.arrTypes.push(new FilterChecker('motorcycle3', false, ['אופנוע 401+ סמ"ק']));
+  // col.arrTypes.push(new FilterChecker('car', false, ['רכב נוסעים פרטי']));
+  // col.arrTypes.push(new FilterChecker('taxi', false, ['מונית']));
+  // col.arrTypes.push(new FilterChecker('tranzit', false, ['משא עד 3.5 טון - אחוד (טרנזיט)']));
+  // col.arrTypes.push(new FilterChecker('tender', false, ['משא עד 3.5  טון - לא אחוד (טנדר)']));
+  // col.arrTypes.push(new FilterChecker('minbuss', false, ['אוטובוס זעיר']));
+  // col.arrTypes.push(new FilterChecker('bus', false, ['אוטובוס']));
+  // col.arrTypes.push(new FilterChecker('truck1', false, ['משא 3.6 עד 9.9 טון']));
+  // col.arrTypes.push(new FilterChecker('truck2', false, ['משא 10.0 עד 12.0 טון']));
+  // col.arrTypes.push(new FilterChecker('truck3', false, ['משא 12.1 עד 15.9 טון']));
+  // col.arrTypes.push(new FilterChecker('truck4', false, ['משא 16.0 עד 33.9 טון']));
+  // col.arrTypes.push(new FilterChecker('truck5', false, ['משא 34.0+ טון']));
+  // col.arrTypes.push(new FilterChecker('tractor', false, ['טרקטור']));
+  // col.arrTypes.push(new FilterChecker('train', false, ['רכבת']));
+  // col.arrTypes.push(new FilterChecker('other', false, ['אחר ולא ידוע']));
   return col;
 };
 
@@ -301,7 +328,7 @@ export const initSeparator = () => {
   col.arrTypes.push(new FilterChecker('separator-not-built', false, [4]));
   col.arrTypes.push(new FilterChecker('separator-paint', false, [1]));
   col.arrTypes.push(new FilterChecker('separator-ohter', false, [5]));
-  col.arrTypes.push(new FilterChecker('separator-not-relevant', false, ['null']));
+  // col.arrTypes.push(new FilterChecker('separator-not-relevant', false, [-1]));
   return col;
 };
 export const initOneLane = () => {
@@ -311,7 +338,7 @@ export const initOneLane = () => {
   col.arrTypes.push(new FilterChecker('onelane-twoway-line', false, [2]));
   col.arrTypes.push(new FilterChecker('onelane-twoway-noline', false, [3]));
   col.arrTypes.push(new FilterChecker('onelane-unknown', false, [9]));
-  col.arrTypes.push(new FilterChecker('onelane-not-relevant', false, ['null']));
+  // col.arrTypes.push(new FilterChecker('onelane-not-relevant', false, [-1]));
   return col;
 };
 export const initAccidentType = () => {

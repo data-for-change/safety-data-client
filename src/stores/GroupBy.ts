@@ -20,40 +20,41 @@ export default class GroupBy implements IGroupBy {
     this.value = value;
     this.limit = limit;
   }
+
 }
 
-export const initGroupByDict = (useGetFetch: boolean) =>{
-  if (useGetFetch) return initGroupByDictForGet();
+export const initGroupMap = (useGetFetch: boolean) => {
+  if (useGetFetch) return initGroupMapForGet();
   else return initGroupByDictForPost();
 }
 
-const initGroupByDictForGet = () => {
-  const dictGroupBy:any = {};
-  dictGroupBy.Severity = new GroupBy('Severity', 'sev');
-  dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injt');
-  dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vcl');
-  dictGroupBy.Gender = new GroupBy('Gender', 'sex');
-  dictGroupBy.Age = new GroupBy('Age', 'age');
-  dictGroupBy.Year = new GroupBy('Year', 'year');
-  dictGroupBy.Month = new GroupBy('Month', 'mn');
-  dictGroupBy.DayNight = new GroupBy('DayNight', 'dn');
-  dictGroupBy.WeekDay = new GroupBy('WeekDay', 'wd');
-  dictGroupBy.RoadType = new GroupBy('RoadType', 'rt');
-  dictGroupBy.City = new GroupBy('City', 'city', 10);
-  dictGroupBy.CityByPop = new GroupBy('CityByPop', 'cpop');
-  dictGroupBy.Street = new GroupBy('Street', 'st', 10);
-  dictGroupBy.Road = new GroupBy('Road', 'rd', 10);
-  dictGroupBy.AccidentType = new GroupBy('AccidentType', 'acc');
-  dictGroupBy.Vehicles = new GroupBy('Vehicles', 'vcli');
-  dictGroupBy.SpeedLimit = new GroupBy('SpeedLimit', 'sp');
-  dictGroupBy.RoadWidth = new GroupBy('RoadWidth', 'rw');
-  dictGroupBy.Separator = new GroupBy('Separator', 'ml');
-  dictGroupBy.OneLane = new GroupBy('OneLane', 'ol');
-  return dictGroupBy;
+const initGroupMapForGet = () => {
+  const map = new Map();
+  map.set('sev', new GroupBy('Severity', 'sev'));
+  map.set('injt', new GroupBy('TypeInjured', 'injt'));
+  map.set('vcl', new GroupBy('Vehicle', 'vcl'));
+  map.set('sex', new GroupBy('Gender', 'sex'));
+  map.set('age', new GroupBy('Age', 'age'));
+  map.set('year', new GroupBy('Year', 'year'));
+  map.set('mn', new GroupBy('Month', 'mn'));
+  map.set('dn', new GroupBy('DayNight', 'dn'));
+  map.set('wd', new GroupBy('WeekDay', 'wd'));
+  map.set('rt', new GroupBy('RoadType', 'rt'));
+  map.set('city', new GroupBy('City', 'city', 10));
+  map.set('cpop', new GroupBy('CityByPop', 'cpop'));
+  map.set('st', new GroupBy('Street', 'st', 10));
+  map.set('rd', new GroupBy('Road', 'rd', 10));
+  map.set('acc', new GroupBy('AccidentType', 'acc'));
+  map.set('vcli', new GroupBy('Vehicles', 'vcli'));
+  map.set('sp', new GroupBy('SpeedLimit', 'sp'));
+  map.set('rw', new GroupBy('RoadWidth', 'rw'));
+  map.set('ml', new GroupBy('Separator', 'ml'));
+  map.set('ol', new GroupBy('OneLane', 'ol'));
+  return map;
 };
 
 const initGroupByDictForPost = () => {
-  const dictGroupBy:any = {};
+  const dictGroupBy: any = {};
   dictGroupBy.Severity = new GroupBy('Severity', 'injury_severity_hebrew');
   dictGroupBy.TypeInjured = new GroupBy('TypeInjured', 'injured_type_hebrew');
   dictGroupBy.Vehicle = new GroupBy('Vehicle', 'vehicle_vehicle_type_hebrew');

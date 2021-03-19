@@ -48,7 +48,7 @@ export class ColumnFilterArray implements IColumnFilterArray {
     if (this.arrValues.length > 0 && this.arrValues[0] !== '') {
       let vals = '';
       if (this.isStringValues) {
-        vals += this.arrValues.map((x: string) => `"${x.trim()}"`).join(',');
+        vals += this.arrValues.map((x: string) => `${x.trim()}`).join(',');
       } else {
         vals += this.arrValues.map((x: string) => x).join(',');
       }
