@@ -29,6 +29,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
       valProp="value"
       contentProp="text"
       value={val}
+      cssClass="form-select-m"
     />
   );
 });

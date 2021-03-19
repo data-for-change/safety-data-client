@@ -9,14 +9,16 @@ interface Props {
    value?: string
    label?: string
    style?: any
+   cssClass?: string
 }
 
-const MySelect: React.FC<Props> = ({ style, label, onChange, data, valProp, contentProp, value }) => {
+const MySelect: React.FC<Props> = ({ style, label, onChange, data, valProp, contentProp, value, cssClass='' }) => {
    const { t } = useTranslation();
+   const cssname= "form-select form-select-sm " + cssClass;
    return (
       <div className="select-wrapper" style={style && style} >
          {label && <label> {t(label)} </label>}
-         <select className="form-select form-select-sm" onChange={onChange} value={value}>
+         <select className={cssname} onChange={onChange} value={value}>
             {data.map((item) => {
                return <option
                   key={valProp ? item[valProp] : item}
