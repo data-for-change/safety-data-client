@@ -26,14 +26,20 @@ interface IProps { }
 //    return size;
 // };
 
+const styles = {
+   divCharts: {
+     width:0,
+     minWidth: '100%',
+   },
+ };
+
 export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    const { filterStore } = useStore();
-   const { dataByYears } = filterStore;
-   const reactData1 = toJS(dataByYears);
+   const { injuriesCount } = filterStore;
 
-   if (reactData1.length > 0) {
+   if (injuriesCount > 0) {
       return (
-         <React.Fragment>
+         <div style={styles.divCharts}>
             <Row>
                <Col md={4}>
                   <CardChartYears />
@@ -47,7 +53,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
                   <CardChartGrpBy2 />
                </Col>
             </Row>
-         </React.Fragment>
+         </div>
       );
    }
    return null;
