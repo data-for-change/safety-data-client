@@ -14,16 +14,24 @@ import SmallCard2 from '../atoms/SmallCard2';
 interface Props {
   type: string;
 }
+
+const styles = {
+  divImageGallery: {
+    width:0,
+    minWidth: '100%',
+  },
+  styleCol: {
+    display: 'flex',
+    justifyContent: 'center',
+  }
+};
+
 // const styleCard: React.CSSProperties = {
 //   borderRadius: '5px',
 //   padding: '5px',
 //   margin: '7px',
 //   width: '80%',
 // };
-const styleCol: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-};
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   const { imageStore, uiStore } = useStore();
@@ -52,8 +60,9 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
 
   return (
     <SmallCard2>
+      <div style={styles.divImageGallery}>
       <Row >
-        <Col md={3} style={styleCol}>
+        <Col md={3} style={styles.styleCol}>
           <Select
             id='exampleForm.SelectTag'
             value={currTag}
@@ -65,7 +74,7 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
         <Col xs={12} md={6}>
           {isGotImages && <ImageTitle />}
         </Col>
-        <Col md={3} style={styleCol}>
+        <Col md={3} style={styles.styleCol}>
           {isGotImages && <ButtonToggleHideDescription />}
         </Col>
       </Row>
@@ -78,6 +87,7 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
         />
       )}
       {!isGotImages && <ImageMsg />}
+      </div>
     </SmallCard2>
   );
 });
