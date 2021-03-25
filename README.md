@@ -14,15 +14,16 @@ With Safety-Data you can check:
 * What percent of pedestrians where hit at daytime compare to nighttime?
 
 Tipical use case is filter cases by categories of when, where, who, road - types etc. for exmaple see all fatal accidnets in tel-aviv.
-then you can serach patterns in the data using one or 2 grouping options - for example group the results by age. you can find more patterns by looking on the reuslts in a map or in a table. you can also copy the resutls to tables for more analis. 
+then you can serach patterns in the data using one or 2 grouping options - for example group the results by age. you can find more patterns by looking on the reuslts in a map or in a table. you can also copy the resutls to tables for more analysis. ![map1](https://user-images.githubusercontent.com/342644/112530180-d1e1e380-8dae-11eb-8e6d-318f90aadd0b.PNG)
 
 
-The source of the data on the accidents is CBS, through accidents data engine of [Anyway project](https://www.anyway.co.il/), from the Public Knowledge Workshop. The map on the site is thanks to the [OpenStreetMap](https://www.openstreetmap.org/) project
+The source of the data on the accidents is CBS, through accidents data engine of [Anyway project](https://www.anyway.co.il/), from the Public Knowledge Workshop. The map on the site is thanks to the [OpenStreetMap](https://www.openstreetmap.org/) project.
 
 Technologies of the site are React.js front-end and Node.js + MongoDB back-end.
 
 Server side:
 Typescript Express, async/await, REST-API 
-using mongoose, helmet, winston, morgan, multer
+using mongoose, helmet, winston, morgan, multer.
+
 
 
