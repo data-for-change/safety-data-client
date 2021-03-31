@@ -42,6 +42,7 @@
   "2020": "2020",
   "Month": "Month",
   "Where": "Where",
+  "LocationAccuracy": "Location Accuracy",
   "City": "City",
   "CityByPop": "Per 100k residents",
   "city_size": "City Population",

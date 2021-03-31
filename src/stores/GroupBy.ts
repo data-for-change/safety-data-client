@@ -40,6 +40,7 @@ const initGroupMapForGet = () => {
   map.set('dn', new GroupBy('DayNight', 'dn'));
   map.set('wd', new GroupBy('WeekDay', 'wd'));
   map.set('rt', new GroupBy('RoadType', 'rt'));
+  map.set('lca', new  GroupBy('LocationAccuracy', 'lca'))
   map.set('city', new GroupBy('City', 'city', 10));
   map.set('cpop', new GroupBy('CityByPop', 'cpop'));
   map.set('st', new GroupBy('Street', 'st', 10));

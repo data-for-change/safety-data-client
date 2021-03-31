@@ -28,6 +28,7 @@ const AccidentsPopUp: React.FC<IProps> = (({ data: x, language }) => {
             {x.road2 ? `${x.road2}, ` : ''}
             {x.road_segment_name ? `${x.road_segment_name}, ` : ''}
             {x.road_type_hebrew}
+            {x.location_accuracy_hebrew ? ` (${x.location_accuracy_hebrew})` : ''} 
           </div>
           <div><span style={pStyle}>{t('What')}:</span> {x.accident_type_hebrew} ({x.vehicles})</div>
           <div><span style={pStyle}>{t('WhatRoad')}:</span> {x.speed_limit_hebrew ? `${x.speed_limit_hebrew}, ` : ''}{x.multi_lane_hebrew ? `${x.multi_lane_hebrew}, ` : ''}{x.one_lane_hebrew ? `${x.one_lane_hebrew}, ` : ''}{x.road_width_hebrew ? `${x.road_width_hebrew}, ` : ''}</div>
