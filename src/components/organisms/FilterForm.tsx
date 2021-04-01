@@ -126,7 +126,9 @@ const CardFilterWhere = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhere, roadTypes, updateRoadType, isMultipleCities,
+      isValidWhere, roadTypes, updateRoadType, 
+      locationAccuracy, updateLocationAccuracy,
+      isMultipleCities,
       cityPopSizeRange, setCityPopSizeRange,
       setFormCardKey,
    } = filterStore;
@@ -162,6 +164,11 @@ const CardFilterWhere = observer(() => {
                   valProp="val"
                   contentProp="text"
                   onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCityPopSizeRange(event.target.value)}
+               />
+               <GroupCheckbox
+                  formName="exampleForm"
+                  colFilter={locationAccuracy}
+                  onChange={updateLocationAccuracy}
                />
             </div>
          </Accordion.Collapse>

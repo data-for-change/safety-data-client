@@ -40,6 +40,7 @@ export default class FilterStore {
       this.endYear = initEndYear();
       this.dayNight = FC.initDayNight();
       // where
+      this.locationAccuracy = FC.initLocationAccuracy();
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road', 'rd', false);
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
@@ -231,8 +232,16 @@ export default class FilterStore {
       this.updateFilters(this.roadTypes, aType, val);
    }
 
+   @observable
+   locationAccuracy: IColumnFilter;
+   
+   @action
+   updateLocationAccuracy = (aType: number, val: boolean) => {
+      this.updateFilters(this.locationAccuracy, aType, val);
+   }
+
    @computed get isValidWhere() {
-      const res = !this.roadTypes.isAllValsFalse;
+      const res = !this.roadTypes.isAllValsFalse && !this.locationAccuracy.isAllValsFalse;
       return res;
    }
 
@@ -777,6 +786,7 @@ export default class FilterStore {
       filter += this.populationTypes.getFilter();
       filter += this.accidentType.getFilter();
       filter += this.vehicleType.getFilter();
+      filter += this.locationAccuracy.getFilter();
       filter += this.roadTypes.getFilter();
       filter += this.speedLimit.getFilter();
       filter += this.roadWidth.getFilter();
@@ -800,6 +810,7 @@ export default class FilterStore {
       this.genderTypes.setText(ignoreIfAll);
       this.ageTypes.setText(ignoreIfAll);
       this.populationTypes.setText(ignoreIfAll);
+      this.locationAccuracy.setText(ignoreIfAll);
       this.roadTypes.setText(ignoreIfAll);
       this.cities.setText();
       this.roads.setText();
@@ -825,6 +836,7 @@ export default class FilterStore {
       this.populationTypes.setBrowserQueryString(params);
       this.cities.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
+      this.locationAccuracy.setBrowserQueryString(params);
       this.accidentType.setBrowserQueryString(params);
       this.vehicleType.setBrowserQueryString(params);
       this.speedLimit.setBrowserQueryString(params);
@@ -852,6 +864,7 @@ export default class FilterStore {
       if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
+      this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
       this.injTypes.setValuesByQuery(params);
       this.genderTypes.setValuesByQuery(params);

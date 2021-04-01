@@ -20,7 +20,7 @@ const WhenTitle: React.FC<{}> = observer(() => {
 const WhereTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { cities, cityPopSizeRange, roads, roadTypes } = filterStore;
+  const { cities, cityPopSizeRange, roads, roadTypes, locationAccuracy } = filterStore;
   let res = t('Israel');
   if (cities.text !== '') {
     res = `${cities.text}`; // maybe use t('several-cities');
@@ -33,6 +33,7 @@ const WhereTitle: React.FC<{}> = observer(() => {
   else if (roadTypes.text !== '') {
     res = `${roadTypes.text}`;
   }
+  if (locationAccuracy.text != '') res += `, ${locationAccuracy.text}`;
   return (
     <span>{res}</span>
   )

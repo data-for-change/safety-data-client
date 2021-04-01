@@ -287,6 +287,16 @@ export const initPopulationTypes = () => {
   return col;
 };
 
+export const initLocationAccuracy = () => {
+  const col: IColumnFilter = new ColumnFilter('LocationAccuracy', 'lca');
+  col.arrTypes.push(new FilterChecker('accurate_location', true, [1]));
+  col.arrTypes.push(new FilterChecker('city_center', true, [2]));
+  col.arrTypes.push(new FilterChecker('road_center', true, [3]));
+  col.arrTypes.push(new FilterChecker('km_cneter', true, [4]));
+  col.arrTypes.push(new FilterChecker('no_location', true, [9]));
+  return col;
+};
+
 export const initRoadTypes = () => {
   const col: IColumnFilter = new ColumnFilter('RoadType', 'rt');
   col.arrTypes.push(new FilterChecker('urban-junction', true, [1]));
