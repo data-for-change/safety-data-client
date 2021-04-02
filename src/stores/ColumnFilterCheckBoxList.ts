@@ -205,7 +205,7 @@ export const initInjTypes = () => {
 export const initVehicleTypes = () => {
   const col: IColumnFilter = new ColumnFilter('VehicleType', 'vcl', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('pedestrian', false, [-1]));
+  col.arrTypes.push(new FilterChecker('pedestrian', false, [0]));
   col.arrTypes.push(new FilterChecker('mobilityscooter', false, [22]));
   col.arrTypes.push(new FilterChecker('bicycle', false, [15]));
   col.arrTypes.push(new FilterChecker('e-scooter', false, [21]));
