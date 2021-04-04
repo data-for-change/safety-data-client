@@ -7,12 +7,15 @@ export const getFilterGroupBy =
     popMin = -1,
     popMax = -1,
     groupName2: string = '',
-    limit: number = 0) => {
+    limit: number= 0,
+    sort: number =0 ) => {
     let filter = filterMatch;
     filter += `&gb=${groupName}`;
     if (groupName2 !== '') {
       filter +=`&gb2=${groupName2}`
     }
+    if (sort !== 0)
+    filter +=`&sort=${sort}`
     if (limit !== 0)
       filter +=`&lim=${limit}`
     return filter;

@@ -4,6 +4,7 @@ export interface IGroupBy {
   text: string;
   value: string;
   limit: number;
+  sort: number;
 }
 
 export default class GroupBy implements IGroupBy {
@@ -14,11 +15,14 @@ export default class GroupBy implements IGroupBy {
 
   limit: number;
 
+  sort: number;
+
   // text - headleine for GUI, value - name of value for filter
-  constructor(text: string, value: string, limit: number = 0) {
+  constructor(text: string, value: string, limit: number = 0, sort = 0) {
     this.text = text;
     this.value = value;
     this.limit = limit;
+    this.sort = sort;
   }
 
 }
@@ -41,10 +45,10 @@ const initGroupMapForGet = () => {
   map.set('wd', new GroupBy('WeekDay', 'wd'));
   map.set('rt', new GroupBy('RoadType', 'rt'));
   map.set('lca', new  GroupBy('LocationAccuracy', 'lca'))
-  map.set('city', new GroupBy('City', 'city', 10));
+  map.set('city', new GroupBy('City', 'city', 15, -1));
   map.set('cpop', new GroupBy('CityByPop', 'cpop'));
-  map.set('st', new GroupBy('Street', 'st', 10));
-  map.set('rd', new GroupBy('Road', 'rd', 10));
+  map.set('st', new GroupBy('Street', 'st', 15, -1));
+  map.set('rd', new GroupBy('Road', 'rd', 10, -1));
   map.set('acc', new GroupBy('AccidentType', 'acc'));
   map.set('vcli', new GroupBy('Vehicles', 'vcli'));
   map.set('sp', new GroupBy('SpeedLimit', 'sp'));
