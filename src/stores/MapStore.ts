@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import { Map } from 'react-leaflet';
 import L from 'leaflet';
-import { fetchFilter } from '../services/AccidentService';
 import logger from '../services/logger';
 import RootStore from './RootStore';
 // import autorun  from "mobx"

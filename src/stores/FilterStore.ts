@@ -11,8 +11,7 @@ import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
 import RootStore from './RootStore';
-import { fetchAggregate, fetchAggregatFilter } from '../services/AccidentService';
-import { fetchGetList, fetchGetGroupBy } from '../services/AccidentService';
+import AccidentService from '../services/AccidentService';
 import CityService from '../services/CityService';
 import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
 import logger from '../services/logger';
@@ -492,7 +491,7 @@ export default class FilterStore {
       if (this.useGetFetch) {
          const filtermatch = this.getfilterBySeverityAndCity();
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year');
-         fetchGetGroupBy(filter)
+         AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
@@ -503,7 +502,7 @@ export default class FilterStore {
       else {
          const filtermatch = this.getfilterBySeverityAndCity();
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year');
-         fetchAggregate(filter)
+         AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
@@ -544,7 +543,7 @@ export default class FilterStore {
       if (this.useGetFetch) {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
-         fetchGetGroupBy(filter)
+         AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
@@ -556,7 +555,7 @@ export default class FilterStore {
       } else {
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
-         fetchAggregate(filter)
+         AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = this.padDataYearsWith0(data);
@@ -576,7 +575,7 @@ export default class FilterStore {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
          // logger.log(filter);
-         fetchGetGroupBy(filter)
+         AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) this.dataFilterd = data;
             });
@@ -584,7 +583,7 @@ export default class FilterStore {
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
          // logger.log(filter);
-         fetchAggregate(filter)
+         AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) this.dataFilterd = data;
             });
@@ -601,7 +600,7 @@ export default class FilterStore {
       const filtermatch = this.getFilterForPost(null);
       const filter = FiterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
       // logger.log(filter);
-      fetchAggregate(filter)
+      AccidentService.fetchAggregate(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
                this.dataFilterd = data;
@@ -616,7 +615,7 @@ export default class FilterStore {
          const filtermatch = this.getFilterQueryString(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
-         fetchGetGroupBy(filter)
+         AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
@@ -635,7 +634,7 @@ export default class FilterStore {
          const filtermatch = this.getFilterForPost(null);
          const filter = FiterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
-         fetchAggregate(filter)
+         AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
@@ -713,7 +712,7 @@ export default class FilterStore {
          this.setBrowserQueryString();
          // logger.log(filter);
          this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-         fetchGetList(filter, 'main')
+         AccidentService.fetchGetList(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
                   this.updateAllInjuries(data);
@@ -728,7 +727,7 @@ export default class FilterStore {
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
          this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-         fetchAggregatFilter(filter, 'main')
+         AccidentService.fetchAggregatFilter(filter, 'main')
             .then((data: any[] | undefined) => {
                if (data !== null && data !== undefined) {
                   this.updateAllInjuries(data);
@@ -745,7 +744,7 @@ export default class FilterStore {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filter = this.getFilterForPost(null);
       // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-      fetchAggregatFilter(filter, 'latlon')
+      AccidentService.fetchAggregatFilter(filter, 'latlon')
          .then((data: any[] | undefined) => {
             if (data !== null && data !== undefined) {
                this.updateDataMarkersLean(data);
