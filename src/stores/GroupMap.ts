@@ -79,6 +79,7 @@ const initGroup2DictForGet = () => {
     year.vals[2017] = new GroupBy2Val('2017', '#559E54');
     year.vals[2018] = new GroupBy2Val('2018', '#305A30');
     year.vals[2019] = new GroupBy2Val('2019', '#305A30');
+    year.vals[2020] = new GroupBy2Val('2020', '#1258DC');
     dict.set(year.name, year);
 
     const injt = new GroupBy2('TypeInjured', 'injt');
