@@ -695,7 +695,7 @@ export default class FilterStore {
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
       this.submitfilterdGroupByYears();
-      console.log((this.groupByDict.groupBy as GroupBy).text);
+      // console.log((this.groupByDict.groupBy as GroupBy).text);
       if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);

@@ -3,7 +3,7 @@ class AccidentService {
     // Default options are marked with *
     let url = '/api/v1/accident/';
     url += filter;
-    console.log(url);
+    // console.log(url);
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors', // no-cors, *cors, same-origin
@@ -25,7 +25,7 @@ class AccidentService {
     // Default options are marked with *
     let url = '/api/v1/accident/groupby/';
     url += filter;
-    console.log(url);
+    // console.log(url);
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors', // no-cors, *cors, same-origin
@@ -47,7 +47,7 @@ class AccidentService {
     // Default options are marked with *
     let url = '/api/v1/accident/get';
     url += filter;
-    console.log(url);
+    // console.log(url);
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors', // no-cors, *cors, same-origin
