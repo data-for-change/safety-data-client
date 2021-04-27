@@ -39,6 +39,7 @@ const initGroupMapForGet = () => {
   map.set('vcl', new GroupBy('Vehicle', 'vcl'));
   map.set('sex', new GroupBy('Gender', 'sex'));
   map.set('age', new GroupBy('Age', 'age'));
+  map.set('pt', new GroupBy('Population', 'pt'));
   map.set('year', new GroupBy('Year', 'year'));
   map.set('mn', new GroupBy('Month', 'mn'));
   map.set('dn', new GroupBy('DayNight', 'dn'));
