@@ -54,6 +54,12 @@ export const initGroup2Map = (useGetFetch: boolean) => {
     else return initGroup2DictForPost();
   };
 
+  /**
+   * init a map of GroupBy2 objects, 
+   * each GroupBy2 object has values, to be used in charts, 
+   * keys are axpected values from server maped to lang values 
+   * @returns 
+   */
 const initGroup2DictForGet = () => {
     const dict = new Map()
     const sev = new GroupBy2('Severity', 'sev');
@@ -81,6 +87,12 @@ const initGroup2DictForGet = () => {
     year.vals[2019] = new GroupBy2Val('2019', '#305A30');
     year.vals[2020] = new GroupBy2Val('2020', '#1258DC');
     dict.set(year.name, year);
+
+    const dayNight = new GroupBy2('DayNight', 'dn');
+    dayNight.vals['יום'] = new GroupBy2Val('day', '#82CA9D');
+    dayNight.vals['לילה'] = new GroupBy2Val('night', '#559E54');
+    dict.set(dayNight.name, dayNight);
+
 
     const injt = new GroupBy2('TypeInjured', 'injt');
     injt.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
