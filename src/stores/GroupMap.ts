@@ -106,6 +106,27 @@ const initGroup2DictForGet = () => {
     injt.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
     dict.set(injt.name, injt);
 
+    const acc=  new GroupBy2('AccidentType', 'acc');
+    acc.vals['פגיעה בהולך רגל'] = new GroupBy2Val('hit-ped', '#e3eaa7');
+    acc.vals['התנגשות חזית בצד'] = new GroupBy2Val('hit-front-side', '#1F326E');
+    acc.vals['התנגשות חזית באחור'] = new GroupBy2Val('hit-front-rear', '#4673FA');
+    acc.vals['התנגשות חזית בחזית'] = new GroupBy2Val('hit-front-front', '#3456BA');
+    acc.vals['התנגשות צד בצד'] = new GroupBy2Val('hit-side-side', '#0d9ea1');
+    acc.vals['התנגשות עם רכב שנעצר ללא חניה'] = new GroupBy2Val('hit-obstacle1', '#3CFAB4');
+    acc.vals['התנגשות עם רכב חונה'] = new GroupBy2Val('hit-obstacle2', '#1D7A58');
+    acc.vals['התנגשות עם עצם דומם'] = new GroupBy2Val('hit-obstacle3', '#2EBD88');
+    acc.vals['ירידה מהכביש או עלייה למדרכה'] = new GroupBy2Val('hit-offroad', '#0A337F');
+    acc.vals['התהפכות'] = new GroupBy2Val('hit-turning-over', '#FA6E2D');
+    acc.vals['החלקה'] = new GroupBy2Val('hit-slip', '#BD5422');
+    acc.vals['פגיעה בנוסע בתוך כלי הרכב'] = new GroupBy2Val('hit-passenger', '#0A337F');
+    acc.vals['נפילה מרכב נע'] = new GroupBy2Val('hit-falloff', '#0A337F');
+    acc.vals['אחר'] = new GroupBy2Val('hit-other', '#0A337F');
+    acc.vals['התנגשות אחור בחזית'] = new GroupBy2Val('hit-rear-front', '#0A337F');
+    acc.vals['התנגשות אחור אל צד'] = new GroupBy2Val('hit-rear-side', '#0A337F');
+    acc.vals['התנגשות עם בעל חיים'] = new GroupBy2Val('hit-animal', '#0A337F');
+    acc.vals['פגיעה ממטען של רכב'] = new GroupBy2Val('hit-cargo', '#0A337F');
+    dict.set(acc.name, acc);
+
     return dict;
 }
 
