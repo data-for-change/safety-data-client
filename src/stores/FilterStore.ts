@@ -53,7 +53,7 @@ export default class FilterStore {
       this.populationTypes = FC.initPopulationTypes();
       // What
       this.accidentType = FC.initAccidentType();
-      this.vehicleType = FC.initVehicleTypes();
+      this.vehicleType = FC.initVehicleTypesFull();
       // What Road
       this.speedLimit = FC.initSpeedLimit();
       this.roadWidth = FC.initRoadWidth();
