@@ -355,14 +355,14 @@ export const initOneLane = () => {
 export const initAccidentType = () => {
   const col: IColumnFilter = new ColumnFilter('AccidentType', 'acc', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('hit-ped', false, [1]));
-  col.arrTypes.push(new FilterChecker('hit-front-side', false, [2]));
-  col.arrTypes.push(new FilterChecker('hit-front-front', false, [5]));
-  col.arrTypes.push(new FilterChecker('hit-front-rear', false, [3]));
-  col.arrTypes.push(new FilterChecker('hit-side-side', false, [4]));
-  col.arrTypes.push(new FilterChecker('hit-obstacle', false, [8]));
-  col.arrTypes.push(new FilterChecker('hit-turning-over', false, [10]));
-  col.arrTypes.push(new FilterChecker('hit-slip', false, [11]));
+  col.arrTypes.push(new FilterChecker('accType.ped', false, [1]));
+  col.arrTypes.push(new FilterChecker('accType.front-side', false, [2]));
+  col.arrTypes.push(new FilterChecker('accType.front-front', false, [5]));
+  col.arrTypes.push(new FilterChecker('accType.front-rear', false, [3]));
+  col.arrTypes.push(new FilterChecker('accType.side-side', false, [4]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle', false, [8]));
+  col.arrTypes.push(new FilterChecker('accType.turning-over', false, [10]));
+  col.arrTypes.push(new FilterChecker('accType.slip', false, [11]));
   return col;
 };
 
