@@ -42,9 +42,8 @@ const WhereTitle: React.FC<{}> = observer(() => {
 const WhoTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injTypes, genderTypes, ageTypes, populationTypes } = filterStore;
-  let res = (injTypes.text !== '') ? `, ${injTypes.text}` : '';
-  if (genderTypes.text != '') res += `, ${genderTypes.text}`;
+  const { genderTypes, ageTypes, populationTypes } = filterStore;
+  let res = (genderTypes.text != '') ? `, ${genderTypes.text}` : '';
   if (populationTypes.text != '') res += `, ${populationTypes.text}`;
   if (ageTypes.text != '') res += `, ${t('Age')}: ${ageTypes.text}`;
   return (
@@ -62,9 +61,12 @@ const WhatTitle: React.FC<{}> = observer(() => {
 });
 
 const WhatVehicleTitle: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { vehicleType } = filterStore;
-  let res = (vehicleType.text !== '') ? `, ${vehicleType.text}` : '';
+  const { injTypes, vehicleType , involvedVehicle} = filterStore;
+  let res = (injTypes.text !== '') ? `, ${injTypes.text}` : '';
+  if (vehicleType.text !== '') res += `,  ${t('VehicleType')}: ${vehicleType.text}`;
+  if (involvedVehicle.text != '') res += `, ${t('Vehicles')}: ${involvedVehicle.text}`;
   return (
     <span>{res}</span>
   )
@@ -86,10 +88,10 @@ const InfoPanel: React.FC<IProps> = observer(({ }) => {
     return (
       <h5 style={styles.div}>
         <WhereTitle />
+        <WhatVehicleTitle />
         <WhoTitle />
         <WhenTitle />
         <WhatTitle />
-        <WhatVehicleTitle />
         {', '}
         {t('Found')}
         {' '}

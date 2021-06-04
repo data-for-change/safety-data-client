@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
@@ -44,10 +44,10 @@ const FilterForm: React.FC<IProps> = observer(({ }) => {
          <Form>
             <Accordion defaultActiveKey={formCardKey.toString()}>
                <CardFilterWhen />
+               <CardFilterWhatVehicle />
                <CardFilterWhere />
                <CardFilterWho />
                <CardFilterWhat />
-               <CardFilterWhatVehicle />
                <CardFilterWhatRoad />
             </Accordion>
             <GroupCheckbox
@@ -126,7 +126,7 @@ const CardFilterWhere = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {
-      isValidWhere, roadTypes, updateRoadType, 
+      isValidWhere, roadTypes, updateRoadType,
       locationAccuracy, updateLocationAccuracy,
       isMultipleCities,
       cityPopSizeRange, setCityPopSizeRange,
@@ -138,14 +138,14 @@ const CardFilterWhere = observer(() => {
       <Card>
          <Card.Header>
             <CustomToggle
-               eventKey="1"
+               eventKey="2"
                style={styleToggle}
                onClick={setFormCardKey}>
                {t('Where')}
             </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
-            eventKey="1"
+            eventKey="2"
             className="filterControls">
             <div>
                <CitySelector isMultiple={isMultipleCities} />
@@ -179,16 +179,16 @@ const CardFilterWho = observer(() => {
    const { t } = useTranslation();
    const location = useLocation();
    const { filterStore } = useStore();
-   const { isValidWho, injTypes, updateInjuerdType, genderTypes, updateGenderType, } = filterStore;
+   const { isValidWho, genderTypes, updateGenderType, } = filterStore;
    const { ageTypes, updateAgeType, populationTypes, updatePopulationType, setFormCardKey } = filterStore;
 
-   useEffect(() => {
-      const query = useQuery(location);
-      const injType = useInjTypeByQuery(query);
-      if (injType) {
-         updateInjuerdType(injType, true);
-      }
-   }, []);
+   // useEffect(() => {
+   //    const query = useQuery(location);
+   //    const injType = useInjTypeByQuery(query);
+   //    if (injType) {
+   //       updateInjuerdType(injType, true);
+   //    }
+   // }, []);
 
    const styleToggle = isValidWho ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
@@ -196,21 +196,16 @@ const CardFilterWho = observer(() => {
       <Card>
          <Card.Header>
             <CustomToggle
-               eventKey="2"
+               eventKey="3"
                style={styleToggle}
                onClick={setFormCardKey}>
                {t('Who')}
             </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
-            eventKey="2"
+            eventKey="3"
             className="filterControls">
             <div>
-               <GroupCheckbox
-                  formName="exampleForm"
-                  colFilter={injTypes}
-                  onChange={updateInjuerdType}
-               />
                <GroupCheckbox
                   formName="exampleForm"
                   colFilter={genderTypes}
@@ -241,14 +236,14 @@ const CardFilterWhat = observer(() => {
       <Card>
          <Card.Header>
             <CustomToggle
-               eventKey="3"
+               eventKey="4"
                style={styleToggle}
                onClick={setFormCardKey}>
                {t('What')}
             </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
-            eventKey="3"
+            eventKey="4"
             className="filterControls">
             <div>
                <GroupCheckbox
@@ -264,26 +259,43 @@ const CardFilterWhat = observer(() => {
 const CardFilterWhatVehicle = observer(() => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
-   const { isValidWhatVehicle, vehicleType, updateVehicleType, setFormCardKey } = filterStore;
+   const { injTypes,
+      updateInjuerdType,
+      vehicleType,
+      updateVehicleType,
+      involvedVehicle,
+      setInvolvedVehicle,
+      isValidWhatVehicle,
+      setFormCardKey
+   } = filterStore;
    const styleToggle = isValidWhatVehicle ? STYLE_TOGGLE_NORMAL : STYLE_TOGGLE_WARNING;
 
    return (
       <Card>
          <Card.Header>
             <CustomToggle
-               eventKey="4"
+               eventKey="1"
                style={styleToggle}
                onClick={setFormCardKey}>
                {t('WhatVehicle')}
             </CustomToggle>
          </Card.Header>
          <Accordion.Collapse
-            eventKey="4"
+            eventKey="1"
             className="filterControls">
             <div>
                <GroupCheckbox
                   formName="exampleForm"
+                  colFilter={injTypes}
+                  onChange={updateInjuerdType}
+               />
+               <GroupCheckbox
+                  formName="exampleForm"
                   colFilter={vehicleType} onChange={updateVehicleType}
+               />
+               <GroupCheckbox
+                  formName="exampleForm"
+                  colFilter={involvedVehicle} onChange={setInvolvedVehicle}
                />
             </div>
          </Accordion.Collapse>

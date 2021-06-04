@@ -130,6 +130,7 @@
   },
   "Vehicles": "Involved Vehicles",
   "WhatVehicle": "What Vehicle",
+  "VehicleType": "Injured Vehicle",
   "vclType": {
     "all": "All",
     "pedestrian": "Pedestrian",
@@ -137,6 +138,7 @@
     "bicycle": "Bicycle",
     "e-scooter": "E-scooter",
     "e-bike": "E-bike",
+    "motorcycle": "Motorcycle",
     "motorcycle1": "Motorcycle under 50 cc",
     "motorcycle2": "Motorcycle 50-125 cc",
     "motorcycle3": "Motorcycle 126-400 cc",

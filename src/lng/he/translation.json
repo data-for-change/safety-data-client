@@ -130,7 +130,7 @@
   },
   "Vehicles": "רכבים מעורבים",
   "WhatVehicle": "איזה רכב",
-  "VehicleType": "רכב",
+  "VehicleType": "רכב הנפגע",
   "vclType": {
     "all": "כל הסוגים",
     "pedestrian": "הולך רגל",
@@ -138,6 +138,7 @@
     "bicycle": "אופניים",
     "e-scooter": "קורקינט חשמלי",
     "e-bike": "אופניים חשמליים",
+    "motorcycle": "אופנוע",
     "motorcycle1": "אופנוע עד 50 סמ\"ק",
     "motorcycle2": "אופנוע 51 - 125 סמ\"ק",
     "motorcycle3": "אופנוע 126 - 400 סמ\"ק",

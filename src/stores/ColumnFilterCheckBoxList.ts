@@ -192,7 +192,7 @@ export const initMonth = () => {
 };
 
 export const initInjTypes = () => {
-  const col: IColumnFilter = new ColumnFilter('Vehicle', 'injt', 0);
+  const col: IColumnFilter = new ColumnFilter('TypeInjured', 'injt', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, [1]));
   col.arrTypes.push(new FilterChecker('cyclist', false, [6, 7]));
@@ -248,6 +248,26 @@ export const initVehicleTypesFull = () => {
   col.arrTypes.push(new FilterChecker('vclType.truck3', false, [5]));
   col.arrTypes.push(new FilterChecker('vclType.truck4', false, [6]));
   col.arrTypes.push(new FilterChecker('vclType.truck5', false, [7]));
+  col.arrTypes.push(new FilterChecker('vclType.tractor', false, [14]));
+  col.arrTypes.push(new FilterChecker('vclType.train', false, [16]));
+  col.arrTypes.push(new FilterChecker('vclType.other', false, [17]));
+  return col;
+};
+
+export const initInvolvedVehicle = () => {
+  const col: IColumnFilter = new ColumnFilter('Vehicles', 'vcli', 0);
+  col.arrTypes.push(new FilterChecker('vclType.all', true, []));
+  col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [22]));
+  col.arrTypes.push(new FilterChecker('vclType.bicycle', false, [15]));
+  col.arrTypes.push(new FilterChecker('vclType.e-scooter', false, [21]));
+  col.arrTypes.push(new FilterChecker('vclType.e-bike', false, [23]));
+  col.arrTypes.push(new FilterChecker('vclType.motorcycle', false, [8]));
+  col.arrTypes.push(new FilterChecker('vclType.car', false, [1]));
+  col.arrTypes.push(new FilterChecker('vclType.taxi', false, [12]));
+  col.arrTypes.push(new FilterChecker('vclType.tranzit', false, [2]));
+  col.arrTypes.push(new FilterChecker('vclType.tender', false, [3]));
+  col.arrTypes.push(new FilterChecker('vclType.bus', false, [11]));
+  col.arrTypes.push(new FilterChecker('vclType.truck', false, [5]));
   col.arrTypes.push(new FilterChecker('vclType.tractor', false, [14]));
   col.arrTypes.push(new FilterChecker('vclType.train', false, [16]));
   col.arrTypes.push(new FilterChecker('vclType.other', false, [17]));

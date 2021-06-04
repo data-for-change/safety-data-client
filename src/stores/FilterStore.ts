@@ -47,13 +47,15 @@ export default class FilterStore {
       this.streets = new ColumnFilterArray('Street', 'st', true);
       this.cityPopSizeRange = initCityPopSize();
       // who
-      this.injTypes = FC.initInjTypes();
       this.genderTypes = FC.initGenderTypes();
       this.ageTypes = FC.initAgeTypes();
       this.populationTypes = FC.initPopulationTypes();
       // What
       this.accidentType = FC.initAccidentType();
+      // what vehicle
+      this.injTypes = FC.initInjTypes();
       this.vehicleType = FC.initVehicleTypesFull();
+      this.involvedVehicle = FC.initInvolvedVehicle();
       // What Road
       this.speedLimit = FC.initSpeedLimit();
       this.roadWidth = FC.initRoadWidth();
@@ -233,7 +235,7 @@ export default class FilterStore {
 
    @observable
    locationAccuracy: IColumnFilter;
-   
+
    @action
    updateLocationAccuracy = (aType: number, val: boolean) => {
       this.updateFilters(this.locationAccuracy, aType, val);
@@ -303,19 +305,8 @@ export default class FilterStore {
       this.updateFilters(this.populationTypes, aType, val);
    }
 
-   /**
-    * injuerd type - for example pedestrian bycicle, car driver etc,
-    */
-   @observable
-   injTypes: IColumnFilter;
-
-   @action
-   updateInjuerdType = (aType: number, val: boolean) => {
-      this.updateFilters(this.injTypes, aType, val);
-   }
-
    @computed get isValidWho() {
-      const res = !this.injTypes.isAllValsFalse && !this.genderTypes.isAllValsFalse
+      const res =  !this.genderTypes.isAllValsFalse
          && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
       return res;
    }
@@ -338,8 +329,21 @@ export default class FilterStore {
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What Vehicle
+   // What Vehicle 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
+
+   /**
+   * injuerd type - for example pedestrian bycicle, car driver etc,
+   */
+   @observable
+   injTypes: IColumnFilter;
+
+   @action
+   updateInjuerdType = (aType: number, val: boolean) => {
+      this.updateFilters(this.injTypes, aType, val);
+   }
+   
+   // vehicle Type of the killed / injured 
    @observable
    vehicleType: IColumnFilter;
 
@@ -348,10 +352,20 @@ export default class FilterStore {
       this.updateFilters(this.vehicleType, aType, val);
    }
 
+   // vehicle that were in the accident
+   @observable
+   involvedVehicle: IColumnFilter;
+
+   @action
+   setInvolvedVehicle = (aType: number, val: boolean) => {
+      this.updateFilters(this.involvedVehicle, aType, val);
+   }
+
    @computed get isValidWhatVehicle() {
-      const res = !this.vehicleType.isAllValsFalse;
+      const res = !this.injTypes.isAllValsFalse && !this.vehicleType.isAllValsFalse &&  !this.involvedVehicle.isAllValsFalse;
       return res;
    }
+
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What Road
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,6 +799,7 @@ export default class FilterStore {
       filter += this.populationTypes.getFilter();
       filter += this.accidentType.getFilter();
       filter += this.vehicleType.getFilter();
+      filter += this.involvedVehicle.getFilter();
       filter += this.locationAccuracy.getFilter();
       filter += this.roadTypes.getFilter();
       filter += this.speedLimit.getFilter();
@@ -816,6 +831,7 @@ export default class FilterStore {
       this.cityPopSizeRange.setText();
       this.accidentType.setText(ignoreIfAll);
       this.vehicleType.setText(ignoreIfAll);
+      this.involvedVehicle.setText(ignoreIfAll);
    }
 
    /**
@@ -838,6 +854,7 @@ export default class FilterStore {
       this.locationAccuracy.setBrowserQueryString(params);
       this.accidentType.setBrowserQueryString(params);
       this.vehicleType.setBrowserQueryString(params);
+      this.involvedVehicle.setBrowserQueryString(params);
       this.speedLimit.setBrowserQueryString(params);
       this.roadWidth.setBrowserQueryString(params);
       this.separator.setBrowserQueryString(params);
@@ -871,6 +888,7 @@ export default class FilterStore {
       this.populationTypes.setValuesByQuery(params);
       this.accidentType.setValuesByQuery(params);
       this.vehicleType.setValuesByQuery(params);
+      this.involvedVehicle.setValuesByQuery(params);
       this.speedLimit.setValuesByQuery(params);
       this.roadWidth.setValuesByQuery(params);
       this.separator.setValuesByQuery(params);
