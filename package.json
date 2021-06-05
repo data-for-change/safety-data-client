@@ -31,9 +31,14 @@
     "react-leaflet-heatmap-layer": "^2.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.2",
-    "tslib": "^1.14.1"
+    "tslib": "^1.14.1",
+    "underscore": "^1.13.1"
+  },
+  "resolutions": {
+    "underscore": "^1.13.1"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
