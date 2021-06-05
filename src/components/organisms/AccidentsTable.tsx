@@ -89,18 +89,13 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     return (() => { window.removeEventListener('resize', handleResize); });
   });
 
-  console.log(reactMarkers, filterStore.cityResult)
+  // console.log(reactMarkers, filterStore.cityResult)
   if (reactMarkers.length > 0) {
     return (
       <div>
         <SmallCard2>
-          {/* <CasualtiesSumLabel
-          length={reactMarkers.length}
-          name={filterStore.cityResult}
-          /> */}
-          {/* <hr /> */}
           <ToolkitProvider
-            keyField="id"
+            keyField="_id"
             data={reactMarkers}
             columns={columns}
             exportCSV>
@@ -125,12 +120,6 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     );
   }
   return null
-  // return (
-  //   <CasualtiesSumLabel
-  //     length={reactMarkers.length}
-  //     name={filterStore.cityResult}
-  //   />
-  // );
 });
 
 export default AccidentsTable;
