@@ -75,7 +75,7 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
       datasets: datasets1,
     };
   };
-  const align = (dir === 'rtl') ? 'right' : 'center';
+  let align = (dir === 'rtl') ? '-40' : 'end';
   const options1 = {
     responsive: true,
     maintainAspectRatio: false,
@@ -90,9 +90,14 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
     plugins: {
       datalabels: {
         display: true,
-        color: 'white',
-        align: align
+        align: align,
+        anchor: "end",
+        font: { size: "14" }
+        
       }
+    },
+    legend: {
+      display: true
     }
   };
   if (chartType === 'BarChart') {
@@ -105,6 +110,7 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
     );
   }
   if (chartType === 'HorizontalBar') {
+    const offset = (dir === 'rtl') ? 20 : 4;
     return (
       <HorizontalBar
         data={dataChart}
@@ -115,8 +121,10 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
             plugins: {
               datalabels: {
                 display: true,
-                color: 'white',
-                align: align
+                anchor: "end",
+                align: 'end',
+                offset : offset,
+                font: { size: "14" }
               }
             }
           }}
