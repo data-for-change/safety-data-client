@@ -1,0 +1,18 @@
+<svg viewBox="0 0 43 43" xmlns="http://www.w3.org/2000/svg" version="1.1" xml:space="preserve">
+	<style type="text/css">
+		.st0{fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+		.st1{fill:none;stroke:"current";stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10;}
+	</style>
+ <g>
+  <title>Layer 1</title>
+  <circle cx="21.04733" cy="22.01185" r="19.59496" fill="current" id="svg_1" stroke="current"/>
+  <circle class="st0" cx="12.44344" cy="26.808" r="3" id="svg_2"/>
+  <circle class="st0" cx="28.44344" cy="26.808" r="3" id="svg_3"/>
+  <line class="st0" x1="33.44344" x2="35.44344" y1="22.808" y2="22.808"  id="svg_4"/>
+  <line class="st0" x1="9.44344" x2="29.44344" y1="19.808" y2="19.808" id="svg_5"/>
+  <line class="st0" x1="18.44344" x2="15.44344" y1="13.808" y2="19.808" id="svg_6"/>
+  <path class="st0" d="m31.44344,26.808l4,0c0.6,0 1,-0.4 1,-1l0,-2c0,-2.2 -1.8,-4 -4,-4l-3,0l-3.8,-4.6c-0.8,-0.9 -1.9,-1.4 -3.1,-1.4l-7.6,0c-1.5,0 -2.9,0.9 -3.6,2.2l-1.9,3.8l-1,0c-1.1,0 -2,0.9 -2,2l0,4c0,0.6 0.4,1 1,1l2,0"  id="svg_7"/>
+  <line class="st0" x1="15.44344" x2="25.44344" y1="26.808" y2="26.808" id="svg_8"/>
+ </g>
+
+</svg>

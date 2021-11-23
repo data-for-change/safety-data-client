@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="Icons" style="enable-background:new 0 0 43 43;" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+	.st0{fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#ffffff;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+  <circle cx="21.5" cy="21.5" r="15.68" fill="current" id="svg_1" stroke="current" style="" transform="matrix(1, 0, 0, 0.999999, -5.571509, -5.322961)"/>
+  <polyline class="st0" points="18.611 6.284 20.575 6.284 23.195 22.899" style=""/>
+  <circle class="st0" cx="28" cy="25" r="3" style="" transform="matrix(0.6548, 0, 0, 0.830701, 4.86041, 2.130649)"/>
+  <circle class="st0" cx="4" cy="25" r="3" style="" transform="matrix(0.6548, 0, 0, 0.830701, 4.86041, 2.130649)"/>
+  <path class="st0" d="M 7.48 17.913 C 9.641 17.913 11.409 20.157 11.409 22.899" style=""/>
+  <polyline class="st0" points="21.885 16.252 18.611 22.899 7.48 22.899" style=""/>
+</svg>

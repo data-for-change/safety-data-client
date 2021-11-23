@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="37" height="45" viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+        .bike1{fill:#ffffff;stroke:#ffffff}
+        .bike2{fill:#ffffff;stroke:#ffffff;stroke-width:0.7}
+    </style>
+  </defs>
+  <path d="M 12.781 0.357 C 6.028 0.357 0.532 5.963 0.532 12.854 C 0.532 14.922 1.04 16.973 2.003 18.793 L 12.112 32.637 C 12.247 32.886 12.502 33.04 12.781 33.04 C 13.06 33.04 13.316 32.886 13.452 32.637 L 23.564 18.786 C 24.524 16.973 25.031 14.922 25.031 12.854 C 25.031 5.963 19.536 0.357 12.781 0.357 Z" fill="red" style=""/>
+  <polyline stroke="#FFF" stroke-width="1" stroke-linecap="round" points="15.363 6.284 16.84 6.284 18.811 18.838" style=""/>
+  <circle stroke="#FFF" stroke-width="2" cx="28" cy="25" r="3" style="" transform="matrix(0.492416, 0, 0, 0.62765, 5.022794, 3.145868)"/>
+  <circle stroke="#FFF" stroke-width="2" cx="4" cy="25" r="3" style="" transform="matrix(0.492416, 0, 0, 0.62765, 5.022794, 3.145868)"/>
+  <path stroke="#FFF" stroke-width="1" stroke-linecap="round" d="M 6.993 15.07 C 8.618 15.07 9.947 16.766 9.947 18.838" style=""/>
+  <polyline stroke="#FFF" stroke-width="1" stroke-linecap="round" points="17.825 13.815 15.363 18.838 6.993 18.838" style=""/>
+</svg>

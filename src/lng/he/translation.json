@@ -216,5 +216,8 @@
   "Filters": "סינונים",
   "My-Filters": "סינונים שלי",
   "Filter": "סינון",
-  "Save": "שמור"
+  "Save": "שמור",
+  "#Map": "=========Map==========",
+  "MarkersColorType": "צבע לפי",
+  "MarkersIconType": "סמנים לפי"
 }

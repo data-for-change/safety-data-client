@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import L from 'leaflet'
@@ -9,6 +10,7 @@ import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
 import logger from '../../services/logger';
+import Select from '../atoms/Select';
 import 'leaflet-css';
 
 const styleButDiv: React.CSSProperties = {
@@ -19,6 +21,7 @@ const styleButDiv: React.CSSProperties = {
 
 interface IProps { }
 const MapAccidents: React.FC<IProps> = observer(() => {
+  const { t } = useTranslation();
   const WRAPPER_STYLES = { height: '75vh', maxWidth: '100%' };
   const mapRef = useRef<Map>(null);
 
@@ -64,7 +67,8 @@ const MapAccidents: React.FC<IProps> = observer(() => {
       </Map>
       <div style={styleButDiv} className="div-buttons">
         <CurrButtonTuggleHeatLayer />
-        <ButtonToggleSmallMarkers />
+        {t('MarkersColorType')}:<SelectMarkersColorType />
+        {t('MarkersIconType')}:<SelectMarkersIConType />
       </div>
       <MapInvalidateSize mapRef={mapRef} />
       {/* {store.isReadyToRenderMap ? " " : ""} */}
@@ -99,6 +103,34 @@ const ButtonToggleSmallMarkers: React.FC<{}> = observer(() => {
     />
   );
 });
+
+const SelectMarkersIConType: React.FC<{}> = observer(() => {
+  const { mapStore } = useStore();
+  const { markerIconsType, setMarkerIconsType, markerIconTypesArr } = mapStore;
+  return (
+      <Select
+  id='map.SelectMarkersIConType'
+  value={markerIconsType}
+  data={markerIconTypesArr}
+  onChange={(val: string) => setMarkerIconsType(val)}
+  />
+  );
+});
+
+const SelectMarkersColorType: React.FC<{}> = observer(() => {
+  const { mapStore } = useStore();
+  const { markerColorType, setMarkerColorType, markerColorTypesArr } = mapStore;
+  return (
+      <Select
+  id='map.SelectMarkersColorType'
+  value={markerColorType}
+  data={markerColorTypesArr}
+  onChange={(val: string) => setMarkerColorType(val)}
+  />
+  );
+});
+
+
 
 interface IPropsMapInvalidateSize {
   mapRef: React.RefObject<Map<any>>

@@ -3,6 +3,8 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import L from 'leaflet'
 import AccidentsMarker from './AccidentsMarker';
+import MarkerSvg from './MarkerSvg';
+import MarkerCar from './MarkerCar';
 import { useStore } from '../../../stores/storeConfig';
 import { BBoxType } from '../../../stores/MapStore';
 import logger from '../../../services/logger';
@@ -13,7 +15,7 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
   const {
     isUse2StepsMarkers, markersLoadStep, dataMarkersLean, dataAllInjuries,
   } = filterStore;
-  const { bboxType, dataMarkersInBounds, useSmallMarkers } = mapStore;
+  const { bboxType, dataMarkersInBounds, useSmallMarkers, markerIconsType, markerColorType} = mapStore;
   let reactMarkers;
   if (bboxType !== BBoxType.NO_BBOX) reactMarkers = toJS(dataMarkersInBounds);
   else if (isUse2StepsMarkers && markersLoadStep === 1) {
@@ -24,7 +26,13 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
   const markers = reactMarkers.map((x: any) => {
     try {
       if (x.latitude !== null && x.longitude !== null) {
-        return <AccidentsMarker data={x} language={uiStore.language} useSmallMarkers={useSmallMarkers} key={`marker-${x._id}`} />;
+        // return <MarkerCar data={x} language={uiStore.language} key={`marker-${x._id}`} />;
+        return <MarkerSvg data={x} 
+                language={uiStore.language} 
+                colorBy={markerColorType}
+                markerIconsType={markerIconsType}
+                key={`marker-${x._id}`} />;
+        //return <AccidentsMarker data={x} language={uiStore.language} useSmallMarkers={useSmallMarkers} key={`marker-${x._id}`} />;
       }
       return null;
     } catch (error) {

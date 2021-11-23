@@ -116,7 +116,7 @@ export default class MapStore {
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
   }
-
+////////// markers /////////////////
   @observable
   useSmallMarkers = false;
 
@@ -125,6 +125,31 @@ export default class MapStore {
     this.useSmallMarkers = !this.useSmallMarkers;
   }
 
+  @observable
+  markerIconsType = "general";
+
+  @action
+  setMarkerIconsType = (value:string) => {
+    this.markerIconsType = value;
+  }
+  markerIconTypesArr = [
+    { val: "general", text: 'general' },
+    { val: "Vehicle", text: 'Vehicle' },
+  ];
+
+  @observable
+  markerColorType = "Severity";
+
+  @action
+  setMarkerColorType = (value:string) => {
+    this.markerColorType = value;
+  }
+  markerColorTypesArr = [
+    { val: "Severity", text: 'Severity' },
+    { val: "Vehicle", text: 'Vehicle' },
+  ];
+
+////// bounds //////////////////////
   getBounds = (data: any[]) => {
     // logger.log("setBounds!")
     let arr: L.LatLng[] = [];

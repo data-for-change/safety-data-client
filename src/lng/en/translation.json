@@ -216,5 +216,8 @@
   "Filters": "Filters",
   "My-Filters": "My-Filters",
   "Filter": "Filter",
-  "Save": "Save"
+  "Save": "Save",
+  "#Map": "=========Map==========",
+  "MarkersColorType": "Color By",
+  "MarkersIconType": "Icon By"
 }
