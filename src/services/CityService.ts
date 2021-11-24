@@ -10,10 +10,17 @@ export default class CityService {
       redirect: 'follow', // manual, *follow, error
       referrerPolicy: 'no-referrer', // no-referrer, *client
     })
-      .then(response => response.json())
+      .then(
+        response => {
+          return response.json();}
+        )
       .then(data => {
         collback(data);
+      })
+      .catch((error) => {
+        console.log('srv.getCityByNameHe',error)
       });
+      ;
   };
 
   getCitiesNames(lang: string, collback: (res: any[]) => void) {
