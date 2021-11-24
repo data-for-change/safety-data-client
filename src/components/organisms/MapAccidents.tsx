@@ -67,8 +67,8 @@ const MapAccidents: React.FC<IProps> = observer(() => {
       </Map>
       <div style={styleButDiv} className="div-buttons">
         <CurrButtonTuggleHeatLayer />
-        {t('MarkersColorType')}:<SelectMarkersColorType />
-        {t('MarkersIconType')}:<SelectMarkersIConType />
+        <SelectMarkersColorType />
+        <SelectMarkersIConType />
       </div>
       <MapInvalidateSize mapRef={mapRef} />
       {/* {store.isReadyToRenderMap ? " " : ""} */}
@@ -80,6 +80,7 @@ interface IPropsButtonTuggleHeatLayer { }
 
 const CurrButtonTuggleHeatLayer: React.FC<IPropsButtonTuggleHeatLayer> = observer(() => {
   const { mapStore, filterStore } = useStore();
+  const style = { width: '150px', height: '35px' }
   return (
     <ButtonToggle
       condtion={mapStore.heatLayerHidden}
@@ -87,6 +88,7 @@ const CurrButtonTuggleHeatLayer: React.FC<IPropsButtonTuggleHeatLayer> = observe
       textFalse="Markers"
       disabled={filterStore.isLoading}
       onClick={mapStore.toggleHeatLayer}
+      style={style}
     />
   );
 });
@@ -104,29 +106,54 @@ const ButtonToggleSmallMarkers: React.FC<{}> = observer(() => {
   );
 });
 
+const styles = {
+  divStyle: {
+    display: 'flex',
+  },
+  labelspan:{
+    marginTop: '7px',
+    fontWeight: 700
+  }
+}
 const SelectMarkersIConType: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
   const { mapStore } = useStore();
   const { markerIconsType, setMarkerIconsType, markerIconTypesArr } = mapStore;
   return (
-      <Select
-  id='map.SelectMarkersIConType'
-  value={markerIconsType}
-  data={markerIconTypesArr}
-  onChange={(val: string) => setMarkerIconsType(val)}
-  />
+    <div style={styles.divStyle} id="map.iconType">
+      <span style={styles.labelspan}>
+        {t('MarkersIconType')}:
+      </span>
+      <span>
+        <Select
+          id='map.SelectMarkersIConType'
+          value={markerIconsType}
+          data={markerIconTypesArr}
+          onChange={(val: string) => setMarkerIconsType(val)}
+        />
+      </span>
+    </div>
   );
 });
 
 const SelectMarkersColorType: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
   const { mapStore } = useStore();
   const { markerColorType, setMarkerColorType, markerColorTypesArr } = mapStore;
   return (
-      <Select
-  id='map.SelectMarkersColorType'
-  value={markerColorType}
-  data={markerColorTypesArr}
-  onChange={(val: string) => setMarkerColorType(val)}
-  />
+    <div style={styles.divStyle} id="map.iconColor">
+      <span style={styles.labelspan}>
+        {t('MarkersColorType')}:
+      </span>
+      <span>
+        <Select
+          id='map.SelectMarkersColorType'
+          value={markerColorType}
+          data={markerColorTypesArr}
+          onChange={(val: string) => setMarkerColorType(val)}
+        />
+      </span>
+    </div>
   );
 });
 

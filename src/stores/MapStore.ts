@@ -126,7 +126,7 @@ export default class MapStore {
   }
 
   @observable
-  markerIconsType = "general";
+  markerIconsType = "Vehicle";
 
   @action
   setMarkerIconsType = (value:string) => {
