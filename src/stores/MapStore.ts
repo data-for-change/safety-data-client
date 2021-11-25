@@ -147,6 +147,7 @@ export default class MapStore {
   markerColorTypesArr = [
     { val: "Severity", text: 'Severity' },
     { val: "Vehicle", text: 'Vehicle' },
+    { val: "DayNight", text: 'DayNight' },
   ];
 
 ////// bounds //////////////////////

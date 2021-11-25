@@ -66,6 +66,36 @@ const getColorsBySeverity = (severity) => {
   }
   return res;
 };
+const getColorsByDayNight = (value) => {
+  let res = '';
+  switch (value) {
+    case 'יום':
+      res = '#ffcc00';
+      break;
+    default:
+      res = '#333333';
+      break;
+  }
+  return res;
+};
+const getColors = (colorBy, data) => {
+  let res = '';
+  switch (colorBy) {
+    case 'Severity':
+      res = getColorsBySeverity(data.injury_severity_hebrew);
+      break;
+    case 'Vehicle':
+      res = getColorByVehicle(data.vehicle_vehicle_type_hebrew);
+      break;
+    case 'DayNight':
+      res = getColorsByDayNight(data.day_night_hebrew);
+      break;
+    default:
+      res = getColorsBySeverity(data.injury_severity_hebrew);
+      break;
+  }
+  return res;
+};
 
 const getSVGPinByCategory = (category, color) => {
   let pin;
@@ -128,8 +158,7 @@ const MarkerSvg = (({
 }) => {
   // eslint-disable-next-line react/prop-types
   const lPoint = new L.LatLng(data.latitude, data.longitude);
-  const color = (colorBy === 'Severity') ? getColorsBySeverity(data.injury_severity_hebrew)
-    : getColorByVehicle(data.vehicle_vehicle_type_hebrew);
+  const color = getColors(colorBy, data);
   const icon = (markerIconsType === 'general') ? getEmptyIcon(color)
     : getSVGPinByCategory(data.vehicle_vehicle_type_hebrew, color);
   // console.log(data.vehicle_vehicle_type_hebrew);
