@@ -18,10 +18,13 @@ const MapAccidents = lazy(() => import('../organisms/MapAccidents'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 
+const styles = {
+  tab: { marginTop: '0.5rem' },
+  tabMap: { marginTop: '0.1rem' },
+  mapCard: { width: '150px', height: '35px' }
+};
+
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
-  const style = {
-    marginTop: '1rem',
-  };
   const { t } = useTranslation();
   const { mapStore, uiStore } = useStore();
   // const [activeKey] = useState(uiStore.);
@@ -39,21 +42,21 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
         uiStore.setCurrentTab(tabActiveKey);
       }}
     >
-      <Tab style={style} eventKey="charts" title={t('Charts')}>
+      <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <GroupByGraphsPanel />
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={style} eventKey="groups" title={t('Groups')}>
+      <Tab style={styles.tab} eventKey="groups" title={t('Groups')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <GroupByTablesPanel />
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={style} eventKey="map" title={t('Map')}>
+      <Tab style={styles.tabMap} eventKey="map" title={t('Map')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <SmallCard2>
@@ -62,14 +65,14 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={style} eventKey="table" title={t('Table')}>
+      <Tab style={styles.tab} eventKey="table" title={t('Table')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <div className="col-auto"><AccidentsTable /></div>
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={style} eventKey="image" title={t('Images')}>
+      <Tab style={styles.tab} eventKey="image" title={t('Images')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <div className="col-auto"><MyImageGallery type={type} /></div>

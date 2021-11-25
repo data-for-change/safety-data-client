@@ -75,9 +75,10 @@ const WhatVehicleTitle: React.FC<{}> = observer(() => {
 const InfoPanel: React.FC<IProps> = observer(({ }) => {
   const styles = {
     div: {
-      marginTop: '1rem',
+      marginTop: '0.8rem',
       marginLeft: '1rem',
-      marginRight: '1rem'
+      marginRight: '1rem',
+      marginBottom: '0.1rem'
     }
   }
   const { t } = useTranslation();

@@ -13,10 +13,14 @@ import logger from '../../services/logger';
 import Select from '../atoms/Select';
 import 'leaflet-css';
 
-const styleButDiv: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'flex-start',
-  marginTop: '1rem'
+//React.CSSProperties 
+const styels: any = {
+  buttonsPanel: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    paddingTop: '0.2rem',
+    margin: '5px'
+  },
 };
 
 interface IProps { }
@@ -65,10 +69,10 @@ const MapAccidents: React.FC<IProps> = observer(() => {
         />
         {markers}
       </Map>
-      <div style={styleButDiv} className="div-buttons">
-        <CurrButtonTuggleHeatLayer />
+      <div style={styels.buttonsPanel}>
         <SelectMarkersColorType />
         <SelectMarkersIConType />
+        <CurrButtonTuggleHeatLayer />
       </div>
       <MapInvalidateSize mapRef={mapRef} />
       {/* {store.isReadyToRenderMap ? " " : ""} */}
@@ -110,7 +114,7 @@ const styles = {
   divStyle: {
     display: 'flex',
   },
-  labelspan:{
+  labelspan: {
     marginTop: '7px',
     fontWeight: 700
   }
