@@ -4,7 +4,6 @@ import { toJS } from 'mobx';
 // import L from 'leaflet'
 import AccidentsMarker from './AccidentsMarker';
 import MarkerSvg from './MarkerSvg';
-import MarkerCar from './MarkerCar';
 import { useStore } from '../../../stores/storeConfig';
 import { BBoxType } from '../../../stores/MapStore';
 import logger from '../../../services/logger';
@@ -26,7 +25,6 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
   const markers = reactMarkers.map((x: any) => {
     try {
       if (x.latitude !== null && x.longitude !== null) {
-        // return <MarkerCar data={x} language={uiStore.language} key={`marker-${x._id}`} />;
         return <MarkerSvg data={x} 
                 language={uiStore.language} 
                 colorBy={markerColorType}
