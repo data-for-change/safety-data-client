@@ -17,6 +17,7 @@ import IconWalk from './markers/IconWalk.tsx';
 import IconBike from './markers/IconBike.tsx';
 import IconScooter from './markers/IconScooter.tsx';
 import IconQuestion from './markers/IconQuestion.tsx';
+import IconBus from './markers/IconBus.tsx';
 import IconEmpty from './markers/IconEmpty.tsx';
 
 // eslint-disable-next-line import/no-unresolved
@@ -49,6 +50,10 @@ const getSVGPinByCategory = (category, color) => {
       break;
     case 'קורקינט חשמלי':
       pin = <IconScooter fill={color} />;
+      break;
+    case 'אוטובוס':
+    case 'אוטובוס זעיר':
+      pin = <IconBus fill={color} />;
       break;
     default:
       pin = <IconQuestion fill={color} />;
