@@ -3,9 +3,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Popup } from 'react-leaflet';
+import Accident from '../../types/Accident';
 
 interface IProps {
-  data: any,
+  data: Accident,
   language: string
 }
 

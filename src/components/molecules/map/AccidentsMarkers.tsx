@@ -7,6 +7,7 @@ import MarkerSvg from './MarkerSvg';
 import { useStore } from '../../../stores/storeConfig';
 import { BBoxType } from '../../../stores/MapStore';
 import logger from '../../../services/logger';
+import Accident from '../../../types/Accident';
 
 interface IProps { }
 const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
@@ -22,7 +23,7 @@ const AccidentsMarkers: FunctionComponent<IProps> = observer(() => {
   } else {
     reactMarkers = toJS(dataAllInjuries);
   }
-  const markers = reactMarkers.map((x: any) => {
+  const markers = reactMarkers.map((x: Accident) => {
     try {
       if (x.latitude !== null && x.longitude !== null) {
         return <MarkerSvg data={x} 

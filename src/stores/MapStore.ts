@@ -148,6 +148,8 @@ export default class MapStore {
     { val: "Severity", text: 'Severity' },
     { val: "Vehicle", text: 'Vehicle' },
     { val: "DayNight", text: 'DayNight' },
+    { val: "Gender", text: 'Gender' },
+    { val: 'RoadType', text:'RoadType'}
   ];
 
 ////// bounds //////////////////////

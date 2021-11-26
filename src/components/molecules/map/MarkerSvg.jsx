@@ -6,8 +6,10 @@
 import React from 'react';
 import L, { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
-
 import { renderToStaticMarkup } from 'react-dom/server';
+import { getColors } from '../../../stores/mapUtils.ts';
+import Accident from '../../../types/Accident.ts';
+
 // import { getColorByVehicle } from '../../../services/mapUtils';
 import IconCar from './markers/IconCar.tsx';
 import IconMotorcycle from './markers/IconMotorcycle.tsx';
@@ -23,79 +25,6 @@ import AccidentPopUp from '../../atoms/AccidentPopUp';
 // const iconSize = {
 //   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 // };
-
-const getColorByVehicle = (category) => {
-  let res = '';
-  switch (category) {
-    case '':
-      res = '#FF0F80';
-      break;
-    case 'רכב נוסעים פרטי':
-      res = '#FE4E00';
-      break;
-    case 'אופנוע עד 50 סמ"ק':
-    case 'אופנוע 51 עד 125 סמ"ק':
-    case 'אופנוע 126 עד 400 סמ"ק':
-    case 'אופנוע 401+ סמ"ק':
-      res = '#E9190F';
-      break;
-    case 'אופניים':
-      res = '#F41448';
-      break;
-    case 'אופניים חשמליים':
-      res = '#EF172C';
-      break;
-    case 'קורקינט חשמלי':
-      res = '#EF172C';
-      break;
-    default:
-      res = '#FE4E00';
-      break;
-  }
-  return res;
-};
-const getColorsBySeverity = (severity) => {
-  let res = '';
-  switch (severity) {
-    case 'הרוג':
-      res = '#CA273B';
-      break;
-    default:
-      res = '#F8A141';
-      break;
-  }
-  return res;
-};
-const getColorsByDayNight = (value) => {
-  let res = '';
-  switch (value) {
-    case 'יום':
-      res = '#ffcc00';
-      break;
-    default:
-      res = '#333333';
-      break;
-  }
-  return res;
-};
-const getColors = (colorBy, data) => {
-  let res = '';
-  switch (colorBy) {
-    case 'Severity':
-      res = getColorsBySeverity(data.injury_severity_hebrew);
-      break;
-    case 'Vehicle':
-      res = getColorByVehicle(data.vehicle_vehicle_type_hebrew);
-      break;
-    case 'DayNight':
-      res = getColorsByDayNight(data.day_night_hebrew);
-      break;
-    default:
-      res = getColorsBySeverity(data.injury_severity_hebrew);
-      break;
-  }
-  return res;
-};
 
 const getSVGPinByCategory = (category, color) => {
   let pin;
