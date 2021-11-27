@@ -31,6 +31,49 @@ export const getColorByVehicle = (category: string) => {
     return res;
 };
 
+export const getColorByAccidentType = (value: string) => {
+    let res = '';
+    switch (value) {
+        case 'פגיעה בהולך רגל':
+            res = '#f94144';
+            break;
+        case 'התנגשות אחור אל צד':
+            res = '#277da1';
+            break;
+        case 'התנגשות אחור בחזית':
+            res = '#577590';
+            break;
+        case 'התנגשות חזית באחור':
+            res = '#577590';
+            break;
+        case 'התנגשות חזית בחזית':
+            res = '#43aa8b';
+            break;
+        case 'התנגשות חזית בצד':
+            res = '#90be6d';
+            break;
+        case 'התנגשות צד בצד':
+            res = '#f9c74f';
+            break;
+        case 'התנגשות עם בעל חיים':
+        case 'התנגשות עם עצם דומם':
+        case 'התנגשות עם רכב חונה':
+        case 'התנגשות עם רכב שנעצר ללא חניה':
+            res = '#f9844a';
+            break;
+        case 'החלקה':
+            res = '#f8961e';
+            break;
+        case 'התהפכות':
+            res = '#f3722c';
+            break;
+        default:
+            res = '#333333';
+            break;
+    }
+    return res;
+};
+
 export const getColorsBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
@@ -107,7 +150,10 @@ export const getColors = (colorBy: string, data: Accident) => {
             break;
         case 'RoadType':
             res = getColorByRoadType(data.road_type_hebrew);
-            break;    
+            break;
+        case 'AccidentType':
+            res = getColorByAccidentType(data.accident_type_hebrew);
+            break;
         default:
             res = getColorsBySeverity(data.injury_severity_hebrew);
             break;

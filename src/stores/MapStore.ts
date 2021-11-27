@@ -32,7 +32,7 @@ export default class MapStore {
 
   rootStore: RootStore;
 
-  mapRef: React.RefObject<Map<any>>|null = null;
+  mapRef: React.RefObject<Map<any>> | null = null;
 
   setMapRef = (mapRef: React.RefObject<Map<any>>) => {
     this.mapRef = mapRef;
@@ -116,7 +116,7 @@ export default class MapStore {
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
   }
-////////// markers /////////////////
+  ////////// markers /////////////////
   @observable
   useSmallMarkers = false;
 
@@ -129,7 +129,7 @@ export default class MapStore {
   markerIconsType = "Vehicle";
 
   @action
-  setMarkerIconsType = (value:string) => {
+  setMarkerIconsType = (value: string) => {
     this.markerIconsType = value;
   }
   markerIconTypesArr = [
@@ -141,18 +141,19 @@ export default class MapStore {
   markerColorType = "Severity";
 
   @action
-  setMarkerColorType = (value:string) => {
+  setMarkerColorType = (value: string) => {
     this.markerColorType = value;
   }
   markerColorTypesArr = [
     { val: "Severity", text: 'Severity' },
     { val: "Vehicle", text: 'Vehicle' },
+    { val: 'AccidentType', text: 'AccidentType' },
     { val: "DayNight", text: 'DayNight' },
     { val: "Gender", text: 'Gender' },
-    { val: 'RoadType', text:'RoadType'}
+    { val: 'RoadType', text: 'RoadType' }
   ];
 
-////// bounds //////////////////////
+  ////// bounds //////////////////////
   getBounds = (data: any[]) => {
     // logger.log("setBounds!")
     let arr: L.LatLng[] = [];
@@ -161,8 +162,8 @@ export default class MapStore {
       if (x.latitude !== null && x.longitude !== null) {
         const p = new L.LatLng(x.latitude, x.longitude);
         if ((lastPoint.lat === 0 && lastPoint.lng === 0)
-        || x.latitude !== lastPoint.lat
-        || x.longitude !== lastPoint.lng) {
+          || x.latitude !== lastPoint.lat
+          || x.longitude !== lastPoint.lng) {
           arr.push(p);
           // prevent insertion of duplicate same point
           lastPoint = p;
