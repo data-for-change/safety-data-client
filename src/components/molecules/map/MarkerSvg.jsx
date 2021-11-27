@@ -18,6 +18,7 @@ import IconBike from './markers/IconBike.tsx';
 import IconScooter from './markers/IconScooter.tsx';
 import IconQuestion from './markers/IconQuestion.tsx';
 import IconBus from './markers/IconBus.tsx';
+import IconTruck from './markers/IconTruck.tsx';
 import IconEmpty from './markers/IconEmpty.tsx';
 
 // eslint-disable-next-line import/no-unresolved
@@ -54,6 +55,13 @@ const getSVGPinByCategory = (category, color) => {
     case 'אוטובוס':
     case 'אוטובוס זעיר':
       pin = <IconBus fill={color} />;
+      break;
+    case 'משא 3.6 עד 9.9 טון':
+    case 'משא 10.0 עד 12.0 טון':
+    case 'משא 12.1 עד 15.9 טון':
+    case 'משא 16.0 עד 33.9 טון':
+    case 'משא 34.0+ טון':
+      pin = <IconTruck fill={color} />;
       break;
     default:
       pin = <IconQuestion fill={color} />;
