@@ -1,34 +1,37 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable import/extensions */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import L, { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { getColors } from '../../../stores/mapUtils.ts';
-import Accident from '../../../types/Accident.ts';
+import { getColors } from '../../../stores/mapUtils';
+import Accident from '../../../types/Accident';
 
 // import { getColorByVehicle } from '../../../services/mapUtils';
-import IconCar from './markers/IconCar.tsx';
-import IconMotorcycle from './markers/IconMotorcycle.tsx';
-import IconWalk from './markers/IconWalk.tsx';
-import IconBike from './markers/IconBike.tsx';
-import IconScooter from './markers/IconScooter.tsx';
-import IconQuestion from './markers/IconQuestion.tsx';
-import IconBus from './markers/IconBus.tsx';
-import IconTruck from './markers/IconTruck.tsx';
-import IconEmpty from './markers/IconEmpty.tsx';
-
-// eslint-disable-next-line import/no-unresolved
+import IconCar from './markers/IconCar';
+import IconMotorcycle from './markers/IconMotorcycle';
+import IconWalk from './markers/IconWalk';
+import IconBike from './markers/IconBike';
+import IconScooter from './markers/IconScooter';
+import IconQuestion from './markers/IconQuestion';
+import IconBus from './markers/IconBus';
+import IconTruck from './markers/IconTruck';
+import IconEmpty from './markers/IconEmpty';
 import AccidentPopUp from '../../atoms/AccidentPopUp';
 
 // const iconSize = {
 //   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 // };
 
-const getSVGPinByCategory = (category, color) => {
+const customMarketIcon = (iconMarkup:any) => {
+  const res = divIcon({
+    html: iconMarkup,
+    className: 'ship-div-icon',
+    iconAnchor: [0, 30],
+    popupAnchor: [1, -32],
+  });
+  return res;
+};
+
+const getSVGPinByCategory = (category: string, color: string) => {
   let pin;
   switch (category) {
     case '':
@@ -70,35 +73,28 @@ const getSVGPinByCategory = (category, color) => {
   const iconMarkup = renderToStaticMarkup(
     pin,
   );
-  const customMarketIcon = divIcon({
-    html: iconMarkup,
-    className: 'ship-div-icon',
-    iconAnchor: [0, 30],
-    popupAnchor: [1, -32],
-  });
-  return customMarketIcon;
+  const res = customMarketIcon(iconMarkup);
+  return res;
 };
 
-const getEmptyIcon = (color) => {
+const getEmptyIcon = (color: string) => {
   const pin = <IconEmpty fill={color} />;
   const iconMarkup = renderToStaticMarkup(
     pin,
   );
-  const customMarketIcon = divIcon({
-    html: iconMarkup,
-    className: 'ship-div-icon',
-    iconAnchor: [0, 30],
-    popupAnchor: [1, -32],
-  });
-  return customMarketIcon;
+  const res = customMarketIcon(iconMarkup);
+  return res;
 };
 
-// eslint-disable-next-line react/prop-types
-// eslint-disable-next-line no-unused-vars
-const MarkerSvg = (({
+interface IProps {
+  data: Accident,
+  language: string,
+  colorBy : string,
+  markerIconsType: string,
+}
+const MarkerSvg: React.FC<IProps> = (({
   data, language, colorBy, markerIconsType,
 }) => {
-  // eslint-disable-next-line react/prop-types
   const lPoint = new L.LatLng(data.latitude, data.longitude);
   const color = getColors(colorBy, data);
   const icon = (markerIconsType === 'general') ? getEmptyIcon(color)

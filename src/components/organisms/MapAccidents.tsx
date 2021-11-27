@@ -26,7 +26,7 @@ const styels: any = {
 interface IProps { }
 const MapAccidents: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
-  const WRAPPER_STYLES = { height: '75vh', maxWidth: '100%' };
+  const WRAPPER_STYLES = { height: '74vh', maxWidth: '100%' };
   const mapRef = useRef<Map>(null);
 
   const { mapStore } = useStore();
