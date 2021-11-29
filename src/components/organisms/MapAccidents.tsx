@@ -6,6 +6,7 @@ import { toJS } from 'mobx';
 import { Map, TileLayer } from 'react-leaflet';
 import AccidentsMarkers from '../molecules/map/AccidentsMarkers';
 import AccidentHeatLayer from '../molecules/map/AccidentHeatLayer';
+import LegendWarpper from '../molecules/map/LegendWarpper';
 import ButtonToggle from '../atoms/ButtonToggle';
 import { useStore } from '../../stores/storeConfig';
 import { BBoxType } from '../../stores/MapStore';
@@ -68,6 +69,7 @@ const MapAccidents: React.FC<IProps> = observer(() => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {markers}
+        <LegendWarpper/>
       </Map>
       <div style={styels.buttonsPanel}>
         <SelectMarkersColorType />

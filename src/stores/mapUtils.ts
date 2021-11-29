@@ -4,21 +4,25 @@ export const getColorByVehicle = (category: string) => {
     let res = '';
     switch (category) {
         case '':
+        case 'הולך רגל':
             res = '#4cc9f0';
             break;
         case 'רכב נוסעים פרטי':
+        case 'מכונית':
             res = '#f72585';
             break;
         case 'אופנוע עד 50 סמ"ק':
         case 'אופנוע 51 עד 125 סמ"ק':
         case 'אופנוע 126 עד 400 סמ"ק':
         case 'אופנוע 401+ סמ"ק':
+        case 'אופנוע':
             res = '#b5179e';
             break;
         case 'אופניים':
             res = '#4895ef';
             break;
         case 'אופניים חשמליים':
+        case 'חשמלי דו גלגלי':
             res = '#3f37c9';
             break;
         case 'קורקינט חשמלי':
@@ -74,7 +78,7 @@ export const getColorByAccidentType = (value: string) => {
     return res;
 };
 
-export const getColorsBySeverity = (severity: string) => {
+export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
         case 'הרוג':
@@ -87,7 +91,7 @@ export const getColorsBySeverity = (severity: string) => {
     return res;
 };
 
-export const getColorsByDayNight = (value: string) => {
+export const getColorByDayNight = (value: string) => {
     let res = '';
     switch (value) {
         case 'יום':
@@ -99,7 +103,7 @@ export const getColorsByDayNight = (value: string) => {
     }
     return res;
 };
-export const getColorsByGender = (value: string) => {
+export const getColorByGender = (value: string) => {
     let res = '';
     switch (value) {
         case 'נקבה':
@@ -120,10 +124,12 @@ export const getColorByRoadType = (value: string) => {
     switch (value) {
         case 'לא-עירונית לא בצומת':
         case 'עירונית לא בצומת':
+        case 'לא בצומת':
             res = '#4895ef';
             break;
         case 'לא-עירונית בצומת':
         case 'עירונית בצומת':
+        case 'בצומת':
             res = '#1E6091';
             break;
         default:
@@ -137,16 +143,16 @@ export const getColors = (colorBy: string, data: Accident) => {
     let res = '';
     switch (colorBy) {
         case 'Severity':
-            res = getColorsBySeverity(data.injury_severity_hebrew);
+            res = getColorBySeverity(data.injury_severity_hebrew);
             break;
         case 'Vehicle':
             res = getColorByVehicle(data.vehicle_vehicle_type_hebrew);
             break;
         case 'DayNight':
-            res = getColorsByDayNight(data.day_night_hebrew);
+            res = getColorByDayNight(data.day_night_hebrew);
             break;
         case 'Gender':
-            res = getColorsByGender(data.sex_hebrew);
+            res = getColorByGender(data.sex_hebrew);
             break;
         case 'RoadType':
             res = getColorByRoadType(data.road_type_hebrew);
@@ -155,8 +161,60 @@ export const getColors = (colorBy: string, data: Accident) => {
             res = getColorByAccidentType(data.accident_type_hebrew);
             break;
         default:
-            res = getColorsBySeverity(data.injury_severity_hebrew);
+            res = getColorBySeverity(data.injury_severity_hebrew);
             break;
     }
     return res;
 };
+
+// export const legendHtmlFor = (colorBy: string) => [
+//     `<h3>${string}</h3>`,
+//     description && `<p>${description}</p>`,
+//   ].join('\n');
+export const createLegendByColorType = (colorBy: string) =>
+  {
+      let grade = [];
+      let res = [];
+      switch (colorBy) {
+          case 'Severity':
+              grade = ['הרוג', 'פצוע קשה'];
+              res = createLegendArr(grade,getColorBySeverity);
+              break;
+          case 'Vehicle':
+              grade = [ 'חשמלי דו גלגלי', 'מכונית', 'אופנוע', 'לא ידוע', 'הולך רגל', 'אופניים'];
+              res = createLegendArr(grade,getColorByVehicle);
+              break;
+          case 'DayNight':
+              grade = ['לילה', 'יום',];
+              res = createLegendArr(grade,getColorByDayNight);
+              break;
+          case 'Gender':
+              grade = ['נקבה', 'זכר', 'לא ידוע'];
+              res = createLegendArr(grade,getColorByGender);
+              break;
+          case 'RoadType':
+              grade = ['לא בצומת', 'בצומת'];
+              res = createLegendArr(grade,getColorByRoadType);
+              break;
+          case 'AccidentType':
+              grade = ['התהפכות', 'החלקה', 'התנגשות אחור אל צד', 'התנגשות אחור בחזית','התנגשות חזית בצד','התנגשות צד בצד','התנגשות חזית בחזית','התנגשות עם עצם דומם','פגיעה בהולך רגל','אחר',];
+              res = createLegendArr(grade,getColorByAccidentType);
+              break;
+          default:
+              grade = ['נקבה', 'זכר', 'לא ידוע'];
+              res = createLegendArr(grade,getColorByGender);
+              break;
+      }
+      return res;
+  }
+export const createLegendArr = (grades: string[], getColorfunc: (value: string) => any) => {
+    const labels: any = [];
+    grades.forEach((val: string) => {
+        labels.push(
+        `<div><i style="background:${getColorfunc(val)}"></i> ${val}</div>`
+        );
+    });
+    //labels.join('\n');
+    return labels;
+};
+
