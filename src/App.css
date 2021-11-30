@@ -125,6 +125,10 @@
   opacity: 0.7;
 }
 
+.legend div { 
+  padding-bottom: 10px;
+}
+
 .info {
   padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
@@ -134,7 +138,7 @@
   border-radius: 5px;
 }
 
-.info h4 {
+.info h5 {
   margin: 0 0 5px;
   color: #777;
 }

@@ -6,29 +6,30 @@
 
 import { useEffect } from 'react';
 import { useLeaflet } from 'react-leaflet';
+import i18n from 'i18next';
 // import PropTypes from "prop-types";
 import L from 'leaflet';
 import { createLegendByColorType } from '../../../stores/mapUtils.ts';
 
-const legendHtmlFor = (title, description) => {
-  const header = `<h5>${title}</h5>`;
+const legendHtmlFor = (title) => {
+  const header = `<h5>${i18n.t(title)}</h5>`;
   const res = createLegendByColorType(title);
   res.unshift(header);
-  return res.join('<br>');
+  return res.join('');
 };
 
-const Legend = ({ title, description }) => {
+const Legend = ({ title }) => {
   const { map } = useLeaflet();
   useEffect(() => {
     const legend = L.control({ position: 'bottomleft' });
     legend.onAdd = () => {
       const div = L.DomUtil.create('div', 'info legend');
-      div.innerHTML = legendHtmlFor(title, description);
+      div.innerHTML = legendHtmlFor(title);
       return div;
     };
     legend.addTo(map);
     return () => legend.remove();
-  }, [map, title, description]);
+  }, [map, title]);
   return null;
 };
 

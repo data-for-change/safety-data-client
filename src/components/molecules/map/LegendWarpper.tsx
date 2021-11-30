@@ -12,7 +12,6 @@ const LegendWarpper: React.FC<{}> = observer(() => {
   return (
     <Legend
     title={markerColorType}
-    description={'description'}
   />
   );
 });
