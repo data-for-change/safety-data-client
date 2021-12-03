@@ -11,9 +11,8 @@
 }
 
 .filters {
-   max-height: 450px;
+   max-height: 600px;
    overflow-x: hidden;
-   background-color: white;
    border-bottom: 2px solid rgb(189, 189, 189);
 }
 

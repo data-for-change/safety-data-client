@@ -19,6 +19,7 @@ const styels: any = {
   buttonsPanel: {
     display: 'flex',
     justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     paddingTop: '0.2rem',
     margin: '5px'
   },
