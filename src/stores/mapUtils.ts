@@ -78,6 +78,26 @@ export const getColorByAccidentType = (value: string) => {
     return res;
 };
 
+export const getColorByAccidentSelfOrNot = (value: string) => {
+    let res = '';
+    switch (value) {
+        case 'עצמית':
+        case 'החלקה':
+        case 'התהפכות':
+        case 'התנגשות עם עצם דומם':
+        case 'התנגשות עם רכב חונה':
+        case 'ירידה מהכביש או עלייה למדרכה': 
+        case 'פגיעה בנוסע בתוך כלי הרכב':
+        case 'נפילה מרכב נע':
+            res = '#138D75';
+            break;
+        default:
+            res = '#f94144';
+            break;
+    }
+    return res;
+};
+
 export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
@@ -130,7 +150,7 @@ export const getColorByRoadType = (value: string) => {
         case 'לא-עירונית בצומת':
         case 'עירונית בצומת':
         case 'בצומת':
-            res = '#1E6091';
+            res = '#CD6155';
             break;
         default:
             res = '#FDE2E4';
@@ -160,6 +180,9 @@ export const getColors = (colorBy: string, data: Accident) => {
         case 'AccidentType':
             res = getColorByAccidentType(data.accident_type_hebrew);
             break;
+        case 'SelfOrNotAcc':
+                res = getColorByAccidentSelfOrNot(data.accident_type_hebrew);
+                break;    
         default:
             res = getColorBySeverity(data.injury_severity_hebrew);
             break;
@@ -200,6 +223,10 @@ export const createLegendByColorType = (colorBy: string) =>
               grade = ['התהפכות', 'החלקה', 'התנגשות אחור אל צד', 'התנגשות אחור בחזית','התנגשות חזית בצד','התנגשות צד בצד','התנגשות חזית בחזית','התנגשות עם עצם דומם','פגיעה בהולך רגל','אחר',];
               res = createLegendArr(grade,getColorByAccidentType);
               break;
+          case 'SelfOrNotAcc':
+              grade = ['לא עצמית','עצמית',];
+              res = createLegendArr(grade,getColorByAccidentSelfOrNot);
+              break;     
           default:
               grade = ['נקבה', 'זכר', 'לא ידוע'];
               res = createLegendArr(grade,getColorByGender);

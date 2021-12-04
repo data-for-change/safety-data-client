@@ -128,6 +128,11 @@
     "animal": "התנגשות עם בעל חיים",
     "cargo": "פגיעה ממטען של רכב"
   },
+  "SelfOrNotAcc": "תאונה עצמית\\מרובה",
+  "selfAccType": {
+    "self": "עצמית",
+    "non-self": "לא עצמית"
+  },
   "Vehicles": "רכבים מעורבים",
   "WhatVehicle": "איזה רכב",
   "VehicleType": "רכב הנפגע",

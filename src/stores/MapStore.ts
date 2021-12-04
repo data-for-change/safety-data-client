@@ -148,6 +148,7 @@ export default class MapStore {
     { val: "Severity", text: 'Severity' },
     { val: "Vehicle", text: 'Vehicle' },
     { val: 'AccidentType', text: 'AccidentType' },
+    { val: 'SelfOrNotAcc', text: 'SelfOrNotAcc'},
     { val: "DayNight", text: 'DayNight' },
     { val: "Gender", text: 'Gender' },
     { val: 'RoadType', text: 'RoadType' }
