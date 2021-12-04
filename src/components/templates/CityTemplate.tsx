@@ -15,7 +15,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   // const { t } = useTranslation();
   const { filterStore, uiStore } = useStore();
   const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
-  const { setCurrentPage, setStoreByQuery, showFilterModal } = uiStore;
+  const { setCurrentPage, setStoreByQuery, showFilterModal, setInitPage} = uiStore;
 
   useEffect(() => {
     setCurrentPage('city');
@@ -35,11 +35,13 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   //   }
   // }, [cityResult, currentTab]);
   useEffect(() => {
+    setInitPage(true);
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
       setStoreByQuery('map','תל אביב -יפו');
       filterStore.submitFilter();
     }
+    setInitPage(false);
   }, []);
   // useEffect(() => {
   //   if (cityResult !== '') {

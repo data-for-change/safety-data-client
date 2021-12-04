@@ -1,6 +1,7 @@
 import { observable, action, reaction } from 'mobx';
 import i18n from '../i18n';
 import RootStore from './RootStore';
+import { setBrowserQueryString } from '../utils/queryStringUtils';
 import logger from '../services/logger';
 // import autorun  from "mobx"
 
@@ -62,6 +63,14 @@ export default class UiStore {
   setShowFilterModal = (val: boolean) => {
     this.showFilterModal = val;
   }
+
+  @observable
+  initPage: boolean = false;
+  @action
+  setInitPage = (val: boolean) => {
+    this.initPage = val;
+  }
+
    /**
     * udpate the store (and gui) using given qurey from the browser (on load time)
     * @param defTab default tab to dispaly
@@ -75,11 +84,11 @@ export default class UiStore {
       if (tab) this.setCurrentTab(tab);
     //set other stores
     this.rootStore.filterStore.setStoreByQuery(params, defCity);
-    this.rootStore.mapStore.setStoreByQuery(params);  
+    this.rootStore.mapStore.setStoreByQuery(params);
   }
 
    // get name by url query parmas
-   getValFromQuery(query: URLSearchParams, name: string, defVal?: string) {
+   getValFromQuery= (query: URLSearchParams, name: string, defVal?: string) => {
     const val = query.get(name);
     const res = (val !== null) ? val : defVal;
     return res;
@@ -102,17 +111,12 @@ export default class UiStore {
   @action
   setCurrentTab = (tabName: string) => {
     this.currentTab = tabName;
-    this.setBrowserQueryString();
+    this.setQueryStrTab();
   }
 
-  /**
-      * set the QueryString of the browser by current filter
-      */
   @action
-  setBrowserQueryString = () => {
-    const params = new URLSearchParams(location.search);
-    params.set('tab', this.currentTab);
-    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+  setQueryStrTab = () => {
+    setBrowserQueryString('tab', this.currentTab);
   }
 
 

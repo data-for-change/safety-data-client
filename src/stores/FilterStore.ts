@@ -306,7 +306,7 @@ export default class FilterStore {
    }
 
    @computed get isValidWho() {
-      const res =  !this.genderTypes.isAllValsFalse
+      const res = !this.genderTypes.isAllValsFalse
          && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
       return res;
    }
@@ -342,7 +342,7 @@ export default class FilterStore {
    updateInjuerdType = (aType: number, val: boolean) => {
       this.updateFilters(this.injTypes, aType, val);
    }
-   
+
    // vehicle Type of the killed / injured 
    @observable
    vehicleType: IColumnFilter;
@@ -362,7 +362,7 @@ export default class FilterStore {
    }
 
    @computed get isValidWhatVehicle() {
-      const res = !this.injTypes.isAllValsFalse && !this.vehicleType.isAllValsFalse &&  !this.involvedVehicle.isAllValsFalse;
+      const res = !this.injTypes.isAllValsFalse && !this.vehicleType.isAllValsFalse && !this.involvedVehicle.isAllValsFalse;
       return res;
    }
 
@@ -770,7 +770,12 @@ export default class FilterStore {
       if (this.cities.arrValues.length >= 1) {
          const city = this.cities.arrValues[0];
          const srvCity = new CityService();
-         srvCity.getCityByNameHe(city, this.rootStore.mapStore.updateMapCenterByCity);
+         //this.rootStore.mapStore.delQueryStrMapCenter();
+         var noop = function () { }; // do nothing.
+         const CenterByCityCallBack = (this.rootStore.mapStore.isCenterMapByCity()) ?
+            this.rootStore.mapStore.updateMapCenterByCity :
+            noop;
+         srvCity.getCityByNameHe(city, CenterByCityCallBack);
          const index = 0;
          this.cityResult = this.cities.arrValues[index];
       } else this.cityResult = '';
@@ -870,7 +875,7 @@ export default class FilterStore {
     * @param defCity default city to choose. (can be null)
     */
    @action
-   setStoreByQuery = (params:URLSearchParams, defCity?: string) => {
+   setStoreByQuery = (params: URLSearchParams, defCity?: string) => {
       this.startYear.setValuesByQuery(params);
       this.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
@@ -893,7 +898,7 @@ export default class FilterStore {
       //update groupby
       this.groupByDict.setValuesByQuery(params);
       this.group2Dict.setValuesByQuery(params);
-  
+
    }
 
 

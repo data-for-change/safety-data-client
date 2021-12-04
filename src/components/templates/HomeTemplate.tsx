@@ -17,7 +17,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter } = filterStore;
-   const { setCurrentPage, setStoreByQuery, showFilterModal } = uiStore;
+   const { setCurrentPage, setStoreByQuery, showFilterModal , setInitPage} = uiStore;
 
    useEffect(() => {
       setCurrentPage('home');
@@ -31,9 +31,11 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
 
    useEffect(() => {
       // mapStore.initBounds();
+      setInitPage(true);
       updateCities([], false);
       setStoreByQuery('charts');
       submitFilter();
+      setInitPage(false)
    }, [submitFilter, updateCities]);
 
 

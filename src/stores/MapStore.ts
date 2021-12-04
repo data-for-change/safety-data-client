@@ -3,6 +3,7 @@ import { Map } from 'react-leaflet';
 import L from 'leaflet';
 import logger from '../services/logger';
 import RootStore from './RootStore';
+import { setBrowserQueryString, delBrowserQueryString } from '../utils/queryStringUtils';
 // import autorun  from "mobx"
 
 
@@ -23,6 +24,9 @@ const DEFAULT_BOUNDS = [
   L.latLng(29.50, 34.22), // most possible south-west point
   L.latLng(33.271, 35.946), // most possible north-east point
 ];
+const QUERY_STR_NAME_LAT = 'lat';
+const QUERY_STR_NAME_LNG = 'lng';
+const QUERY_STR_NAME_MRKRCOLOR = 'mkclr';
 
 export default class MapStore {
   appInitialized = false
@@ -39,25 +43,32 @@ export default class MapStore {
   setMapRef = (mapRef: React.RefObject<Map<any>>) => {
     this.mapRef = mapRef;
   }
+  @action
+  onMapLoad = () => {
+    console.log('onMapLoad');
+    const params = new URLSearchParams(window.location.search);
+    this.setMapZoomByQuery(params);
+  }
 
   /////////// set / get from quey string
   @action
   setStoreByQuery = (params: URLSearchParams) => {
     this.setMapCenterByQuery(params);
+    this.setMapZoomByQuery(params);
     this.setMarkerColorTypeByQuery(params);
   }
-  /**
-  * set the QueryString of the browser by name and vlaue
-  */
-  @action
-  setBrowserQueryString = (name: string, val: string) => {
-    const params = new URLSearchParams(location.search);
-    params.set(name, val);
-    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+
+  delQueryStrMapCenter = () => {
+    delBrowserQueryString(QUERY_STR_NAME_LAT);
+    delBrowserQueryString(QUERY_STR_NAME_LNG)
   }
-  setQueryStrMapCenter= (center: L.LatLng) =>{
-    this.setBrowserQueryString('lat', center.lat.toFixed(5));
-    this.setBrowserQueryString('lng', center.lng.toFixed(5));
+
+  setQueryStrMapCenter = (center: L.LatLng) => {
+    setBrowserQueryString(QUERY_STR_NAME_LAT, center.lat.toFixed(5));
+    setBrowserQueryString(QUERY_STR_NAME_LNG, center.lng.toFixed(5));
+  }
+  setQueryStrMapZoom = (zoom: number) => {
+    setBrowserQueryString('z', zoom.toString());
   }
 
   @observable
@@ -70,26 +81,63 @@ export default class MapStore {
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
 
   @action
-  updateMapCenter = (center: L.LatLng, updateQuery :boolean = true) => {
+  updateMapCenter = (center: L.LatLng, updateQuery: boolean = true) => {
     this.mapCenter = center;
-    if(updateQuery)
-    {
+    if (updateQuery) {
       this.setQueryStrMapCenter(center);
     }
   }
 
+  @observable
+  mapZoom: number = 13;
+
+  @action
+  setMapZoom = (value: number) => {
+    this.mapZoom = value;
+  };
+
+
   @action
   setMapCenterByQuery = (params: URLSearchParams) => {
-    const sLat = params.get('lat');
-    const sLon = params.get('lng');
+    const center = this.getCenterByQuery(params);
+    if (center) {
+      this.updateMapCenter(center, false);
+    }
+  }
+  getCenterByQuery = (params: URLSearchParams) => {
+    let center = null
+    const sLat = params.get(QUERY_STR_NAME_LAT);
+    const sLon = params.get(QUERY_STR_NAME_LNG);
     if (sLat && sLon) {
       const lat = Number.parseFloat(sLat);
       const lng = Number.parseFloat(sLon)
       if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-        const center = new L.LatLng(lat, lng);
-        this.updateMapCenter(center, false);
+        center = new L.LatLng(lat, lng);
       }
     }
+    return center;
+  }
+  @action
+  setMapZoomByQuery = (params: URLSearchParams) => {
+    const sZoom = params.get('z');
+    if (sZoom) {
+      const zoom = Number.parseInt(sZoom);
+      if (!Number.isNaN(zoom)) {
+        this.setMapZoom(zoom);
+      }
+    }
+  }
+  // if this is init-page and query string has center- don't center by city location
+  isCenterMapByCity = () => {
+    let doCenterByCity = true;
+    if (this.rootStore.uiStore.initPage) {
+      const params = new URLSearchParams(window.location.search);
+      const center = this.getCenterByQuery(params);
+      if (center) {
+        doCenterByCity = false;
+      }
+    }
+    return doCenterByCity;
   }
 
   @action
@@ -98,6 +146,7 @@ export default class MapStore {
       const city = res[0];
       if (city.lat && city.lon) {
         this.updateMapCenter(new L.LatLng(city.lat, city.lon));
+        this.setMapZoom(13);
       }
     }
   }
@@ -185,17 +234,17 @@ export default class MapStore {
   @action
   setMarkerColorType = (value: string) => {
     this.markerColorType = value;
-    this.setBrowserQueryString('mkclr', value);
+    setBrowserQueryString(QUERY_STR_NAME_MRKRCOLOR, value);
   }
   @action
   setMarkerColorTypeByQuery = (params: URLSearchParams) => {
-    const val = params.get('mkclr');
+    const val = params.get(QUERY_STR_NAME_MRKRCOLOR);
     if (val !== null) {
       this.setMarkerColorType(val);
     }
   }
   setBrowserQueryStringByMarkerColor = (params: URLSearchParams) => {
-    params.set('mkclr', (this.markerColorType));
+    params.set(QUERY_STR_NAME_MRKRCOLOR, (this.markerColorType));
     window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
   }
 
@@ -280,18 +329,31 @@ export default class MapStore {
       logger.error(error);
     }
   };
-  setQueryStrMapCenterByBounds= () =>{
+  setQueryStrMapCenterByBounds = () => {
     if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     try {
-      const mapBounds = this.mapRef.current.leafletElement.getBounds(); 
-      if(mapBounds) {
+      const mapBounds = this.mapRef.current.leafletElement.getBounds();
+      if (mapBounds) {
         const center = mapBounds.getCenter()
         this.setQueryStrMapCenter(center);
+        this.setQueryStrMapZoom(this.mapRef.current.leafletElement.getZoom());
       }
     } catch (error) {
       logger.error(error);
     }
   }
+  /* 
+    setMapZoom =(zoom: number) =>{
+      console.log('mapRef',this.mapRef)
+      if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
+      try {
+        this.mapRef.current.leafletElement.setZoom(zoom);
+        const zoom2 = this.mapRef.current.leafletElement.getZoom();
+        console.log('zoom2', zoom2)
+      } catch (error) {
+        logger.error(error);
+      }
+    } */
 
   getMarkersInBBox = () => {
     if (this.bboxType === BBoxType.LOCAL_BBOX) {

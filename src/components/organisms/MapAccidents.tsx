@@ -32,14 +32,15 @@ const MapAccidents: React.FC<IProps> = observer(() => {
   const mapRef = useRef<Map>(null);
 
   const { mapStore } = useStore();
-  mapStore.setMapRef(mapRef);
+  //mapStore.setMapRef(mapRef);
 
-  const { heatLayerHidden, mapCenter,  updateMapBounds } = mapStore;
+  const { heatLayerHidden, mapCenter, mapZoom, updateMapBounds, onMapLoad } = mapStore;
   const reactMapCenter = toJS(mapCenter);
   const markers = heatLayerHidden && <AccidentsMarkers />;
   const heatLayer = !heatLayerHidden && <AccidentHeatLayer />;
 
   useEffect(() => {
+    mapStore.setMapRef(mapRef);
     // use in mountOnEnter
     updateMapBounds();
     // prevent zoom  0 bug
@@ -47,14 +48,16 @@ const MapAccidents: React.FC<IProps> = observer(() => {
       const zoom = mapRef.current.leafletElement.getZoom();
       if (zoom === 0) mapRef.current.leafletElement.setZoom(13);
     }
-  });
+  },[]);
+  
   return (
     <div>
       <Map
         ref={mapRef}
         center={reactMapCenter}
-        zoom={13}
+        zoom={mapZoom}
         // bounds={mapBounds}
+        // whenReady= {onMapLoad}
         style={WRAPPER_STYLES}
         onmoveend={updateMapBounds}
       >
