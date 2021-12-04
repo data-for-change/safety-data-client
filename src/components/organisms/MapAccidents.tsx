@@ -34,20 +34,14 @@ const MapAccidents: React.FC<IProps> = observer(() => {
   const { mapStore } = useStore();
   mapStore.setMapRef(mapRef);
 
-  const { heatLayerHidden, mapCenter, bboxType } = mapStore;
+  const { heatLayerHidden, mapCenter,  updateMapBounds } = mapStore;
   const reactMapCenter = toJS(mapCenter);
   const markers = heatLayerHidden && <AccidentsMarkers />;
   const heatLayer = !heatLayerHidden && <AccidentHeatLayer />;
-  const updateBounds = (() => {
-    try {
-      if (bboxType !== BBoxType.NO_BBOX) mapStore.getMarkersInBBox();
-    } catch (error) {
-      logger.error(error);
-    }
-  });
+
   useEffect(() => {
-    // us in mountOnEnter
-    updateBounds();
+    // use in mountOnEnter
+    updateMapBounds();
     // prevent zoom  0 bug
     if (mapRef.current !== null) {
       const zoom = mapRef.current.leafletElement.getZoom();
@@ -62,7 +56,7 @@ const MapAccidents: React.FC<IProps> = observer(() => {
         zoom={13}
         // bounds={mapBounds}
         style={WRAPPER_STYLES}
-        onmoveend={updateBounds}
+        onmoveend={updateMapBounds}
       >
         {heatLayer}
         <TileLayer

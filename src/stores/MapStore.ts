@@ -5,6 +5,8 @@ import logger from '../services/logger';
 import RootStore from './RootStore';
 // import autorun  from "mobx"
 
+
+
 /**
  * bbox type - how to fetch data for map 
  * NO_BBOX - when filter change, get all the points from server
@@ -38,6 +40,26 @@ export default class MapStore {
     this.mapRef = mapRef;
   }
 
+  /////////// set / get from quey string
+  @action
+  setStoreByQuery = (params: URLSearchParams) => {
+    this.setMapCenterByQuery(params);
+    this.setMarkerColorTypeByQuery(params);
+  }
+  /**
+  * set the QueryString of the browser by name and vlaue
+  */
+  @action
+  setBrowserQueryString = (name: string, val: string) => {
+    const params = new URLSearchParams(location.search);
+    params.set(name, val);
+    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+  }
+  setQueryStrMapCenter= (center: L.LatLng) =>{
+    this.setBrowserQueryString('lat', center.lat.toFixed(5));
+    this.setBrowserQueryString('lng', center.lng.toFixed(5));
+  }
+
   @observable
   isReadyToRenderMap = false;
 
@@ -48,8 +70,26 @@ export default class MapStore {
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
 
   @action
-  updateMapCenter = (center: L.LatLng) => {
+  updateMapCenter = (center: L.LatLng, updateQuery :boolean = true) => {
     this.mapCenter = center;
+    if(updateQuery)
+    {
+      this.setQueryStrMapCenter(center);
+    }
+  }
+
+  @action
+  setMapCenterByQuery = (params: URLSearchParams) => {
+    const sLat = params.get('lat');
+    const sLon = params.get('lng');
+    if (sLat && sLon) {
+      const lat = Number.parseFloat(sLat);
+      const lng = Number.parseFloat(sLon)
+      if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+        const center = new L.LatLng(lat, lng);
+        this.updateMapCenter(center, false);
+      }
+    }
   }
 
   @action
@@ -83,7 +123,7 @@ export default class MapStore {
   @action
   setBounds = (data: any[], citisArr: string[]) => {
     if (this.isSetBounds) {
-      const bunds = this.getBounds(data);
+      const bunds = this.getBoundsByPointsArr(data);
       if (citisArr.length > 0 && citisArr[0] !== '') {
         // //this.mapBounds = bunds;
         // if (bunds.contains(this.mapCenter))
@@ -116,11 +156,7 @@ export default class MapStore {
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
   }
-  /////////// set / get from quey string
-  @action
-  setStoreByQuery = (params: URLSearchParams) => {
-    this.setMarkerColorTypeByQuery(params);
-}
+
 
   ////////// markers /////////////////
   @observable
@@ -149,41 +185,32 @@ export default class MapStore {
   @action
   setMarkerColorType = (value: string) => {
     this.markerColorType = value;
-    const params = new URLSearchParams(location.search);
-    this.setBrowserQueryString(params,'mkclr', value);
+    this.setBrowserQueryString('mkclr', value);
   }
   @action
   setMarkerColorTypeByQuery = (params: URLSearchParams) => {
-      const val = params.get('mkclr');
-      if (val !== null) {
-        this.setMarkerColorType(val);
-      }
+    const val = params.get('mkclr');
+    if (val !== null) {
+      this.setMarkerColorType(val);
+    }
   }
   setBrowserQueryStringByMarkerColor = (params: URLSearchParams) => {
     params.set('mkclr', (this.markerColorType));
-    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);  
+    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
   }
-    /**
-      * set the QueryString of the browser by current filter
-      */
-  @action
-  setBrowserQueryString = (params: URLSearchParams, name: string, val: string ) => {
-       // const params = new URLSearchParams(location.search);
-       params.set(name, val);
-       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
-  }
+
   markerColorTypesArr = [
     { val: "Severity", text: 'Severity' },
     { val: "Vehicle", text: 'Vehicle' },
     { val: 'AccidentType', text: 'AccidentType' },
-    { val: 'SelfOrNotAcc', text: 'SelfOrNotAcc'},
+    { val: 'SelfOrNotAcc', text: 'SelfOrNotAcc' },
     { val: "DayNight", text: 'DayNight' },
     { val: "Gender", text: 'Gender' },
     { val: 'RoadType', text: 'RoadType' }
   ];
 
   ////// bounds //////////////////////
-  getBounds = (data: any[]) => {
+  getBoundsByPointsArr = (data: any[]) => {
     // logger.log("setBounds!")
     let arr: L.LatLng[] = [];
     let lastPoint: L.LatLng = L.latLng(0, 0);
@@ -241,6 +268,29 @@ export default class MapStore {
   @action
   updateDataMarkersInBounds = (data: any[]) => {
     this.dataMarkersInBounds = data;
+  }
+  @action
+  updateMapBounds = () => {
+    try {
+      //get markers
+      if (this.bboxType !== BBoxType.NO_BBOX) this.getMarkersInBBox();
+      //update query string by map
+      this.setQueryStrMapCenterByBounds()
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+  setQueryStrMapCenterByBounds= () =>{
+    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
+    try {
+      const mapBounds = this.mapRef.current.leafletElement.getBounds(); 
+      if(mapBounds) {
+        const center = mapBounds.getCenter()
+        this.setQueryStrMapCenter(center);
+      }
+    } catch (error) {
+      logger.error(error);
+    }
   }
 
   getMarkersInBBox = () => {
