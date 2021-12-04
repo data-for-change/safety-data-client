@@ -870,14 +870,11 @@ export default class FilterStore {
     * @param defCity default city to choose. (can be null)
     */
    @action
-   setStoreByQuery = (defTab: string, defCity?: string) => {
-      const params = new URLSearchParams(window.location.search);
-      const tab = this.getValFromQuery(params, 'tab', defTab);
+   setStoreByQuery = (params:URLSearchParams, defCity?: string) => {
       this.startYear.setValuesByQuery(params);
       this.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
       this.dayNight.setValuesByQuery(params);
-      if (tab) this.rootStore.uiStore.setCurrentTab(tab);
       const citis = this.getCityNameFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
       this.locationAccuracy.setValuesByQuery(params);
@@ -896,14 +893,10 @@ export default class FilterStore {
       //update groupby
       this.groupByDict.setValuesByQuery(params);
       this.group2Dict.setValuesByQuery(params);
+  
    }
 
-   // get name by url query parmas
-   getValFromQuery(query: URLSearchParams, name: string, defVal?: string) {
-      const val = query.get(name);
-      const res = (val !== null) ? val : defVal;
-      return res;
-   }
+
 
    // old code - backup for post req
    getFilterForPost = (bounds: any, useBounds: boolean = false) => {

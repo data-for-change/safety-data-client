@@ -62,14 +62,28 @@ export default class UiStore {
   setShowFilterModal = (val: boolean) => {
     this.showFilterModal = val;
   }
-
+   /**
+    * udpate the store (and gui) using given qurey from the browser (on load time)
+    * @param defTab default tab to dispaly
+    * @param defCity default city to choose. (can be null)
+    */
   @action
-  setStoreByQuery = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabParam = urlParams.get('tab');
-    console.log(tabParam)
-
+  setStoreByQuery = (defTab: string, defCity?: string) => {
+    const params = new URLSearchParams(window.location.search);
+    //set tab
+    const tab = this.getValFromQuery(params, 'tab', defTab);
+      if (tab) this.setCurrentTab(tab);
+    //set other stores
+    this.rootStore.filterStore.setStoreByQuery(params, defCity);
+    this.rootStore.mapStore.setStoreByQuery(params);  
   }
+
+   // get name by url query parmas
+   getValFromQuery(query: URLSearchParams, name: string, defVal?: string) {
+    const val = query.get(name);
+    const res = (val !== null) ? val : defVal;
+    return res;
+ }
 
   /**
    * current page

@@ -116,6 +116,12 @@ export default class MapStore {
   toggleHeatLayer = () => {
     this.heatLayerHidden = !this.heatLayerHidden;
   }
+  /////////// set / get from quey string
+  @action
+  setStoreByQuery = (params: URLSearchParams) => {
+    this.setMarkerColorTypeByQuery(params);
+}
+
   ////////// markers /////////////////
   @observable
   useSmallMarkers = false;
@@ -143,6 +149,28 @@ export default class MapStore {
   @action
   setMarkerColorType = (value: string) => {
     this.markerColorType = value;
+    const params = new URLSearchParams(location.search);
+    this.setBrowserQueryString(params,'mkclr', value);
+  }
+  @action
+  setMarkerColorTypeByQuery = (params: URLSearchParams) => {
+      const val = params.get('mkclr');
+      if (val !== null) {
+        this.setMarkerColorType(val);
+      }
+  }
+  setBrowserQueryStringByMarkerColor = (params: URLSearchParams) => {
+    params.set('mkclr', (this.markerColorType));
+    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);  
+  }
+    /**
+      * set the QueryString of the browser by current filter
+      */
+  @action
+  setBrowserQueryString = (params: URLSearchParams, name: string, val: string ) => {
+       // const params = new URLSearchParams(location.search);
+       params.set(name, val);
+       window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
   }
   markerColorTypesArr = [
     { val: "Severity", text: 'Severity' },

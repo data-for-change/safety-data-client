@@ -16,8 +16,8 @@ interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
    const { t } = useTranslation();
    const { mapStore, filterStore, uiStore } = useStore();
-   const { setIsMultipleCities, updateCities, submitFilter, setStoreByQuery } = filterStore;
-   const { setCurrentPage, showFilterModal } = uiStore;
+   const { setIsMultipleCities, updateCities, submitFilter } = filterStore;
+   const { setCurrentPage, setStoreByQuery, showFilterModal } = uiStore;
 
    useEffect(() => {
       setCurrentPage('home');
