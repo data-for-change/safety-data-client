@@ -1,10 +1,12 @@
 import { observable } from 'mobx';
+import {reGroupResultIsSelfAcc} from '../utils/groupByUtils';
 
 export interface IGroupBy {
   text: string;
   value: string;
   limit: number;
   sort: number;
+  reGroupResultFunc? : any;
 }
 
 export default class GroupBy implements IGroupBy {
@@ -17,16 +19,19 @@ export default class GroupBy implements IGroupBy {
 
   sort: number;
 
+  reGroupResultFunc : any|null;
+
   // text - headleine for GUI, value - name of value for filter
-  constructor(text: string, value: string, limit: number = 0, sort = 0) {
+  constructor(text: string, value: string, limit: number = 0, sort:number = 0, reGroupResultFunc?:any) {
     this.text = text;
     this.value = value;
     this.limit = limit;
     this.sort = sort;
+    if(reGroupResultFunc) this.reGroupResultFunc = reGroupResultFunc;
   }
 
 }
-
+//init a group-by dictionary 
 export const initGroupMap = (useGetFetch: boolean) => {
   if (useGetFetch) return initGroupMapForGet();
   else return initGroupByDictForPost();
@@ -51,6 +56,7 @@ const initGroupMapForGet = () => {
   map.set('st', new GroupBy('Street', 'st', 15, -1));
   map.set('rd', new GroupBy('Road', 'rd', 10, -1));
   map.set('acc', new GroupBy('AccidentType', 'acc'));
+  map.set('selfacc', new GroupBy('SelfOrNotAcc', 'selfacc', 0, 0, reGroupResultIsSelfAcc));
   map.set('vcli', new GroupBy('Vehicles', 'vcli'));
   map.set('sp', new GroupBy('SpeedLimit', 'sp'));
   map.set('rw', new GroupBy('RoadWidth', 'rw'));

@@ -1,6 +1,4 @@
 
-import { IColumnFilter } from './ColumnFilterCheckBoxList';
-
 export const getFilterGroupBy =
   (filterMatch: string,
     groupName: string,
