@@ -380,10 +380,21 @@ export const initAccidentType = () => {
   col.arrTypes.push(new FilterChecker('accType.front-front', false, [5]));
   col.arrTypes.push(new FilterChecker('accType.front-rear', false, [3]));
   col.arrTypes.push(new FilterChecker('accType.side-side', false, [4]));
-  col.arrTypes.push(new FilterChecker('accType.obstacle', false, [8]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle1', false, [6]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle2', false, [7]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle3', false, [8]));
+  col.arrTypes.push(new FilterChecker('accType.offroad', false, [9]));
   col.arrTypes.push(new FilterChecker('accType.turning-over', false, [10]));
   col.arrTypes.push(new FilterChecker('accType.slip', false, [11]));
+  col.arrTypes.push(new FilterChecker('accType.passenger', false, [12]));
+  col.arrTypes.push(new FilterChecker('accType.falloff', false, [13]));
+  col.arrTypes.push(new FilterChecker('accType.rear-front', false, [17]));
+  col.arrTypes.push(new FilterChecker('accType.rear-side', false, [18]));
+  col.arrTypes.push(new FilterChecker('accType.animal', false, [19]));
+  col.arrTypes.push(new FilterChecker('accType.cargo', false, [20]));
+  col.arrTypes.push(new FilterChecker('accType.other', false, [15]));
   return col;
+
 };
 
 export const initDataYreasUnfilterd = () => dataYearsUnfilterdInit;
