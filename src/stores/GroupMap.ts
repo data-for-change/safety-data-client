@@ -86,6 +86,7 @@ const initGroup2DictForGet = () => {
     year.vals[2018] = new GroupBy2Val('2018', '#305A30');
     year.vals[2019] = new GroupBy2Val('2019', '#305A30');
     year.vals[2020] = new GroupBy2Val('2020', '#1258DC');
+    year.vals[2021] = new GroupBy2Val('2021', '#1258DC');
     dict.set(year.name, year);
 
     const dayNight = new GroupBy2('DayNight', 'dn');

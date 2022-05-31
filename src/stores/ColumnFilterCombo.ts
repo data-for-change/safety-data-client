@@ -123,7 +123,7 @@ export class ColumnFilterComboValText extends ColumnFilterCombo {
   }
 }
 
-const years: string[] = ['2015', '2016', '2017', '2018', '2019','2020'];
+const years: string[] = ['2015', '2016', '2017', '2018', '2019','2020','2021'];
 const CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
 const cityPopSizeArr = [
   { val: '{"min":-1,"max":-1}', text: 'all' },
@@ -141,7 +141,7 @@ export const initStartYear = () => {
 };
 
 export const initEndYear = () => {
-  const col: ColumnFilterCombo = new ColumnFilterCombo('ToYear', 'ey', -1, years, 2020);
+  const col: ColumnFilterCombo = new ColumnFilterCombo('ToYear', 'ey', -1, years, 2021);
   return col;
 };
 
