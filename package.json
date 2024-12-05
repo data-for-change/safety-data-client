@@ -10,6 +10,7 @@
     "chart.js": "^4.4.7",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dexie": "^4.0.10",
+    "dotenv": "^16.4.7",
     "i18next": "^24.0.5",
     "i18next-browser-languagedetector": "^8.0.0",
     "leaflet": "^1.9.4",
@@ -27,9 +28,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "node ./configs/loadEnv.js && react-scripts start",
+    "build": "node ./configs/loadEnv.js && react-scripts build",
+    "test": "node ./configs/loadEnv.js && react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

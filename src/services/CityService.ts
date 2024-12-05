@@ -1,7 +1,8 @@
 export default class CityService {
+  apiUrl = process.env.API_URL || '';
   getCityByNameHe = (cityName: string, collback: (res: any[]) => void) => {
     // "http://localhost:5000/api/v1/city?name_he=חיפה"
-    const url = `/api/v1/city?name_he=${cityName}`;
+    const url = `${this.apiUrl}/api/v1/city?name_he=${cityName}`;
     fetch(url, {
       method: 'GET',
       headers: {
@@ -25,7 +26,7 @@ export default class CityService {
 
   getCitiesNames(lang: string, collback: (res: any[]) => void) {
     // "http://localhost:5000/api/v1/city?lang=he"
-    const url = `/api/v1/city?lang=${lang}`;
+    const url = `${this.apiUrl}/api/v1/city?lang=${lang}`;
     fetch(url, {
       method: 'GET',
       headers: {
