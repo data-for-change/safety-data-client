@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import MapPage from './MapPage';
 import './App.css';
 
 function App() {
+  // const [number, setNumber] = useState(0);
+  // useEffect(()=>{    
+  //   console.log(`eEffect`);
+  //   const interval = setInterval(()=>{
+      
+  //     setNumber(prev=> prev+1);
+  //   },1001);
+  //   return () =>{
+  //     console.log(`clean interval`);
+  //     clearInterval(interval);
+  //   }
+  // },[]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <h1> {number} Hello world!</h1>; */}
+      <MapPage />
     </div>
   );
 }
