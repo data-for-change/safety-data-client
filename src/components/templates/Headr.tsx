@@ -1,7 +1,7 @@
 import React from 'react';
 // import LanguageSelector from '../molecules/LanguageSelector';
 import logo from '../../assets/safety-logo.png';
-// import NavigationList from '../molecules/NavigationList';
+import NavigationList from '../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar'
 import '../../styles/tabs.css'
 
@@ -35,7 +35,7 @@ export const Header: React.FC<IProps> = ({ title }) => {
                <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-light" />
                <Navbar.Collapse id="basic-navbar-nav" >
                   <div className="navbar-nav">
-                     {/* <NavigationList /> */}
+                     <NavigationList />
                   </div>
                   <div>
                      {/* <LanguageSelector /> */}

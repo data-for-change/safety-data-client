@@ -1,8 +1,8 @@
 import React from 'react';
-import IconVehicle from '../molecules/map/IconVehicle';
+import IconVehicle from '../components/molecules/map/IconVehicle';
 
 import Logo from '../assets/transport_icons/car_icon.svg';
-import Icon from '../atoms/Icon';
+import Icon from '../components/atoms/Icon';
 
 interface IProps { }
 

@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Card from 'react-bootstrap/Card';
 // import HomePage from './components/pages/HomePage';
 // import CityPage from './components/pages/CityPage';
-import MapPage from './components/pages/MapPage';
+import MapPage from './pages/MapPage';
 import Header from './components/templates/Headr';
 // import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
@@ -13,7 +13,7 @@ import './App.css';
 // import MyFilters from './components/pages/MyFilters';
 // import { useTranslate } from './hooks/transelate'
 
-const AboutPage = lazy(() => import('./components/pages/AboutPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
 // const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
 // const MyFilters = lazy(() => import('./components/pages/MyFilters'))
 

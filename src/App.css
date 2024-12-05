@@ -2,6 +2,33 @@
   text-align: center;
 }
 
+:root {
+  --primary-color: #1976d2;
+  --p-stonrg: #004ba0;
+  --p-light: #63a4ff;
+  --onprimary-color: white;
+  --secondary-color: #00aacc;
+  --primary-old: #4576c4;
+  --image-gallery-description-visable: inherit;
+  --primary-second: rgba(250, 52, 118, 0.911)
+}
+
+.heb {
+  direction: rtl;
+}
+
+.texthe {
+  text-align: right;
+}
+
+.texten {
+  text-align: left;
+}
+
+.languageSelector {
+  padding: 3px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
