@@ -1,11 +1,11 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Card from 'react-bootstrap/Card';
-// import HomePage from './components/pages/HomePage';
+import HomePage from './pages/HomePage';
 // import CityPage from './components/pages/CityPage';
 import MapPage from './pages/MapPage';
 import Header from './components/templates/Headr';
-// import Footer from './components/templates/Footer';
+//import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
 import './i18n';
 import './App.css';
@@ -33,8 +33,9 @@ function App() {
             <div style={styles.app}>
         
                <Routes>
-                  <Route path="/" element={<MapPage />} />
+                  <Route path="/" element={<HomePage />} />
                   <Route path="/about" element={<AboutPage />} />
+                  <Route path="/map" element={<MapPage />} />
                </Routes>
            
             </div>
