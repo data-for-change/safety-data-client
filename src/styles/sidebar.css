@@ -1,0 +1,33 @@
+.sidebar {
+   /* display: flex;
+   justify-content: center; */
+   /* max-height: 520px; */
+   padding: 1rem 0.5rem;
+   /* width: 250px; */
+   /* overflow-x: hidden; */
+   /* background-color: var(--primary-color); */
+  /*  position: fixed; */
+   /* border: 2px solid rgb(189, 189, 189); */
+}
+
+.filters {
+   max-height: 600px;
+   overflow-x: hidden;
+   border-bottom: 2px solid rgb(189, 189, 189);
+}
+
+.sidebar ::-webkit-scrollbar {
+   width: 7px;
+}
+
+.sidebar ::-webkit-scrollbar-track {
+   background: #f1f1f1;
+}
+
+.sidebar ::-webkit-scrollbar-thumb {
+   background: #888;
+}
+
+.sidebar ::-webkit-scrollbar-thumb:hover {
+   background: #555;
+}

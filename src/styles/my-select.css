@@ -1,0 +1,24 @@
+.select-wrapper {
+   /* display: inline; */
+}
+
+.form-select-sm {
+   margin-left: 0.5rem;
+   margin-right: 0.5rem;
+   padding: 0.1rem;
+}
+
+.form-select-m {
+   margin-left: 0.5rem;
+   margin-right: 0.5rem;
+   padding: 0.1rem;
+   width: 200px;
+}
+
+.form-select-sm:focus {
+   border: 2px rgb(108, 108, 246) solid;
+}
+
+.select-wrapper label {
+   font-weight: 700;
+}

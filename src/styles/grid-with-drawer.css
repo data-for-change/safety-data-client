@@ -1,0 +1,29 @@
+.grid-with-drawer {
+   display: grid;
+   grid-template-columns: 1fr 4fr;
+}
+
+.grid-with-drawer .grid-drawer {
+   /* background-color: var(--primary-color); */
+   background-color: white;
+   /* margin: 0.5rem; */
+   margin-top: 0.5rem;
+}
+
+.grid-with-drawer .grid-main {
+   margin-top: 0.5rem;
+   margin-bottom: 0.5rem;
+   /* padding: 1rem; */
+}
+
+@media screen and (max-width: 1050px) {
+   .grid-with-drawer .grid-drawer {
+      display: none;
+   }
+   .grid-with-drawer .grid-main {
+      grid-column: 4 span;
+   }
+   .filter-btn {
+      display: block;
+   }
+}
