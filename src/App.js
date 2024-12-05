@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import Card from 'react-bootstrap/Card';
 // import HomePage from './components/pages/HomePage';
 // import CityPage from './components/pages/CityPage';
-//import AboutPage from './components/pages/AboutPage';
+import MapPage from './components/pages/MapPage';
 import Header from './components/templates/Headr';
 // import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
@@ -33,12 +33,8 @@ function App() {
             <div style={styles.app}>
         
                <Routes>
-               <Route path="/" element={<AboutPage />}>
-                  <Route index element={<AboutPage />} />
-                  <Route path="blogs" element={<AboutPage />} />
-                  <Route path="contact" element={<AboutPage />} />
-                  <Route path="*" element={<AboutPage />} />
-               </Route>
+                  <Route path="/" element={<MapPage />} />
+                  <Route path="/about" element={<AboutPage />} />
                </Routes>
            
             </div>
