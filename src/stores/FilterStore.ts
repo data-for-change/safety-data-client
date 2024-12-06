@@ -1,5 +1,5 @@
 import {
-   observable, action, computed,
+   observable, action, computed, makeAutoObservable
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import * as FC from './ColumnFilterCheckBoxList';
@@ -21,8 +21,13 @@ import { FilterLocalStorage, LocalStorageService } from '../services/Localstorag
 import citisNamesHeb from '../assets/json/cities_names_heb.json';
 // import autorun  from "mobx"
 
-
-export default class FilterStore {
+export interface IFilterStore {
+   isLoading: boolean;
+   setIsLoading: (value:boolean) => void;
+   startYear: ColumnFilterCombo;
+   endYear: ColumnFilterCombo;
+}
+class FilterStore implements IFilterStore  {
    appInitialized = false
 
    useGetFetch = true;
@@ -32,6 +37,7 @@ export default class FilterStore {
    constructor(rootStore: RootStore) {
       // init app data
       this.rootStore = rootStore;
+      makeAutoObservable(this, { rootStore: false});
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when
@@ -249,15 +255,14 @@ export default class FilterStore {
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // when
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   @observable
    startYear: ColumnFilterCombo;
 
    @action
    setStartYear = (year: string) => {
+      console.log("set start year in store",year );
       this.startYear.setFilter(parseInt(year));
    }
 
-   @observable
    endYear: ColumnFilterCombo;
 
    @action
@@ -469,6 +474,11 @@ export default class FilterStore {
 
    @observable
    isLoading: boolean = false;
+   @action
+   setIsLoading( value:boolean)
+   {
+      this.isLoading = value;
+   }
 
    @computed get isValidAllFilters() {
       const res = this.isValidSeverity && this.isValidWhen && this.isValidWho
@@ -723,7 +733,7 @@ export default class FilterStore {
    }
 
    submintMainDataFilter = () => {
-      this.isLoading = true;
+      this.setIsLoading(true);
       if (this.useGetFetch) {
          const filter = this.getFilterQueryString(null);
          this.setFiltersText(true);
@@ -737,7 +747,8 @@ export default class FilterStore {
                   // write Data to local db
                   if (this.useLocalDb === 1) insertToDexie(data);
                }
-               this.isLoading = false;
+               console.log("setISLoading =false in store")
+               this.setIsLoading(false);
             });
       } else {
          const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
@@ -752,7 +763,7 @@ export default class FilterStore {
                   // write Data to local db
                   if (this.useLocalDb === 1) insertToDexie(data);
                }
-               this.isLoading = false;
+               this.setIsLoading(false);
             });
       }
 
@@ -981,7 +992,7 @@ export default class FilterStore {
    useLocalDb = 0;
 
    submitMainDataFilterLocalDb = () => {
-      this.isLoading = true;
+      this.setIsLoading(true);
       const arrFilters = this.getFilterIDB();
       this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
       // logger.log(arrFilters);
@@ -990,7 +1001,7 @@ export default class FilterStore {
             if (data !== null && data !== undefined) {
                this.updateAllInjuries(data);
             }
-            this.isLoading = false;
+            this.setIsLoading(false);
          });
    }
 
@@ -1100,9 +1111,4 @@ export default class FilterStore {
    }
 }
 
-// autorun(() =>{
-//     logger.log(store.todos[0])
-//     logger.log(store.filter)
-// })
-
-// export default store
+export default FilterStore;

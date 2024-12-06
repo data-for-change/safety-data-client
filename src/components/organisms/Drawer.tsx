@@ -9,8 +9,8 @@ import '../../styles/sidebar.css'
 const Drawer: React.FC<any> = observer((props) => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
-
-   // console.log(filterStore)
+   const {isLoading, isValidAllFilters} = filterStore;
+   console.log("isLoading", isLoading)
 
    return (
       <div className="sidebar">
@@ -21,22 +21,21 @@ const Drawer: React.FC<any> = observer((props) => {
             style={{ margin: '0.5rem' }}
             variant="primary"
             onClick={() => filterStore.submitFilter()}
-            disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
+            //disabled={isLoading || !isValidAllFilters}
          >
-            {filterStore.isLoading ? t('Loading') : t('Submit')}
+            {/* {isLoading ? t('Loading') : t('Submit')} */}
+           {t('Submit')}
          </Button>
          <Button
             style={{ margin: '0.5rem' }}
             variant="info"
             onClick={() => alert('action in filter store to collect filters')}
-            disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
+            disabled={isLoading || !isValidAllFilters}
          >
             {t('Save')}  {t('Filter')}
          </Button>
       </div>
    )
-   {/* </SmallCard2> */ }
-})
-
+  })
 
 export default Drawer

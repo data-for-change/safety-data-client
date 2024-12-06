@@ -1,7 +1,10 @@
+import React, {FC} from 'react';
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import L from 'leaflet';
+import L, {LatLngTuple} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from '../assets/marker-icon.png.png'
+import { observer } from 'mobx-react';
+import { store } from '../stores/storeConfig';
 
 const iconSize = {
     iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
@@ -13,12 +16,26 @@ const blue_ICON = new L.Icon({
     popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
     shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
   }); 
-  
-function MapPage() {
-    const position = [51.505, -0.09];
+ 
+interface IProps {
+}
+const MapPage: FC<IProps> = observer(() => { 
+    const {filterStore}=store;
+    const {isLoading}  = filterStore;
+    console.log("isloading1 ", isLoading);
+    
+    const position : LatLngTuple = [51.505, -0.09] as LatLngTuple;
     return (
         <>
         <div><h1>map demo</h1></div>
+        <label>
+            <input
+                type="checkbox"
+                checked={isLoading}
+                onChange={(e) => filterStore.setIsLoading(e.target.checked)}
+            />
+            {isLoading ? "Loading" : "Not Loading"}
+        </label>
         <div id="map">
             <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: '100vh', width: '100%' }}>
                 <TileLayer
@@ -34,6 +51,6 @@ function MapPage() {
         </div>
         </>
     );
-}
+});
 
 export default MapPage;
