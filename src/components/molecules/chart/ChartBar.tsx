@@ -225,7 +225,6 @@ export const data1 = {
 
 const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
-  console.log(data);
 
    // if metaData == undefined - chart of 1 group
   //if (metaData == undefined) {

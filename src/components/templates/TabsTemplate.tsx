@@ -8,7 +8,7 @@ import { useStore } from '../../stores/storeConfig';
 import Loader from '../atoms/Loader';
 import SmallCard2 from '../atoms/SmallCard2';
 import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel';
-
+import MapPage from '../../pages/MapPage';
 interface IProps {
   type: string;
 }
@@ -28,12 +28,14 @@ const styles = {
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { t } = useTranslation();
   const { mapStore, uiStore } = useStore();
+  const {currentTab} = uiStore;
+  console.log("currentTab", currentTab);
   // const [activeKey] = useState(uiStore.);
   // defaultActiveKey={uiStore.currentTab}
   return (
     <Tabs
       mountOnEnter
-      activeKey={uiStore.currentTab}
+      activeKey={currentTab}
       id="main-tabs"
       onSelect={(tabActiveKey: any) => {
         if (tabActiveKey === 'map') {
@@ -46,7 +48,6 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>     
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>  
-            <h1>GroupByGraphsPanel</h1>        
             <GroupByGraphsPanel />
           </Suspense>
         </ErrorBoundary>
@@ -62,8 +63,8 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tabMap} eventKey="map" title={t('Map')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-            <SmallCard2>
-            <h1>MAp</h1>
+            <SmallCard2>           
+              <MapPage />
               {/* <MapAccidents /> */}
             </SmallCard2>
           </Suspense>

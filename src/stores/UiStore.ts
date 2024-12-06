@@ -1,4 +1,4 @@
-import { observable, action, reaction } from 'mobx';
+import { observable, action, reaction, makeAutoObservable } from 'mobx';
 import i18n from '../i18n';
 import RootStore from './RootStore';
 import { setBrowserQueryString } from '../utils/queryStringUtils';
@@ -10,6 +10,7 @@ export default class UiStore {
 
   constructor(rootStore: RootStore) {
     // init app data
+    makeAutoObservable(this, { rootStore: false});
     this.rootStore = rootStore;
     this.initLang();
     this.appInitialized = false;
@@ -105,7 +106,7 @@ export default class UiStore {
     this.currentPage = pageType;
   }
 
-  @observable
+
   currentTab: string = 'charts';
 
   @action
