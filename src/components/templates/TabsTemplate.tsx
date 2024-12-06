@@ -16,7 +16,7 @@ interface IProps {
 // const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
 // const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 // const MapAccidents = lazy(() => import('../organisms/MapAcc2.jsx'));
-// const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
+const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 // const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 
 const styles = {
@@ -74,7 +74,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
           <h1>AccidentsTable</h1>
-            {/* <div className="col-auto"><AccidentsTable /></div> */}
+            <div className="col-auto"><AccidentsTable /></div>
           </Suspense>
         </ErrorBoundary>
       </Tab>
