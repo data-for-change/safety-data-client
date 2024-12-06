@@ -1,10 +1,10 @@
 import React from 'react';
-// import LanguageSelector from '../molecules/LanguageSelector';
-import logo from '../../assets/safety-logo.png';
-import NavigationList from '../molecules/NavigationList';
+import LanguageSelector from '../../molecules/LanguageSelector';
+import logo from '../../../assets/safety-logo.png';
+import NavigationList from '../../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar'
-import '../../styles/tabs.css'
-
+import '../../../styles/tabs.css'
+import './header.css';
 
 interface IProps {
    title: string
@@ -38,7 +38,7 @@ export const Header: React.FC<IProps> = ({ title }) => {
                      <NavigationList />
                   </div>
                   <div>
-                     {/* <LanguageSelector /> */}
+                     <LanguageSelector />
                   </div>
                </Navbar.Collapse>
             </div>

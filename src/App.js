@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 // import CityPage from './components/pages/CityPage';
 import MapPage from './pages/MapPage';
-import Header from './components/templates/Headr';
+import Header from './components/templates/Header/Headr';
 //import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
 import './i18n';

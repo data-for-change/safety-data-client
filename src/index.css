@@ -11,3 +11,75 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card {
+  border-radius: 0px;
+}
+
+.dir-rtl {
+  direction: rtl;
+}
+
+.dir-ltr {
+  direction: ltr;
+}
+
+.selectLabel {
+  font-weight: 700;
+  padding-right: 0 !important;
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+
+.form-select-sm {
+  border-radius: 2px;
+  width: 6rem;
+}
+
+.btn, .button-sm, .form-control, .modal-content {
+  border-radius: 2px;
+}
+
+.row, .col-md-4, .col-md-8 {
+  margin-top: 1rem;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.filterLable {
+  font-weight: 700;
+  padding-right: 0 !important;
+  /* margin-right: 1rem;
+  margin-left: 1rem; */
+}
+
+.filterControls {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+}
+
+button.btn.btn-link {
+  text-decoration: none;
+  color: black !important;
+  font-weight: 600;
+}
+
+/* IMAGES DESCRIPTION  */
+
+#main-tabs-tabpane-image>div>div>div.image-gallery.image-gallery-using-mouse>div>div.image-gallery-slide-wrapper.bottom.image-gallery-rtl>div>div>div.image-gallery-slide.center>div>span {
+  right: 0;
+}
+
+body>div.fade.modal.show {
+  margin-top: 3rem !important;
+  /* margin-bottom: 3rem !important; */
+}

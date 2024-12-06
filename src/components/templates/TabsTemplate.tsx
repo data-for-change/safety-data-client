@@ -7,12 +7,13 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 import { useStore } from '../../stores/storeConfig';
 import Loader from '../atoms/Loader';
 import SmallCard2 from '../atoms/SmallCard2';
+import GroupByGraphsPanel from '../organisms/GroupByGraphsPanel';
 
 interface IProps {
   type: string;
 }
 
-const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
+// const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
 // const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 // const MapAccidents = lazy(() => import('../organisms/MapAcc2.jsx'));
 // const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
@@ -42,9 +43,10 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
         uiStore.setCurrentTab(tabActiveKey);
       }}
     >
-      <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>
+      <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>     
         <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader />}>  
+            <h1>GroupByGraphsPanel</h1>        
             <GroupByGraphsPanel />
           </Suspense>
         </ErrorBoundary>
