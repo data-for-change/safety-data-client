@@ -75,7 +75,7 @@ export default class MapStore {
   isReadyToRenderMap = false;
 
   @observable
-  bboxType: BBoxType = BBoxType.LOCAL_BBOX;
+  bboxType: BBoxType = BBoxType.NO_BBOX;
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)

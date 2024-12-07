@@ -7,14 +7,14 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 import { useStore } from '../../stores/storeConfig';
 import Loader from '../atoms/Loader';
 import SmallCard2 from '../atoms/SmallCard2';
-import MapPage from '../../pages/MapPage';
+// import MapPage from '../../pages/MapPage';
 interface IProps {
   type: string;
 }
 
 const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
 const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
-// const MapAccidents = lazy(() => import('../organisms/MapAcc2.jsx'));
+const MapAccidents = lazy(() => import('../organisms/AccidentsMap'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
 // const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 
@@ -62,8 +62,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <SmallCard2>           
-              <MapPage />
-              {/* <MapAccidents /> */}
+              <MapAccidents />
             </SmallCard2>
           </Suspense>
         </ErrorBoundary>

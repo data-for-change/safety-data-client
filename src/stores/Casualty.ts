@@ -7,4 +7,4 @@ export interface CasualtyLean {
 
 export default interface Casualty extends CasualtyLean {
 
-  };
+};
