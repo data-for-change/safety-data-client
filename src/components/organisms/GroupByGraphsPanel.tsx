@@ -41,8 +41,7 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
       return (
          <div style={styles.divCharts}>           
             <Row>
-               <Col md={4}>
-                  <h2>CardChartYears </h2>
+               <Col md={4}>                  
                   <CardChartYears />
                </Col>
                <Col md={8} >
