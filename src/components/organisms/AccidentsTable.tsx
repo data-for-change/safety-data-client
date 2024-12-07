@@ -3,13 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import {
+  Column,
+  ColumnDef,
   createColumnHelper,
+  PaginationState,
+  Table,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-//import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-//import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
+} from '@tanstack/react-table';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 
@@ -81,119 +86,52 @@ type InjuredPerson = {
   sex_hebrew: string;
 };
 
-type Person = {
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  status: string
-  progress: number
-}
-
-const defaultData: Person[] = [
-  {
-    firstName: 'tanner',
-    lastName: 'linsley',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-  },
-  {
-    firstName: 'tandy',
-    lastName: 'miller',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-  },
-  {
-    firstName: 'joe',
-    lastName: 'dirte',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-]
-
-const columnHelper = createColumnHelper<Person>();
-const columnHelper1 = createColumnHelper<InjuredPerson>();
+const columnHelper = createColumnHelper<InjuredPerson>();
 
 const columns = [
-  columnHelper1.accessor('_id', {
+  columnHelper.accessor('_id', {
     cell: info => info.getValue(),
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('accident_year', {
+  columnHelper.accessor('accident_year', {
     cell: info => <i>{info.getValue()}</i>,
     header: () => <span>Accident Year</span>,
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('injury_severity_hebrew', {
+  columnHelper.accessor('injury_severity_hebrew', {
     header: () => 'Injury Severity',
     cell: info => info.renderValue(),
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('injured_type_hebrew', {
+  columnHelper.accessor('injured_type_hebrew', {
     header: () => <span>Injured Type</span>,
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('accident_yishuv_name', {
+  columnHelper.accessor('accident_yishuv_name', {
     header: 'Yishuv Name',
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('street1_hebrew', {
+  columnHelper.accessor('street1_hebrew', {
     header: 'Street',
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('vehicle_vehicle_type_hebrew', {
+  columnHelper.accessor('vehicle_vehicle_type_hebrew', {
     header: 'Vehicle Type',
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('accident_type_hebrew', {
+  columnHelper.accessor('accident_type_hebrew', {
     header: 'Accident Type',
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('age_group_hebrew', {
+  columnHelper.accessor('age_group_hebrew', {
     header: 'Age Group',
     footer: info => info.column.id,
   }),
-  columnHelper1.accessor('sex_hebrew', {
+  columnHelper.accessor('sex_hebrew', {
     header: 'Sex',
     footer: info => info.column.id,
   }),
 ];
-
-const columns2 = [
-  columnHelper.accessor('firstName', {
-    cell: info => info.getValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor(row => row.lastName, {
-    id: 'lastName',
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Last Name</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('age', {
-    header: () => 'Age',
-    cell: info => info.renderValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('visits', {
-    header: () => <span>Visits</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('progress', {
-    header: 'Profile Progress',
-    footer: info => info.column.id,
-  }),
-]
 
 interface IProps { }
 // const AccidentsTable: React.FC<IProps> = observer(() => {
@@ -253,71 +191,210 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   const reactMarkers = toJS(filterStore.dataAllInjuries);
   //@ts-ignore
   const defaultDAta2 = reactMarkers as InjuredPerson[];
-  if (reactMarkers.length >0){
-    const test = defaultDAta2;
-  }
   const [data, _setData] = React.useState(() => [...defaultDAta2]);
-  const [data1, _setData1] = React.useState(() => [...defaultData])
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const rerender = React.useReducer(() => ({}), {})[1]
 
-  const table = useReactTable({
+  const table1 = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
+  const table = useReactTable({
+    columns,
+    data,
+    debugTable: true,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
+    state: {
+      pagination,
+    },
+    // autoResetPageIndex: false, // turn off page index reset when sorting or filtering
+  })
+
   return (
     <div className="p-2">
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+    <div className="h-2" />
+    <table>
+      <thead>
+        {table.getHeaderGroups().map(headerGroup => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map(header => {
+              return (
+                <th key={header.id} colSpan={header.colSpan}>
+                  <div
+                    {...{
+                      className: header.column.getCanSort()
+                        ? 'cursor-pointer select-none'
+                        : '',
+                      onClick: header.column.getToggleSortingHandler(),
+                    }}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                    {{
+                      asc: ' 🔼',
+                      desc: ' 🔽',
+                    }[header.column.getIsSorted() as string] ?? null}
+                    {header.column.getCanFilter() ? (
+                      <div>
+                        <Filter column={header.column} table={table} />
+                      </div>
+                    ) : null}
+                  </div>
                 </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
+              )
+            })}
+          </tr>
+        ))}
+      </thead>
+      <tbody>
+        {table.getRowModel().rows.map(row => {
+          return (
             <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+              {row.getVisibleCells().map(cell => {
+                return (
+                  <td key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </td>
+                )
+              })}
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
-      </table>
-      <div className="h-4" />
-      <button onClick={() => rerender()} className="border p-2">
-        Rerender
+          )
+        })}
+      </tbody>
+    </table>
+    <div className="h-2" />
+    <div className="flex items-center gap-2">
+      <button
+        className="border rounded p-1"
+        onClick={() => table.firstPage()}
+        disabled={!table.getCanPreviousPage()}
+      >
+        {'<<'}
       </button>
+      <button
+        className="border rounded p-1"
+        onClick={() => table.previousPage()}
+        disabled={!table.getCanPreviousPage()}
+      >
+        {'<'}
+      </button>
+      <button
+        className="border rounded p-1"
+        onClick={() => table.nextPage()}
+        disabled={!table.getCanNextPage()}
+      >
+        {'>'}
+      </button>
+      <button
+        className="border rounded p-1"
+        onClick={() => table.lastPage()}
+        disabled={!table.getCanNextPage()}
+      >
+        {'>>'}
+      </button>
+      <span className="flex items-center gap-1">
+        <div>Page</div>
+        <strong>
+          {table.getState().pagination.pageIndex + 1} of{' '}
+          {table.getPageCount().toLocaleString()}
+        </strong>
+      </span>
+      <span className="flex items-center gap-1">
+        | Go to page:
+        <input
+          type="number"
+          min="1"
+          max={table.getPageCount()}
+          defaultValue={table.getState().pagination.pageIndex + 1}
+          onChange={e => {
+            const page = e.target.value ? Number(e.target.value) - 1 : 0
+            table.setPageIndex(page)
+          }}
+          className="border p-1 rounded w-16"
+        />
+      </span>
+      <select
+        value={table.getState().pagination.pageSize}
+        onChange={e => {
+          table.setPageSize(Number(e.target.value))
+        }}
+      >
+        {[10, 20, 30, 40, 50].map(pageSize => (
+          <option key={pageSize} value={pageSize}>
+            Show {pageSize}
+          </option>
+        ))}
+      </select>
     </div>
+  </div>
   )
 });
+
+function Filter({
+  column,
+  table,
+}: {
+  column: Column<any, any>
+  table: Table<any>
+}) {
+  const firstValue = table
+    .getPreFilteredRowModel()
+    .flatRows[0]?.getValue(column.id)
+
+  const columnFilterValue = column.getFilterValue()
+
+  return typeof firstValue === 'number' ? (
+    <div className="flex space-x-2" onClick={e => e.stopPropagation()}>
+      <input
+        type="number"
+        value={(columnFilterValue as [number, number])?.[0] ?? ''}
+        onChange={e =>
+          column.setFilterValue((old: [number, number]) => [
+            e.target.value,
+            old?.[1],
+          ])
+        }
+        placeholder={`Min`}
+        className="w-24 border shadow rounded"
+      />
+      <input
+        type="number"
+        value={(columnFilterValue as [number, number])?.[1] ?? ''}
+        onChange={e =>
+          column.setFilterValue((old: [number, number]) => [
+            old?.[0],
+            e.target.value,
+          ])
+        }
+        placeholder={`Max`}
+        className="w-24 border shadow rounded"
+      />
+    </div>
+  ) : (
+    <input
+      className="w-36 border shadow rounded"
+      onChange={e => column.setFilterValue(e.target.value)}
+      onClick={e => e.stopPropagation()}
+      placeholder={`Search...`}
+      type="text"
+      value={(columnFilterValue ?? '') as string}
+    />
+  )
+};
+
 export default AccidentsTable;
