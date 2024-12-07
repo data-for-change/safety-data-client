@@ -1,23 +1,11 @@
 import React, {FC} from 'react';
-import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import L, {LatLngTuple} from 'leaflet';
-import markerIcon from '../../assets/marker-icon.png.png'
+import { MapContainer, TileLayer } from 'react-leaflet';
+import {LatLngTuple} from 'leaflet';
 import { observer } from 'mobx-react';
 import { store } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
 import AccidentsMarkers from '../map/AccidentsMarkers';
 
-const iconSize = {
-    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-  };
-const blue_ICON = new L.Icon({
-    iconUrl: markerIcon,
-    iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
-    iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
-    popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
-    shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
-  }); 
- 
 interface IProps {
 }
 const AccidentsMap: FC<IProps> = observer(() => { 
@@ -29,7 +17,6 @@ const AccidentsMap: FC<IProps> = observer(() => {
 
     return (
         <>
-        <div><h1>map demo</h1></div>
         <label>
             <input
                 type="checkbox"

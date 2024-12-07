@@ -16,11 +16,9 @@ interface IProps {
 const IconVehicle: React.FC<IProps> = (({ vType, color, size=35 }) => {
     switch (vType) {
         case 'מכונית':
-            return <ReactSVG src={carIcon} style={{ height: size, width: size }} fill={color} />          
-          break;
+            return <ReactSVG src={carIcon} style={{ height: size, width: size }} fill={color} />         
         case 'אופניים':
             return <ReactSVG src={bikeIcon} style={{ height: size, width: size }} fill={color}/>
-          break;
         default:
             return <ReactSVG src={questionSvg} style={{ height: size, width: size }} fill={color}/>
     }

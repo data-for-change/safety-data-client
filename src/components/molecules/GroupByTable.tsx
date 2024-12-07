@@ -1,6 +1,6 @@
 
 import React, { FunctionComponent } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import {
   createColumnHelper,
   flexRender,
@@ -98,15 +98,14 @@ const columns = [
 //   return null;
 // };
 
-const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: col2, data: data2 }) => {
-  const [data, _setData] = React.useState(() => [...data2])
+const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: col2, data }) => {
+  // const [data, _setData] = React.useState(() => [...data2])
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-  console.log('col2', col2);
-
+  
   return (
     <div className="p-2">
       <table>
