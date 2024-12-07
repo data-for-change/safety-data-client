@@ -248,7 +248,6 @@ const chartData = {
 
   return (
   <>
-    <h2>bar chart</h2>
     <Bar options={options} data={chartData} />
   </>
   );
