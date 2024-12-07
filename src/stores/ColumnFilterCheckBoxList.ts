@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, makeAutoObservable } from 'mobx';
 import FilterChecker, { IFilterChecker } from './FilterChecker';
 import dataYearsUnfilterdInit from '../assets/json/data-by-years.json';
 import dataYearsfilterdInit from '../assets/json/data-by-years-filtred.json';
@@ -10,6 +10,7 @@ export interface IColumnFilter {
   name: string;
   queryColName: string;
   arrTypes: IFilterChecker[];
+  //arrChecked: boolean[];
   //array of values to be sent as query to server
   arrValues: number[];
   isArrValuesEmptyOnAllCheck: boolean;
@@ -54,6 +55,11 @@ export class ColumnFilter implements IColumnFilter {
     // if this value > -1 , there is an option to set all values as true
     this.allTypesOption = allTypesOption;
     this.text = '';
+    makeAutoObservable(this, {
+      arrTypes: observable,
+      // arrChecked: computed,
+    });
+     
   }
 
   /**
@@ -157,6 +163,9 @@ export class ColumnFilter implements IColumnFilter {
       this.text = this.arrTypes.filter(x => x.checked).map(x => i18n.t(x.label)).join(', ');
     }
   }
+  // get arrChecked(): boolean[] {
+  //   return this.arrTypes.map((item) => item.checked);
+  // }
 }
 
 export const initInjurySeverity = () => {

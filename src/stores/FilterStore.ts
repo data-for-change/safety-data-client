@@ -131,6 +131,7 @@ class FilterStore implements IFilterStore  {
    @action
    updateInjurySeverity = (aType: number, val: boolean) => {
       this.updateFilters(this.injurySeverity, aType, val);
+      console.log ("updateInjurySeverity", this.injurySeverity.arrTypes)
    }
 
    @computed get isValidSeverity() {
