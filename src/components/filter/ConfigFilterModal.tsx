@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import FilterForm from '../organisms/FilterForm';
+import FilterForm from './FilterForm';
 import { useStore } from '../../stores/storeConfig';
 import ConfigModal from "../organisms/ConfigModal";
 

@@ -4,7 +4,7 @@ import {LatLngTuple} from 'leaflet';
 import { observer } from 'mobx-react';
 import { store } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
-import AccidentsMarkers from '../map/AccidentsMarkers';
+import AccidentsMarkers from './AccidentsMarkers';
 
 interface IProps {
 }

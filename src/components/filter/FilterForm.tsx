@@ -1,20 +1,20 @@
 import React, { ChangeEvent, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+// mport { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 // import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
+// import Col from 'react-bootstrap/Col';
 import { Accordion, useAccordionButton, Card } from 'react-bootstrap';
 // @ts-ignore
-import CitySelector from '../molecules/CitySelector';
-import StreetSelector from '../molecules/StreetSelector';
-import RoadNameSelector from '../molecules/RoadNameSelector';
-import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
+import CitySelector from './CitySelector';
+import StreetSelector from './StreetSelector';
+import RoadNameSelector from './RoadNameSelector';
+import RoadSegmentSelector from './RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
-import Select from '../atoms/Select';
+// import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
-import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
+// import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import MySelect from '../atoms/MySelect';
 import '../../styles/accordion.css'
 
@@ -33,7 +33,7 @@ const STYLE_TOGGLE_NORMAL = {
    // paddingLeft: '15px',
 };
 
-const FilterForm: React.FC<IProps> = observer(({ }) => {
+const FilterForm: React.FC<IProps> = observer(() => {
    const { filterStore } = useStore();
    const { injurySeverity, updateInjurySeverity, formCardKey } = filterStore;
    // console.log(injurySeverity)
@@ -103,13 +103,14 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                         label={'FromYear'}
                         value={String(startYear.queryValue)}
                         data={startYear.arrTypes}
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}                   
                      />
                      <MySelect
                         label={'ToYear'}
                         value={String(endYear.queryValue)}
                         data={endYear.arrTypes}
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
+                        
                      />
                   </div>
                   <GroupCheckbox formName="exampleForm" colFilter={dayNight} onChange={updateDayNight} />
@@ -175,7 +176,7 @@ const CardFilterWhere = observer(() => {
 });
 const CardFilterWho = observer(() => {
    const { t } = useTranslation();
-   const location = useLocation();
+   // const location = useLocation();
    const { filterStore } = useStore();
    const { isValidWho, genderTypes, updateGenderType, } = filterStore;
    const { ageTypes, updateAgeType, populationTypes, updatePopulationType, setFormCardKey } = filterStore;

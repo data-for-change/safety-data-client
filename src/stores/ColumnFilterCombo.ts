@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action , makeObservable} from 'mobx';
 import i18n from '../i18n';
 
 export interface IColumnFilterCombo {
@@ -16,7 +16,7 @@ export interface IColumnFilterCombo {
   setFilter: (value: string | number) => void;
   getFilter: () => string;
   //text is updated ofter filter submit
-  text: string;
+  text: string;  
   setText: () => void;
 }
 /**  filter group of boolaen filters
@@ -29,10 +29,9 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
   queryColName: string;
 
   arrTypes: any[];
-  @observable
+  
   queryValue: string | number;
 
-  @observable
   text: string;
 
   allTypesOption: number;
@@ -48,9 +47,14 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
     this.queryValue = defaultVal;
     this.allTypesOption = allTypesOption;
     this.text = '';
+    makeObservable(this, {
+      queryValue: observable, 
+      text: observable, 
+      setFilter: action,
+      // setText: action
+    });
   }
 
-  @action
   setFilter = (value: string | number) => {
     this.queryValue = value;
   }
@@ -96,7 +100,6 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
     return filter;
   }
 
-  @action
   setText = () => {
     if (typeof (this.queryValue) === 'string') {
       this.text = this.queryValue;

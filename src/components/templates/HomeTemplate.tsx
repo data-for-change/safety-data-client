@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 // import FilterPanel from '../organisms/FilterPanel';
 import TabsTemplate from './TabsTemplate';
 import { useStore } from '../../stores/storeConfig';
-import ConfigFilterModal from '../organisms/ConfigFilterModal';
+import ConfigFilterModal from '../filter/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
 // import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';

@@ -2,7 +2,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 
 interface IProps {

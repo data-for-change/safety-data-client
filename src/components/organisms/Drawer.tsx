@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
-import FilterForm from './FilterForm'
+import FilterForm from '../filter/FilterForm'
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
@@ -23,8 +23,7 @@ const Drawer: React.FC<any> = observer((props) => {
             onClick={() => filterStore.submitFilter()}
             //disabled={isLoading || !isValidAllFilters}
          >
-            {/* {isLoading ? t('Loading') : t('Submit')} */}
-           {t('Submit')}
+           {isLoading ? t('Loading') : t('Submit')} 
          </Button>
          <Button
             style={{ margin: '0.5rem' }}

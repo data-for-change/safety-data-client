@@ -7,8 +7,7 @@ const LanguageSelector = observer(() => {
    const { uiStore } = useStore();
    const {direction} = uiStore;
    const style: any = document.getElementById('style-direction');
-   console.log('direction', direction);
-   if (style !== null) {
+      if (style !== null) {
       if (direction === 'rtl') {
          style.href = './bootstrap.rtl.min.css';
          // changeLanguage('he')
@@ -23,7 +22,6 @@ const LanguageSelector = observer(() => {
    }
    return (
       <React.Fragment>
-
          <MySelect
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                uiStore.updateLanguage(e.target.value)
@@ -33,30 +31,7 @@ const LanguageSelector = observer(() => {
             valProp="value"
             contentProp="text"
             value={uiStore.language}
-         />
-         {/* <Form className="form-inline">
-            <Form.Group>
-               <Form.Control
-                  style={{ width: '7rem' }}
-                  className="form-select form-select-sm"
-                  as="select"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                     uiStore.updateLanguage(e.target.value)
-                  }}
-               >
-                  <option value="he">Hebrew</option>
-                  <option value="en">English</option>
-               </Form.Control>
-            </Form.Group>
-         </Form> */}
-         {/* <select
-            className="form-select-sm"
-            onChange={(e) => {
-               uiStore.updateLanguage(e.target.value)
-            }}>
-            <option value="he">Hebrew</option>
-            <option value="en">English</option>
-         </select> */}
+         />        
       </React.Fragment>
    );
 });
