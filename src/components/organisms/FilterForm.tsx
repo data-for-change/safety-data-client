@@ -7,10 +7,10 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import { Accordion, useAccordionButton, Card } from 'react-bootstrap';
 // @ts-ignore
-// import CitySelector from '../molecules/CitySelector';
-// import StreetSelector from '../molecules/StreetSelector';
-// import RoadNameSelector from '../molecules/RoadNameSelector';
-// import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
+import CitySelector from '../molecules/CitySelector';
+import StreetSelector from '../molecules/StreetSelector';
+import RoadNameSelector from '../molecules/RoadNameSelector';
+import RoadSegmentSelector from '../molecules/RoadSegmentSelector';
 import GroupCheckbox from '../molecules/GroupCheckBox';
 import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
@@ -146,10 +146,10 @@ const CardFilterWhere = observer(() => {
             eventKey="2"
             className="filterControls">
             <div>
-               {/* <CitySelector isMultiple={isMultipleCities} /> */}
-               {/* <StreetSelector />
+               <CitySelector isMultiple={isMultipleCities} /> 
+               <StreetSelector />
                <RoadNameSelector />
-               <RoadSegmentSelector /> */}
+               <RoadSegmentSelector />
                <GroupCheckbox
                   formName="exampleForm"
                   colFilter={roadTypes}

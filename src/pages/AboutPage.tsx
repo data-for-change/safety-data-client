@@ -1,8 +1,4 @@
 import React from 'react';
-import IconVehicle from '../components/molecules/map/IconVehicle';
-
-import Logo from '../assets/transport_icons/car_icon.svg';
-import Icon from '../components/atoms/Icon';
 
 interface IProps { }
 
@@ -36,9 +32,6 @@ const AboutPage: React.FC<IProps> = () => {
             <div style={styleDiv}>
                מקור הנתונים על התאונות הוא הלמ"ס , דרך מנוע הנתונים של פרויקט <a href={'https://www.anyway.co.il'} target="_blank" rel="noopener noreferrer">Anyway</a>  של הסדנא לידע ציבורי. המפה באתר היא תודות לפרויקט <a href={'https://www.openstreetmap.org/'} target="_blank" rel="noopener noreferrer">OpenStreetMap</a>.
              </div>
-             <Icon name="arrow-left" color="blue" size={35} />
-             <IconVehicle vType="מכונית" color="green" />
-             <IconVehicle vType="אופניים" color="blue" />
          </div>
       </div>
    );

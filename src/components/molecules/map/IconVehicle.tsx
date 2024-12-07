@@ -4,10 +4,6 @@ import carIcon from '../../../assets/transport_icons/car_icon.svg';
 import bikeIcon from '../../../assets/transport_icons/bicycle_icon.svg'; 
 import questionSvg from '../../../assets/transport_icons/question_icon.svg'; 
 
-// import { ReactComponent as CarSvg1 } from '../../../assets/transport_icons/car_icon.svg';
-//import { ReactComponent as BikeSvg} from '../../../assets/transport_icons/bicycle_icon.svg';
-//import { ReactComponent as QuestionSvg} from '../../../assets/transport_icons/question_icon.svg';
-
 interface IProps {
     vType: string,
     color: string,
