@@ -116,7 +116,7 @@ export class ColumnFilter implements IColumnFilter {
    */
   getFilter = () => {
     const vals = this.arrValues.join(',');
-    let res = (this.arrValues.length == 0) ? '' : `&${this.queryColName}=${vals}`;
+    let res = (this.arrValues.length === 0) ? '' : `&${this.queryColName}=${vals}`;
     return res;
   }
 

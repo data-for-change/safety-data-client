@@ -1,14 +1,15 @@
 import React, { ChangeEvent } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
-import Form from 'react-bootstrap/Form'
 import MySelect from '../atoms/MySelect';
 
 const LanguageSelector = observer(() => {
    const { uiStore } = useStore();
+   const {direction} = uiStore;
    const style: any = document.getElementById('style-direction');
+   console.log('direction', direction);
    if (style !== null) {
-      if (uiStore.direction === 'rtl') {
+      if (direction === 'rtl') {
          style.href = './bootstrap.rtl.min.css';
          // changeLanguage('he')
          document.body.classList.remove('dir-ltr');

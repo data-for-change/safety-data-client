@@ -10,7 +10,7 @@ export default class UiStore {
 
   constructor(rootStore: RootStore) {
     // init app data
-    makeAutoObservable(this, { rootStore: false});
+    makeAutoObservable(this, { rootStore: false, direction: observable});
     this.rootStore = rootStore;
     this.initLang();
     this.appInitialized = false;

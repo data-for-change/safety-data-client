@@ -15,16 +15,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
     
     const position : LatLngTuple = [32.07995, 34.8344] as LatLngTuple;
 
-    return (
-        <>
-        <label>
-            <input
-                type="checkbox"
-                checked={isLoading}
-                onChange={(e) => filterStore.setIsLoading(e.target.checked)}
-            />
-            {isLoading ? "Loading" : "Not Loading"}
-        </label>
+    return (       
         <div id="map">
             <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: '100vh', width: '100%' }}>
                 <TileLayer
@@ -34,7 +25,6 @@ const AccidentsMap: FC<IProps> = observer(() => {
                   <AccidentsMarkers />
             </MapContainer>
         </div>
-        </>
     );
 });
 
