@@ -1,4 +1,4 @@
-import FilterStore from './FilterStore';
+import FilterStore from './filter/FilterStore';
 import UiStore from './UiStore';
 import MapStore from './MapStore';
 import ImageStore from './ImageStore'

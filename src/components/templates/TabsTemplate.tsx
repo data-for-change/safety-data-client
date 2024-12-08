@@ -16,7 +16,7 @@ const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'))
 const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 const MapAccidents = lazy(() => import('../map/AccidentsMap'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
-// const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
+const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 
 const styles = {
   tab: { marginTop: '0.5rem' },
@@ -70,7 +70,6 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tab} eventKey="table" title={t('Table')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-          <h1>AccidentsTable</h1>
             <div className="col-auto"><AccidentsTable /></div>
           </Suspense>
         </ErrorBoundary>
@@ -78,8 +77,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tab} eventKey="image" title={t('Images')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-          <h1>MyImageGallery</h1>
-            {/* <div className="col-auto"><MyImageGallery type={type} /></div> */}
+            <div className="col-auto"><MyImageGallery type={type} /></div>
           </Suspense>
         </ErrorBoundary>
       </Tab>

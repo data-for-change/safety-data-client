@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
-import GroupBy2 from '../../stores/GroupBy2';
+import GroupBy2 from '../../stores/filter/GroupBy2';
 import SelectGroupBy from '../atoms/SelectGroupBy';
 import SelectGroupBy2 from '../atoms/SelectGroupBy2';
 import SmallCard2 from '../atoms/SmallCard2';

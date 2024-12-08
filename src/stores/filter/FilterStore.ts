@@ -3,22 +3,22 @@ import {
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import * as FC from './ColumnFilterCheckBoxList';
-import * as FilterUtils from '../utils/FilterUtils';
+import * as FilterUtils from '../../utils/FilterUtils';
 import { ColumnFilterArray } from './ColumnFilterArray';
 import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
-import GroupMap, { initGroup2Map } from './GroupMap';
-import RootStore from './RootStore';
-import AccidentService from '../services/AccidentService';
-import CityService from '../services/CityService';
-import { insertToDexie, getFromDexie } from '../services/DexieInjuredService';
-import logger from '../services/logger';
-import { BBoxType } from './MapStore';
-import Casualty from './Casualty';
-import { FilterLocalStorage, LocalStorageService } from '../services/Localstorage.Service';
-import citisNamesHeb from '../assets/json/cities_names_heb.json';
+import GroupMap, { initGroup2Map } from '../GroupMap';
+import RootStore from '../RootStore';
+import AccidentService from '../../services/AccidentService';
+import CityService from '../../services/CityService';
+import { insertToDexie, getFromDexie } from '../../services/DexieInjuredService';
+import logger from '../../services/logger';
+import { BBoxType } from '../MapStore';
+import Casualty from '../Casualty';
+import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
+import citisNamesHeb from '../../assets/json/cities_names_heb.json';
 // import autorun  from "mobx"
 
 export interface IFilterStore {

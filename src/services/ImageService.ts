@@ -1,9 +1,11 @@
 import IimageEntity from '../stores/ImageEntity';
+import {API_URL} from '../utils/globalEnvs';
 
 export const fetchListImgByTag = async (tag: string, lang: string):
   Promise<Array<any> | undefined> => {
+  const apiUrl = API_URL || '';
   // Default options are marked with *
-  const url = (lang === '') ? `/api/v1/img/tags/${tag}` : `/api/v1/img/tags/${lang}/${tag}`;
+  const url = (lang === '') ? `${apiUrl}/api/v1/img/tags/${tag}` : `${apiUrl}/api/v1/img/tags/${lang}/${tag}`;
   const response = await fetch(url, {
     method: 'GET',
     mode: 'cors', // no-cors, *cors, same-origin
@@ -22,19 +24,20 @@ export const fetchListImgByTag = async (tag: string, lang: string):
 };
 export const fetchListImgByPlace = async (place: string, lang: string):
   Promise<Array<any> | undefined> => {
-  // Default options are marked with *
-  const url = `/api/v1/img/place/${lang}/${place}`;
-  const response = await fetch(url, {
-    method: 'GET',
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *client
-  });
+    const apiUrl = API_URL || '';  
+    // Default options are marked with *
+    const url = `${apiUrl}/api/v1/img/place/${lang}/${place}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+    });
   if (!response.ok) {
     return [];
   }
@@ -43,6 +46,7 @@ export const fetchListImgByPlace = async (place: string, lang: string):
 
 export const uploadImg = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
+  const apiUrl = API_URL || '';  
   if (image.file === undefined) return [];
   const formData = new FormData();
   formData.append('titlehe', image.titlehe);
@@ -51,7 +55,7 @@ export const uploadImg = async (image: IimageEntity):
   formData.append('tags', image.tags);
   formData.append('place', image.place);
   if (image.index !== undefined) formData.append('index', image.index?.toString());
-  const url = '/api/v1/img/';
+  const url = `${apiUrl}/api/v1/img/`;
   const response = await fetch(url, {
     method: 'POST',
     mode: 'cors',
@@ -65,20 +69,21 @@ export const uploadImg = async (image: IimageEntity):
 
 export const updateImgProps = async (image: IimageEntity):
   Promise<Array<any> | undefined> => {
-  // Default options are marked with *
-  const url = '/api/v1/img/props';
-  const response = await fetch(url, {
-    method: 'PUT',
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *client
-    body: JSON.stringify(image),
-  });
+    const apiUrl = API_URL || '';  
+    // Default options are marked with *
+    const url = `${apiUrl}/api/v1/img/props`;
+    const response = await fetch(url, {
+      method: 'PUT',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+      body: JSON.stringify(image),
+    });
   if (!response.ok) {
     return [];
   }
@@ -87,23 +92,24 @@ export const updateImgProps = async (image: IimageEntity):
 
 export const fetchImg = async (fileName: string):
   Promise<any| undefined> => {
-  // Default options are marked with *
-  const url = `/api/v1/img/${fileName}`;
-  const response = await fetch(url, {
-    method: 'GET',
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, *same-origin, omit
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow', // manual, *follow, error
-    referrerPolicy: 'no-referrer', // no-referrer, *client
-  });
-  if (!response.ok) {
-    return [];
-  }
-  return response; // parses JSON response into native JavaScript objects
+    const apiUrl = API_URL || '';  
+    // Default options are marked with *
+    const url = `${apiUrl}/api/v1/img/${fileName}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+    });
+    if (!response.ok) {
+      return [];
+    }
+    return response; // parses JSON response into native JavaScript objects
 };
 
 export default fetchImg;

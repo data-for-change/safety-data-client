@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
-import GroupBy from './GroupBy';
-import GroupBy2 from './GroupBy2';
+import GroupBy from './filter/GroupBy';
+import GroupBy2 from './filter/GroupBy2';
 import GroupBy2Val from './GroupBy2Val';
 
 export default class GroupMap {

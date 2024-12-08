@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
-import GroupBy from '../../stores/GroupBy';
+import GroupBy from '../../stores/filter/GroupBy';
 import MySelect from './MySelect';
 
 interface IProps {

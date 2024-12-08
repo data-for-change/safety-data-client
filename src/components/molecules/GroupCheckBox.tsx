@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import Checkbox from '../atoms/Checkbox';
-import { IColumnFilter } from '../../stores/ColumnFilterCheckBoxList';
+import { IColumnFilter } from '../../stores/filter/ColumnFilterCheckBoxList';
 import { useMemos } from "../../hooks/myUseMemo";
 
 interface IProps {

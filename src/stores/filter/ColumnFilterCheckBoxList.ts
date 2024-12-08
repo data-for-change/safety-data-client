@@ -1,10 +1,10 @@
 import { observable, action, computed, makeAutoObservable } from 'mobx';
 import FilterChecker, { IFilterChecker } from './FilterChecker';
-import dataYearsUnfilterdInit from '../assets/json/data-by-years.json';
-import dataYearsfilterdInit from '../assets/json/data-by-years-filtred.json';
-import dataGrpBy1Init from '../assets/json/data-by-grp1.json';
-import dataGrp2Init from '../assets/json/data-by-grp2.json';
-import i18n from '../i18n';
+import dataYearsUnfilterdInit from '../../assets/json/data-by-years.json';
+import dataYearsfilterdInit from '../../assets/json/data-by-years-filtred.json';
+import dataGrpBy1Init from '../../assets/json/data-by-grp1.json';
+import dataGrp2Init from '../../assets/json/data-by-grp2.json';
+import i18n from '../../i18n';
 
 export interface IColumnFilter {
   name: string;

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 
 import { useStore } from '../../stores/storeConfig';
-import GroupBy2 from '../../stores/GroupBy2';
+import GroupBy2 from '../../stores/filter/GroupBy2';
 import MySelect from './MySelect';
 
 interface IProps { id: string }

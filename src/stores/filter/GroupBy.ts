@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import {reGroupResultIsSelfAcc} from '../utils/groupByUtils';
+import {reGroupResultIsSelfAcc} from '../../utils/groupByUtils';
 
 export interface IGroupBy {
   text: string;
