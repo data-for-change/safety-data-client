@@ -13,7 +13,7 @@ const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) 
   const { cities, roadSegment, updateRoadSegment } = filterStore;
   if (cities.arrValues.length === 0) {
     return (
-      <Form.Group controlId="exampleForm.ControlRoadSegment">
+      <Form.Group controlId="filterForm.ControlRoadSegment">
         <Form.Label className="filterLable">
           {t('RoadSegment')}
           :

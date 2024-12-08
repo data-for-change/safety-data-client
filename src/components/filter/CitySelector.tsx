@@ -18,7 +18,7 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { cities, updateCities} = filterStore;
   const { t } = useTranslation();
   return (
-    <Form.Group controlId="exampleForm.ControlCity">
+    <Form.Group controlId="filterForm.ControlCity">
       <Form.Label className="filterLable">
         {t('City')}:
       </Form.Label>

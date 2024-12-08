@@ -11,7 +11,7 @@ const StreetSelector: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
   if (cities.arrValues.length > 0) {
     return (
-      <Form.Group controlId="exampleForm.ControlStreet">
+      <Form.Group controlId="filterForm.ControlStreet">
         <Form.Label className="filterLable">
           {t('Street')}
 :
