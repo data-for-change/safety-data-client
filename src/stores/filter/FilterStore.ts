@@ -26,6 +26,9 @@ export interface IFilterStore {
    setIsLoading: (value:boolean) => void;
    startYear: ColumnFilterCombo;
    endYear: ColumnFilterCombo;
+   cities: ColumnFilterArray;
+   streets: ColumnFilterArray;
+   roads: ColumnFilterArray;
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
@@ -37,7 +40,12 @@ class FilterStore implements IFilterStore  {
    constructor(rootStore: RootStore) {
       // init app data
       this.rootStore = rootStore;
-      makeAutoObservable(this, { rootStore: false});
+      makeAutoObservable(this, { rootStore: false,
+         startYear: observable,
+         cities: observable,
+         endYear: observable,
+         streets: observable,
+      });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when

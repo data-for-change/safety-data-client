@@ -1,7 +1,7 @@
 import FilterStore from './filter/FilterStore';
 import UiStore from './UiStore';
 import MapStore from './MapStore';
-import ImageStore from './ImageStore'
+import ImageStore from './image/ImageStore'
 
 export default class RootStore {
     appInitialized = false;

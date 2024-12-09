@@ -1,4 +1,4 @@
-import IimageEntity from '../stores/ImageEntity';
+import IimageEntity from '../stores/image/ImageEntity';
 import {API_URL} from '../utils/globalEnvs';
 
 export const fetchListImgByTag = async (tag: string, lang: string):

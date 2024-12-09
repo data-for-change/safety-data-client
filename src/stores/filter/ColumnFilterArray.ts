@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeAutoObservable } from 'mobx';
 // import i18n from '../i18n';
 
 export interface IColumnFilterArray {
@@ -23,15 +23,18 @@ export class ColumnFilterArray implements IColumnFilterArray {
 
   queryColName: string;
 
-  @observable
   arrValues: string[];
 
-  @observable
   text: string;
 
   isStringValues: boolean;
 
   constructor(name: string, queryColName: string, isStringValues: boolean) {
+    makeAutoObservable (this,{
+      arrValues: observable,
+      text: observable,
+
+    }); 
     this.name = name;
     this.queryColName = queryColName;
     this.arrValues = [];
@@ -39,7 +42,6 @@ export class ColumnFilterArray implements IColumnFilterArray {
     this.text = '';
   }
 
-  @action
   setFilter = (values: string[]) => {
     this.arrValues = values;
   }
@@ -72,7 +74,6 @@ export class ColumnFilterArray implements IColumnFilterArray {
     return filter;
   }
 
-  @action
   setText = () => {
     this.text = this.arrValues.join(', ');
   }

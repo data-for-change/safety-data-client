@@ -1,8 +1,8 @@
 import { observable, action , makeAutoObservable} from 'mobx';
-import RootStore from './RootStore';
+import RootStore from '../RootStore';
 import {
   fetchListImgByTag, fetchListImgByPlace, updateImgProps, uploadImg,
-} from '../services/ImageService';
+} from '../../services/ImageService';
 import IimageEntity from './ImageEntity';
 
 export interface IImageStore {
