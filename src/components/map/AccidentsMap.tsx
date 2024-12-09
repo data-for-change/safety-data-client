@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import { store } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
 import AccidentsMarkers from './AccidentsMarkers';
+import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 
@@ -35,6 +36,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                   <AccidentsMarkers />
+                 <LegendWarpper />
             </MapContainer>
             <div style={styels.buttonsPanel}>
                 <SelectMarkersColorType />
