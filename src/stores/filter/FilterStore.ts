@@ -760,7 +760,7 @@ class FilterStore implements IFilterStore  {
                this.setIsLoading(false);
             });
       } else {
-         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+         // const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filter = this.getFilterForPost(null);
          // logger.log(filter);
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
@@ -779,7 +779,7 @@ class FilterStore implements IFilterStore  {
    }
 
    submintGetMarkerFirstStep = () => {
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+      // const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filter = this.getFilterForPost(null);
       // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
       AccidentService.fetchAggregatFilter(filter, 'latlon')

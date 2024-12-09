@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeAutoObservable } from 'mobx';
 //import { Map } from 'react-leaflet';
 import L from 'leaflet';
 import logger from '../services/logger';
@@ -28,12 +28,27 @@ const QUERY_STR_NAME_LAT = 'lat';
 const QUERY_STR_NAME_LNG = 'lng';
 const QUERY_STR_NAME_MRKRCOLOR = 'mkclr';
 
+export interface IMapStore {
+  isLoading: boolean;
+  setIsLoading: (value:boolean) => void;
+  mapCenter: L.LatLng;
+  mapZoom: number;
+  markerColorType: string;
+  markerIconsType: string;   
+}
+
 export default class MapStore {
   appInitialized = false
 
   constructor(rootStore: RootStore) {
     // init app data
     this.rootStore = rootStore;
+    makeAutoObservable(this, { rootStore: false,
+      mapCenter: observable,
+      mapZoom: observable,
+      markerColorType: observable,
+      markerIconsType: observable,
+   });
   }
 
   rootStore: RootStore;
@@ -232,7 +247,7 @@ export default class MapStore {
   markerColorType = "Severity";
 
   @action
-  setMarkerColorType = (value: string) => {
+  setMarkerColorType = (value: string) => {    
     this.markerColorType = value;
     setBrowserQueryString(QUERY_STR_NAME_MRKRCOLOR, value);
   }
