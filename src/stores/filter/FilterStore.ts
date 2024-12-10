@@ -757,8 +757,7 @@ class FilterStore implements IFilterStore  {
                   this.updateAllInjuries(data);
                   // write Data to local db
                   if (this.useLocalDb === 1) insertToDexie(data);
-               }
-               console.log("setISLoading =false in store")
+               }               
                this.setIsLoading(false);
             });
       } else {

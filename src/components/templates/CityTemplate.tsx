@@ -19,7 +19,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
 
   useEffect(() => {
     setCurrentPage('city');
-    filterStore.isMultipleCities = false;
+    filterStore.setIsMultipleCities(false);
     if (cityResult !== '') {
       filterStore.submitFilter();
     }

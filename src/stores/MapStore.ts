@@ -56,6 +56,7 @@ export default class MapStore {
   mapRef: React.RefObject<any> | null = null;
 
   setMapRef = (mapRef: React.RefObject<any>) => {
+   
     this.mapRef = mapRef;
   }
   @action

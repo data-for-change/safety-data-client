@@ -28,7 +28,6 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { t } = useTranslation();
   const { mapStore, uiStore } = useStore();
   const {currentTab} = uiStore;
-  console.log("currentTab", currentTab);
   // const [activeKey] = useState(uiStore.);
   // defaultActiveKey={uiStore.currentTab}
   return (

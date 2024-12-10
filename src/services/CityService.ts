@@ -1,5 +1,7 @@
+import {API_URL} from '../utils/globalEnvs';
+
 export default class CityService {
-  apiUrl = process.env.API_URL || '';
+  apiUrl = API_URL || '';
   getCityByNameHe = (cityName: string, collback: (res: any[]) => void) => {
     // "http://localhost:5000/api/v1/city?name_he=חיפה"
     const url = `${this.apiUrl}/api/v1/city?name_he=${cityName}`;

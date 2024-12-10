@@ -10,8 +10,7 @@ const Drawer: React.FC<any> = observer((props) => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
    const {isLoading, isValidAllFilters} = filterStore;
-   console.log("isLoading", isLoading)
-
+   
    return (
       <div className="sidebar">
          <div className="filters">
@@ -21,7 +20,7 @@ const Drawer: React.FC<any> = observer((props) => {
             style={{ margin: '0.5rem' }}
             variant="primary"
             onClick={() => filterStore.submitFilter()}
-            //disabled={isLoading || !isValidAllFilters}
+            disabled={isLoading || !isValidAllFilters}
          >
            {isLoading ? t('Loading') : t('Submit')} 
          </Button>
