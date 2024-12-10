@@ -6,7 +6,6 @@ import GroupCheckbox from '../molecules/GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 import MySelect from '../atoms/MySelect';
 import CustomToggle from './CustomToggle';
-// @ts-ignore
 import CitySelector from './CitySelector';
 import StreetSelector from './StreetSelector';
 import RoadNameSelector from './RoadNameSelector';

@@ -29,6 +29,7 @@ export interface IFilterStore {
    cities: ColumnFilterArray;
    streets: ColumnFilterArray;
    roads: ColumnFilterArray;
+   groupByDict: GroupMap
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
@@ -45,6 +46,7 @@ class FilterStore implements IFilterStore  {
          cities: observable,
          endYear: observable,
          streets: observable,
+         groupByDict: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);

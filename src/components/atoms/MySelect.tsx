@@ -17,7 +17,7 @@ const MySelect: React.FC<Props> = ({ style, label, onChange, data, valProp, cont
    const cssname= "form-select form-select-sm " + cssClass;
    return (
       <div className="select-wrapper" style={style && style} >
-         {label && <label> {t(label)} </label>}
+         {label && <label style={{'whiteSpace': 'nowrap'}}> {t(label)} </label>}
          <select className={cssname} onChange={onChange} value={value}>
             {data.map((item) => {
                return <option

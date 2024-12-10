@@ -5,12 +5,23 @@ import { setBrowserQueryString } from '../utils/queryStringUtils';
 import logger from '../services/logger';
 // import autorun  from "mobx"
 
-export default class UiStore {
+export interface IUiStore  {
+  language: string;
+  direction: string;
+  currentPage: string;
+  chartType: string;
+  showFilterModal: boolean;
+}
+export default class UiStore implements IUiStore {
   appInitialized = false
 
   constructor(rootStore: RootStore) {
     // init app data
-    makeAutoObservable(this, { rootStore: false, direction: observable});
+    makeAutoObservable(this, { rootStore: false, 
+      direction: observable,
+      chartType: observable,
+      currentPage: observable,
+    });
     this.rootStore = rootStore;
     this.initLang();
     this.appInitialized = false;

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../stores/storeConfig';
 import Legend from './Legend';

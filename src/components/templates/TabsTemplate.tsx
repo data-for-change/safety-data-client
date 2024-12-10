@@ -12,7 +12,7 @@ interface IProps {
   type: string;
 }
 
-const GroupByGraphsPanel = lazy(() => import('../organisms/GroupByGraphsPanel'));
+const GroupByGraphsPanel = lazy(() => import('../chart/GroupByGraphsPanel'));
 const GroupByTablesPanel = lazy(() => import('../organisms/GroupByTablesPanel'));
 const MapAccidents = lazy(() => import('../map/AccidentsMap'));
 const AccidentsTable = lazy(() => import('../organisms/AccidentsTable'));
