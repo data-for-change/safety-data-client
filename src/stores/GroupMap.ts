@@ -1,28 +1,35 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeAutoObservable} from 'mobx';
 import GroupBy from './filter/GroupBy';
 import GroupBy2 from './filter/GroupBy2';
 import GroupBy2Val from './GroupBy2Val';
 
-export default class GroupMap {
-    dict: Map<string,any>;
-    queryColName: string;
-
-    @observable
+export interface IGroupMap{
     groupBy: GroupBy2|GroupBy;
-
+    arrGroups: any[];
+}
+export default class GroupMap implements IGroupMap {
+    
     constructor(map: Map<string,any>, colName: string,  defautVal: string) {
         this.dict = map;
+        makeAutoObservable(this,{
+            groupBy: observable,
+            arrGroups: observable
+        })
         this.queryColName = colName;
         this.groupBy = this.dict.get(defautVal);
         this.setArrGroups();
     }
+
+    dict: Map<string,any>;
+    queryColName: string;
+
+    groupBy: GroupBy2|GroupBy;
 
     @action
     setFilter = (key: string) => {
         this.groupBy = this.dict.get(key);
     }
 
-    @observable
     arrGroups: any[] = [];
 
     @action
