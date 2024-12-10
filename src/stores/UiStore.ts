@@ -9,6 +9,7 @@ export interface IUiStore  {
   language: string;
   direction: string;
   currentPage: string;
+  currentTab: string;
   chartType: string;
   showFilterModal: boolean;
 }
@@ -18,13 +19,26 @@ export default class UiStore implements IUiStore {
   constructor(rootStore: RootStore) {
     // init app data
     makeAutoObservable(this, { rootStore: false, 
+      language: observable,
       direction: observable,
       chartType: observable,
       currentPage: observable,
+      currentTab: observable,
+      updateLanguage: action,
     });
     this.rootStore = rootStore;
     this.initLang();
     this.appInitialized = false;
+
+    // Attach reaction here
+    reaction(
+      () => this.language, // Observable property to track
+      (locale) => {
+        i18n.changeLanguage(locale).catch((error) => {
+          console.error('Failed to change language', error);
+        });
+      }
+    );
   }
 
   rootStore: RootStore;
@@ -48,13 +62,6 @@ export default class UiStore implements IUiStore {
   setDirection = (val: string) => {
     this.direction = val;
   }
-
-  reactionChangeLang = reaction(
-    () => this.language,
-    (locale) => {
-      i18n.changeLanguage(locale);
-    },
-  )
 
   initLang = () => {
     try {
