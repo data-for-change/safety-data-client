@@ -1,6 +1,8 @@
 
 import React, { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
+
 import {
   createColumnHelper,
   flexRender,
@@ -31,6 +33,28 @@ type GroupTable ={
 
 const columnHelper = createColumnHelper<GroupTable>();
 
+const generateColumns = ( dataName: string, col2?: any[],) => {
+  if (!col2 || !col2.length) {
+    // Default column structure
+    return [
+      columnHelper.accessor('_id', {
+        cell: (info) => info.getValue(),
+        header: () => <span>{t(dataName)}</span>,
+      }),
+      columnHelper.accessor('count', {
+        cell: (info) => info.getValue(),
+        header: () => <span>{t('casualties')}</span>, 
+      }),
+    ];
+  }
+  // Dynamic column structure with translation
+  return col2.map((col: any) =>
+    columnHelper.accessor(col.dataField, {
+      cell: (info) => info.getValue(),
+      header: () => <span>{t(col.text)}</span>,
+    })
+  );
+};
 
 // const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, data }) => {
 //   // do format only grp1 and not grpBy2
@@ -55,19 +79,8 @@ const columnHelper = createColumnHelper<GroupTable>();
 // };
 
 const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: col2, data }) => {
-  const { t } = useTranslation();
   // const [data, _setData] = React.useState(() => [...data2])
-  const columns = [
-    columnHelper.accessor('_id', {
-      cell: info => info.getValue(),
-      header: () => <span>{t(dataName)}</span>,
-    }),
-    columnHelper.accessor('count', {
-      cell: info => info.getValue(),
-      header: () => <span>{t('casualties')}</span>,
-    }),
-  ];
-
+  const columns = generateColumns(dataName, col2);
   const table = useReactTable({
     data,
     columns,

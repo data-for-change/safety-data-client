@@ -6,7 +6,7 @@ import { useStore } from '../../stores/storeConfig';
 import GroupByTable from './GroupByTable';
 import SmallCard2 from '../atoms/SmallCard2';
 
-const CardGroupTablesYears2: React.FC<{}> = observer(() => {
+const CardGroupTablesYears2: FC<{}> = observer(() => {
     const { t } = useTranslation();
     const { filterStore } = useStore();
     const { dataFilterdByYears, casualtiesNames } = filterStore;
