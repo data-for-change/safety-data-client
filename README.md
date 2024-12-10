@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+![cahrts-1](https://user-images.githubusercontent.com/342644/112526699-e8863b80-8daa-11eb-8cd3-1bb81b23db1e.PNG)
+Safety-Data presents data on road accidents in Israel. The site analysis focus on casualties in severe and fatal accidents, in accordance to [Vision Zero](https://en.wikipedia.org/wiki/Vision_Zero).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The site offers a variety of options to filter, group and display the data in different formats, in the hope that this will improve research, policy and education on accidents prevention. It is a tool for city planners, safety experts, researchers and more.  
 
-## Available Scripts
+With Safety-Data you can check:
+* What is the gender difference in different kind of vehicle?
+* In what places are car drivers injured? what are the common accidents in the urban area and how it is diffrent from rural accidents.
+* What types of fatal accidents are most common for motorcyclists in cities? or many young motorcyclists were killed, compared to older motorcyclists?
+* How many pedestrians were hit Jerusalem? what are the most denageros streets for pedestrians there?  
+* what are the "red roads"?
+* Compare the number of fatalities in 2 or more cities. 
+* Find the top 10 cities where most severe accidents happened.
+* What percent of pedestrians where hit at daytime compare to nighttime?
 
-In the project directory, you can run:
+Tipical use case is filter cases by categories of when, where, who, road - types etc. for exmaple see all fatal accidnets in tel-aviv.
+then you can serach patterns in the data using one or 2 grouping options - for example group the results by age. you can find more patterns by looking on the reuslts in a map or in a table. you can also copy the resutls to tables for more analysis. ![map1](https://user-images.githubusercontent.com/342644/112530180-d1e1e380-8dae-11eb-8e6d-318f90aadd0b.PNG)
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The source of the data on the accidents is CBS, through accidents data engine of [Anyway project](https://www.anyway.co.il/), from the Public Knowledge Workshop. The map on the site is thanks to the [OpenStreetMap](https://www.openstreetmap.org/) project.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Technologies of the site are React.js front-end and Node.js + MongoDB back-end.
 
-### `npm test`
+Server side:
+Typescript Express, async/await, REST-API 
+using mongoose, helmet, winston, morgan, multer.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
