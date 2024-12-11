@@ -9,6 +9,8 @@ import MapCenterUpdater from './MapCenterUpdater';
 import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
+import ButtonTuggleHeatLayer from './ButtonTuggleHeatLayer';
+import AccidentHeatLayer from './AccidentHeatLayer';
 
 const styels: any = {
   buttonsPanel: {
@@ -26,7 +28,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
   const mapRef = useRef<LeafletMap | null>(null);
   const {mapStore}= store;
     //const {isLoading} = filterStore;
-    const {mapCenter} = mapStore;     
+    const { mapCenter, heatLayerHidden } = mapStore;     
     const position : LatLngTuple = [mapCenter.lat, mapCenter.lng] as LatLngTuple;
     return (       
         <div id="map">
@@ -37,17 +39,37 @@ const AccidentsMap: FC<IProps> = observer(() => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <AccidentsMarkers />
+                {!heatLayerHidden && <AccidentHeatLayer />}
+                {heatLayerHidden && <AccidentsMarkers />}
                 <MapCenterUpdater center={mapCenter}/>
                 <LegendWarpper />
             </MapContainer>
             <div style={styels.buttonsPanel}>
                 <SelectMarkersColorType />
                 <SelectMarkersIConType />
-                {/* <CurrButtonTuggleHeatLayer /> */}
+                <ButtonTuggleHeatLayer />
            </div>
         </div>
     );
+});
+
+const AccidentsMap1: FC<IProps> = observer(() => {
+    
+  // const store = useStore();
+  // let reactMarkers = toJS(store.dataAllInjuries);
+  const position : LatLngTuple = [32.08, 34.83] as LatLngTuple;
+  return (
+      <div id="map">
+      <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ height: '70vh', width: '100%' }}>
+          <AccidentHeatLayer />
+          <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />             
+           
+      </MapContainer>
+  </div>
+  );
 });
 
 export default AccidentsMap;

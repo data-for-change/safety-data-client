@@ -35,6 +35,7 @@ export interface IMapStore {
   mapZoom: number;
   markerColorType: string;
   markerIconsType: string;   
+  heatLayerHidden: boolean;
 }
 
 export default class MapStore {
@@ -48,6 +49,7 @@ export default class MapStore {
       mapZoom: observable,
       markerColorType: observable,
       markerIconsType: observable,
+      heatLayerHidden: observable
    });
   }
 
