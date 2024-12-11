@@ -33,6 +33,8 @@ export interface IMapStore {
   setIsLoading: (value:boolean) => void;
   mapCenter: L.LatLng;
   mapZoom: number;
+  mapBounds: L.LatLngBounds | null;
+  bboxType: BBoxType;
   markerColorType: string;
   markerIconsType: string;   
   heatLayerHidden: boolean;
@@ -47,6 +49,7 @@ export default class MapStore {
     makeAutoObservable(this, { rootStore: false,
       mapCenter: observable,
       mapZoom: observable,
+      bboxType: observable,
       markerColorType: observable,
       markerIconsType: observable,
       heatLayerHidden: observable
@@ -93,7 +96,7 @@ export default class MapStore {
   isReadyToRenderMap = false;
 
   @observable
-  bboxType: BBoxType = BBoxType.NO_BBOX;
+  bboxType: BBoxType = BBoxType.LOCAL_BBOX;
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
@@ -336,25 +339,29 @@ export default class MapStore {
   updateDataMarkersInBounds = (data: any[]) => {
     this.dataMarkersInBounds = data;
   }
+
+  @observable
+  mapBounds: L.LatLngBounds | null = null;
   @action
-  updateMapBounds = () => {
-    try {
+  updateMapBounds = (newBounds: L.LatLngBounds) => {
+    try {      
+      this.mapBounds = newBounds;
       //get markers
       if (this.bboxType !== BBoxType.NO_BBOX) this.getMarkersInBBox();
       //update query string by map
-      this.setQueryStrMapCenterByBounds()
+      this.setQueryStrMapCenterByBounds(newBounds)
     } catch (error) {
       logger.error(error);
     }
   };
-  setQueryStrMapCenterByBounds = () => {
-    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
+  setQueryStrMapCenterByBounds = (mapBounds: L.LatLngBounds) => {   
+    //if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     try {
-      const mapBounds = this.mapRef.current.leafletElement.getBounds();
+      // const mapBounds = this.mapRef.current.leafletElement.getBounds();
       if (mapBounds) {
         const center = mapBounds.getCenter()
         this.setQueryStrMapCenter(center);
-        this.setQueryStrMapZoom(this.mapRef.current.leafletElement.getZoom());
+        //this.setQueryStrMapZoom(this.mapRef.current.leafletElement.getZoom());
       }
     } catch (error) {
       logger.error(error);
@@ -382,19 +389,21 @@ export default class MapStore {
   }
 
   getMarkersInLocalBBox = (boundsMargin: number) => {
-    if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
+    //if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     try {
-      const mapBounds = this.mapRef.current.leafletElement.getBounds();
-      const west = mapBounds.getWest() - boundsMargin;
-      const east = mapBounds.getEast() + boundsMargin;
-      const south = mapBounds.getSouth() - boundsMargin;
-      const north = mapBounds.getNorth() + boundsMargin;
-      const data = this.rootStore.filterStore.dataAllInjuries
-        .filter((x) => x.latitude >= south
-          && x.latitude <= north && x.longitude >= west && x.longitude <= east);
-      // const zoom = this.mapRef.current.leafletElement.getZoom();
-      // console.log(zoom, east -west ,data.length);     
-      this.updateDataMarkersInBounds(data);
+      const mapBounds = this.mapBounds;
+      if(mapBounds !== null){
+        const west = mapBounds.getWest() - boundsMargin;
+        const east = mapBounds.getEast() + boundsMargin;
+        const south = mapBounds.getSouth() - boundsMargin;
+        const north = mapBounds.getNorth() + boundsMargin;
+        const data = this.rootStore.filterStore.dataAllInjuries
+          .filter((x) => x.latitude >= south
+            && x.latitude <= north && x.longitude >= west && x.longitude <= east);
+        // const zoom = this.mapRef.current.leafletElement.getZoom();
+        // console.log(zoom, east -west ,data.length);     
+        this.updateDataMarkersInBounds(data);
+      }   
     } catch (error) {
       logger.error(error);
     }
