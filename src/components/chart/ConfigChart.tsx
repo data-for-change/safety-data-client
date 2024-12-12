@@ -2,15 +2,15 @@ import React, { ChangeEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
-import Checkbox from '../atoms/Checkbox';
 import { useStore } from '../../stores/storeConfig';
+// import Checkbox from '../atoms/Checkbox';
 
 interface IProps { }
 const ConfigChart: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
   const { uiStore } = useStore();
   const {
-    chartType, chartTypeList, updateChartType, showPercentageChart, updateShowPercentageChart,
+    chartType, chartTypeList, updateChartType, // showPercentageChart, updateShowPercentageChart,
   } = uiStore;
   const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     updateChartType(event.target.value);
@@ -28,7 +28,7 @@ const ConfigChart: React.FC<IProps> = observer(() => {
             .map(([key, x]: any[]) => (<option value={x} key={key}>{t(x)}</option>))}
         </Form.Control>
       </Form.Group>
-      <Form.Group controlId="ConfigFile.ControlShowPercentageChart">
+      {/* <Form.Group controlId="ConfigFile.ControlShowPercentageChart">
         <Checkbox
           key={2}
           label="PercentageChart"
@@ -39,7 +39,7 @@ const ConfigChart: React.FC<IProps> = observer(() => {
             updateShowPercentageChart(e.target.checked);
           }}
         />
-      </Form.Group>
+      </Form.Group> */}
     </div>
   );
 });

@@ -4,11 +4,12 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 
 // import { useTranslation } from 'react-i18next';
@@ -105,7 +106,7 @@ const getColorPallete = (chartType: string, length: number, defColor: string) =>
 //         align: align,
 //         anchor: "end",
 //         font: { size: "14" }
-        
+
 //       }
 //     },
 //     legend: {
@@ -184,6 +185,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
@@ -191,57 +193,76 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
+  indexAxis: "x" as "x" | "y",
   plugins: {
     legend: {
       position: 'top' as const,
     },
-    // title: {
-    //   display: true,
-    //   text: 'Chart.js Bar Chart',
-    // },
   },
 };
 
 const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
-   // if metaData == undefined - chart of 1 group
+  // if metaData == undefined - chart of 1 group
   //if (metaData == undefined) {
-    const label = t('casualties');
-    const backgroundColor = getColorPallete(chartType, data.length, fill);   
+  const label = t('casualties');
+  const backgroundColor = getColorPallete(chartType, data.length, fill);
   //}
-// Extract labels and data
-const labels = data.map(item => item._id); 
+  // Extract labels and data
+  const labels = data.map(item => item._id);
 
-// Create the chart data structure
-let datasets: any;
-if (metaData === undefined) {
-  // chart of gorup 1
-  const counts = data.map(item => item.count);
-  datasets=  [
-    {
-      label: label,
-      data: counts, 
-      backgroundColor: backgroundColor
-    },
-  ];
-} else {
-  // Dynamically generate datasets based on MethData and data
-  datasets = metaData.map((method) => {
-    return {
-      label: t(method.key), //method.key.charAt(0).toUpperCase() + method.key.slice(1),  
-      data: data.map(item => item[method.key] || 0),  // Use key from MethData to access values in data
-      backgroundColor: method.color  // backgroundColor from MethData
+  // Create the chart data structure
+  let datasets: any;
+  if (metaData === undefined) {
+    // chart of gorup 1
+    const counts = data.map(item => item.count);
+    datasets = [
+      {
+        label: label,
+        data: counts,
+        backgroundColor: backgroundColor
+      },
+    ];
+  } else {
+    // Dynamically generate datasets based on MethData and data
+    datasets = metaData.map((method) => {
+      return {
+        label: t(method.key), //method.key.charAt(0).toUpperCase() + method.key.slice(1),  
+        data: data.map(item => item[method.key] || 0),  // Use key from MethData to access values in data
+        backgroundColor: method.color, // backgroundColor from MethData
+        axis: 'x',
+      };
+    });
+  }
+  const chartData = {
+    labels: labels, // Years as labels
+    datasets: datasets
   };
-});
-}
-const chartData = {
-  labels: labels, // Years as labels
-  datasets: datasets
-};
-  return (
-  <>
-    <Bar options={options} data={chartData} />
-  </>
-  );
+  if (chartType === 'BarChart') {    
+    return (
+      <>
+        <Bar options={options} data={chartData} />
+      </>
+    );
+  } else if (chartType === 'PieChart') {       
+    return (
+      <>
+        <Pie options={options} data={chartData} />
+      </>
+    );
+  } else { 
+    //HorizontalBar
+    //options.indexAxis= "y" as "y";
+    const options1 = ({indexAxis: "y" as "y"})
+    // chartData.datasets = chartData.datasets.map((dataset: any) => ({
+    //   ...dataset,
+    //   axis: "y",
+    // }));
+    return (
+      <>
+        <Bar options={options1} data={chartData} />
+      </>
+    );
+  }
 }
 export default ChartBar;

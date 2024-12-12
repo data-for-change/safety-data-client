@@ -160,7 +160,7 @@ export default class UiStore implements IUiStore {
   chartType: string = 'BarChart';
 
   @observable
-  chartTypeList: string[] = ['BarChart', 'PieChart', 'HorizontalBar'];
+  chartTypeList: string[] = ['BarChart', 'PieChart' ];
 
   @action
   updateChartType = (val: string) => {
