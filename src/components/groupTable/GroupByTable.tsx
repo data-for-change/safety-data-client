@@ -2,6 +2,8 @@
 import React, { FunctionComponent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
+import Table from "react-bootstrap/Table";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
   createColumnHelper,
@@ -89,7 +91,7 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: co
   
   return (
     <div className="p-2">
-      <table>
+      <Table striped bordered hover>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
@@ -133,7 +135,7 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: co
             </tr>
           ))}
         </tfoot>
-      </table>
+      </Table>
     </div>
   )
 };

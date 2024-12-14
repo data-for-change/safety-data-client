@@ -16,7 +16,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useStore } from '../../stores/storeConfig';
-import SmallCard2 from '../atoms/SmallCard2';
+import {Table as TableBootstrap}  from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const getColumnsByWidth = (width: number, t: any) => {
   const columns1 = [{
@@ -223,7 +224,7 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   return (
     <div className="p-2">
     <div className="h-2" />
-    <table>
+    <TableBootstrap striped bordered hover>
       <thead>
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id}>
@@ -276,7 +277,7 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
           )
         })}
       </tbody>
-    </table>
+    </TableBootstrap>
     <div className="h-2" />
     <div className="flex items-center gap-2">
       <button
