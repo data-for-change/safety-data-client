@@ -6,7 +6,7 @@ import MarkerSvg from './MarkerSvg';
 
 const AccidentsMarkers: FC = observer(() => {
   const markers = useAccidentMarkers();
-
+  console.log ('markers1', markers);
   return (
     <div>
       {markers.map((marker:any) => (

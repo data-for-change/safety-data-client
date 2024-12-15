@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { toJS, autorun } from "mobx";
+import { LatLngTuple } from "leaflet";
 import { useStore } from "../stores/storeConfig";
-import { BBoxType, Accident} from "../types";
-import logger from "../services/logger";
+import { BBoxType, Accident, MarkerData} from "../types";
+// import logger from "../services/logger";
 
 export const useAccidentMarkers = () => {
   const { filterStore, mapStore, uiStore } = useStore();
   const { isUse2StepsMarkers, markersLoadStep, dataMarkersLean, dataAllInjuries } = filterStore;
   const { bboxType, dataMarkersInBounds, markerIconsType, markerColorType } = mapStore;
 
-  const [markers, setMarkers] = useState<{ key: string; data: Accident; language: string; colorBy: string; markerIconsType: string }[]>([]);
+  const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   // autorun to automatically update markers when observables change
   useEffect(() => {
@@ -27,9 +28,16 @@ export const useAccidentMarkers = () => {
       const updatedMarkers = reactMarkers
         .map((x: Accident) => {
           try {
-            if (x.latitude !== null && x.longitude !== null) {
+            const latitude = x.latitude !== null && !isNaN(Number(x.latitude))
+            ? parseFloat(Number(x.latitude).toFixed(6))
+            : null;
+            const longitude = x.longitude !== null && !isNaN(Number(x.longitude))
+            ? parseFloat(Number(x.longitude).toFixed(6))
+            : null;
+            if (latitude !== null && longitude !== null ) {
               return {
                 key: `marker-${x._id}`,
+                position: [latitude,longitude] as LatLngTuple,
                 data: x,
                 language: uiStore.language,
                 colorBy: markerColorType,

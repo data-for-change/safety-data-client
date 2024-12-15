@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import CityPage from './pages/CityPage';
 import MapPage from './pages/MapPage';
 import Header from './components/templates/Header/Headr';
+import MapWithClusters from './pages/MapWithClusters';
 //import Footer from './components/templates/Footer';
 import Loader from './components/atoms/Loader';
 import './i18n';
@@ -37,7 +38,7 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/city" element={<CityPage/>} />
                   <Route path="/about" element={<AboutPage />} />
-                  <Route path="/map" element={<MapPage />} />
+                  <Route path="/map" element={<MapWithClusters />} />
                </Routes>
            
             </div>

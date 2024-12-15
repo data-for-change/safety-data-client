@@ -1,16 +1,32 @@
 import React, { FC, useRef } from 'react';
 import { MapContainer, TileLayer, useMapEvent } from 'react-leaflet';
-import { Map as LeafletMap, LatLngTuple } from 'leaflet';
+import L, { Map as LeafletMap, LatLngTuple } from 'leaflet';
 import { observer } from 'mobx-react';
+import MarkerClusterGroup from "react-leaflet-markercluster";
 import { store } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
 import AccidentsMarkers from './AccidentsMarkers';
 import MapCenterUpdater from './MapCenterUpdater';
+import ClusteredMarkers from './ClusteredMarkers';
 import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import ButtonTuggleHeatLayer from './ButtonTuggleHeatLayer';
 import AccidentHeatLayer from './AccidentHeatLayer';
+
+// Function for creating custom icon for cluster group
+// https://github.com/Leaflet/Leaflet.markercluster#customising-the-clustered-markers
+// NOTE: iconCreateFunction is running by leaflet, which is not support ES6 arrow func syntax
+// eslint-disable-next-line
+const createClusterCustomIcon = function (cluster:any) {
+  const allMarkers = cluster.getAllChildMarkers(); 
+  const totalCount = allMarkers.length; 
+  return L.divIcon({
+    html: `<span>${totalCount}</span>`,
+    className: 'marker-cluster-custom',
+    iconSize: L.point(40, 40, true),
+  });
+};
 
 const styels: any = {
   buttonsPanel: {
@@ -62,7 +78,13 @@ const AccidentsMap: FC<IProps> = observer(() => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {!heatLayerHidden && <AccidentHeatLayer />}
-        {heatLayerHidden && <AccidentsMarkers />}
+       { heatLayerHidden && <AccidentsMarkers />}  
+         {/* <MarkerClusterGroup 
+          showCoverageOnHover={false}
+          spiderfyDistanceMultiplier={2}
+          iconCreateFunction={createClusterCustomIcon}>
+          <ClusteredMarkers />
+       </MarkerClusterGroup>  */}
         <MapCenterUpdater center={mapCenter} />
         <LegendWarpper />
         <MapEventHandlerMoveEnd />
