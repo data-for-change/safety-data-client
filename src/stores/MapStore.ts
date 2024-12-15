@@ -4,21 +4,12 @@ import L from 'leaflet';
 import logger from '../services/logger';
 import RootStore from './RootStore';
 import { setBrowserQueryString, delBrowserQueryString } from '../utils/queryStringUtils';
+import { BBoxType } from '../types/BBoxType';
 // import autorun  from "mobx"
 
 
 
-/**
- * bbox type - how to fetch data for map 
- * NO_BBOX - when filter change, get all the points from server
- * SERVER_BBOX - on every zoom / movment of the map get only relevent DEFAULT_BOUNDS
- * LOCAL_BBOX - on zoom/ movment of map get relevent markers from memory (dataAllInjuries)
- */
-export enum BBoxType {
-  NO_BBOX,
-  SERVER_BBOX,
-  LOCAL_BBOX
-}
+
 // const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
 const DEFAULT_BOUNDS = [
   L.latLng(29.50, 34.22), // most possible south-west point

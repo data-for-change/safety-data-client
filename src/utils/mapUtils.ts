@@ -1,4 +1,4 @@
-import Accident from '../types/Accident';
+import { Accident } from '../types';
 
 export const getColorByVehicle = (category: string) => {
     let res = '';

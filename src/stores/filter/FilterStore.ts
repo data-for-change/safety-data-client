@@ -15,7 +15,7 @@ import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import { insertToDexie, getFromDexie } from '../../services/DexieInjuredService';
 import logger from '../../services/logger';
-import { BBoxType } from '../MapStore';
+import { BBoxType } from '../../types';
 import Casualty from '../Casualty';
 import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
 import citisNamesHeb from '../../assets/json/cities_names_heb.json';

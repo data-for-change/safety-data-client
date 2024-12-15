@@ -1,4 +1,4 @@
-export default interface CasualtyLean {
+export interface CasualtyLean {
     _id : number;
     latitude:number;
     longitude:number;

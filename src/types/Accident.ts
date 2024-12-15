@@ -1,4 +1,4 @@
-export default interface Accident {
+export interface Accident {
     _id: number;
     latitude: number;
     longitude: number;

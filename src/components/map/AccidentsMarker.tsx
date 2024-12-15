@@ -2,7 +2,7 @@ import React from 'react';
 import L from 'leaflet';
 import { Marker } from 'react-leaflet';
 import AccidentPopUp from './AccidentPopUp';
-import Accident from '../../types/Accident';
+import { Accident } from '../../types';
 import redMarker from '../../../assets/marker-icon-2x-red.png';
 import orangeMarker from '../../../assets/marker-icon-2x-orange2.png';
 import shadoMarker from '../../../assets/marker-shadow.png';

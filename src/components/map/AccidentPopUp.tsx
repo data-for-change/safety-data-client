@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Popup } from 'react-leaflet';
-import Accident from '../../types/Accident';
+import { Accident } from '../../types';
 
 interface IProps {
   data: Accident,

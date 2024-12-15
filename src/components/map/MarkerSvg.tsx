@@ -3,7 +3,7 @@ import L, { divIcon } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getColors } from '../../utils/mapUtils';
-import Accident from '../../types/Accident';
+import { Accident } from '../../types';
 
 // import { getColorByVehicle } from '../../../services/mapUtils';
 import IconCar from './markers/IconCar';

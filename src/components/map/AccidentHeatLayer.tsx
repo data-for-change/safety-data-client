@@ -5,7 +5,7 @@ import { toJS } from 'mobx';
 // @ts-ignore
 import {HeatmapLayer} from 'react-leaflet-heatmap-layer-v3';
 import { useStore } from '../../stores/storeConfig';
-import { BBoxType } from '../../stores/MapStore';
+import { BBoxType } from '../../types';
 // import logger from '../../services/logger';
 
 interface IProps {
