@@ -5,13 +5,14 @@ import { observer } from 'mobx-react';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { store } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
+import { MapMarkersType } from '../../types';
 import AccidentsMarkers from './AccidentsMarkers';
 import MapCenterUpdater from './MapCenterUpdater';
 import ClusteredMarkers from './ClusteredMarkers';
 import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
-import ButtonTuggleHeatLayer from './ButtonTuggleHeatLayer';
+import SelectMapMarkersType from './SelectMapMarkersType';
 import AccidentHeatLayer from './AccidentHeatLayer';
 
 // Function for creating custom icon for cluster group
@@ -64,7 +65,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
     }, 500); //delay to get mapRef.current
   };
   //const {isLoading} = filterStore;
-  const { mapCenter, heatLayerHidden } = mapStore;
+  const { mapCenter, mapMarkersType } = mapStore;
   const position: LatLngTuple = [mapCenter.lat, mapCenter.lng] as LatLngTuple;
   return (
     <div id="map">
@@ -77,22 +78,23 @@ const AccidentsMap: FC<IProps> = observer(() => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {!heatLayerHidden && <AccidentHeatLayer />}
-       { heatLayerHidden && <AccidentsMarkers />}  
-         {/* <MarkerClusterGroup 
+        {mapMarkersType === MapMarkersType.Heat_Map && <AccidentHeatLayer />}
+        {mapMarkersType === MapMarkersType.Markers && <AccidentsMarkers />}
+        {mapMarkersType === MapMarkersType.Markers_AND_Clusters &&<MarkerClusterGroup 
           showCoverageOnHover={false}
           spiderfyDistanceMultiplier={2}
+          maxClusterRadius= {10}
           iconCreateFunction={createClusterCustomIcon}>
           <ClusteredMarkers />
-       </MarkerClusterGroup>  */}
+       </MarkerClusterGroup>}
         <MapCenterUpdater center={mapCenter} />
         <LegendWarpper />
         <MapEventHandlerMoveEnd />
       </MapContainer>
       <div style={styels.buttonsPanel}>
+        <SelectMapMarkersType />
         <SelectMarkersColorType />
-        <SelectMarkersIConType />
-        <ButtonTuggleHeatLayer />
+        <SelectMarkersIConType />        
       </div>
     </div>
   );

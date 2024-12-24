@@ -4,7 +4,7 @@ import L from 'leaflet';
 import logger from '../services/logger';
 import RootStore from './RootStore';
 import { setBrowserQueryString, delBrowserQueryString } from '../utils/queryStringUtils';
-import { BBoxType } from '../types/BBoxType';
+import { BBoxType, MapMarkersType } from '../types';
 // import autorun  from "mobx"
 
 
@@ -28,7 +28,7 @@ export interface IMapStore {
   bboxType: BBoxType;
   markerColorType: string;
   markerIconsType: string;   
-  heatLayerHidden: boolean;
+  mapMarkersType: MapMarkersType;
 }
 
 export default class MapStore {
@@ -43,7 +43,7 @@ export default class MapStore {
       bboxType: observable,
       markerColorType: observable,
       markerIconsType: observable,
-      heatLayerHidden: observable
+      mapMarkersType: observable
    });
   }
 
@@ -87,7 +87,7 @@ export default class MapStore {
   isReadyToRenderMap = false;
 
   @observable
-  bboxType: BBoxType = BBoxType.LOCAL_BBOX;
+  bboxType: BBoxType = BBoxType.NO_BBOX;//BBoxType.LOCAL_BBOX;
 
   @observable
   mapCenter: L.LatLng = new L.LatLng(32.08, 34.83)
@@ -211,12 +211,18 @@ export default class MapStore {
   }
 
   @observable
-  heatLayerHidden = true;
+  mapMarkersType = MapMarkersType.Markers_AND_Clusters;
 
   @action
-  toggleHeatLayer = () => {
-    this.heatLayerHidden = !this.heatLayerHidden;
+  setMapMarkersType = (value :MapMarkersType) => {
+    this.mapMarkersType = value;
   }
+
+  mapMarkersTypesArr = [
+    { val: MapMarkersType.Markers_AND_Clusters, text: 'Clusters' },
+    { val: MapMarkersType.Markers, text: 'Markers' },
+    { val: MapMarkersType.Heat_Map, text: 'HeatMap' },
+  ];
 
 
   ////////// markers /////////////////

@@ -9,3 +9,11 @@
     text-align: center;
     width: 40px;
   }
+
+  .map-select-div {
+     display: flex
+  }
+  .map-select-labelspan{
+    margin-top: 7px;
+    font-weight: 700;
+  }

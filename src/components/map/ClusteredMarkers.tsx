@@ -4,7 +4,9 @@ import { observer } from 'mobx-react';
 import { Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
 import { useAccidentMarkers } from '../../hooks/useAccidentMarkers';
-import { MarkerData } from '../../types';
+import MarkerSvg from './MarkerSvg';
+import AccidentPopUp from './AccidentPopUp';
+import { MarkerData, Accident } from '../../types';
 import orangeMarker from '../../assets/marker-icon-2x-orange2.png';
 import shadoMarker from '../../assets/marker-shadow.png';
 import './map.css';
@@ -28,6 +30,7 @@ type MarkerData1 = {
   key: number;
   position: LatLngExpression;
   markerIconsType: string;
+  language: string;
 };
 
 // Function for creating custom icon for cluster group
@@ -35,21 +38,35 @@ type MarkerData1 = {
 // NOTE: iconCreateFunction is running by leaflet, which is not support ES6 arrow func syntax
 // eslint-disable-next-line
 const createClusterCustomIcon = function (cluster:any) {
-  const allMarkers = cluster.getAllChildMarkers(); 
-  const totalCount = allMarkers.length; 
+  const test = cluster.length; //.getChildCount()
   return L.divIcon({
-    html: `<span>${totalCount}</span>`,
+    html: `<span>${test}</span>`,
     className: 'marker-cluster-custom',
     iconSize: L.point(40, 40, true),
   });
 };
 
-const markers1: MarkerData1[] = [
-  { key: 1, position: [32.032, 34.739], markerIconsType: "Marker 1" },
-  { key: 2, position: [32.032, 34.739], markerIconsType: "Marker 2" },
-  { key: 3, position: [32.031, 34.739], markerIconsType: "Marker 3" },
-  { key: 4, position: [32.032, 34.738], markerIconsType: "Marker 4" },
-];
+// const accidentMock :Accident = {
+//   _id: 1, latitude: 32.032, longitude: 34.739, accident_timestamp: "", day_in_week_hebrew: "",
+//   day_night_hebrew: 'day',
+//   injured_type_hebrew: "",
+//   injury_severity_hebrew: "",
+//   vehicle_vehicle_type_hebrew: "",
+//   sex_hebrew: "",
+//   age_group_hebrew: "",
+//   population_type_hebrew: "",
+//   road2: "",
+//   road_type_hebrew: "",
+//   accident_type_hebrew: "",
+//   vehicles: ""
+// } ;
+
+// const markers1: MarkerData[] = [
+//   { key: '1', position: [32.032, 34.739], markerIconsType: "Marker 1" , language:'he', colorBy: 'Severity', data:accidentMock},
+//   { key: '2', position: [32.032, 34.739], markerIconsType: "Marker 2" , language:'he', colorBy: 'Severity', data:accidentMock},
+//   { key: '3', position: [32.034, 34.742], markerIconsType: "Marker 3" , language:'he', colorBy: 'Severity', data:accidentMock},
+//   { key: '4', position: [32.034, 34.746], markerIconsType: "Marker 4" , language:'he', colorBy: 'Severity', data:accidentMock},
+// ];
 
 const createFlower = (center: LatLngExpression, count: number): LatLngExpression[] => {
   const radius = 0.0005; // Adjust for spacing
@@ -67,17 +84,17 @@ const createFlower = (center: LatLngExpression, count: number): LatLngExpression
 
 const ClusteredMarkers: React.FC = observer(() => {
   const map = useMap();
-  const [currZoom, setCurrZoom] = React.useState(map.getZoom()); // Store the current zoom level
+  //const [currZoom, setCurrZoom] = React.useState(map.getZoom()); // Store the current zoom level
 
   // Listen for zoom events
-  useMapEvents({
-    zoomend: () => {
-      setCurrZoom(map.getZoom()); // Update zoom level when the map zooms
-    },
-  });
+  // useMapEvents({
+  //   zoomend: () => {
+  //     setCurrZoom(map.getZoom()); // Update zoom level when the map zooms
+  //   },
+  // });
   // const zoomThreshold = 15; // Define zoom level to "explode" clusters into flowers
   const markers = useAccidentMarkers();
-  //const markers  = markers1;
+  // const markers  = markers1;
   console.log ('markers', markers);
   const clusteredMarkers = markers.reduce<MarkerData[][]>((clusters, marker) => {
     const existingCluster = clusters.find(cluster =>
@@ -97,23 +114,41 @@ const ClusteredMarkers: React.FC = observer(() => {
         if (cluster.length === 1 ) {
           // Single marker or zoomed out - show as normal marker
           return (
-            <Marker key={cluster[0].key} position={cluster[0].position} icon={icon}>
-              <Popup>{cluster[0].markerIconsType}</Popup>
-            </Marker>
+            <MarkerSvg
+              key={cluster[0].key}
+              position={cluster[0].position}
+              data={cluster[0].data}
+              language={cluster[0].language}
+              colorBy={cluster[0].colorBy}
+              markerIconsType={cluster[0].markerIconsType}
+            />
+            // <Marker key={cluster[0].key} position={cluster[0].position} icon={icon}>
+            //    <AccidentPopUp data={cluster[0].data} language={cluster[0].language} />
+            //    {/* <Popup>{cluster[0].position.toString()}</Popup> */}
+            // </Marker>
           );
         } else {
           // Flower arrangement for clustered markers
           const flowerPositions = createFlower(cluster[0].position, cluster.length);
           return flowerPositions.map((position, i) => (
-            <Marker key={`${cluster[0].key}-${i}`} position={position} icon={icon}>
-              <Popup>
-                <div>
-                  {cluster.map(marker => (
-                    <div key={marker.key}>{marker.markerIconsType}</div>
-                  ))}
-                </div>
-              </Popup>
-            </Marker>
+            <MarkerSvg
+              key={`${cluster[0].key}-${i}`}
+              position={position}
+              data={cluster[i].data}
+              language={cluster[i].language}
+              colorBy={cluster[i].colorBy}
+              markerIconsType={cluster[i].markerIconsType}
+            />
+            //  <Marker key={`${cluster[0].key}-${i}`} position={position} icon={icon}>
+            //   <Popup>
+            //     <div>
+            //       {cluster.map(marker => (
+            //         // <div key={marker.key}>{marker.position.toString()}</div>
+            //         <div key={marker.key}>{marker.position.toString() + ',' + marker.data.injured_type_hebrew +',' + marker.data.accident_timestamp}</div>
+            //       ))}
+            //     </div>
+            //   </Popup>
+            // </Marker> 
           ));
         }
       })}

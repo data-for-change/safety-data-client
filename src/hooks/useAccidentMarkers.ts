@@ -29,10 +29,10 @@ export const useAccidentMarkers = () => {
         .map((x: Accident) => {
           try {
             const latitude = x.latitude !== null && !isNaN(Number(x.latitude))
-            ? parseFloat(Number(x.latitude).toFixed(6))
+            ? parseFloat(Number(x.latitude).toFixed(10))
             : null;
             const longitude = x.longitude !== null && !isNaN(Number(x.longitude))
-            ? parseFloat(Number(x.longitude).toFixed(6))
+            ? parseFloat(Number(x.longitude).toFixed(10))
             : null;
             if (latitude !== null && longitude !== null ) {
               return {

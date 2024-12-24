@@ -12,6 +12,7 @@ const AccidentsMarkers: FC = observer(() => {
       {markers.map((marker:any) => (
         <MarkerSvg
           key={marker.key}
+          position={marker.position}
           data={marker.data}
           language={marker.language}
           colorBy={marker.colorBy}

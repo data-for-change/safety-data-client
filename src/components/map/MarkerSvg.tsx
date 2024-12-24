@@ -1,5 +1,5 @@
 import React from 'react';
-import L, { divIcon } from 'leaflet';
+import L, { divIcon, LatLngExpression } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getColors } from '../../utils/mapUtils';
@@ -88,21 +88,22 @@ const getEmptyIcon = (color: string) => {
 
 interface IProps {
   data: Accident,
+  position: LatLngExpression;
   language: string,
   colorBy : string,
   markerIconsType: string,
 }
 const MarkerSvg: React.FC<IProps> = (({
-  data, language, colorBy, markerIconsType,
+  data, position, language, colorBy, markerIconsType,
 }) => {
-  const lPoint = new L.LatLng(data.latitude, data.longitude);
+  //const lPoint = new L.LatLng(data.latitude, data.longitude);
   const color = getColors(colorBy, data);
   const icon = (markerIconsType === 'general') ? getEmptyIcon(color)
     : getSVGPinByCategory(data.vehicle_vehicle_type_hebrew, color);
   // console.log(data.vehicle_vehicle_type_hebrew);
   // const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew, useSmallMarkers);
   return (
-    <Marker position={lPoint} icon={icon}>
+    <Marker position={position} icon={icon}>
       <AccidentPopUp data={data} language={language} />
     </Marker>
   );

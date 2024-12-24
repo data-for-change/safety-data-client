@@ -4,7 +4,8 @@
   "English": "English",
   "Home": "דף הבית",
   "HeatMap": "מפת חום",
-  "Markers": "סמנים",
+  "Markers": "מרקרים",
+  "Clusters": "קלסטרס",
   "Cities": "יישובים",
   "About": "אודות",
   "Israel": "ישראל",
@@ -228,5 +229,6 @@
   "Save": "שמור",
   "#Map": "=========Map==========",
   "MarkersColorType": "צבע לפי",
-  "MarkersIconType": "סמנים לפי"
+  "MarkersIconType": "סמנים לפי",
+  "MapMarkersType":"סוג מפה"
 }
