@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Checkbox from '../atoms/Checkbox';
 import { IColumnFilter } from '../../stores/filter/ColumnFilterCheckBoxList';
 import { useMemos } from "../../hooks/myUseMemo";
+import './groupCheckBox.css';
 
 interface IProps {
   formName: string,
@@ -50,8 +51,8 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
     />);
   });
   return (
-    <div className="injury-level-form">
-      <Form.Group controlId={`${formName}.Control${name}`}>
+    <div>
+      <Form.Group className='checkBoxList' controlId={`${formName}.Control${name}`}>
         <Form.Label className="filterLable">
           {t(name)}:
       </Form.Label>

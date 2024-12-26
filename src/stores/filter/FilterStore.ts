@@ -523,6 +523,7 @@ class FilterStore implements IFilterStore  {
 
    @action
    submitGroupByYears = () => {
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getfilterBySeverityAndCity();
          const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year');
@@ -970,6 +971,7 @@ class FilterStore implements IFilterStore  {
    getfilterBySeverityAndCity = () => {
       let filter = '?';
       filter += this.startYear.getFilter();
+      filter += this.endYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);

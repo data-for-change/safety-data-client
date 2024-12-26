@@ -1,0 +1,20 @@
+.checkBoxList {
+  display: flex;
+  flex-direction: column;
+}
+
+checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Default for LTR */
+}
+
+.checkbox input[type="checkbox"] {
+  order: 1; /* Checkbox comes first */
+  margin-inline-end: 3px; /* Space between checkbox and label */
+  margin-top: 5px;
+}
+
+.checkbox label {
+  order: 2; /* Label comes after the checkbox */
+}
