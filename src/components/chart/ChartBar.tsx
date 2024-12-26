@@ -10,6 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useTranslation } from 'react-i18next';
 
 // import { useTranslation } from 'react-i18next';
@@ -188,8 +189,20 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels
 );
+
+
+export const datalabelsOptions=  {
+  anchor: 'end', // Label position relative to the bar
+  align: 'top', // Alignment of the label
+  textAlign: "center",
+  font: {
+    size: 12, // Font size
+    weight: 'bold', // Font weight
+  }
+};
 
 export const options = {
   responsive: true,
@@ -239,6 +252,7 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
     datasets: datasets
   };
   if (chartType === 'BarChart') {    
+    Object.assign(options.plugins, { datalabels: datalabelsOptions }); 
     return (
       <>
         <Bar options={options} data={chartData} />
@@ -259,9 +273,9 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
     //   axis: "y",
     // }));
     return (
-      <>
+      <div style={{ direction: 'rtl' }}>
         <Bar options={options1} data={chartData} />
-      </>
+      </div>
     );
   }
 }
