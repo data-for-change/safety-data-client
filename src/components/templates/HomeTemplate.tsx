@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 // import FilterPanel from '../organisms/FilterPanel';
 import TabsTemplate from './TabsTemplate';
@@ -14,7 +13,6 @@ import InfoPanel from '../molecules/InfoPanel';
 
 interface IProps { }
 const HomeTemplate: React.FC<IProps> = observer(() => {
-   const { t } = useTranslation();
    const { mapStore, filterStore, uiStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter } = filterStore;
    const { setCurrentPage, setStoreByQuery, showFilterModal , setInitPage} = uiStore;

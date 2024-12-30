@@ -14,13 +14,13 @@ const CardGroupTables2: FC<{}> = observer(() => {
       display: 'flex',
       // flexWrap: 'wrap',
     } as React.CSSProperties;
-    const styleLable = {
-      fontWeight: 700,
-      lineHeight: '40px',
-      marginLeft: '15px',
-      // marginTop: '5px',
-      // marginRight: '20px',
-    };
+    // const styleLable = {
+    //   fontWeight: 700,
+    //   lineHeight: '40px',
+    //   marginLeft: '15px',
+    //   // marginTop: '5px',
+    //   // marginRight: '20px',
+    // };
     const { t } = useTranslation();
     const { filterStore } = useStore();
     const { groupByDict, group2Dict, dataGroupby2 } = filterStore;

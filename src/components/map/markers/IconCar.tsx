@@ -1,13 +1,8 @@
 /* eslint-disable max-len */
 import React from 'react';
+import {IIconProps} from '../../types';
 
-interface IProps {
-  fill?: string,
-  width?: number,//original 45
-  height?: number//original 37
-}
-
-export const IconCar: React.FC<IProps> = (({ fill= 'red', width = 24.6, height= 30}) => {
+export const IconCar: React.FC<IIconProps> = (({ fill= 'red', width = 24.6, height= 30, isAccuratePos = true}) => {
   return (
   // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,6 +14,7 @@ export const IconCar: React.FC<IProps> = (({ fill= 'red', width = 24.6, height= 
       <line stroke="#FFF" x1="11.326" x2="9.279" y1="6.44" y2="10.78" id="svg_6" />
       <path stroke="#FFF" d="M 20.191 15.842 L 22.918 15.842 C 23.327 15.842 23.6 15.552 23.6 15.118 L 23.6 13.672 C 23.6 12.082 22.373 10.78 20.872 10.78 L 18.827 10.78 L 16.235 7.453 C 15.69 6.802 14.94 6.44 14.122 6.44 L 8.938 6.44 C 7.915 6.44 6.961 7.091 6.483 8.031 L 5.188 10.78 L 4.506 10.78 C 3.756 10.78 3.142 11.431 3.142 12.226 L 3.142 15.118 C 3.142 15.552 3.415 15.842 3.824 15.842 L 5.188 15.842" id="svg_7" />
       <line stroke="#FFF" x1="9.279" x2="16.099" y1="15.842" y2="15.842" id="svg_8" />
+      {!isAccuratePos && <path transform="matrix(0.2, 0, 0, 0.2, 9, 28)" fill="#000000" d="M13.98,0.84v12.66L1.94,9.59L0,15.6l12.05,3.92l-7.45,10.26l5.09,3.7L17.15,23.18l7.45,10.26l5.09-3.7L22.29,19.5L34,15.6l-1.94-5.98l-12.05,3.92V0.85H13.98L13.98,0.84z"/>}
     </svg>
   );
 });

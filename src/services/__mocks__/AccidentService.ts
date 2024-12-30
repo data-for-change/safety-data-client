@@ -68,4 +68,5 @@ class AccidentService {
       };
   }
   
-  export default new AccidentService();
+  const accidentServiceInstance = new AccidentService();
+  export default accidentServiceInstance;

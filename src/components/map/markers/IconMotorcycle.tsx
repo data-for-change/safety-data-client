@@ -1,13 +1,8 @@
 /* eslint-disable max-len */
 import React from 'react';
+import {IIconProps} from '../../types';
 
-interface IProps {
-  fill?: string,
-  width?: number,//original 45
-  height?: number//original 37
-}
-
-export const IconMotorcycle: React.FC<IProps> = (({ fill= 'red', width = 24.6, height= 30}) => {
+export const IconMotorcycle: React.FC<IIconProps> = (({ fill= 'red', width = 24.6, height= 30, isAccuratePos = true }) => {
   return (
     // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +13,7 @@ export const IconMotorcycle: React.FC<IProps> = (({ fill= 'red', width = 24.6, h
       <path fill="#FFF" stroke="none" d="M 13.567 15.007 L 11.889 15.007 C 11.664 15.008 11.451 14.928 11.292 14.787 L 8.185 11.954 L 6.011 11.954 C 5.786 11.955 5.574 11.875 5.416 11.733 L 4.575 10.969 C 4.115 10.551 4.326 9.839 4.953 9.687 C 5.244 9.617 5.554 9.694 5.768 9.885 L 6.357 10.428 L 8.531 10.428 C 8.754 10.428 8.967 10.506 9.127 10.649 L 12.233 13.482 L 13.258 13.482 L 15.963 11.375 C 16.114 11.256 16.307 11.19 16.508 11.19 L 19.101 11.19 C 19.29 11.186 19.444 11.05 19.447 10.879 C 19.449 10.795 19.412 10.709 19.345 10.649 L 15.492 7.153 C 15.032 6.734 15.243 6.022 15.869 5.871 C 16.162 5.799 16.471 5.875 16.684 6.068 L 20.529 9.573 C 20.915 9.915 21.13 10.388 21.125 10.879 C 21.125 11.895 20.221 12.718 19.101 12.718 L 16.818 12.718 L 14.114 14.826 C 13.96 14.943 13.769 15.007 13.567 15.007 Z" />
       <path fill="#FFF" stroke="none" d="M 11.889 11.954 L 6.011 11.954 C 5.364 11.954 4.961 11.317 5.283 10.809 C 5.434 10.573 5.71 10.428 6.011 10.428 L 11.545 10.428 L 12.973 9.122 C 13.132 8.98 13.344 8.9 13.567 8.902 L 15.249 8.902 C 15.894 8.902 16.299 9.537 15.976 10.046 C 15.824 10.282 15.547 10.428 15.249 10.428 L 13.912 10.428 L 12.485 11.733 C 12.326 11.875 12.112 11.955 11.889 11.954 Z" />
       <path fill="#FFF" stroke="none" d="M 17.768 8.137 L 17.768 11.954 L 19.101 11.954 C 20.013 11.957 20.588 11.063 20.136 10.342 C 20.082 10.258 20.017 10.183 19.942 10.114 Z" /> 
+      {!isAccuratePos && <path transform="matrix(0.2, 0, 0, 0.2, 9, 28)" fill="#000000" d="M13.98,0.84v12.66L1.94,9.59L0,15.6l12.05,3.92l-7.45,10.26l5.09,3.7L17.15,23.18l7.45,10.26l5.09-3.7L22.29,19.5L34,15.6l-1.94-5.98l-12.05,3.92V0.85H13.98L13.98,0.84z"/>}
     </svg>
   );
 });

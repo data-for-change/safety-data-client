@@ -1,13 +1,8 @@
 /* eslint-disable max-len */
 import React from 'react';
+import {IIconProps} from '../../types';
 
-interface IProps {
-  fill?: string,
-  width?: number,//original 45
-  height?: number//original 37
-}
-
-export const IconBike: React.FC<IProps> = (({ fill= 'red', width = 24.6, height= 30}) => {
+export const IconBike: React.FC<IIconProps> = (({ fill= 'red', width = 24.6, height= 30, isAccuratePos = true}) => {
   return (
     // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,6 +12,7 @@ export const IconBike: React.FC<IProps> = (({ fill= 'red', width = 24.6, height=
       <path fill="#ffffff" d="M 12.56 18.498 C 12.16 18.498 11.838 18.146 11.838 17.711 L 11.838 14.894 L 9.531 12.383 C 9.247 12.075 9.247 11.573 9.531 11.265 L 11.564 9.093 C 11.918 8.625 12.602 8.751 12.797 9.319 C 12.907 9.643 12.811 10.007 12.56 10.218 L 11.053 11.792 L 13.058 13.972 C 13.205 14.126 13.285 14.341 13.281 14.564 L 13.281 17.711 C 13.281 18.146 12.957 18.498 12.56 18.498 Z" />
       <path fill="#ffffff" d="M 16.395 12.745 L 14.233 12.745 C 14.044 12.744 13.862 12.662 13.727 12.517 L 11.564 10.218 C 11.124 9.848 11.214 9.098 11.728 8.867 C 12.02 8.735 12.357 8.827 12.56 9.093 L 14.514 11.17 L 16.383 11.17 C 16.937 11.17 17.284 11.826 17.006 12.351 C 16.878 12.594 16.639 12.745 16.383 12.745 Z" />
       <circle fill="#ffffff" cx="14.32" cy="4" r="2" transform="matrix(0.721159, 0, 0, 0.787069, 3.905845, 4.331152)" />
+      {!isAccuratePos && <path transform="matrix(0.2, 0, 0, 0.2, 9, 28)" fill="#000000" d="M13.98,0.84v12.66L1.94,9.59L0,15.6l12.05,3.92l-7.45,10.26l5.09,3.7L17.15,23.18l7.45,10.26l5.09-3.7L22.29,19.5L34,15.6l-1.94-5.98l-12.05,3.92V0.85H13.98L13.98,0.84z"/>}
     </svg>
   );
 });

@@ -1,13 +1,8 @@
 /* eslint-disable max-len */
 import React from 'react';
+import {IIconProps} from '../../types';
 
-interface IProps {
-  fill?: string,
-  width?: number,//original 45
-  height?: number//original 37
-}
-
-export const IconBus: React.FC<IProps> = (({ fill = 'red', width = 24.6, height = 30 }) => {
+export const IconBus: React.FC<IIconProps> = (({ fill = 'red', width = 24.6, height = 30, isAccuratePos = true }) => {
   return (
     // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +13,7 @@ export const IconBus: React.FC<IProps> = (({ fill = 'red', width = 24.6, height 
       <path id="svg_5" d="M 5.9 17.6 L 4.9 17.6 C 3.9 17.6 3 16.9 3 16 L 3 8.7 C 3 7.3 4.3 6.2 5.9 6.2 L 17.5 6.2 C 20.1 6.2 22.3 8.1 22.3 10.3 L 22.3 13.6 C 22.3 14.2 21.5 14.6 20.8 14.3 C 20.5 14.1 20.3 13.9 20.3 13.6 L 20.3 10.3 C 20.3 9 19.1 7.9 17.5 7.9 L 5.9 7.9 C 5.4 7.9 4.9 8.2 4.9 8.7 L 4.9 16 L 5.9 16 C 6.6 16 7.1 16.7 6.7 17.2 C 6.5 17.5 6.2 17.6 5.9 17.6 Z" fill="#ffffff"></path>
       <path id="svg_6" stroke="#ffffff" d="M 20.5 11.8 L 8.9 11.8 C 8.2 11.8 7.7 11.5 8.1 11.2 C 8.2 11 8.6 10.9 8.9 10.9 L 20.5 10.9 C 21.2 10.9 21.7 11.3 21.3 11.6 C 21.1 11.8 20.8 11.8 20.5 11.8 Z" fill="#ffffff"></path>
       <path id="svg_7" d="M 21.3 11.7 L 21.3 10.8 C 21.3 8.9 19.7 7.4 17.8 7.4 L 17.8 11.7 L 21.3 11.7 Z" fill="#ffffff"></path>
+      {!isAccuratePos && <path transform="matrix(0.2, 0, 0, 0.2, 9, 28)" fill="#000000" d="M13.98,0.84v12.66L1.94,9.59L0,15.6l12.05,3.92l-7.45,10.26l5.09,3.7L17.15,23.18l7.45,10.26l5.09-3.7L22.29,19.5L34,15.6l-1.94-5.98l-12.05,3.92V0.85H13.98L13.98,0.84z"/>}
     </svg>
   );
 });

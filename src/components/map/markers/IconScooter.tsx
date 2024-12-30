@@ -1,13 +1,8 @@
 /* eslint-disable max-len */
 import React from 'react';
+import {IIconProps} from '../../types';
 
-interface IProps {
-  fill?: string,
-  width?: number,//original 45
-  height?: number//original 37
-}
-
-export const IconScooter: React.FC<IProps> = (({ fill = 'red', width = 24.6, height = 30 }) => {
+export const IconScooter: React.FC<IIconProps> = (({ fill = 'red', width = 24.6, height = 30, isAccuratePos = true} ) => {
   return (
     // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,6 +12,7 @@ export const IconScooter: React.FC<IProps> = (({ fill = 'red', width = 24.6, hei
       <circle stroke="#FFF" strokeWidth="2" cx="4" cy="25" r="3" transform="matrix(0.492416, 0, 0, 0.62765, 5.022794, 3.145868)" />
       <path stroke="#FFF" strokeWidth="1" strokeLinecap="round" d="M 6.993 15.07 C 8.618 15.07 9.947 16.766 9.947 18.838" />
       <polyline stroke="#FFF" strokeWidth="1" strokeLinecap="round" points="17.825 13.815 15.363 18.838 6.993 18.838" />
+      {!isAccuratePos && <path transform="matrix(0.2, 0, 0, 0.2, 9, 28)" fill="#000000" d="M13.98,0.84v12.66L1.94,9.59L0,15.6l12.05,3.92l-7.45,10.26l5.09,3.7L17.15,23.18l7.45,10.26l5.09-3.7L22.29,19.5L34,15.6l-1.94-5.98l-12.05,3.92V0.85H13.98L13.98,0.84z"/>}
     </svg>
   );
 });
