@@ -17,7 +17,7 @@ const CardGroupTable: FC<{}> = observer(() => {
     
     if (reactData.length > 0) {
       return (
-        <SmallCard2>
+        <SmallCard2 style={{marginBottom: '0.5rem'}}>
           <div style={divStyle}>
             <SelectGroupBy id="Tables.Main" />
           </div>

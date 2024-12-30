@@ -43,7 +43,6 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
 
    return (
       <WithSidebarTemplate>
-         {/* <div className="row"> */}
          <div>
             <div>
                <InfoPanel />

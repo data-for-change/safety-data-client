@@ -206,6 +206,7 @@ export const datalabelsOptions=  {
 
 export const options = {
   responsive: true,
+  maintainAspectRatio: false,
   indexAxis: "x" as "x" | "y",
   plugins: {
     legend: {
@@ -254,9 +255,9 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
   if (chartType === 'BarChart') {    
     Object.assign(options.plugins, { datalabels: datalabelsOptions }); 
     return (
-      <>
+      <div style={{ height: '100%'}}>
         <Bar options={options} data={chartData} />
-      </>
+      </div>
     );
   } else if (chartType === 'PieChart') {       
     return (
@@ -273,7 +274,7 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
     //   axis: "y",
     // }));
     return (
-      <div style={{ direction: 'rtl' }}>
+      <div >
         <Bar options={options1} data={chartData} />
       </div>
     );

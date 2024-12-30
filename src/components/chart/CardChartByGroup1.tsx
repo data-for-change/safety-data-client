@@ -29,7 +29,7 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
        },
        divChart: {
           width: '100%',
-          height: '60vh',
+          height: '57vh',
        },
     };
     // const { t } = useTranslation();
@@ -51,12 +51,12 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     );
     // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
     return (
-       <SmallCard2>
+       <SmallCard2 style={{marginBottom: '0.5rem'}}>
           <div style={styles.divConfig}>
              <SelectGroupBy id="Graphs.Main" />
-             <Button onClick={() => { setShowModal(!showModel); }}>
+             {/* <Button onClick={() => { setShowModal(!showModel); }}>
                 {memoSettingsIcon}
-             </Button>
+             </Button> */}
           </div>
           <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
              <ConfigChart />

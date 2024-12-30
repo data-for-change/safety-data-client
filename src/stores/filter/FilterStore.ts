@@ -523,7 +523,6 @@ class FilterStore implements IFilterStore  {
 
    @action
    submitGroupByYears = () => {
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       if (this.useGetFetch) {
          const filtermatch = this.getfilterBySeverityAndCity();
          const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year');

@@ -25,6 +25,8 @@ const ConfigModal: React.FC<IProps> = observer(({
 
   const submitChanges = action ?
     <Button
+     style={{height:'20px'}} 
+     size='sm'
       variant="primary"
       onClick={action}
       disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
