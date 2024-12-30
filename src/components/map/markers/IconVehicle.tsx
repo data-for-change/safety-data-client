@@ -9,7 +9,7 @@ interface IProps {
     color: string,
     size?: number
 }
-const IconVehicle: React.FC<IProps> = (({ vType, color, size=35 }) => {
+export const IconVehicle: React.FC<IProps> = (({ vType, color, size=35 }) => {
     switch (vType) {
         case 'מכונית':
             return <ReactSVG src={carIcon} style={{ height: size, width: size }} fill={color} />         
@@ -19,5 +19,3 @@ const IconVehicle: React.FC<IProps> = (({ vType, color, size=35 }) => {
             return <ReactSVG src={questionSvg} style={{ height: size, width: size }} fill={color}/>
     }
 });
-
-export default IconVehicle;

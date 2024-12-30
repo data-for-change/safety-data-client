@@ -7,7 +7,7 @@ interface IProps {
   height?: number//original 37
 }
 
-const IconBus: React.FC<IProps> = (({ fill = 'red', width = 24.6, height = 30 }) => {
+export const IconBus: React.FC<IProps> = (({ fill = 'red', width = 24.6, height = 30 }) => {
   return (
     // its a SVG example, it`s by half, or corrupted, to not occupy large caracter space here, use your SVG file here...
     <svg width={width} height={height} viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,4 +21,3 @@ const IconBus: React.FC<IProps> = (({ fill = 'red', width = 24.6, height = 30 })
     </svg>
   );
 });
-export default IconBus;

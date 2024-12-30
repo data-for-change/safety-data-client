@@ -6,15 +6,7 @@ import { getColors } from '../../utils/mapUtils';
 import { Accident } from '../../types';
 
 // import { getColorByVehicle } from '../../../services/mapUtils';
-import IconCar from './markers/IconCar';
-import IconMotorcycle from './markers/IconMotorcycle';
-import IconWalk from './markers/IconWalk';
-import IconBike from './markers/IconBike';
-import IconScooter from './markers/IconScooter';
-import IconQuestion from './markers/IconQuestion';
-import IconBus from './markers/IconBus';
-import IconTruck from './markers/IconTruck';
-import IconEmpty from './markers/IconEmpty';
+import {IconBike, IconBus, IconCar, IconEmpty, IconMotorcycle, IconQuestion, IconScooter, IconTruck, IconWalk } from './markers/';
 import AccidentPopUp from './AccidentPopUp';
 
 // const iconSize = {
