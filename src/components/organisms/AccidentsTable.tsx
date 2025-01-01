@@ -89,50 +89,7 @@ type InjuredPerson = {
 
 const columnHelper = createColumnHelper<InjuredPerson>();
 
-const columns = [
-  columnHelper.accessor('_id', {
-    cell: info => info.getValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('accident_year', {
-    cell: info => <i>{info.getValue()}</i>,
-    header: () => <span>Accident Year</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('injury_severity_hebrew', {
-    header: () => 'Injury Severity',
-    cell: info => info.renderValue(),
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('injured_type_hebrew', {
-    header: () => <span>Injured Type</span>,
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('accident_yishuv_name', {
-    header: 'Yishuv Name',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('street1_hebrew', {
-    header: 'Street',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('vehicle_vehicle_type_hebrew', {
-    header: 'Vehicle Type',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('accident_type_hebrew', {
-    header: 'Accident Type',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('age_group_hebrew', {
-    header: 'Age Group',
-    footer: info => info.column.id,
-  }),
-  columnHelper.accessor('sex_hebrew', {
-    header: 'Sex',
-    footer: info => info.column.id,
-  }),
-];
+
 
 interface IProps { }
 // const AccidentsTable: React.FC<IProps> = observer(() => {
@@ -189,6 +146,7 @@ interface IProps { }
 // });
 const AccidentsTable: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
+  const { t } = useTranslation();
   const reactMarkers = toJS(filterStore.dataAllInjuries);
   //@ts-ignore
   const defaultDAta2 = reactMarkers as InjuredPerson[];
@@ -197,14 +155,48 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     pageIndex: 0,
     pageSize: 10,
   });
-  const rerender = React.useReducer(() => ({}), {})[1]
 
-  const table1 = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  const columns = [
 
+    columnHelper.accessor('accident_year', {
+      cell: info => <i>{info.getValue()}</i>,
+      header: t('Year'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('injury_severity_hebrew', {
+      header: t('Severity'),
+      cell: info => info.renderValue(),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('injured_type_hebrew', {
+      header: t('TypeInjured'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('accident_yishuv_name', {
+      header: t('City'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('street1_hebrew', {
+      header: t('Street'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('vehicle_vehicle_type_hebrew', {
+      header: t('VehicleType'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('accident_type_hebrew', {
+      header: t('AccidentType'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('age_group_hebrew', {
+      header: t('Age'),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('sex_hebrew', {
+      header: t('Gender'),
+      footer: info => info.column.id,
+    }),
+  ];
   const table = useReactTable({
     columns,
     data,
@@ -240,7 +232,7 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
                     }}
                   >
                     {flexRender(
-                      header.column.columnDef.header,
+                       header.column.columnDef.header,
                       header.getContext()
                     )}
                     {{
