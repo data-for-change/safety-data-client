@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+// import { observable, action, computed } from 'mobx';
 // import FilterChecker, { IFilterChecker } from './FilterChecker';
 // import dataYearsUnfilterdInit from '../assets/data-by-years.json';
 // import dataYearsfilterdInit from '../assets/data-by-years-filtred.json';

@@ -4,7 +4,6 @@ import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import {
   Column,
-  ColumnDef,
   createColumnHelper,
   PaginationState,
   Table,
