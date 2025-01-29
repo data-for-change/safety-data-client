@@ -3,3 +3,4 @@ export * from './MarkerData';
 export * from './CasualtyLean';
 export * from './BBoxType';
 export * from './MapMarkersType';
+export * from './InjuredPerson';

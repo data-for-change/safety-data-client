@@ -2,6 +2,7 @@ export interface Accident {
     _id: number;
     latitude: number;
     longitude: number;
+    accident_year: string;
     accident_timestamp: string;
     day_in_week_hebrew: string;
     day_night_hebrew:string;
