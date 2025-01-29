@@ -21,7 +21,9 @@ import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 import {Accident} from '../../types';
 import {exportCSV} from '../../utils/exportCSV';
+import DetailsTableFilter from './DetailsTableFilter';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 type AccidentColumn = AccessorKeyColumnDef<Accident, string>;
 
@@ -152,7 +154,7 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
                       }[header.column.getIsSorted() as string] ?? null}
                       {header.column.getCanFilter() ? (
                         <div>
-                          <Filter column={header.column} table={table} />
+                          <DetailsTableFilter column={header.column} table={table} />
                         </div>
                       ) : null}
                     </div>
@@ -252,56 +254,5 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   )
 });
 
-function Filter({
-  column,
-  table,
-}: {
-  column: Column<any, any>
-  table: Table<any>
-}) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id)
-
-  const columnFilterValue = column.getFilterValue()
-
-  return typeof firstValue === 'number' ? (
-    <div className="flex space-x-2" onClick={e => e.stopPropagation()}>
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[0] ?? ''}
-        onChange={e =>
-          column.setFilterValue((old: [number, number]) => [
-            e.target.value,
-            old?.[1],
-          ])
-        }
-        placeholder={`Min`}
-        className="w-24 border shadow rounded"
-      />
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[1] ?? ''}
-        onChange={e =>
-          column.setFilterValue((old: [number, number]) => [
-            old?.[0],
-            e.target.value,
-          ])
-        }
-        placeholder={`Max`}
-        className="w-24 border shadow rounded"
-      />
-    </div>
-  ) : (
-    <input
-      className="w-36 border shadow rounded"
-      onChange={e => column.setFilterValue(e.target.value)}
-      onClick={e => e.stopPropagation()}
-      placeholder={`Search...`}
-      type="text"
-      value={(columnFilterValue ?? '') as string}
-    />
-  )
-};
 
 export default AccidentsTable;
