@@ -87,16 +87,16 @@ const initGroup2DictForGet = () => {
     dict.set(roadt.name, roadt);
 
     const year = new GroupBy2('Year', 'year');
-    year.vals[2015] = new GroupBy2Val('2015', '#82CA9D');
-    year.vals[2016] = new GroupBy2Val('2016', '#559E54');
-    year.vals[2017] = new GroupBy2Val('2017', '#559E54');
-    year.vals[2018] = new GroupBy2Val('2018', '#305A30');
-    year.vals[2019] = new GroupBy2Val('2019', '#305A30');
-    year.vals[2020] = new GroupBy2Val('2020', '#1258DC');
-    year.vals[2021] = new GroupBy2Val('2021', '#1258DC');
-    year.vals[2021] = new GroupBy2Val('2022', '#1258DC');
-    year.vals[2021] = new GroupBy2Val('2023', '#1258DC');
-    year.vals[2021] = new GroupBy2Val('2024', '#1258DC');
+    year.vals[2015] = new GroupBy2Val('2015', '#A3D9A5'); // Light green
+    year.vals[2016] = new GroupBy2Val('2016', '#82CA9D'); // Medium-light green
+    year.vals[2017] = new GroupBy2Val('2017', '#66B886'); // Slightly darker green
+    year.vals[2018] = new GroupBy2Val('2018', '#559E54'); // Darker green
+    year.vals[2019] = new GroupBy2Val('2019', '#3E7C3C'); // Deep green    
+    year.vals[2020] = new GroupBy2Val('2020', '#A3C7F2'); // Light blue
+    year.vals[2021] = new GroupBy2Val('2021', '#71A3E6'); // Medium-light blue
+    year.vals[2022] = new GroupBy2Val('2022', '#4682D9'); // Medium blue
+    year.vals[2023] = new GroupBy2Val('2023', '#2560C0'); // Darker blue
+    year.vals[2024] = new GroupBy2Val('2024', '#12408B'); // Deep blue
     dict.set(year.name, year);
 
     const dayNight = new GroupBy2('DayNight', 'dn');
