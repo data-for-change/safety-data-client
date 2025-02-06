@@ -51,8 +51,8 @@ class FilterStore implements IFilterStore  {
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when
-      this.startYear = initStartYear(2019);
-      this.endYear = initEndYear(2023);
+      this.startYear = initStartYear(2020);
+      this.endYear = initEndYear(2024);
       this.dayNight = FC.initDayNight();
       // where
       this.locationAccuracy = FC.initLocationAccuracy();

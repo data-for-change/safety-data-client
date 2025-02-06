@@ -126,7 +126,7 @@ export class ColumnFilterComboValText extends ColumnFilterCombo {
   }
 }
 
-const years: string[] = ['2015', '2016', '2017', '2018', '2019','2020','2021','2022','2023',];
+const years: string[] = ['2015', '2016', '2017', '2018', '2019','2020','2021','2022','2023','2024'];
 const CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
 const cityPopSizeArr = [
   { val: '{"min":-1,"max":-1}', text: 'all' },
