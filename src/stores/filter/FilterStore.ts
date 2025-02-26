@@ -183,7 +183,7 @@ class FilterStore implements IFilterStore  {
       if (this.cities.arrValues.length === 0) {
          this.streets.arrValues = [];
       } else if (updateCityResult) {
-         [this.cityResult] = this.cities.arrValues;
+         //[this.cityResult] = this.cities.arrValues;
       }
    }
 
@@ -208,6 +208,15 @@ class FilterStore implements IFilterStore  {
 
    @observable
    cityResult: string = '';
+   @action 
+   updateCityResult = (value:string) => {
+      this.previousCity = this.cityResult;
+      this.cityResult = value;
+   }
+
+   @observable
+   previousCity: string | null = null;
+   
 
    @observable
    streets: ColumnFilterArray;
@@ -797,13 +806,12 @@ class FilterStore implements IFilterStore  {
          const srvCity = new CityService();
          //this.rootStore.mapStore.delQueryStrMapCenter();
          var noop = function () { }; // do nothing.
+         this.updateCityResult(this.cities.arrValues[0]);
          const CenterByCityCallBack = (this.rootStore.mapStore.isCenterMapByCity()) ?
             this.rootStore.mapStore.updateMapCenterByCity :
             noop;
-         srvCity.getCityByNameHe(city, CenterByCityCallBack);
-         const index = 0;
-         this.cityResult = this.cities.arrValues[index];
-      } else this.cityResult = '';
+         srvCity.getCityByNameHe(city, CenterByCityCallBack);         
+      } else this.updateCityResult('');
    }
    /**
     * get filter query string for the server request. 

@@ -148,6 +148,11 @@ export default class MapStore {
       if (center) {
         doCenterByCity = false;
       }
+    } else{
+      if (this.rootStore.filterStore.previousCity === this.rootStore.filterStore.cityResult 
+        && this.rootStore.filterStore.previousCity !== ""){
+        doCenterByCity = false;
+      }
     }
     return doCenterByCity;
   }
