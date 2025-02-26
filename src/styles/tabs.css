@@ -10,6 +10,11 @@
 .nav .nav-tabs {
    border-bottom: 1px solid black !important;
 }
+  
+.nav-tabs .nav-link {
+   padding: 4px 12px;
+   line-height: 1;
+}
 
 button.navbar-toggler {
    border: 1px solid white;
@@ -17,13 +22,15 @@ button.navbar-toggler {
 
 .navbar {
    background-color: var(--primary-color);
-   color: var(--onprimary-color)
+   color: var(--onprimary-color);
+   height: 3.125rem;
 }
 
 #basic-navbar-nav>div>a, a.nav-link {
    font-weight: 600;
    color: var(--onprimary-color);
    opacity: 0.7;
+   margin: 2px 14px;
 }
 
 #basic-navbar-nav>div>a:focus, #basic-navbar-nav>div>a:hover, a.nav-link:hover {
@@ -37,6 +44,10 @@ button.navbar-toggler {
       font-size: 12px;
    }
    /* .navbar-collapse {} */
+}
+
+.navbar-collapse {
+   background-color: var(--primary-color);
 }
 
 @media screen and (min-width: 980px) {

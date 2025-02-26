@@ -1,17 +1,9 @@
 .sidebar {
-   /* display: flex;
-   justify-content: center; */
-   /* max-height: 520px; */
-   padding: 1rem 0.5rem;
-   /* width: 250px; */
-   /* overflow-x: hidden; */
-   /* background-color: var(--primary-color); */
-  /*  position: fixed; */
-   /* border: 2px solid rgb(189, 189, 189); */
+   padding: 0.2rem 0.4rem;
 }
 
 .filters {
-   max-height: 600px;
+   max-height: 590px;
    overflow-x: hidden;
    border-bottom: 2px solid rgb(189, 189, 189);
 }
