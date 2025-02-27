@@ -1,0 +1,25 @@
+name: Deploy
+on:
+  workflow_dispatch
+
+env:
+  DOCKER_REPOSITORY_ANYWAY: "${{ github.repository }}/safety-data-client"
+jobs:
+  Build-anyway:
+    if: github.repository == "${{ github.repository_owner }}/safety-data-client"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and push safety-data-client Docker image
+        uses: docker/build-push-action@v1.1.1
+        with:
+          name: ${{ env.DOCKER_REPOSITORY_ANYWAY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ env.DOCKER_REPOSITORY_ANYWAY }}
+          tag_with_ref: true
+          tag_with_sha: true
+          file: Dockerfile.prod
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
