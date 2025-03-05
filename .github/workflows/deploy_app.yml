@@ -16,4 +16,5 @@ jobs:
               export GIT_SSH_COMMAND="ssh -i `pwd`/dfc_iac_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
               git clone git@github.com:data-for-change/dfc-iac.git &&\
               cd dfc-iac &&\
+              chmod +x bin/apps.py &&\
               bin/apps.py deploy_app safety-data-client
