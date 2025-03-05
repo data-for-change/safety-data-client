@@ -10,6 +10,7 @@ jobs:
       - env:
           DFC_IAC_DEPLOY_KEY: ${{ secrets.DFC_IAC_DEPLOY_KEY }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
               cd `mktemp -d` &&\
               echo "${DFC_IAC_DEPLOY_KEY}" > dfc_iac_deploy_key &&\
