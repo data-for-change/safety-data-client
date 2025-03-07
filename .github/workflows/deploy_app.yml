@@ -1,0 +1,23 @@
+name: deploy_app
+on:
+  workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - env:
+          DFC_IAC_DEPLOY_KEY: ${{ secrets.DFC_IAC_DEPLOY_KEY }}
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+        run: |
+              cd `mktemp -d` &&\
+              echo "${DFC_IAC_DEPLOY_KEY}" > dfc_iac_deploy_key &&\
+              chmod 400 dfc_iac_deploy_key &&\
+              export GIT_SSH_COMMAND="ssh -i `pwd`/dfc_iac_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
+              git clone git@github.com:data-for-change/dfc-iac.git &&\
+              cd dfc-iac &&\
+              pip install -r requirements.txt &&\
+              chmod +x bin/apps.py &&\
+              bin/apps.py deploy_app safety-data-client
