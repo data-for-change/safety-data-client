@@ -7,9 +7,6 @@ import { setBrowserQueryString, delBrowserQueryString } from '../utils/queryStri
 import { BBoxType, MapMarkersType } from '../types';
 // import autorun  from "mobx"
 
-
-
-
 // const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
 const DEFAULT_BOUNDS = [
   L.latLng(29.50, 34.22), // most possible south-west point

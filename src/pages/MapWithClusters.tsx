@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import L, { LatLngExpression } from "leaflet";
 
 import orangeMarker from '../assets/marker-icon-2x-orange2.png';
 import shadoMarker from '../assets/marker-shadow.png';
-import circleMarker from '../assets/circle_orange_20.png'
+// import circleMarker from '../assets/circle_orange_20.png'
 import '../components/map/map.css';
 
 const iconSize = {
     iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
   };
-  const mIconSizes = {
-    iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [1, -10],
-  };
+  // const mIconSizes = {
+  //   iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [1, -10],
+  // };
 const ORANGE_ICON = new L.Icon({
     iconUrl: orangeMarker,
     shadowUrl: shadoMarker,
@@ -23,12 +23,12 @@ const ORANGE_ICON = new L.Icon({
     shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
   });
 
-  const ORANGE_CIRCLE_ICON = new L.Icon({
-    iconUrl: circleMarker,
-    iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
-    // iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
-    popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
-  });
+  // const ORANGE_CIRCLE_ICON = new L.Icon({
+  //   iconUrl: circleMarker,
+  //   iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
+  //   // iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
+  //   popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
+  // });
 
 type MarkerData = {
   id: number;
@@ -81,7 +81,7 @@ const ClusteredMarkers: React.FC = () => {
       setCurrZoom(map.getZoom()); // Update zoom level when the map zooms
     },
   });
-  const zoomThreshold = 15; // Define zoom level to "explode" clusters into flowers
+  // const zoomThreshold = 15; // Define zoom level to "explode" clusters into flowers
 
   const clusteredMarkers = markers.reduce<MarkerData[][]>((clusters, marker) => {
     const existingCluster = clusters.find(cluster =>

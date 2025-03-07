@@ -1,6 +1,6 @@
 
 import React, { FunctionComponent } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import Table from "react-bootstrap/Table";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,15 +18,15 @@ interface IProps {
     columns? :any[];
   }
 
-const foramtDataPrecision = (data: any[]) => {
-  const data2 = data.map((x) => {
-    if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
-      return { _id : x._id, count: x.count.toFixed(1) };
-    }
-    return { _id : x._id, count: x.count};
-  });
-  return data2;
-};
+// const foramtDataPrecision = (data: any[]) => {
+//   const data2 = data.map((x) => {
+//     if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
+//       return { _id : x._id, count: x.count.toFixed(1) };
+//     }
+//     return { _id : x._id, count: x.count};
+//   });
+//   return data2;
+// };
 
 type GroupTable ={
   _id : string;
