@@ -805,20 +805,19 @@ class FilterStore implements IFilterStore  {
             }
          });
    }
+   async submitCityNameAndLocation() {
+      const city = this.cities.arrValues[0] || "";
+      this.updateCityResult(city);    
+      if (!city || !this.rootStore.mapStore.isCenterMapByCity()) return;    
+      try {
+        const srvCity = new CityService();
+        const cityData = await srvCity.getCityByid(city);
+        this.rootStore.mapStore.updateMapCenterByCity(cityData);
+      } catch (error) {
+        console.error("Error fetching city data:", error);
+      }
+    }
 
-   submitCityNameAndLocation = () => {
-      if (this.cities.arrValues.length >= 1) {
-         const city = this.cities.arrValues[0];
-         const srvCity = new CityService();
-         //this.rootStore.mapStore.delQueryStrMapCenter();
-         var noop = function () { }; // do nothing.
-         this.updateCityResult(this.cities.arrValues[0]);
-         const CenterByCityCallBack = (this.rootStore.mapStore.isCenterMapByCity()) ?
-            this.rootStore.mapStore.updateMapCenterByCity :
-            noop;
-         srvCity.getCityByNameHe(city, CenterByCityCallBack);         
-      } else this.updateCityResult('');
-   }
    /**
     * get filter query string for the server request. 
     * @param bounds gis bound (rect) to filter
