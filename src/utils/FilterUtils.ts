@@ -14,10 +14,11 @@ export const getFilterGroupBy =
     if (groupName2 !== '') {
       filter +=`&gb2=${groupName2}`
     }
-    if (sort !== 0)
-    filter +=`&sort=${sort}`
-    if (limit !== 0)
-      filter +=`&lim=${limit}`
+    //ignore this until anyway server support 
+    // if (sort !== 0)
+    // filter +=`&sort=${sort}`
+    // if (limit !== 0)
+    //   filter +=`&lim=${limit}`
     return filter;
   };
 
