@@ -94,8 +94,6 @@ const ClusteredMarkers: React.FC = observer(() => {
   // });
   // const zoomThreshold = 15; // Define zoom level to "explode" clusters into flowers
   const markers = useAccidentMarkers();
-  // const markers  = markers1;
-  console.log ('markers', markers);
   const clusteredMarkers = markers.reduce<MarkerData[][]>((clusters, marker) => {
     const existingCluster = clusters.find(cluster =>
       L.latLng(cluster[0].position).equals(L.latLng(marker.position))

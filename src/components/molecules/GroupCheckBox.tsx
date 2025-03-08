@@ -53,9 +53,9 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
   return (
     <div>
       <Form.Group className='checkBoxList' controlId={`${formName}.Control${name}`}>
-        <Form.Label className="filterLable">
+        <div className="filterLable">
           {t(name)}:
-      </Form.Label>
+        </div>
         {list}
         {isvalid}
       </Form.Group>

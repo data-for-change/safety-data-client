@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Form from 'react-bootstrap/Form';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { useStore } from '../../stores/storeConfig';
@@ -18,10 +17,10 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { t } = useTranslation();
   const selectedCities = citisNamesHeb.filter(city => cities.arrValues.includes(city.value.toString()));
   return (
-    <Form.Group controlId="filterForm.ControlCity">
-      <Form.Label className="filterLable">
+    <div className="form-group">
+      <div className="filterLable">
         {t('City')}:
-      </Form.Label>
+      </div>
       <Typeahead
         id="city-selector"
         options={citisNamesHeb}
@@ -31,10 +30,10 @@ const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
         }}
         //onChange={setSelectedCities}
         labelKey="label" // the key to display in the dropdown
-        selected= {selectedCities}
+        selected={selectedCities}
         multiple={isMultiple}
       />
-    </Form.Group>
+    </div>
   );
 });
 
