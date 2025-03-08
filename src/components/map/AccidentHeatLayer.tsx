@@ -24,7 +24,7 @@ const AccidentHeatLayer: FunctionComponent<IProps> = observer(({ fitBoundsOnUpda
     reactMarkers = toJS(dataAllInjuries);
   }
   // logger.log("reactMarkers ", reactMarkers.length)
-  const newArr: any[] = reactMarkers.map((x) => [x.latitude, x.longitude, x._id]);
+  const newArr: any[] = (!Array.isArray(reactMarkers))? [] : reactMarkers.map((x) => [x.latitude, x.longitude, x._id]);
   //const newArr1: any[] =  [{32.08, 34.83, 1}]
   return (
     <HeatmapLayer

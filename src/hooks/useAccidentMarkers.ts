@@ -9,7 +9,6 @@ export const useAccidentMarkers = () => {
   const { filterStore, mapStore, uiStore } = useStore();
   const { isUse2StepsMarkers, markersLoadStep, dataMarkersLean, dataAllInjuries } = filterStore;
   const { bboxType, dataMarkersInBounds, markerIconsType, markerColorType } = mapStore;
-
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   // autorun to automatically update markers when observables change
@@ -23,9 +22,9 @@ export const useAccidentMarkers = () => {
       } else {
         reactMarkers = toJS(dataAllInjuries);
       }
-
+ 
       // Filter and transform markers
-      const updatedMarkers = reactMarkers
+      const updatedMarkers = (!Array.isArray(reactMarkers))?[]: reactMarkers
         .map((x: Accident) => {
           try {
             const latitude = x.latitude !== null && !isNaN(Number(x.latitude))

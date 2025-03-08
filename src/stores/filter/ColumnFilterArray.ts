@@ -13,6 +13,7 @@ export interface IColumnFilterArray {
   //text is updated ofter filter submit
   text: string;
   setText: () => void;
+  setTitle: (title: string) => void; 
 }
 /**  filter group of boolaen filters
 *  each group represnt one column in the database that can get
@@ -77,4 +78,8 @@ export class ColumnFilterArray implements IColumnFilterArray {
   setText = () => {
     this.text = this.arrValues.join(', ');
   }
+  setTitle = (title: string) => {
+    this.text = title;
+  }; 
+
 }

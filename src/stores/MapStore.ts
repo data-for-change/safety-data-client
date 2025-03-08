@@ -279,33 +279,32 @@ export default class MapStore {
   ];
 
   ////// bounds //////////////////////
-  getBoundsByPointsArr = (data: any[]) => {
-    // logger.log("setBounds!")
+  getBoundsByPointsArr = (data: any[]): L.LatLngBounds => {
+    if (!Array.isArray(data)) return L.latLngBounds(DEFAULT_BOUNDS); // Ensure it's an array  
     let arr: L.LatLng[] = [];
-    let lastPoint: L.LatLng = L.latLng(0, 0);
-    data.forEach((x) => {
-      if (x.latitude !== null && x.longitude !== null) {
-        const p = new L.LatLng(x.latitude, x.longitude);
-        if ((lastPoint.lat === 0 && lastPoint.lng === 0)
-          || x.latitude !== lastPoint.lat
-          || x.longitude !== lastPoint.lng) {
-          arr.push(p);
-          // prevent insertion of duplicate same point
-          lastPoint = p;
+    const uniquePoints = new Set<string>();
+    // Filter valid points and avoid duplicates
+    data
+      .filter((x) => x.latitude !== null && x.longitude !== null)
+      .forEach((x) => {
+        const key = `${x.latitude},${x.longitude}`;
+        if (!uniquePoints.has(key)) {
+          uniquePoints.add(key);
+          arr.push(L.latLng(x.latitude, x.longitude));
         }
-      }
-    });
-    // bounds for single point
+      });  
+    // Handle single point case
     if (arr.length === 1) {
-      arr.length = 0; // clean tha array
-      arr.push(L.latLng(lastPoint.lat + 0.01, lastPoint.lng + 0.01));
-      arr.push(L.latLng(lastPoint.lat - 0.01, lastPoint.lng - 0.01));
-    }
-    // in case no lat/lon info
-    if (arr.length < 2) arr = DEFAULT_BOUNDS;
-    const bounds = L.latLngBounds(arr);
-    return bounds;
-  }
+      const { lat, lng } = arr[0];
+      arr = [
+        L.latLng(lat + 0.01, lng + 0.01),
+        L.latLng(lat - 0.01, lng - 0.01),
+      ];
+    }  
+    // Fallback in case of empty bounds
+    if (arr.length < 2) return L.latLngBounds(DEFAULT_BOUNDS);  
+    return L.latLngBounds(arr);
+  };
 
   getBounds2 = (data: any[]) => {
     if (data.length === 0) return L.latLngBounds(DEFAULT_BOUNDS);

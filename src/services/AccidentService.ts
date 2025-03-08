@@ -1,12 +1,13 @@
 
-import {API_URL} from '../utils/globalEnvs';
+import {API_URL, API_URL2} from '../utils/globalEnvs';
 
 class AccidentService {
   apiUrl = API_URL || '';
+
   public fetchGetList = async (filter: string, type: string): Promise<Array<any> | undefined> => {
-    console.log(`API URL: ${this.apiUrl}`);
     // Default options are marked with *
-    let url = `${this.apiUrl}/api/v1/accident/`;
+    let url = `${API_URL2}/involved`;
+    //let url = `${this.apiUrl}/api/v1/accident/`;
     url += filter;
     // console.log(url);
     const response = await fetch(url, {
@@ -28,7 +29,8 @@ class AccidentService {
   
   public fetchGetGroupBy = async (filter: string): Promise<Array<any> | undefined> => {
     // Default options are marked with *
-    let url = `${this.apiUrl}/api/v1/accident/groupby/`;
+    let url = `${API_URL2}/involved/groupby`
+    //let url = `${this.apiUrl}/api/v1/accident/groupby/`;
     url += filter;
     // console.log(url);
     const response = await fetch(url, {
@@ -48,28 +50,7 @@ class AccidentService {
     return response.json(); // parses JSON response into native JavaScript objects
   };
   
-  public fetchGetCount = async (filter: string, type: string): Promise<Array<any> | undefined> => {
-    // Default options are marked with *
-    let url = `${this.apiUrl}/api/v1/accident/get`;
-    url += filter;
-    // console.log(url);
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *client
-    });
-    if (!response.ok) {
-      return [];
-    }
-    return response.json(); // parses JSON response into native JavaScript objects
-  };
-
+  //old code - fetch post requests 
   public fetchFilter = async (filter: string, type: string):
   Promise<Array<any> | undefined> => {
   // Default options are marked with *
@@ -135,5 +116,6 @@ public fetchAggregate = async (filter: string): Promise<Array<any> | undefined> 
   return response.json(); // parses JSON response into native JavaScript objects
 };
 }
-export default new AccidentService();
+const AccidentServiceInstance =  new AccidentService();
+export default AccidentServiceInstance;
 

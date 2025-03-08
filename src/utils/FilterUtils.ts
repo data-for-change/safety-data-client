@@ -1,3 +1,5 @@
+import citiesNamesHeb from '../assets/json/cities_names_heb.json';
+import { CityKeyVal } from '../types';
 
 export const getFilterGroupBy =
   (filterMatch: string,
@@ -68,6 +70,16 @@ export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
   filter += `&lon=${mapBounds.getWest()},${mapBounds.getEast()}`;
   return filter;
 }
+
+// return array of citis names
+export const getCitiesNames = (values: string[]): string[] => {
+  // Convert input values to numbers
+  const numericValues = values.map(Number).filter(v => !isNaN(v));
+  return citiesNamesHeb
+      .filter((city: CityKeyVal) => numericValues.includes(city.value)) // Filter by number
+      .map((city) => city.label); // Return only labels
+}
+
 // don't use this - for post filter
 export const getFilterStreets = (streets : string[]) => {
   let filter: string = '';

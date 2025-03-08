@@ -24,7 +24,7 @@ export interface IColumnFilter {
   isAllValsFalse: boolean;
   //text is updated after filter submit
   text: string;
-  setText: (ignoreIfAll: boolean) => void;
+  setText: (ignoreIfAll: boolean) => void;  
 }
 /**  filter group of boolaen filters that are check-box in the gui
 *  each group represnt one column in the database that can get

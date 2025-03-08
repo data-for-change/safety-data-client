@@ -28,14 +28,14 @@ export function useInjTypeByQuery(query: URLSearchParams) {
   return res;
 }
 
-// get city name by url query parmas
-export function useCityNameFromQuery(query: URLSearchParams, defaultName: string) {
-  let res = [defaultName];
-  const name = query.get('name');
-  let found = false;
-  if (name !== null) found = citisNamesHeb.includes(name);
-  if (found) {
-    res = [citisNamesHeb.find((element) => element === name!)!];
-  }
-  return res;
-}
+// // get city name by url query parmas
+// export function useCityNameFromQuery(query: URLSearchParams, defaultName: string) {
+//   let res = [defaultName];
+//   const name = query.get('name');
+//   let found = false;
+//   //if (name !== null) found = citisNamesHeb.includes(name);
+//   //if (found) {
+//   //  res = [citisNamesHeb.find((element) => element === name!)!];
+//   //}
+//   return res;
+// }

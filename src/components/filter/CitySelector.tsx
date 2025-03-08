@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
@@ -6,32 +5,37 @@ import Form from 'react-bootstrap/Form';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { useStore } from '../../stores/storeConfig';
+import { CityKeyVal } from '../../types'
 import citisNamesHeb from '../../assets/json/cities_names_heb.json';
 
 interface IProps {
-  isMultiple?: boolean
+  isMultiple?: boolean;
 }
 
 const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { filterStore } = useStore();
-  const { cities, updateCities} = filterStore;
+  const { cities, updateCities } = filterStore;
   const { t } = useTranslation();
+  const selectedCities = citisNamesHeb.filter(city => cities.arrValues.includes(city.value.toString()));
   return (
     <Form.Group controlId="filterForm.ControlCity">
       <Form.Label className="filterLable">
         {t('City')}:
       </Form.Label>
       <Typeahead
-        id="typeaheadCity"
-        onChange={(selected) => {         
-          const selectedCities = selected.map(option => option as string);
+        id="city-selector"
+        options={citisNamesHeb}
+        onChange={(selected) => {
+          const selectedCities = (selected as CityKeyVal[]).map(option => option.value.toString());
           updateCities(selectedCities ?? [], true);
         }}
-        options={citisNamesHeb}
+        //onChange={setSelectedCities}
+        labelKey="label" // the key to display in the dropdown
+        selected= {selectedCities}
         multiple={isMultiple}
-        selected={cities.arrValues}
       />
     </Form.Group>
   );
 });
+
 export default CitySelector;

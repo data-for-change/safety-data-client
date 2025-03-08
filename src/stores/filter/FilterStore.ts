@@ -18,7 +18,8 @@ import logger from '../../services/logger';
 import { BBoxType } from '../../types';
 import Casualty from '../Casualty';
 import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
-import citisNamesHeb from '../../assets/json/cities_names_heb.json';
+// import citisNamesHeb from '../../assets/json/cities_names_heb.json';
+import { getCitiesNames } from '../../utils/FilterUtils';
 // import autorun  from "mobx"
 
 export interface IFilterStore {
@@ -59,7 +60,7 @@ class FilterStore implements IFilterStore  {
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road', 'rd', false);
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
-      this.cities = new ColumnFilterArray('City', 'city', true);
+      this.cities = new ColumnFilterArray('City', 'city', false);
       this.streets = new ColumnFilterArray('Street', 'st', true);
       this.cityPopSizeRange = initCityPopSize();
       // who
@@ -86,7 +87,7 @@ class FilterStore implements IFilterStore  {
       // init data (on home page)
       this.dataByYears = FC.initDataYreasUnfilterd();
       this.dataFilterdByYears = FC.initDataYreasfilterd();
-      this.dataFilterd = FC.initDataGrpBy1();
+      this.setDataFilterd(FC.initDataGrpBy1());
       this.dataGroupby2 = FC.initDataGrpBy2();
       this.appInitialized = false;
       this.localStorageService = new LocalStorageService();
@@ -178,8 +179,8 @@ class FilterStore implements IFilterStore  {
    cities: ColumnFilterArray;
 
    @action
-   updateCities = (names: string[], updateCityResult: boolean) => {
-      this.cities.setFilter(names);
+   updateCities = (values: string[], updateCityResult: boolean) => {
+      this.cities.setFilter(values);
       if (this.cities.arrValues.length === 0) {
          this.streets.arrValues = [];
       } else if (updateCityResult) {
@@ -188,19 +189,16 @@ class FilterStore implements IFilterStore  {
    }
 
    // get city name by url query parmas
-   getCityNameFromQuery(query: URLSearchParams, defVal: string | undefined) {
+   getCityIdFromQuery(query: URLSearchParams, defVal: string | undefined) {
       let res = (defVal) ? [defVal] : [];
-      const name = query.get('city');
-      let found = false;
-      if (name !== null) {
-         const arr = name.split(',');
+      const id = query.get('city');
+      //let found = false;
+      if (id !== null) {
+         const arr = id.split(',');
          if (arr.length > 1 && this.isMultipleCities) {
             res = arr;
          } else {
-            found = citisNamesHeb.includes(name);
-            if (found) {
-               res = [citisNamesHeb.find((element) => element === name!)!];
-            }
+            res =[id];
          }
       }
       return res;
@@ -487,10 +485,18 @@ class FilterStore implements IFilterStore  {
    // casualties groupd by some group, filterd on main filter
    @observable
    dataFilterd: any[] = []
+   @action
+   setDataFilterd(data:any[]){
+      this.dataFilterd = data;
+   }
 
    // casualties groupd by 2 groups, filterd on main filter
    @observable
-   dataGroupby2: any[] = []
+   dataGroupby2: any[] = [];
+   @action
+   setDataGroupBy2(data: any[]){
+      this.dataGroupby2 = data;
+   }
 
    @observable
    isLoading: boolean = false;
@@ -624,7 +630,7 @@ class FilterStore implements IFilterStore  {
                if(aGroupBy.reGroupResultFunc) {
                   data = aGroupBy.reGroupResultFunc(data);
                }
-               if (data !== undefined) this.dataFilterd = data;
+               if (data !== undefined) this.setDataFilterd(data);
             });
       } else {
          const filtermatch = this.getFilterForPost(null);
@@ -632,7 +638,7 @@ class FilterStore implements IFilterStore  {
          // logger.log(filter);
          AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
-               if (data !== undefined) this.dataFilterd = data;
+               if (data !== undefined) this.setDataFilterd(data);
             });
       }
 
@@ -651,7 +657,7 @@ class FilterStore implements IFilterStore  {
       AccidentService.fetchAggregate(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
-               this.dataFilterd = data;
+               this.setDataFilterd(data);
             }
          });
    }
@@ -668,13 +674,13 @@ class FilterStore implements IFilterStore  {
                if (data !== undefined && data.length > 0) {
                   try {
                      const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
-                     this.dataGroupby2 = fixData;
+                     this.setDataGroupBy2(fixData);
                   } catch (error) {
                      logger.log(error);
-                     this.dataGroupby2 = [];
+                     this.setDataGroupBy2([]);
                   }
                } else {
-                  this.dataGroupby2 = [];
+                  this.setDataGroupBy2([]);
                }
             });
       } else {
@@ -687,13 +693,13 @@ class FilterStore implements IFilterStore  {
                if (data !== undefined && data.length > 0) {
                   try {
                      const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
-                     this.dataGroupby2 = fixData;
+                     this.setDataGroupBy2(fixData);
                   } catch (error) {
                      logger.log(error);
-                     this.dataGroupby2 = [];
+                     this.setDataGroupBy2([]);
                   }
                } else {
-                  this.dataGroupby2 = [];
+                  this.setDataGroupBy2([]);
                }
             });
       }
@@ -761,11 +767,11 @@ class FilterStore implements IFilterStore  {
          // logger.log(filter);
          this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          AccidentService.fetchGetList(filter, 'main')
-            .then((data: any[] | undefined) => {
-               if (data !== null && data !== undefined) {
-                  this.updateAllInjuries(data);
+            .then((res: any | undefined) => {
+               if (res && res.data !== null && res.data !== undefined) {
+                  this.updateAllInjuries(res.data);
                   // write Data to local db
-                  if (this.useLocalDb === 1) insertToDexie(data);
+                  if (this.useLocalDb === 1) insertToDexie(res.data);
                }               
                this.setIsLoading(false);
             });
@@ -776,11 +782,11 @@ class FilterStore implements IFilterStore  {
          // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
          this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
          AccidentService.fetchAggregatFilter(filter, 'main')
-            .then((data: any[] | undefined) => {
-               if (data !== null && data !== undefined) {
-                  this.updateAllInjuries(data);
+            .then((res: any | undefined) => {
+               if (res && res.data !== null && res.data !== undefined) {
+                  this.updateAllInjuries(res.data);
                   // write Data to local db
-                  if (this.useLocalDb === 1) insertToDexie(data);
+                  if (this.useLocalDb === 1) insertToDexie(res.data);
                }
                this.setIsLoading(false);
             });
@@ -864,7 +870,9 @@ class FilterStore implements IFilterStore  {
       this.populationTypes.setText(ignoreIfAll);
       this.locationAccuracy.setText(ignoreIfAll);
       this.roadTypes.setText(ignoreIfAll);
-      this.cities.setText();
+      const cityNamesArr = getCitiesNames(this.cities.arrValues);
+      const cityNames = cityNamesArr.join(', ');
+      this.cities.setTitle(cityNames);
       this.roads.setText();
       this.cityPopSizeRange.setText();
       this.accidentType.setText(ignoreIfAll);
@@ -913,7 +921,7 @@ class FilterStore implements IFilterStore  {
       this.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
       this.dayNight.setValuesByQuery(params);
-      const citis = this.getCityNameFromQuery(params, defCity);
+      const citis = this.getCityIdFromQuery(params, defCity);
       if (citis) this.updateCities(citis, true);
       this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
@@ -1016,9 +1024,9 @@ class FilterStore implements IFilterStore  {
       this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
       // logger.log(arrFilters);
       getFromDexie(arrFilters)
-         .then((data: any[] | undefined) => {
-            if (data !== null && data !== undefined) {
-               this.updateAllInjuries(data);
+         .then((res: any | undefined) => {
+            if (res && res.data !== null && res.data !== undefined) {
+               this.updateAllInjuries(res.data);
             }
             this.setIsLoading(false);
          });
