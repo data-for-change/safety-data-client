@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - env:
+          SAFETY_DATA_CLIENT_IMAGE: "${{ github.repository }}/safety-data-client"
           DFC_IAC_DEPLOY_KEY: ${{ secrets.DFC_IAC_DEPLOY_KEY }}
         run: |
               cd `mktemp -d` &&\
@@ -16,7 +17,8 @@ jobs:
               export GIT_SSH_COMMAND="ssh -i `pwd`/dfc_iac_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
               git clone git@github.com:data-for-change/dfc-iac.git &&\
               cd dfc-iac &&\
+              bin/update_anyway_env.py '{"safetyDataClientImage":"'${SAFETY_DATA_CLIENT_IMAGE}'"}' &&\
               git config --global user.name "Anyway CI" &&\
               git config --global user.email "anyway-ci@localhost" &&\
-              git commit --allow-empty -m "automatic update of anyway (safety data)" &&\
+              git add apps/anyway/.env && git commit -m "automatic update of anyway (safety data)" &&\
               git push origin main
