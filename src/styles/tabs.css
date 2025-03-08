@@ -57,21 +57,31 @@ button.navbar-toggler {
    }
 }
 
-.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-   color: rgb(241, 24, 78);
-   border: none;
-   border-bottom: 1px solid black;
-}
-
-.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
-   /* color: red; */
+/* Default state for nav links */
+.nav-tabs .nav-link {
    color: black;
    border: none;
    border-bottom: 1px solid black;
 }
 
-.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
-   color: rgb(241, 24, 78);
+/* Hover state */
+.nav-tabs .nav-link:hover {
+   font-weight: 700;
+   color: black;
+   border: none;
+   border-bottom: 1px solid black;
+}
+
+/* Active state */
+.nav-tabs .nav-link.active {
+   color: rgb(241, 24, 78) !important;
+   border: none;
+   border-bottom: 1px solid black;
+}
+
+/* Active state when the item is shown */
+.nav-tabs .nav-item.show .nav-link {
+   color: rgb(241, 24, 78) !important;
    border: none;
    border-bottom: 1px solid black;
 }
