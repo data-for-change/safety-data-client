@@ -25,7 +25,7 @@ const customMarketIcon = (iconMarkup:any) => {
 const getSVGPinByCategory = (category: string, color: string, isAccuratePos: boolean) => {
   let pin;
   switch (category) {
-    case '':
+    case 'הולך רגל':
       pin = <IconWalk fill={color} isAccuratePos={isAccuratePos}/>;
       break;
     case 'רכב נוסעים פרטי':
@@ -34,7 +34,7 @@ const getSVGPinByCategory = (category: string, color: string, isAccuratePos: boo
     case 'אופנוע עד 50 סמ"ק':
     case 'אופנוע 51 עד 125 סמ"ק':
     case 'אופנוע 126 עד 400 סמ"ק':
-    case 'אופנוע 401+ סמ"ק':
+    case 'אופנוע 401 סמ"ק ומעלה':
       pin = <IconMotorcycle fill={color} isAccuratePos={isAccuratePos}/>;
       break;
     case 'אופניים':
