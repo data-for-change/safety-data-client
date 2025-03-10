@@ -15,11 +15,11 @@ import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import { insertToDexie, getFromDexie } from '../../services/DexieInjuredService';
 import logger from '../../services/logger';
-import { BBoxType } from '../../types';
+import { BBoxType, Street } from '../../types';
 import Casualty from '../Casualty';
 import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
 // import citisNamesHeb from '../../assets/json/cities_names_heb.json';
-import { getCitiesNames } from '../../utils/FilterUtils';
+import { getCitiesNames, padDataYearsWith0 } from '../../utils/FilterUtils';
 // import autorun  from "mobx"
 
 export interface IFilterStore {
@@ -61,7 +61,7 @@ class FilterStore implements IFilterStore  {
       this.roads = new ColumnFilterArray('Road', 'rd', false);
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
       this.cities = new ColumnFilterArray('City', 'city', false);
-      this.streets = new ColumnFilterArray('Street', 'st', true);
+      this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
       // who
       this.genderTypes = FC.initGenderTypes();
@@ -179,12 +179,21 @@ class FilterStore implements IFilterStore  {
    cities: ColumnFilterArray;
 
    @action
-   updateCities = (values: string[], updateCityResult: boolean) => {
+   updateCities = async (values: string[], updateCityResult: boolean) => {
       this.cities.setFilter(values);
       if (this.cities.arrValues.length === 0) {
          this.streets.arrValues = [];
-      } else if (updateCityResult) {
-         //[this.cityResult] = this.cities.arrValues;
+      } else {
+         if(this.cities.arrValues.length ===1){
+            const cityId = this.cities.arrValues[0];
+            const srvCity = new CityService();
+            const streets = await srvCity.getStreetsByCity(cityId);
+            this.SetCityStreets(streets);
+            console.log(streets);
+         }         
+         if (updateCityResult) {
+            //[this.cityResult] = this.cities.arrValues;
+         }
       }
    }
 
@@ -215,13 +224,19 @@ class FilterStore implements IFilterStore  {
    @observable
    previousCity: string | null = null;
    
+   @observable
+   cityStreets: Street [] |null = null;
+   @action
+   SetCityStreets =(streets: Street[])=>{
+      this.cityStreets = streets;
+      console.log('this.cityStreets', this.cityStreets.length);
+   }
 
    @observable
    streets: ColumnFilterArray;
-
    @action
-   updateStreets = (names: string) => {
-      this.streets.setFilter(names.split(','));
+   updateStreets = (values: string[]) => {
+      this.streets.setFilter(values);
    }
 
    @observable
@@ -544,7 +559,7 @@ class FilterStore implements IFilterStore  {
          AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
-                  const dataPadded = this.padDataYearsWith0(data);
+                  const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                   this.dataByYears = dataPadded;
                }
             });
@@ -555,7 +570,7 @@ class FilterStore implements IFilterStore  {
          AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
-                  const dataPadded = this.padDataYearsWith0(data);
+                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                   this.dataByYears = dataPadded;
                }
             });
@@ -563,23 +578,7 @@ class FilterStore implements IFilterStore  {
 
    }
 
-   /**
-    * convert parital array of years and count to full array
-    * if year is missing, add year and count = 0
-    * @param data array of years and counts, some of the years might be missing
-    */
-   padDataYearsWith0 = (data: any) => {
-      const yearsList = [];
-      for (let i = Number(this.startYear.queryValue); i <= Number(this.endYear.queryValue); i += 1) {
-         yearsList.push(i);
-      }
-      const data2 = yearsList.map((year) => {
-         const objDAta = data.find((x: any) => x._id === year);
-         const val = (objDAta) ? objDAta.count : 0;
-         return { _id: year, count: val };
-      });
-      return data2;
-   }
+  
 
    getCountFromGroupByRes = (data: any[]) => {
       const res = data.reduce((b: number, x: any) => b + x.count, 0);
@@ -596,7 +595,7 @@ class FilterStore implements IFilterStore  {
          AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
-                  const dataPadded = this.padDataYearsWith0(data);
+                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                   this.setDataFilterdByYears(dataPadded);
                   const count = this.getCountFromGroupByRes(data);
                   this.setInjuriesCount(count);
@@ -608,7 +607,7 @@ class FilterStore implements IFilterStore  {
          AccidentService.fetchAggregate(filter)
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
-                  const dataPadded = this.padDataYearsWith0(data);
+                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                   this.setDataFilterdByYears(dataPadded);
                   const count = this.getCountFromGroupByRes(data);
                   this.setInjuriesCount(count);
@@ -806,12 +805,12 @@ class FilterStore implements IFilterStore  {
          });
    }
    async submitCityNameAndLocation() {
-      const city = this.cities.arrValues[0] || "";
-      this.updateCityResult(city);    
-      if (!city || !this.rootStore.mapStore.isCenterMapByCity()) return;    
+      const cityId = this.cities.arrValues[0] || "";
+      this.updateCityResult(cityId);    
+      if (!cityId || !this.rootStore.mapStore.isCenterMapByCity()) return;    
       try {
         const srvCity = new CityService();
-        const cityData = await srvCity.getCityByid(city);
+        const cityData = await srvCity.getCityByid(cityId);
         this.rootStore.mapStore.updateMapCenterByCity(cityData);
       } catch (error) {
         console.error("Error fetching city data:", error);

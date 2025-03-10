@@ -1,3 +1,4 @@
+import { Street } from '../types';
 import {API_URL2} from '../utils/globalEnvs';
 
 export default class CityService {
@@ -24,7 +25,26 @@ export default class CityService {
       console.error("srv.getCityByid", error);
       return [];
     }
-  }
+  };
+  
+  async getStreetsByCity(cityId: string): Promise<Street[]> {
+    try {
+      const urlStreets = `${this.apiUrl}/api/streets?yishuv_symbol=${cityId}`;
+      const response = await fetch(urlStreets, {
+        method: "GET",
+        redirect: "follow",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("srv.getCityByid", error);
+      return [];
+    }
+  };
 
   getCitiesNames(lang: string, collback: (res: any[]) => void) {
     // "http://localhost:5000/api/v1/city?lang=he"
