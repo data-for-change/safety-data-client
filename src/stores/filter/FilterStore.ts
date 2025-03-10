@@ -142,7 +142,6 @@ class FilterStore implements IFilterStore  {
    @action
    updateInjurySeverity = (aType: number, val: boolean) => {
       this.updateFilters(this.injurySeverity, aType, val);
-      console.log ("updateInjurySeverity", this.injurySeverity.arrTypes)
    }
 
    @computed get isValidSeverity() {
@@ -188,8 +187,7 @@ class FilterStore implements IFilterStore  {
             const cityId = this.cities.arrValues[0];
             const srvCity = new CityService();
             const streets = await srvCity.getStreetsByCity(cityId);
-            this.SetCityStreets(streets);
-            console.log(streets);
+            this.SetCityStreets(streets);           
          }         
          if (updateCityResult) {
             //[this.cityResult] = this.cities.arrValues;
@@ -229,7 +227,6 @@ class FilterStore implements IFilterStore  {
    @action
    SetCityStreets =(streets: Street[])=>{
       this.cityStreets = streets;
-      console.log('this.cityStreets', this.cityStreets.length);
    }
 
    @observable
@@ -292,7 +289,6 @@ class FilterStore implements IFilterStore  {
 
    @action
    setStartYear = (year: string) => {
-      console.log("set start year in store",year );
       this.startYear.setFilter(parseInt(year));
    }
 

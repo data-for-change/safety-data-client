@@ -33,7 +33,6 @@ const getColumnsByWidth = (width: number, allColumns: AccidentColumn[]) => {
   if (width < 900) filteredColumns = filteredColumns.filter(col => col.accessorKey !== 'vehicle_vehicle_type_hebrew');
   if (width < 700) filteredColumns = filteredColumns.filter(col => col.accessorKey !== 'street1_hebrew');
   if (width < 500) filteredColumns = filteredColumns.filter(col => col.accessorKey !== 'accident_yishuv_name');
-  console.log('filteredColumns', filteredColumns.length)
   return filteredColumns;
 };
 
@@ -96,7 +95,6 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   ];
  
   const [columns, setColumns] = useState(() => getColumnsByWidth(window.innerWidth, allColumns));
-  console.log('columns', columns.length, 'innerWidth',window.innerWidth);
   useEffect(() => {
     const handleResize = () => {
       setColumns(getColumnsByWidth(window.innerWidth, allColumns));

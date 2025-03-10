@@ -1,5 +1,5 @@
 import React, { FC, useRef } from 'react';
-import { MapContainer, TileLayer, useMapEvent } from 'react-leaflet';
+import { MapContainer, TileLayer, useMapEvents, useMap } from 'react-leaflet';
 import L, { Map as LeafletMap, LatLngTuple } from 'leaflet';
 import { observer } from 'mobx-react';
 import MarkerClusterGroup from "react-leaflet-markercluster";
@@ -46,11 +46,25 @@ const AccidentsMap: FC<IProps> = observer(() => {
   const { mapStore } = store;
   const { updateMapBounds } = mapStore;
 
-  const MapEventHandlerMoveEnd: FC = () => {
-    const map = useMapEvent("moveend", () => {
-      const newBounds = map.getBounds();
-      updateMapBounds(newBounds);
-    });
+  const MapEventHandler: FC = () => {
+    const map = useMap();
+    const previousZoomRef = useRef(map.getZoom());  
+    useMapEvents({
+      moveend: () => {
+        const newZoom = map.getZoom();
+        const newBounds = map.getBounds();
+        const newCenter = map.getCenter();
+  
+        if (newZoom !== previousZoomRef.current) {
+          // console.log("Zoom changed");
+          updateMapBounds(newBounds, newCenter, newZoom);
+        } else {
+          // console.log("Move only");
+          updateMapBounds(newBounds, newCenter, undefined);
+        }        
+        previousZoomRef.current = newZoom;
+      },
+    });  
     return null;
   };
 
@@ -58,14 +72,16 @@ const AccidentsMap: FC<IProps> = observer(() => {
     // Wait 1 second before fetching the bounds
     setTimeout(() => {
       const bounds = mapRef.current?.getBounds();
+      const newCenter = mapRef.current?.getCenter();
+      const newZoom = mapRef.current?.getZoom();
       if (bounds) {
         //updateMapBounds to get markers in bbox         
-        updateMapBounds(bounds);
+        updateMapBounds(bounds, newCenter, newZoom);
       }
     }, 500); //delay to get mapRef.current
   };
   //const {isLoading} = filterStore;
-  const { mapCenter, mapMarkersType } = mapStore;
+  const { mapCenter, mapMarkersType, mapZoom } = mapStore;
   const position: LatLngTuple = [mapCenter.lat, mapCenter.lng] as LatLngTuple;
   return (
     <div id="map">
@@ -87,9 +103,9 @@ const AccidentsMap: FC<IProps> = observer(() => {
           iconCreateFunction={createClusterCustomIcon}>
           <ClusteredMarkers />
        </MarkerClusterGroup>}
-        <MapCenterUpdater center={mapCenter} />
+        <MapCenterUpdater center={mapCenter} zoom={mapZoom}/>
         <LegendWarpper />
-        <MapEventHandlerMoveEnd />
+        <MapEventHandler />
       </MapContainer>
       <div style={styels.buttonsPanel}>
         <SelectMapMarkersType />

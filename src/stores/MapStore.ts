@@ -18,13 +18,13 @@ const QUERY_STR_NAME_MRKRCOLOR = 'mkclr';
 
 export interface IMapStore {
   isLoading: boolean;
-  setIsLoading: (value:boolean) => void;
+  setIsLoading: (value: boolean) => void;
   mapCenter: L.LatLng;
   mapZoom: number;
   mapBounds: L.LatLngBounds | null;
   bboxType: BBoxType;
   markerColorType: string;
-  markerIconsType: string;   
+  markerIconsType: string;
   mapMarkersType: MapMarkersType;
 }
 
@@ -34,14 +34,15 @@ export default class MapStore {
   constructor(rootStore: RootStore) {
     // init app data
     this.rootStore = rootStore;
-    makeAutoObservable(this, { rootStore: false,
+    makeAutoObservable(this, {
+      rootStore: false,
       mapCenter: observable,
       mapZoom: observable,
       bboxType: observable,
       markerColorType: observable,
       markerIconsType: observable,
       mapMarkersType: observable
-   });
+    });
   }
 
   rootStore: RootStore;
@@ -49,7 +50,7 @@ export default class MapStore {
   mapRef: React.RefObject<any> | null = null;
 
   setMapRef = (mapRef: React.RefObject<any>) => {
-   
+
     this.mapRef = mapRef;
   }
   @action
@@ -103,6 +104,7 @@ export default class MapStore {
   @action
   setMapZoom = (value: number) => {
     this.mapZoom = value;
+    // this.setQueryStrMapZoom(value);
   };
 
 
@@ -114,7 +116,7 @@ export default class MapStore {
     }
   }
   getCenterByQuery = (params: URLSearchParams) => {
-    let center = null
+    let center = null;
     const sLat = params.get(QUERY_STR_NAME_LAT);
     const sLon = params.get(QUERY_STR_NAME_LNG);
     if (sLat && sLon) {
@@ -145,9 +147,9 @@ export default class MapStore {
       if (center) {
         doCenterByCity = false;
       }
-    } else{
-      if (this.rootStore.filterStore.previousCity === this.rootStore.filterStore.cityResult 
-        && this.rootStore.filterStore.previousCity !== ""){
+    } else {
+      if (this.rootStore.filterStore.previousCity === this.rootStore.filterStore.cityResult
+        && this.rootStore.filterStore.previousCity !== "") {
         doCenterByCity = false;
       }
     }
@@ -216,7 +218,7 @@ export default class MapStore {
   mapMarkersType = MapMarkersType.Markers_AND_Clusters;
 
   @action
-  setMapMarkersType = (value :MapMarkersType) => {
+  setMapMarkersType = (value: MapMarkersType) => {
     this.mapMarkersType = value;
   }
 
@@ -252,7 +254,7 @@ export default class MapStore {
   markerColorType = "Severity";
 
   @action
-  setMarkerColorType = (value: string) => {    
+  setMarkerColorType = (value: string) => {
     this.markerColorType = value;
     setBrowserQueryString(QUERY_STR_NAME_MRKRCOLOR, value);
   }
@@ -292,7 +294,7 @@ export default class MapStore {
           uniquePoints.add(key);
           arr.push(L.latLng(x.latitude, x.longitude));
         }
-      });  
+      });
     // Handle single point case
     if (arr.length === 1) {
       const { lat, lng } = arr[0];
@@ -300,9 +302,9 @@ export default class MapStore {
         L.latLng(lat + 0.01, lng + 0.01),
         L.latLng(lat - 0.01, lng - 0.01),
       ];
-    }  
+    }
     // Fallback in case of empty bounds
-    if (arr.length < 2) return L.latLngBounds(DEFAULT_BOUNDS);  
+    if (arr.length < 2) return L.latLngBounds(DEFAULT_BOUNDS);
     return L.latLngBounds(arr);
   };
 
@@ -341,42 +343,24 @@ export default class MapStore {
   @observable
   mapBounds: L.LatLngBounds | null = null;
   @action
-  updateMapBounds = (newBounds: L.LatLngBounds) => {
-    try {      
+  updateMapBounds = (newBounds: L.LatLngBounds, newCenter: L.LatLng | undefined, newZoom: number | undefined) => {
+    try {
       this.mapBounds = newBounds;
       //get markers
       if (this.bboxType !== BBoxType.NO_BBOX) this.getMarkersInBBox();
-      //update query string by map
-      this.setQueryStrMapCenterByBounds(newBounds)
+      // update query string by map, we don't update the map itself to avoid more movesd of the map  
+      // change the query zoom on zoom 
+      if (newZoom) {
+        this.setQueryStrMapZoom(newZoom);        
+      } 
+      // change the query center on zoom or move
+      if (newCenter){
+        this.setQueryStrMapCenter(newCenter);
+      }
     } catch (error) {
       logger.error(error);
     }
   };
-  setQueryStrMapCenterByBounds = (mapBounds: L.LatLngBounds) => {   
-    //if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
-    try {
-      // const mapBounds = this.mapRef.current.leafletElement.getBounds();
-      if (mapBounds) {
-        const center = mapBounds.getCenter()
-        this.setQueryStrMapCenter(center);
-        //this.setQueryStrMapZoom(this.mapRef.current.leafletElement.getZoom());
-      }
-    } catch (error) {
-      logger.error(error);
-    }
-  }
-  /* 
-    setMapZoom =(zoom: number) =>{
-      console.log('mapRef',this.mapRef)
-      if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
-      try {
-        this.mapRef.current.leafletElement.setZoom(zoom);
-        const zoom2 = this.mapRef.current.leafletElement.getZoom();
-        console.log('zoom2', zoom2)
-      } catch (error) {
-        logger.error(error);
-      }
-    } */
 
   getMarkersInBBox = () => {
     if (this.bboxType === BBoxType.LOCAL_BBOX) {
@@ -390,7 +374,7 @@ export default class MapStore {
     //if (this.mapRef === undefined || this.mapRef === null || this.mapRef.current === null) return;
     try {
       const mapBounds = this.mapBounds;
-      if(mapBounds !== null){
+      if (mapBounds !== null) {
         const west = mapBounds.getWest() - boundsMargin;
         const east = mapBounds.getEast() + boundsMargin;
         const south = mapBounds.getSouth() - boundsMargin;
@@ -401,7 +385,7 @@ export default class MapStore {
         // const zoom = this.mapRef.current.leafletElement.getZoom();
         // console.log(zoom, east -west ,data.length);     
         this.updateDataMarkersInBounds(data);
-      }   
+      }
     } catch (error) {
       logger.error(error);
     }

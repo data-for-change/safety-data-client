@@ -95,7 +95,6 @@ const ClusteredMarkers: React.FC = () => {
     return clusters;
   }, []);
   
-  console.log ('zoom',currZoom);
   const icon: L.Icon = ORANGE_ICON;
   return (
     <>

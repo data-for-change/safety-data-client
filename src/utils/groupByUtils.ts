@@ -1,8 +1,8 @@
-import Footer from "../components/templates/Footer";
+// import Footer from "../components/templates/Footer";
 
 export const reGroupResultIsSelfAcc = (data: any[]) => {
     console.log('reGroupResultIsSelfAcc',data)
-    let res = new Array();
+    let res = [];
     res.push({ _id: 'תאונה עצמית', count: 0 });
     res.push({ _id: 'תאונה לא עצמית', count: 0 });
     data.forEach(element => {
