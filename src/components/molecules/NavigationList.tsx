@@ -16,15 +16,20 @@ const NavigationList: React.FC<any> = () => {
             to="/city">
             {t('Cities')}
          </Link>
+         {/* <Link
+            className="nav-link"
+            to="/my-filters">
+            {t('My-Filters')}
+         </Link> */}
+         <Link
+            className="nav-link"
+            to="/recommend">
+            {t('Recommendations')}
+         </Link>
          <Link
             className="nav-link"
             to="/about">
             {t('About')}
-         </Link>
-         <Link
-            className="nav-link"
-            to="/my-filters">
-            {t('My-Filters')}
          </Link>
       </React.Fragment>
    )

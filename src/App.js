@@ -11,11 +11,8 @@ import MapWithClusters from './pages/MapWithClusters';
 import './i18n';
 import './App.css';
 
-// import Drawer from './components/organisms/Drawer';
-// import MyFilters from './components/pages/MyFilters';
-// import { useTranslate } from './hooks/transelate'
-
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const RecommendationsPage = lazy(() => import('./pages/RecommendationsPage'));
 // const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
 // const MyFilters = lazy(() => import('./components/pages/MyFilters'))
 
@@ -37,8 +34,9 @@ function App() {
                <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/city" element={<CityPage/>} />
-                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/recommend" element={<RecommendationsPage/>} />               
                   <Route path="/map" element={<MapWithClusters />} />
+                  <Route path="/about" element={<AboutPage />} />
                </Routes>
            
             </div>

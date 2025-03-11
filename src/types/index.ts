@@ -6,3 +6,4 @@ export * from './MapMarkersType';
 export * from './InjuredPerson';
 export type {CityKeyVal} from './CityKeyVal';
 export type {Street} from './Street';
+export type {Recommendation} from './Recommendation';
