@@ -13,9 +13,11 @@ import './App.css';
 
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const RecommendationsPage = lazy(() => import('./pages/RecommendationsPage'));
+const Login = lazy(() =>import ('./components/auth/Login'));
+const Register = lazy(() =>import ('./components/auth/Register'));
+const Profile = lazy(() =>import ('./components/auth/Profile'));
 // const UpdateImagePage = lazy(() => import('./components/pages/UpdateImagePage'));
 // const MyFilters = lazy(() => import('./components/pages/MyFilters'))
-
 
 const styles = {
    app: {
@@ -37,6 +39,9 @@ function App() {
                   <Route path="/recommend" element={<RecommendationsPage/>} />               
                   <Route path="/map" element={<MapWithClusters />} />
                   <Route path="/about" element={<AboutPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/profile" element={<Profile />} />`
                </Routes>
            
             </div>
