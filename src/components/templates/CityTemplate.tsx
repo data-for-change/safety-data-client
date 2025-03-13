@@ -25,29 +25,16 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     }
     return () => setIsUpdateFromUrl(true); // unmount
   }, []);
-  // useEffect(() => {
-  //   if (cityResult !== '') {
-  //     history.push({
-  //       pathname: '/city',
-  //       search: `?name=${cityResult}&tab=${currentTab}`,
-  //     });
-  //     filterStore.submitFilter();
-  //   }
-  // }, [cityResult, currentTab]);
+
   useEffect(() => {
     setInitPage(true);
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
-      setStoreByQuery('map','תל אביב -יפו');
+      setStoreByQuery('map','5000');
       filterStore.submitFilter();
     }
     setInitPage(false);
   }, []);
-  // useEffect(() => {
-  //   if (cityResult !== '') {
-  //     filterStore.submitFilter();
-  //   }
-  // }, [cityResult]);
 
   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
   return (
@@ -59,9 +46,6 @@ const CityTemplate: React.FC<IProps> = observer(() => {
         </div>
         {showFilterModal && memoConfigModal}
         <TabsTemplate type="city" />
-        {/* </div> */}
-        {/* </div>
-        </div> */}
       </div>
     </WithSidebarTemplate>
   );
