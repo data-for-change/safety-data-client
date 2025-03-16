@@ -3,7 +3,7 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Recommendation } from "../../types";
 
 type Props = {
-  initialData?: Recommendation;
+  initialData?: Recommendation | null | undefined;
   onSave: (data: Recommendation) => void;
 };
 
@@ -61,7 +61,7 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave }) => {
 
   return (
     <Container>
-      <h3>{initialData ? "Edit Recommendation" : "Add Recommendation"}</h3>
+      {/* <h3>{initialData ? "Edit Recommendation" : "Add Recommendation"}</h3> */}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>

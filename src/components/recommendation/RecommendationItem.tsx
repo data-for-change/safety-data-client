@@ -1,31 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ListGroup, Badge, Button, Modal } from 'react-bootstrap';
+import { ListGroup, Badge, Button } from 'react-bootstrap';
 import { Recommendation } from '../../types';
-import RecommendationForm from './RecommendationForm';
 
 interface Props {
   recommendation: Recommendation;
-  onUpdate: (updatedRecommendation: Recommendation) => void;
+  onEdit: (updatedRecommendation: Recommendation) => void;
 }
 
-const RecommendationItem: React.FC<Props> = ({ recommendation, onUpdate }) => {
+const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit }) => {
   const { t } = useTranslation();
-  const [showModal, setShowModal] = useState(false);
-
   const handleEditClick = () => {
-    setShowModal(true);
+    onEdit(recommendation);
   };
-
-  const handleClose = () => {
-    setShowModal(false);
-  };
-
-  const handleSave = (updatedData: Recommendation) => {
-    onUpdate(updatedData);
-    setShowModal(false);
-  };
-
   return (
     <>
       <ListGroup.Item className="recommendation-item">
@@ -55,15 +42,6 @@ const RecommendationItem: React.FC<Props> = ({ recommendation, onUpdate }) => {
           {t('Edit')}
         </Button>
       </ListGroup.Item>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('Edit Recommendation')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <RecommendationForm initialData={recommendation} onSave={handleSave} />
-        </Modal.Body>
-      </Modal>
     </>
   );
 };

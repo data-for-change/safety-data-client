@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
-import { Container, Form, Spinner } from 'react-bootstrap';
+import { Container, Form, Spinner, Button} from 'react-bootstrap';
 import RecommendationList from '../components/recommendation/RecommendationList';
 import { useStore } from '../stores/storeConfig';
+import RecommendationModal from '../components/recommendation/RecommendationModal';
 
 const tagsOptions = [
   { value: 'הולכי רגל', label: 'הולכי רגל' },
@@ -18,10 +19,11 @@ const tagsOptions = [
 const RecommendationsPage: React.FC = observer(() => {
   const { t } = useTranslation();
   const { recommendationStore } = useStore();
+  const {fetchRecommendationsByTags} = recommendationStore;
   const [selectedTag, setSelectedTag] = useState(tagsOptions[0].value);
 
   useEffect(() => {
-    recommendationStore.fetchRecommendationsByTags(selectedTag);
+    fetchRecommendationsByTags(selectedTag);
   }, [selectedTag]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,7 +33,9 @@ const RecommendationsPage: React.FC = observer(() => {
   return (
     <Container>
       <h2 className="mt-4">{t('Recommendations')}</h2>
-
+      <Button variant="success" onClick={() => recommendationStore.openModal(undefined)}>
+      {t('Create Recommendation')}
+    </Button>
       <Form.Group controlId="tagSelect" className="mb-3">
         <Form.Label>Select Tag:</Form.Label>
         <Form.Select value={selectedTag} onChange={handleChange}>
@@ -44,6 +48,7 @@ const RecommendationsPage: React.FC = observer(() => {
       </Form.Group>
 
       {recommendationStore.loading ? <Spinner animation="border" /> : <RecommendationList />}
+      <RecommendationModal />
     </Container>
   );
 });

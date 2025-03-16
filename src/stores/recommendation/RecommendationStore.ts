@@ -5,7 +5,16 @@ import RootStore from '../RootStore';
 import { Recommendation } from '../../types';
 
 export interface IRecommendationStore{
-    recommendationsList: Recommendation[];    
+    loading: boolean;
+    setLoading: (value: boolean) => void;
+    recommendationsList: Recommendation[]; 
+    fetchRecommendationsByTags: (tags: string, lang: string) => void;
+    fetchRecommendationsByAccident: (vcl: string, lang : string) => void;  
+    //edit / create 
+    isOpenModal: boolean;
+    selectedRecommendation: Recommendation | null;
+    openModal: (recommendation?: Recommendation) => void;   
+    submitRecommendation: (data: Recommendation) => void;   
 }
 export default class RecommendationStore implements IRecommendationStore {
 
@@ -17,28 +26,50 @@ export default class RecommendationStore implements IRecommendationStore {
   rootStore: RootStore;
   recommendationsList:Recommendation[]= [];
   loading = false;
+  setLoading = (value:boolean) => {
+    this.loading = value;
+  }
 
-  async fetchRecommendationsByTags(tags: string, lang: string = 'he') {
-    this.loading = true;
+  fetchRecommendationsByTags = async(tags: string, lang: string = 'he') => {
+    //this.setLoading(true);
     try {
       this.recommendationsList = await RecommendationService.getRecommendationsByTags(tags, lang);
     } catch (error) {
       logger.log(error)
     } finally {
-      this.loading = false;
+      this.setLoading(false);
     }
   }
 
-  async fetchRecommendationsByAccident(vcl: string, lang : string= 'he') {
-    this.loading = true;
+  fetchRecommendationsByAccident = async (vcl: string, lang : string= 'he') =>{
+    this.setLoading(true);
     try {
       this.recommendationsList = await RecommendationService.getRecommendationsByAccident(vcl, lang);
     } catch (error:unknown) {
         logger.log(error);
     } finally {
-      this.loading = false;
+      this.setLoading(false);
     }
   }
-}
+  //edit / create 
+  isOpenModal = false;
+  openModal = (recommendation?: Recommendation) => {
+    this.isOpenModal = true;
+    this.selectedRecommendation = recommendation || null;
+  }
+  closeModal =() => {
+    this.isOpenModal = false;
+    this.selectedRecommendation = null;
+  }
+  selectedRecommendation: Recommendation | null = null;
 
+  submitRecommendation = async (data: Recommendation) => {
+    if(data._id === ""){
+      console.log ("create recommand",data )
+    }
+    else{
+      console.log ("update recommand",data )
+    }
+  };
+}
 
