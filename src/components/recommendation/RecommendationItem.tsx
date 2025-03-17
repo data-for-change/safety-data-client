@@ -6,9 +6,10 @@ import { Recommendation } from '../../types';
 interface Props {
   recommendation: Recommendation;
   onEdit: (updatedRecommendation: Recommendation) => void;
+  hasEditPermission: boolean;
 }
 
-const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit }) => {
+const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit, hasEditPermission }) => {
   const { t } = useTranslation();
   const handleEditClick = () => {
     onEdit(recommendation);
@@ -38,9 +39,9 @@ const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit }) => {
           </div>
         )}
         <small className="recommendation-category">{t('Category')}: {recommendation.category}</small>
-        <Button variant="primary" size="sm" onClick={handleEditClick} className="ms-2">
+        {hasEditPermission && <Button variant="primary" size="sm" onClick={handleEditClick} className="ms-2">
           {t('Edit')}
-        </Button>
+        </Button>}
       </ListGroup.Item>
     </>
   );

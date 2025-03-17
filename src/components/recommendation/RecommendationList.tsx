@@ -5,8 +5,9 @@ import RecommendationItem from './RecommendationItem';
 import { ListGroup, Spinner, Alert } from 'react-bootstrap';
 
 const RecommendationList: React.FC = observer(() => {
-  const { recommendationStore } = useStore();
+  const { recommendationStore, userStore } = useStore();
   const { loading, recommendationsList, openModal } = recommendationStore;
+  const { hasEditPermission } = userStore;
 
   if (loading) {
     return <Spinner animation="border" />;
@@ -18,7 +19,7 @@ const RecommendationList: React.FC = observer(() => {
   return (
     <ListGroup>
       {recommendationsList.map((rec) => (
-        <RecommendationItem key={rec._id} recommendation={rec} onEdit={openModal}/>
+        <RecommendationItem key={rec._id} recommendation={rec} onEdit={openModal} hasEditPermission={hasEditPermission}/>
       ))}
     </ListGroup>
   );

@@ -25,6 +25,9 @@ export default class RecommendationStore implements IRecommendationStore {
   }
   rootStore: RootStore;
   recommendationsList:Recommendation[]= [];
+  setRecommendationsList(data:Recommendation[]){
+    this.recommendationsList = data;
+  }
   loading = false;
   setLoading = (value:boolean) => {
     this.loading = value;
@@ -33,7 +36,8 @@ export default class RecommendationStore implements IRecommendationStore {
   fetchRecommendationsByTags = async(tags: string, lang: string = 'he') => {
     //this.setLoading(true);
     try {
-      this.recommendationsList = await RecommendationService.getRecommendationsByTags(tags, lang);
+      const list = await RecommendationService.getRecommendationsByTags(tags, lang);
+      this.setRecommendationsList(list);
     } catch (error) {
       logger.log(error)
     } finally {
@@ -44,7 +48,8 @@ export default class RecommendationStore implements IRecommendationStore {
   fetchRecommendationsByAccident = async (vcl: string, lang : string= 'he') =>{
     this.setLoading(true);
     try {
-      this.recommendationsList = await RecommendationService.getRecommendationsByAccident(vcl, lang);
+      const list = await RecommendationService.getRecommendationsByAccident(vcl, lang);
+      this.setRecommendationsList(list);
     } catch (error:unknown) {
         logger.log(error);
     } finally {
@@ -64,12 +69,19 @@ export default class RecommendationStore implements IRecommendationStore {
   selectedRecommendation: Recommendation | null = null;
 
   submitRecommendation = async (data: Recommendation) => {
-    if(data._id === ""){
-      console.log ("create recommand",data )
+    if (!this.rootStore.userStore.hasEditPermission) {
+        throw new Error("Unauthorized: You do not have permission to perform this action.");
     }
-    else{
-      console.log ("update recommand",data )
+    try {
+        if (data._id === "") {
+            await RecommendationService.addRecommendation(data);
+        } else {
+            await RecommendationService.editRecommendation(data._id, data);
+        }
+    } catch (error) {
+        console.error("Failed to submit recommendation:", error);
     }
-  };
+  }
+
 }
 

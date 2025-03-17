@@ -1,23 +1,22 @@
 import React, { useState } from "react";
-import AuthService from "../../services/AuthService";
+import { useStore } from '../../stores/storeConfig';
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert, Container, Card } from "react-bootstrap";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState("");  
     const navigate = useNavigate();
-
+    const {userStore} = useStore();
+    
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        const serv = new AuthService();
-        try {
-            const response = await serv.loginUser(username, password);
-            localStorage.setItem("token", response.data.token);
+        const success = await userStore.login(username, password);
+        if (success) {
             navigate("/profile");
-        } catch (err) {
+        } else {
             setError("Invalid credentials");
         }
     };

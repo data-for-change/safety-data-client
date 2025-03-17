@@ -4,6 +4,7 @@ import MapStore from './MapStore';
 import ImageStore from './image/ImageStore';
 import IRecommendationStore from './recommendation/RecommendationStore';
 import RecommendationStore from './recommendation/RecommendationStore';
+import UserStore from './user/UserStore';
 
 export default class RootStore {
     appInitialized = false;
@@ -14,6 +15,7 @@ export default class RootStore {
       this.filterStore = new FilterStore(this);
       this.imageStore = new ImageStore(this);
       this.recommendationStore = new RecommendationStore(this);
+      this.userStore = new UserStore(this);
     }
 
     uiStore: UiStore;
@@ -21,4 +23,5 @@ export default class RootStore {
     filterStore: FilterStore;
     imageStore: ImageStore;
     recommendationStore :IRecommendationStore;
+    userStore: UserStore;
 }
