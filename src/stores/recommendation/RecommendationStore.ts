@@ -74,9 +74,10 @@ export default class RecommendationStore implements IRecommendationStore {
     }
     try {
         if (data._id === "") {
-            await RecommendationService.addRecommendation(data);
+          const { _id, ...newData } = data;
+          await RecommendationService.addRecommendation(newData);           
         } else {
-            await RecommendationService.editRecommendation(data._id, data);
+          await RecommendationService.editRecommendation(data._id, data);
         }
     } catch (error) {
         console.error("Failed to submit recommendation:", error);

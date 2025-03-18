@@ -7,3 +7,4 @@ export * from './InjuredPerson';
 export type {CityKeyVal} from './CityKeyVal';
 export type {Street} from './Street';
 export type {Recommendation} from './Recommendation';
+export type {NewRecommendation} from './Recommendation';

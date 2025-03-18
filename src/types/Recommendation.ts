@@ -9,3 +9,4 @@ export type Recommendation = {
     references: { title: string; url: string }[]; 
     updateDate: Date;
   };
+export type NewRecommendation = Omit<Recommendation, '_id'>;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../utils/globalEnvs';
-import { Recommendation } from '../types';
+import { Recommendation, NewRecommendation } from '../types';
 import { getValidToken } from '../utils/authUtils';
 
 class RecommendationService {
@@ -28,7 +28,7 @@ class RecommendationService {
     }
   }
 
-  static async addRecommendation(data: Recommendation) {
+  static async addRecommendation(data: NewRecommendation) {
     try {
       const token = getValidToken();
       const response = await axios.post(`${API_URL}/api/v1/recommendations/`, data,
