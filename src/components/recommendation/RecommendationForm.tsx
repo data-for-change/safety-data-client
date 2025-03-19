@@ -5,9 +5,10 @@ import { Recommendation } from "../../types";
 type Props = {
   initialData?: Recommendation | null | undefined;
   onSave: (data: Recommendation) => void;
+  language? : string;
 };
 
-const RecommendationForm: React.FC<Props> = ({ initialData, onSave }) => {
+const RecommendationForm: React.FC<Props> = ({ initialData, onSave, language}) => {
   const [formData, setFormData] = useState<Recommendation>(
     initialData || {
       _id: "",
@@ -15,8 +16,8 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave }) => {
       category: "",
       description: "",
       tags: [],
-      language: "",
-      lang: "",
+      language: language? (language === "he")? "עברית": "english": "" ,
+      lang: language? language: "",
       references: [],
       updateDate: new Date(),
     }

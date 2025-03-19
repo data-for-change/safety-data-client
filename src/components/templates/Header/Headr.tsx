@@ -16,7 +16,7 @@ const styles = {
       position: 'fixed' as 'fixed',
       top: '0px',
       width: '100%',
-      zIndex: 5000,
+      zIndex: 1030,
    }
 };
 
