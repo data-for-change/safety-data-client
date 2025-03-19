@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ListGroup, Badge, Button } from 'react-bootstrap';
 import { Recommendation } from '../../types';
+import './RecommendationItem.css';
 
 interface Props {
   recommendation: Recommendation;
@@ -17,7 +18,14 @@ const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit, hasEditPe
   return (
     <>
       <ListGroup.Item className="recommendation-item">
-        <h5 className="recommendation-title">{recommendation.title}</h5>
+        <div className="recommendation-header">
+          <h5 className="recommendation-title">{recommendation.title}</h5>
+          {hasEditPermission && (
+            <Button variant="primary" size="sm" onClick={handleEditClick} className="edit-button">
+              {t('Edit')}
+            </Button>
+          )}
+        </div>
         <p className="recommendation-description">{recommendation.description}</p>
         <div className="recommendation-tags">
           {recommendation.tags.map((tag: string, index: number) => (
@@ -39,9 +47,6 @@ const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit, hasEditPe
           </div>
         )}
         <small className="recommendation-category">{t('Category')}: {recommendation.category}</small>
-        {hasEditPermission && <Button variant="primary" size="sm" onClick={handleEditClick} className="ms-2">
-          {t('Edit')}
-        </Button>}
       </ListGroup.Item>
     </>
   );

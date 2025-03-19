@@ -27,6 +27,7 @@
 
 .recommendation-references {
   margin-top: 10px;
+  font-size: 0.9rem;
 }
 
 .recommendation-references ul {
@@ -47,4 +48,21 @@
   margin-top: 10px;
   font-size: 0.9rem;
   color: #666;
+}
+
+.recommendation-header {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 10px; 
+}
+
+.recommendation-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.edit-button {
+  font-size: 0.9rem;
+  padding: 4px 8px;
 }
