@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import { Container, Form, Spinner, Button, ToastContainer, Toast } from 'react-bootstrap';
 import { useStore } from '../stores/storeConfig';
 import RecommendationList from '../components/recommendation/RecommendationList';
 import RecommendationModal from '../components/recommendation/RecommendationModal';
+import {tagsOptions} from '../stores/recommendation/tagsOptions';
 import './RecommendationsPage.css';
-
-const tagsOptions = [
-  { value: 'הולכי רגל', label: 'הולכי רגל' },
-  { value: 'אופניים', label: 'אופניים' },
-  { value: 'קורקינטים', label: 'קורקינטים' },
-  { value: 'אופנועים', label: 'אופנועים' },
-  { value: 'מכוניות', label: 'מכוניות' },
-  { value: 'משאיות', label: 'משאיות' },
-  { value: 'אוטובוסים', label: 'אוטובוסים' },
-];
 
 const RecommendationsPage: React.FC = observer(() => {
   const { t } = useTranslation();
   const { recommendationStore, userStore } = useStore();
-  const { fetchRecommendationsByTags, loading, openModal, successMessage, errorMessage, clearMessages } = recommendationStore;
+  const { selectedTag, setSelectedTag, fetchRecommendationsByTags, loading, openModal, successMessage, errorMessage, clearMessages } = recommendationStore;
   const { hasEditPermission } = userStore;
-  const [selectedTag, setSelectedTag] = useState(tagsOptions[0].value);
-
+  
   useEffect(() => {
     fetchRecommendationsByTags(selectedTag);
   }, [selectedTag, fetchRecommendationsByTags]);

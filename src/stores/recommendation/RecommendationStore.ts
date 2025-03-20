@@ -1,13 +1,15 @@
-import { makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import RecommendationService from '../../services/RecommendationService';
 import logger from '../../services/logger';
 import RootStore from '../RootStore';
 import { Recommendation } from '../../types';
+import {tagsOptions} from './tagsOptions';
 
 export interface IRecommendationStore {
   loading: boolean;
   setLoading: (value: boolean) => void;
   recommendationsList: Recommendation[];
+  selectedTag: string;
   fetchRecommendationsByTags: (tags: string, lang: string) => void;
   fetchRecommendationsByAccident: (vcl: string, lang: string) => void;
   //edit / create 
@@ -30,6 +32,10 @@ export default class RecommendationStore implements IRecommendationStore {
   }
   rootStore: RootStore;
   recommendationsList: Recommendation[] = [];
+  selectedTag = tagsOptions[0].value;
+  setSelectedTag = (value:string) => {
+    this.selectedTag = value;
+  }
   setRecommendationsList(data: Recommendation[]) {
     this.recommendationsList = data;
   }
