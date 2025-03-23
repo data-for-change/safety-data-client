@@ -1,28 +1,25 @@
 import { observable } from 'mobx';
 import {reGroupResultIsSelfAcc} from '../../utils/groupByUtils';
+import { ItemCount } from '../../types';
 
 export interface IGroupBy {
-  text: string;
+  text: string
   value: string;
   limit: number;
   sort: number;
-  reGroupResultFunc? : any;
+  reGroupResultFunc? : ((data: ItemCount[]) => ItemCount[]);
 }
 
 export default class GroupBy implements IGroupBy {
   @observable
   text: string;
-
   value: string;
-
   limit: number;
-
-  sort: number;
-
-  reGroupResultFunc : any|null;
+  sort;
+  reGroupResultFunc;
 
   // text - headleine for GUI, value - name of value for filter
-  constructor(text: string, value: string, limit: number = 0, sort:number = 0, reGroupResultFunc?:any) {
+  constructor(text: string, value: string, limit: number = 0, sort:number = 0, reGroupResultFunc?:((data: ItemCount[]) => ItemCount[])) {
     this.text = text;
     this.value = value;
     this.limit = limit;

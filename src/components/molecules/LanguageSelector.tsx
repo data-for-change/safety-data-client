@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
 import MySelect from '../atoms/MySelect';
@@ -6,7 +6,7 @@ import MySelect from '../atoms/MySelect';
 const LanguageSelector = observer(() => {
    const { uiStore } = useStore();
    const {direction} = uiStore;
-   const style: any = document.getElementById('style-direction');
+   const style: HTMLLinkElement | null= document.getElementById('style-direction') as HTMLLinkElement;;
       if (style !== null) {
       if (direction === 'rtl') {
          style.href = './bootstrap.rtl.min.css';

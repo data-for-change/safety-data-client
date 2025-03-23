@@ -10,8 +10,9 @@ import ConfigChart from './ConfigChart';
 import ConfigModal from '../organisms/ConfigModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
+import { ItemCount } from '../../types';
 
-const foramtDataPrecision = (data: any[]) => {
+const foramtDataPrecision = (data: ItemCount[]) => {
     const data2 = data.map((x) => {
        if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
           return { _id: x._id, count: x.count.toFixed(1) };

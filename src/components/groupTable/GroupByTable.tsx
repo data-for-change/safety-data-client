@@ -1,5 +1,5 @@
 
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import Table from "react-bootstrap/Table";
@@ -12,25 +12,19 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-interface IProps {
-    dataName?:string;
-    data: any[];
-    columns? :any[];
-  }
-
-// const foramtDataPrecision = (data: any[]) => {
-//   const data2 = data.map((x) => {
-//     if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
-//       return { _id : x._id, count: x.count.toFixed(1) };
-//     }
-//     return { _id : x._id, count: x.count};
-//   });
-//   return data2;
-// };
+interface IProps<TData> {
+  dataName?: string;
+  data: TData[];
+  columns?: ColType[];
+}
 
 type GroupTable ={
   _id : string;
   count: number;
+}
+type ColType ={
+  dataField: any;
+  text: string
 }
 
 const columnHelper = createColumnHelper<GroupTable>();
@@ -58,37 +52,14 @@ const generateColumns = ( dataName: string, col2?: any[],) => {
   );
 };
 
-// const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns, data }) => {
-//   // do format only grp1 and not grpBy2
-//   const data1 = (columns === undefined) ? foramtDataPrecision(data) : data;
-//   const { t } = useTranslation();
-//   // let reactColumns = 1;
-//   const reactColumns = (columns === undefined) ? [{
-//     dataField: '_id',
-//     text: t(dataName),
-//   }, {
-//     dataField: 'count',
-//     text: t('casualties'),
-//   }] : columns;
-//   if (data != null) {
-//     return (
-//       <div className="groupByTable">
-//         <BootstrapTable keyField="_id" data={data1} columns={reactColumns} headerClasses="table-header" />
-//       </div>
-//     );
-//   }
-//   return null;
-// };
-
-const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: col2, data }) => {
-  // const [data, _setData] = React.useState(() => [...data2])
+const GroupByTable = <TData,>({ dataName = 'Year', columns: col2, data }: IProps<TData>) => {
   const columns = generateColumns(dataName, col2);
-  const table = useReactTable({
-    data,
+  const table = useReactTable<GroupTable>({
+    data: data as GroupTable[], // Ensure data matches GroupTable type
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
-  
+  });
+
   return (
     <div className="p-2">
       <Table striped bordered hover>
@@ -99,10 +70,7 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: co
                 <th key={header.id}>
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
             </tr>
@@ -119,25 +87,10 @@ const GroupByTable:FunctionComponent<IProps> = ({ dataName = 'Year', columns: co
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </Table>
     </div>
-  )
+  );
 };
+
 
 export default GroupByTable;

@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react'
 
 interface SmallCard2Props extends PropsWithChildren<any> {
    header?: string,
-   style?: any,
+   style?: React.CSSProperties,
 }
 
 const SmallCard2: React.FC<SmallCard2Props> = ({ children, header, style }) => {

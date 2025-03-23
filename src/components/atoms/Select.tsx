@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import { KeyVal } from '../../types';
 
 interface IProps {
   label?: string;
   id: string;
-  data: any[];
+  data: KeyVal[];
   value: string;
   onChange: (val: string) => void;
 }
@@ -16,7 +17,7 @@ const styleSelect = {
 
 const Select: React.FC<IProps> = ({ label, id, data, value, onChange }) => {
   const { t } = useTranslation();
-  const opttions = data.map((x: any, index) => <option value={x.val} key={index}>{t(x.text)}</option>)
+  const opttions = data.map((x: KeyVal, index) => <option value={x.val} key={index}>{t(x.text)}</option>)
   return (
     <div>
       <Form.Group as={Col} controlId={id}>

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { API_URL } from '../utils/globalEnvs';
 import { Recommendation, NewRecommendation } from '../types';
 import { getValidToken } from '../utils/authUtils';
@@ -31,19 +31,21 @@ class RecommendationService {
   static async addRecommendation(data: NewRecommendation) {
     try {
       const token = getValidToken();
-      const response = await axios.post(`${API_URL}/api/v1/recommendations/`, data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post(`${API_URL}/api/v1/recommendations/`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return response.data;
-    } catch (error: any) {
-      if (error && error.response?.status === 403) {
-        console.error('Unauthorized: You do not have permission to perform this action.');
-      }
-      else {
-        console.error('Error adding recommendation:', error);
-        throw error;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
+          console.error('Unauthorized: You do not have permission to perform this action.');
+        } else {
+          console.error('Error adding recommendation:', error.response?.data || error.message);
+          throw error; // Rethrow the error to handle it elsewhere if needed
+        }
+      } else {
+        console.error('An unexpected error occurred:', error);
+        throw error; // Rethrow the error if it's not an AxiosError
       }
     }
   }
@@ -55,12 +57,17 @@ class RecommendationService {
         { headers: { Authorization: `Bearer ${token}` }, }
       );
       return response.data;
-    } catch (error: any) {
-      if (error && error.response?.status === 403) {
-        console.error('Unauthorized: You do not have permission to perform this action.');
-      }else {
-        console.error('Error editing recommendation:', error);
-        throw error;
+    }  catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
+          console.error('Unauthorized: You do not have permission to perform this action.');
+        } else {
+          console.error('Error editing recommendation:', error.response?.data || error.message);
+          throw error; // Rethrow the error to handle it elsewhere if needed
+        }
+      } else {
+        console.error('An unexpected error occurred:', error);
+        throw error; // Rethrow the error if it's not an AxiosError
       }
     }
   }

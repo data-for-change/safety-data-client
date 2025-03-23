@@ -8,7 +8,7 @@ interface IProps {
   textTrue: string,
   textFalse: string,
   disabled?: boolean,
-  style?: any,
+  style?: React.CSSProperties,
   onClick: () => void
 }
 const ButtonToggle: React.FC<IProps> = ({
