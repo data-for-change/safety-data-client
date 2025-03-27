@@ -556,7 +556,7 @@ class FilterStore implements IFilterStore  {
             .then((data: any[] | undefined) => {
                if (data !== undefined) {
                   const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-                  this.dataByYears = dataPadded;
+                  this.setDataFilterdByYears(dataPadded);                  
                }
             });
       }
