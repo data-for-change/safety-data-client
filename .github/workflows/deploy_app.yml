@@ -27,6 +27,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/safety-data-client:sha-${{ env.SHORT_SHA }}
           build-args: |
             REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
   deploy:
     needs: Build-safety-data-client
     runs-on: ubuntu-latest
