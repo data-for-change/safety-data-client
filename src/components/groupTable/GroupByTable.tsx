@@ -47,7 +47,7 @@ const generateColumns = ( dataName: string, col2?: any[],) => {
   return col2.map((col: any) =>
     columnHelper.accessor(col.dataField, {
       cell: (info) => info.getValue(),
-      header: () => <span>{t(col.text)}</span>,
+      header: () => <span>{col.text}</span>,
     })
   );
 };
