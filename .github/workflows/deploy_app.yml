@@ -1,23 +1,52 @@
 name: deploy_app
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - dev
 
 jobs:
+  Build-safety-data-client:
+    if: github.repository == "${{ github.repository_owner }}/safety-data-client"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get Short SHA
+        run: echo "SHORT_SHA=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+      - name: Build and push safety-data-client Docker image
+        uses: docker/build-push-action@v6
+        with:
+          file: Dockerfile.prod
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/safety-data-client:latest
+            ghcr.io/${{ github.repository_owner }}/safety-data-client:sha-${{ env.SHORT_SHA }}
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
   deploy:
+    needs: Build-safety-data-client
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - env:
+          SAFETY_DATA_CLIENT_IMAGE_NAME: ghcr.io/data-for-change/safety-data-client
           DFC_IAC_DEPLOY_KEY: ${{ secrets.DFC_IAC_DEPLOY_KEY }}
-          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
+              SHA_TAG=sha-`git rev-parse --short $GITHUB_SHA` &&\
+              echo SHA_TAG=$SHA_TAG &&\
               cd `mktemp -d` &&\
               echo "${DFC_IAC_DEPLOY_KEY}" > dfc_iac_deploy_key &&\
               chmod 400 dfc_iac_deploy_key &&\
               export GIT_SSH_COMMAND="ssh -i `pwd`/dfc_iac_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
               git clone git@github.com:data-for-change/dfc-iac.git &&\
               cd dfc-iac &&\
-              pip install -r requirements.txt &&\
-              chmod +x bin/apps.py &&\
-              bin/apps.py deploy_app safety-data-client
+              SAFETY_DATA_CLIENT_IMAGE="${SAFETY_DATA_CLIENT_IMAGE_NAME}:${SHA_TAG}" &&\
+              bin/update_anyway_env.py '{"safetyDataClientImage":"'${SAFETY_DATA_CLIENT_IMAGE}'"}' &&\
+              git config --global user.name "Anyway CI" &&\
+              git config --global user.email "anyway-ci@localhost" &&\
+              git add apps/anyway/.env && git commit -m "automatic update of anyway (safety data)" &&\
+              git push origin main
