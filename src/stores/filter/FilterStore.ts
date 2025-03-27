@@ -1,5 +1,6 @@
 import {
-   observable, action, computed, makeAutoObservable
+   observable, action, computed, makeAutoObservable,
+   runInAction
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import * as FC from './ColumnFilterCheckBoxList';
@@ -529,16 +530,34 @@ class FilterStore implements IFilterStore  {
    // @observable
    // groupBy: GroupBy;
 
+   // observable for group by name
+   @observable
+   groupByName: string = '';
+
+   // Action to set group by name
    @action
-   updateGroupby = (key: string) => {
+   setGroupByName = (name: string) => {
+      this.groupByName = name;
+   }
+
+
+   @action
+   updateGroupby = (key: string) => {      
       this.groupByDict.setFilter(key);
-      this.groupByDict.setBrowserQueryString();
-      if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
-      else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
-      if (this.groupByDict.groupBy.text !== 'CityByPop') {
-         const gb2 = (this.group2Dict.groupBy as GroupBy2).name
-         this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2);
-      }
+      this.setGroupByName((this.groupByDict.groupBy as GroupBy).value)
+      
+       // Add additional logic after state update
+      runInAction(() => {
+         this.groupByDict.setBrowserQueryString();
+     
+         if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+         else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+         if (this.groupByDict.groupBy.text !== 'CityByPop') {
+            const gb2 = (this.group2Dict.groupBy as GroupBy2).name
+            this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2);
+         }
+      });
+    
    }
 
    /**
@@ -657,6 +676,16 @@ class FilterStore implements IFilterStore  {
          });
    }
 
+   // observable for group by name
+   @observable
+   groupBy2Name: string = '';
+
+   // Action to set group by name
+   @action
+   setGroupBy2Name = (name: string) => {
+      this.groupBy2Name = name;
+   }
+
    @action
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
       if (this.useGetFetch) {
@@ -707,6 +736,7 @@ class FilterStore implements IFilterStore  {
    @action
    updateGroupBy2 = (key: string) => {
       this.group2Dict.setFilter(key);
+      this.setGroupBy2Name((this.group2Dict.groupBy as GroupBy2).name);
       this.group2Dict.setBrowserQueryString();
       const gb2name = (this.group2Dict.groupBy as GroupBy2).name
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2name);

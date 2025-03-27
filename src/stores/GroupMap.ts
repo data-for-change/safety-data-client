@@ -12,7 +12,7 @@ export default class GroupMap implements IGroupMap {
     constructor(map: Map<string,any>, colName: string,  defautVal: string) {
         this.dict = map;
         makeAutoObservable(this,{
-            groupBy: observable,
+            groupBy: observable.ref,
             arrGroups: observable
         })
         this.queryColName = colName;
@@ -23,6 +23,7 @@ export default class GroupMap implements IGroupMap {
     dict: Map<string,any>;
     queryColName: string;
 
+    
     groupBy: GroupBy2|GroupBy;
 
     @action

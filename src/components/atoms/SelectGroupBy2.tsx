@@ -11,11 +11,12 @@ interface IProps { id: string }
 const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { group2Dict, updateGroupBy2 } = filterStore;
+  const { group2Dict, updateGroupBy2, groupBy2Name } = filterStore;
   const onSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     updateGroupBy2(event.target.value);
   }, [updateGroupBy2]);
 
+  
   const fixData = group2Dict.arrGroups;
   const val = (group2Dict.groupBy as GroupBy2).name;
 
