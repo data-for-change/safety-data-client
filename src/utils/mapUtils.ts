@@ -1,4 +1,5 @@
-import { Accident } from '../types';
+import L , {LatLngExpression} from 'leaflet';
+import { Accident, MarkerData } from '../types';
 
 export const getColorByVehicle = (category: string) => {
     let res = '';
@@ -244,4 +245,41 @@ export const createLegendArr = (grades: string[], getColorfunc: (value: string) 
     //labels.join('\n');
     return labels;
 };
+
+export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
+    return markers.reduce<MarkerData[][]>((clusters, marker) => {
+      const existingCluster = clusters.find(cluster =>
+        L.latLng(cluster[0].position).equals(L.latLng(marker.position))
+      );
+      if (existingCluster) {
+        existingCluster.push(marker);
+      } else {
+        clusters.push([marker]);
+      }
+      return clusters;
+    }, []);
+  };
+
+  /**
+ * Generates a set of LatLng positions in a flower-like arrangement
+ * around the center position.
+ * 
+ * @param center - The center position for the cluster.
+ * @param count - The number of positions to generate around the center.
+ * @returns An array of LatLngExpression positions.
+ */
+export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
+    const radius = 0.0005; // Adjust for spacing
+    const angleStep = (2 * Math.PI) / count;
+    return Array.from({ length: count }, (_, i) => {
+      const angle = i * angleStep;
+      const latOffset = radius * Math.sin(angle);
+      const lngOffset = radius * Math.cos(angle);
+      return [
+        (center as [number, number])[0] + latOffset,
+        (center as [number, number])[1] + lngOffset,
+      ];
+    });
+  };
+  
 
