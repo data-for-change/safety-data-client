@@ -225,8 +225,8 @@ export default class MapStore {
   mapMarkersTypesArr = [
     { val: MapMarkersType.Markers_AND_Clusters, text: 'Clusters' },
     { val: MapMarkersType.Markers, text: 'Markers' },
-    { val: MapMarkersType.Heat_Map, text: 'HeatMap' },
-  ];
+  //   { val: MapMarkersType.Heat_Map, text: 'HeatMap' },
+   ];
 
 
   ////////// markers /////////////////

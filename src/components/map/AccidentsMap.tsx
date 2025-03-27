@@ -13,7 +13,7 @@ import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import SelectMapMarkersType from './SelectMapMarkersType';
-import AccidentHeatLayer from './AccidentHeatLayer';
+//import AccidentHeatLayer from './AccidentHeatLayer';
 
 // Function for creating custom icon for cluster group
 // https://github.com/Leaflet/Leaflet.markercluster#customising-the-clustered-markers
@@ -94,7 +94,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {mapMarkersType === MapMarkersType.Heat_Map && <AccidentHeatLayer />}
+        {/* {mapMarkersType === MapMarkersType.Heat_Map && <AccidentHeatLayer />} */}
         {mapMarkersType === MapMarkersType.Markers && <AccidentsMarkers />}
         {mapMarkersType === MapMarkersType.Markers_AND_Clusters &&<MarkerClusterGroup 
           showCoverageOnHover={false}
