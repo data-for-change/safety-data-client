@@ -71,6 +71,28 @@ class RecommendationService {
       }
     }
   }
+  static async deleteRecommendation(id: string) {
+    try {
+      const token = getValidToken();
+      const response = await axios.delete(`${API_URL}/api/v1/recommendations/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
+          console.error('Unauthorized: You do not have permission to perform this action.');
+        } else {
+          console.error('Error deleting recommendation:', error.response?.data || error.message);
+          throw error; // Rethrow the error to handle it elsewhere if needed
+        }
+      } else {
+        console.error('An unexpected error occurred:', error);
+        throw error;
+      }
+    }
+  }
+  
 }
 
 export default RecommendationService;

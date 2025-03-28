@@ -12,13 +12,14 @@ export interface IRecommendationStore {
   selectedTag: string;
   fetchRecommendationsByTags: (tags: string, lang: string) => void;
   fetchRecommendationsByAccident: (vcl: string, lang: string) => void;
-  //edit / create 
+  //edit / create / delete
   isOpenModal: boolean;
   successMessage: string;
   errorMessage: string;
   selectedRecommendation: Recommendation | null;
   openModal: (recommendation?: Recommendation) => void;
   submitRecommendation: (data: Recommendation) => void;
+  deleteRecommendation: (id: string) => void;
   clearMessages: () => void;
   setErrorMessage: (value: string) => void;
   setSuccessMessage: (value: string) => void;
@@ -111,6 +112,21 @@ export default class RecommendationStore implements IRecommendationStore {
       this.setErrorMessage("Failed_submit_recommendation");
     }
   }
+
+  deleteRecommendation = async (id: string) => {
+    if (!this.rootStore.userStore.hasEditPermission) {
+      this.setErrorMessage("Unauthorized_no_permission");
+      return;
+    }
+    try {
+      await RecommendationService.deleteRecommendation(id);
+      this.setSuccessMessage("Recommendation_deleted");
+      this.setErrorMessage("");
+    } catch (error) {
+      console.error("Failed to delete recommendation:", error);
+      this.setErrorMessage("Failed_delete_recommendation");
+    }
+  };
 
 }
 

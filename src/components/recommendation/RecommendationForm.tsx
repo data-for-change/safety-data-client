@@ -5,10 +5,11 @@ import { Recommendation } from "../../types";
 type Props = {
   initialData?: Recommendation | null | undefined;
   onSave: (data: Recommendation) => void;
-  language? : string;
+  onDelete: (id: string) => void;
+  language?: string;
 };
 
-const RecommendationForm: React.FC<Props> = ({ initialData, onSave, language}) => {
+const RecommendationForm: React.FC<Props> = ({ initialData, onSave, onDelete, language }) => {
   const [formData, setFormData] = useState<Recommendation>(
     initialData || {
       _id: "",
@@ -16,8 +17,8 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, language}) =
       category: "",
       description: "",
       tags: [],
-      language: language? (language === "he")? "עברית": "english": "" ,
-      lang: language? language: "",
+      language: language ? (language === "he" ? "עברית" : "english") : "",
+      lang: language ? language : "",
       references: [],
       updateDate: new Date(),
     }
@@ -60,9 +61,14 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, language}) =
     onSave(formData);
   };
 
+  const handleDelete = () => {
+    if (formData._id && window.confirm("Are you sure you want to delete this recommendation?")) {
+      onDelete(formData._id);
+    }
+  };
+
   return (
     <Container>
-      {/* <h3>{initialData ? "Edit Recommendation" : "Add Recommendation"}</h3> */}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>
@@ -125,7 +131,11 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, language}) =
           <Button variant="secondary" onClick={addReference}>Add Reference</Button>
         </Form.Group>
 
-        <Button type="submit" variant="primary">Save</Button>
+        <Button type="submit" variant="primary" className="me-2">Save</Button>
+
+        {initialData && (
+          <Button variant="danger" onClick={handleDelete}>Delete</Button>
+        )}
       </Form>
     </Container>
   );

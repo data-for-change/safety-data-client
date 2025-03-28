@@ -9,13 +9,18 @@ import { Recommendation } from '../../types';
 const RecommendationModal: React.FC = observer(() => {
   const { t } = useTranslation();
   const { recommendationStore, uiStore } = useStore();
+  const {submitRecommendation, deleteRecommendation} = recommendationStore;
   const { isOpenModal, closeModal, selectedRecommendation } = recommendationStore;
   const { language } = uiStore;
 
   if (!isOpenModal) return null;
   const mode = (selectedRecommendation) ? "edit" : "create";
   const handleSave = (updatedData: Recommendation) => {
-    recommendationStore.submitRecommendation(updatedData);
+    submitRecommendation(updatedData);
+    closeModal();
+  };
+  const handleDelete = (id: string ) => {
+    deleteRecommendation(id);
     closeModal();
   };
 
@@ -28,6 +33,7 @@ const RecommendationModal: React.FC = observer(() => {
         <RecommendationForm
           initialData={mode === 'edit' ? selectedRecommendation : undefined}
           onSave={handleSave}
+          onDelete= {handleDelete}
           language={language}
         />
       </Modal.Body>
