@@ -5,7 +5,9 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 ARG VITE_API_URL
+ARG VITE_API_URL2
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_API_URL2=${VITE_API_URL2}
 RUN npm run build
 
 #copy static pages to nginx and serve them
