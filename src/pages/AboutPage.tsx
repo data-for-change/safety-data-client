@@ -30,8 +30,12 @@ const AboutPage: React.FC<IProps> = () => {
                </ul>
             </div>
             <div style={styleDiv}>
-               מקור הנתונים על התאונות הוא הלמ"ס , דרך מנוע הנתונים של פרויקט <a href={'https://www.anyway.co.il'} target="_blank" rel="noopener noreferrer">Anyway</a>  של הסדנא לידע ציבורי. המפה באתר היא תודות לפרויקט <a href={'https://www.openstreetmap.org/'} target="_blank" rel="noopener noreferrer">OpenStreetMap</a>.
-             </div>
+             מקור הנתונים על התאונות הוא הלמ"ס, דרך מנוע הנתונים של פרויקט 
+             &nbsp;<a href={'https://www.anyway.co.il'} target="_blank" rel="noopener noreferrer">Anyway</a>&nbsp;  
+             של <a href={'https://www.natoon.co.il'} target="_blank" rel="noopener noreferrer">נתון לשינוי</a>. 
+            המפה באתר היא תודות לפרויקט &nbsp;
+            <a href={'https://www.openstreetmap.org/'} target="_blank" rel="noopener noreferrer">OpenStreetMap</a>.
+            </div>
          </div>
       </div>
    );
