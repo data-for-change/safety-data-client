@@ -1,5 +1,4 @@
-import { observable, action, makeAutoObservable } from 'mobx';
-// import i18n from '../i18n';
+import { makeAutoObservable } from 'mobx';
 
 export interface IColumnFilterArray {
   name: string;
@@ -21,26 +20,17 @@ export interface IColumnFilterArray {
 */
 export class ColumnFilterArray implements IColumnFilterArray {
   name: string;
-
   queryColName: string;
-
-  arrValues: string[];
-
-  text: string;
-
+  arrValues: string[] = [];
+  text: string = '';
   isStringValues: boolean;
 
   constructor(name: string, queryColName: string, isStringValues: boolean) {
-    makeAutoObservable (this,{
-      arrValues: observable,
-      text: observable,
-
-    }); 
+    makeAutoObservable(this);
+    
     this.name = name;
     this.queryColName = queryColName;
-    this.arrValues = [];
     this.isStringValues = isStringValues;
-    this.text = '';
   }
 
   setFilter = (values: string[]) => {
@@ -70,7 +60,6 @@ export class ColumnFilterArray implements IColumnFilterArray {
       } else {
         filter += this.arrValues.map((x: string) => x).join(',');
       }
-
     }
     return filter;
   }
@@ -78,8 +67,8 @@ export class ColumnFilterArray implements IColumnFilterArray {
   setText = () => {
     this.text = this.arrValues.join(', ');
   }
+  
   setTitle = (title: string) => {
     this.text = title;
-  }; 
-
+  }
 }
