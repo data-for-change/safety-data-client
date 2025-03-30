@@ -98,6 +98,8 @@ const initGroup2DictForGet = () => {
     year.vals[2022] = new GroupBy2Val('2022', '#4682D9'); // Medium blue
     year.vals[2023] = new GroupBy2Val('2023', '#2560C0'); // Darker blue
     year.vals[2024] = new GroupBy2Val('2024', '#12408B'); // Deep blue
+    year.vals[2025] = new GroupBy2Val('2025', '#0A2A68'); // Deeper blue
+    //year.vals[2026] = new GroupBy2Val('2026', '#051A47'); // Darkest blue
     dict.set(year.name, year);
 
     const dayNight = new GroupBy2('DayNight', 'dn');
