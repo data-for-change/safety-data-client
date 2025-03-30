@@ -36,8 +36,6 @@ export interface IFilterStore {
 class FilterStore implements IFilterStore  {
    appInitialized = false
 
-   useGetFetch = true;
-
    localStorageService: LocalStorageService<FilterLocalStorage>
 
    constructor(rootStore: RootStore) {
@@ -48,7 +46,8 @@ class FilterStore implements IFilterStore  {
          cities: observable,
          endYear: observable,
          streets: observable,
-         groupByDict: observable
+         groupByDict: observable,
+         dataByYears: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
@@ -80,9 +79,9 @@ class FilterStore implements IFilterStore  {
       this.separator = FC.initSeparator();
       this.oneLane = FC.initOneLane();
       //init Group-by dictionary
-      const map: Map<string, any> = initGroupMap(this.useGetFetch);
+      const map: Map<string, any> = initGroupMap();
       this.groupByDict = new GroupMap(map, 'gb', 'injt');
-      const mapGroupBy2 = initGroup2Map(this.useGetFetch);
+      const mapGroupBy2 = initGroup2Map();
       this.group2Dict = new GroupMap(mapGroupBy2, 'gb2', 'sex');
 
       // init data (on home page)
@@ -484,6 +483,10 @@ class FilterStore implements IFilterStore  {
    // casualties groupd by yeras, filterd only by injurySeverity
    @observable
    dataByYears: any[] = []
+   @action
+   setDataByYears = (data: any[]) => {
+      this.dataByYears = data;
+   }
 
    // casualties groupd by yeras, filterd on main filter
    @observable
@@ -550,7 +553,7 @@ class FilterStore implements IFilterStore  {
       runInAction(() => {
          this.groupByDict.setBrowserQueryString();
      
-         if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+         if (false && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
          else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
          if (this.groupByDict.groupBy.text !== 'CityByPop') {
             const gb2 = (this.group2Dict.groupBy as GroupBy2).name
@@ -568,29 +571,15 @@ class FilterStore implements IFilterStore  {
 
    @action
    submitGroupByYears = () => {
-      if (this.useGetFetch) {
-         const filtermatch = this.getfilterBySeverityAndCity();
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year');
-         AccidentService.fetchGetGroupBy(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined) {
-                  const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-                  this.setDataFilterdByYears(dataPadded);                  
-               }
-            });
-      }
-      else {
-         const filtermatch = this.getfilterBySeverityAndCity();
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, 'accident_year');
-         AccidentService.fetchAggregate(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined) {
-                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-                  this.dataByYears = dataPadded;
-               }
-            });
-      }
-
+      const filtermatch = this.getfilterBySeverityAndCity();
+      const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year');
+      AccidentService.fetchGetGroupBy(filter)
+         .then((data: any[] | undefined) => {
+            if (data !== undefined) {
+               const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
+               this.setDataByYears(dataPadded);                  
+            }
+         });
    }
 
   
@@ -603,59 +592,35 @@ class FilterStore implements IFilterStore  {
    @action
    submitfilterdGroupByYears = () => {
       this.isLoadingInjuriesCount = true;
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      if (this.useGetFetch) {
-         const filtermatch = this.getFilterQueryString(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
-         AccidentService.fetchGetGroupBy(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined) {
-                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-                  this.setDataFilterdByYears(dataPadded);
-                  const count = this.getCountFromGroupByRes(data);
-                  this.setInjuriesCount(count);
-               }
-            });
-      } else {
-         const filtermatch = this.getFilterForPost(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, 'accident_year', range.min, range.max);
-         AccidentService.fetchAggregate(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined) {
-                  const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-                  this.setDataFilterdByYears(dataPadded);
-                  const count = this.getCountFromGroupByRes(data);
-                  this.setInjuriesCount(count);
-               }
-            });
-      }
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
+      const filtermatch = this.getFilterQueryString(null);
+      const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
+      AccidentService.fetchGetGroupBy(filter)
+         .then((data: any[] | undefined) => {
+            if (data !== undefined) {
+               const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
+               this.setDataFilterdByYears(dataPadded);
+               const count = this.getCountFromGroupByRes(data);
+               this.setInjuriesCount(count);
+            }
+         });
+      
    }
 
 
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      if (this.useGetFetch) {
-         const filtermatch = this.getFilterQueryString(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
-         // logger.log(filter);
-         AccidentService.fetchGetGroupBy(filter)
-            .then((data: any | undefined) => {
-               if(aGroupBy.reGroupResultFunc) {
-                  data = aGroupBy.reGroupResultFunc(data);
-               }
-               if (data !== undefined) this.setDataFilterd(data);
-            });
-      } else {
-         const filtermatch = this.getFilterForPost(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit);
-         // logger.log(filter);
-         AccidentService.fetchAggregate(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined) this.setDataFilterd(data);
-            });
-      }
-
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
+      const filtermatch = this.getFilterQueryString(null);
+      const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
+      // logger.log(filter);
+      AccidentService.fetchGetGroupBy(filter)
+         .then((data: any | undefined) => {
+            if(aGroupBy.reGroupResultFunc) {
+               data = aGroupBy.reGroupResultFunc(data);
+            }
+            if (data !== undefined) this.setDataFilterd(data);
+         });
    }
 
     
@@ -687,8 +652,7 @@ class FilterStore implements IFilterStore  {
    }
 
    @action
-   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
-      if (this.useGetFetch) {
+   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {  
          const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
          const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
@@ -707,27 +671,6 @@ class FilterStore implements IFilterStore  {
                   this.setDataGroupBy2([]);
                }
             });
-      } else {
-         const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-         const filtermatch = this.getFilterForPost(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
-         // logger.log(filter)
-         AccidentService.fetchAggregate(filter)
-            .then((data: any[] | undefined) => {
-               if (data !== undefined && data.length > 0) {
-                  try {
-                     const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
-                     this.setDataGroupBy2(fixData);
-                  } catch (error) {
-                     logger.log(error);
-                     this.setDataGroupBy2([]);
-                  }
-               } else {
-                  this.setDataGroupBy2([]);
-               }
-            });
-      }
-
    }
 
    // @observable
@@ -775,7 +718,7 @@ class FilterStore implements IFilterStore  {
       this.submitGroupByYears();
       this.submitfilterdGroupByYears();
       // console.log((this.groupByDict.groupBy as GroupBy).text);
-      if (!this.useGetFetch && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
+      if (false && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
@@ -784,39 +727,22 @@ class FilterStore implements IFilterStore  {
    }
 
    submintMainDataFilter = () => {
-      this.setIsLoading(true);
-      if (this.useGetFetch) {
-         const filter = this.getFilterQueryString(null);
-         this.setFiltersText(true);
-         this.setBrowserQueryString();
-         // logger.log(filter);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-         AccidentService.fetchGetList(filter, 'main')
-            .then((res: any | undefined) => {
-               if (res && res.data !== null && res.data !== undefined) {
-                  this.updateAllInjuries(res.data);
-                  // write Data to local db
-                  if (this.useLocalDb === 1) insertToDexie(res.data);
-               }               
-               this.setIsLoading(false);
-            });
-      } else {
-         // const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-         const filter = this.getFilterForPost(null);
-         // logger.log(filter);
-         // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-         this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-         AccidentService.fetchAggregatFilter(filter, 'main')
-            .then((res: any | undefined) => {
-               if (res && res.data !== null && res.data !== undefined) {
-                  this.updateAllInjuries(res.data);
-                  // write Data to local db
-                  if (this.useLocalDb === 1) insertToDexie(res.data);
-               }
-               this.setIsLoading(false);
-            });
-      }
-
+      this.setIsLoading(true);    
+      const filter = this.getFilterQueryString(null);
+      this.setFiltersText(true);
+      this.setBrowserQueryString();
+      // logger.log(filter);
+      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
+      AccidentService.fetchGetList(filter, 'main')
+         .then((res: any | undefined) => {
+            if (res && res.data !== null && res.data !== undefined) {
+               this.updateAllInjuries(res.data);
+               // write Data to local db
+               if (this.useLocalDb === 1) insertToDexie(res.data);
+            }               
+            this.setIsLoading(false);
+         });
+   
    }
 
    submintGetMarkerFirstStep = () => {
