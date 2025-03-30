@@ -9,8 +9,8 @@ import '../../styles/sidebar.css'
 const Drawer: React.FC<any> = observer((props) => {
    const { t } = useTranslation();
    const { filterStore } = useStore();
-   const {isLoading, isValidAllFilters} = filterStore;
-   
+   const {isLoading, isValidAllFilters, dataUpdatedTo} = filterStore;
+   const updatStr = dataUpdatedTo.toLocaleDateString('en-GB');
    return (
       <div className="sidebar">
          <div className="filters">
@@ -24,14 +24,15 @@ const Drawer: React.FC<any> = observer((props) => {
          >
            {isLoading ? t('Loading') : t('Submit')} 
          </Button>
-         <Button
+         {/* <Button
             style={{ margin: '0.5rem' }}
             variant="info"
             onClick={() => alert('action in filter store to collect filters')}
             disabled={isLoading || !isValidAllFilters}
          >
             {t('Save')}  {t('Filter')}
-         </Button>
+         </Button> */}
+         <div>נתונים מעודכנים עד: {updatStr}</div>
       </div>
    )
   })

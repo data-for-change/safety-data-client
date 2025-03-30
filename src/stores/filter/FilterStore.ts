@@ -31,7 +31,8 @@ export interface IFilterStore {
    cities: ColumnFilterArray;
    streets: ColumnFilterArray;
    roads: ColumnFilterArray;
-   groupByDict: GroupMap
+   groupByDict: GroupMap;
+   dataUpdatedTo: Date|null; 
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
@@ -91,6 +92,7 @@ class FilterStore implements IFilterStore  {
       this.dataGroupby2 = FC.initDataGrpBy2();
       this.appInitialized = false;
       this.localStorageService = new LocalStorageService();
+      this.dataUpdatedTo = new Date(2025,0,31);      
    }
 
    rootStore: RootStore;
@@ -132,7 +134,10 @@ class FilterStore implements IFilterStore  {
    @action setFormCardKey = (value: number) => {
       this.formCardKey = value;
    }
-
+   dataUpdatedTo: Date; 
+   setDataUpdatedTo(value: Date) {
+      this.dataUpdatedTo = value;
+    }
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // Severity
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -717,7 +722,6 @@ class FilterStore implements IFilterStore  {
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
       this.submitfilterdGroupByYears();
-      // console.log((this.groupByDict.groupBy as GroupBy).text);
       if (false && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
       else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
