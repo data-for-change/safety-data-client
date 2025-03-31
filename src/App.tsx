@@ -6,7 +6,7 @@ import CityPage from './pages/CityPage';
 // import MapPage from './pages/MapPage';
 import Header from './components/templates/Header/Headr';
 import MapWithClusters from './pages/MapWithClusters';
-//import Footer from './components/templates/Footer';
+import Footer from './components/templates/Footer';
 //import Loader from './components/atoms/Loader';
 import './i18n';
 import './App.css';
@@ -45,7 +45,7 @@ function App() {
                </Routes>
            
             </div>
-            {/* <Footer /> */}
+            <Footer />
          </div>
          {/* </Card> */}
       </BrowserRouter>

@@ -32,7 +32,7 @@ const Drawer: React.FC<any> = observer((props) => {
          >
             {t('Save')}  {t('Filter')}
          </Button> */}
-         <div>נתונים מעודכנים עד: {updatStr}</div>
+         <div>{t('Data_updated_until')}: {updatStr}</div>
       </div>
    )
   })
