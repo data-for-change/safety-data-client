@@ -75,9 +75,9 @@ const InfoPanel: React.FC<IProps> = observer(() => {
   const styles = {
     div: {
       marginTop: '0.8rem',
-      marginLeft: '1rem',
-      marginRight: '1rem',
-      marginBottom: '0.1rem'
+      marginLeft: '0.8rem',
+      marginRight: '0.8rem',
+      marginBottom: '0.2rem'
     }
   }
   const { t } = useTranslation();

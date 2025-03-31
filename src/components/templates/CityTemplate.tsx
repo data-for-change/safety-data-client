@@ -39,7 +39,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
   return (
     <WithSidebarTemplate>
-      <div className="App">
+      <div>
         <div>
           <InfoPanel />
           <ButtonShowFilterModal />
