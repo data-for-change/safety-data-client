@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CityPage from './pages/CityPage';
 // import MapPage from './pages/MapPage';
-import Header from './components/templates/Header/Headr';
+import Header from './components/templates/Header/Header';
 import MapWithClusters from './pages/MapWithClusters';
 import Footer from './components/templates/footer/Footer';
 //import Loader from './components/atoms/Loader';

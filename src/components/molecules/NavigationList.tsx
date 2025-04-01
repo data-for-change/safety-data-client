@@ -15,16 +15,16 @@ const NavigationList: React.FC = observer(() => {
 
    return (
       <>
-         <Link className="nav-link" to="/" onClick={handleLinkClick}>
+         <Link className="nav-link" to="/" onClick={handleLinkClick} data-testid="home-link">
             {t('Home')}
          </Link>
-         <Link className="nav-link" to="/city" onClick={handleLinkClick}>
+         <Link className="nav-link" to="/city" onClick={handleLinkClick} data-testid="city-link">
             {t('Cities')}
          </Link>
-         <Link className="nav-link" to="/recommend" onClick={handleLinkClick}>
+         <Link className="nav-link" to="/recommend" onClick={handleLinkClick} data-testid="recommend-link">
             {t('Recommendations')}
          </Link>
-         <Link className="nav-link" to="/about" onClick={handleLinkClick}>
+         <Link className="nav-link" to="/about" onClick={handleLinkClick} data-testid="about-link">
             {t('About')}
          </Link>
       </>

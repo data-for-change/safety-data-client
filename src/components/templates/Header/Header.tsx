@@ -21,7 +21,7 @@ const Header: React.FC<IProps> = observer(({ title }) => {
          <Navbar className="navbar" expand="lg" expanded={isHeaderExpanded} onToggle={toggleHeaderExpanded}>
             <div className="container-fluid">
                <img src={logo} alt={`${title} logo`} height="45" width="188" />
-               <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-light" />
+               <Navbar.Toggle aria-controls="basic-navbar-nav" className="text-light" data-testid="navbar-toggle" />
                <Navbar.Collapse id="basic-navbar-nav">
                   <div className="navbar-nav">
                      <NavigationList />
