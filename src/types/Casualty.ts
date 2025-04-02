@@ -1,10 +1,5 @@
-export interface CasualtyLean {
-    _id : number;
-    latitude:number;
-    longitude:number;
-    injury_severity_hebrew: string;
-  }
+import {CasualtyLean} from './CasualtyLean';
 
-export default interface Casualty extends CasualtyLean {
+export interface Casualty extends CasualtyLean {
 
 };

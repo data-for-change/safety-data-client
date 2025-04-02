@@ -1,8 +1,8 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import i18n from '../i18n';
-import RootStore from './RootStore';
-import { setBrowserQueryString } from '../utils/queryStringUtils';
-import logger from '../services/logger';
+import i18n from '../../i18n';
+import RootStore from './../RootStore';
+import { setBrowserQueryString } from '../../utils/queryStringUtils';
+import logger from '../../services/logger';
 
 export default class UiStore {
   rootStore: RootStore;

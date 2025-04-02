@@ -1,10 +1,10 @@
 import { observable, action, makeAutoObservable } from 'mobx';
 //import { Map } from 'react-leaflet';
 import L from 'leaflet';
-import logger from '../services/logger';
-import RootStore from './RootStore';
-import { setBrowserQueryString, delBrowserQueryString } from '../utils/queryStringUtils';
-import { BBoxType, MapMarkersType } from '../types';
+import logger from '../../services/logger';
+import RootStore from './../RootStore';
+import { setBrowserQueryString, delBrowserQueryString } from '../../utils/queryStringUtils';
+import { BBoxType, MapMarkersType } from '../../types';
 // import autorun  from "mobx"
 
 // const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];

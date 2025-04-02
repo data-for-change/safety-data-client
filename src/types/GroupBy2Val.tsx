@@ -1,4 +1,4 @@
-export default class GroupBy2Val {
+export class GroupBy2Val {
   name: string;
   
   color: string;
