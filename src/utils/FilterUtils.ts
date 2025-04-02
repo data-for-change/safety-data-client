@@ -8,17 +8,17 @@ export const getFilterGroupBy =
     popMax = -1,
     groupName2: string = '',
     limit: number= 0,
-    sort: number =0 ) => {
+    sort: string|null =null ) => {
     let filter = filterMatch;
     filter += `&gb=${groupName}`;
     if (groupName2 !== '') {
       filter +=`&gb2=${groupName2}`
     }
-    //ignore this until anyway server support 
-    // if (sort !== 0)
-    // filter +=`&sort=${sort}`
-    // if (limit !== 0)
-    //   filter +=`&lim=${limit}`
+    //set group by sort and limit
+    if (sort !== null)
+    filter +=`&sort=${sort}`
+    if (limit !== 0)
+      filter +=`&lim=${limit}`
     return filter;
   };
 

@@ -6,7 +6,7 @@ export interface IGroupBy {
   text: string
   value: string;
   limit: number;
-  sort: number;
+  sort: string|null;
   reGroupResultFunc? : ((data: ItemCount[]) => ItemCount[]);
 }
 
@@ -15,11 +15,11 @@ export default class GroupBy implements IGroupBy {
   text: string;
   value: string;
   limit: number;
-  sort;
+  sort:string|null;
   reGroupResultFunc;
 
   // text - headleine for GUI, value - name of value for filter
-  constructor(text: string, value: string, limit: number = 0, sort:number = 0, reGroupResultFunc?:((data: ItemCount[]) => ItemCount[])) {
+  constructor(text: string, value: string, limit: number = 0, sort:string|null = null , reGroupResultFunc?:((data: ItemCount[]) => ItemCount[])) {
     this.text = text;
     this.value = value;
     this.limit = limit;
@@ -43,12 +43,12 @@ export const initGroupMap = () => {
   map.set('wd', new GroupBy('WeekDay', 'wd'));
   map.set('rt', new GroupBy('RoadType', 'rt'));
   map.set('lca', new  GroupBy('LocationAccuracy', 'lca'))
-  map.set('city', new GroupBy('City', 'city', 15, -1));
+  map.set('city', new GroupBy('City', 'city', 15, 'd'));
   map.set('cpop', new GroupBy('CityByPop', 'cpop'));
-  map.set('st', new GroupBy('Street', 'st', 15, -1));
-  map.set('rd', new GroupBy('Road', 'rd', 10, -1));
+  map.set('st', new GroupBy('Street', 'st', 15, 'd'));
+  map.set('rd', new GroupBy('Road', 'rd', 10, 'd'));
   map.set('acc', new GroupBy('AccidentType', 'acc'));
-  map.set('selfacc', new GroupBy('SelfOrNotAcc', 'selfacc', 0, 0, reGroupResultIsSelfAcc));
+  map.set('selfacc', new GroupBy('SelfOrNotAcc', 'selfacc', 0, null, reGroupResultIsSelfAcc));
   map.set('vcli', new GroupBy('Vehicles', 'vcli'));
   map.set('sp', new GroupBy('SpeedLimit', 'sp'));
   map.set('rw', new GroupBy('RoadWidth', 'rw'));

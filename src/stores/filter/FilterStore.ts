@@ -555,12 +555,10 @@ class FilterStore implements IFilterStore  {
       
        // Add additional logic after state update
       runInAction(() => {
-         this.groupByDict.setBrowserQueryString();
-     
-         if (false && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
-         else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+         this.groupByDict.setBrowserQueryString();     
+         this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
          if (this.groupByDict.groupBy.text !== 'CityByPop') {
-            const gb2 = (this.group2Dict.groupBy as GroupBy2).name
+            const gb2 = (this.group2Dict.groupBy as GroupBy2).name;
             this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2);
          }
       });
@@ -624,24 +622,6 @@ class FilterStore implements IFilterStore  {
                data = aGroupBy.reGroupResultFunc(data);
             }
             if (data !== undefined) this.setDataFilterd(data);
-         });
-   }
-
-    
-   /**
-    * deprecated function
-    */
-   @action
-   submitfilterdGroupByPop = () => {
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      const filtermatch = this.getFilterForPost(null);
-      const filter = FilterUtils.getFilterGroupByPop(filtermatch, range.min, range.max, -1, 15);
-      // logger.log(filter);
-      AccidentService.fetchAggregate(filter)
-         .then((data: any[] | undefined) => {
-            if (data !== undefined) {
-               this.setDataFilterd(data);
-            }
          });
    }
 
@@ -720,9 +700,8 @@ class FilterStore implements IFilterStore  {
       }
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
-      this.submitfilterdGroupByYears();
-      if (false && this.groupByDict.groupBy.text === 'CityByPop') this.submitfilterdGroupByPop();
-      else this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+      this.submitfilterdGroupByYears();      
+      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
       const lang = this.rootStore.uiStore.language;
@@ -750,14 +729,14 @@ class FilterStore implements IFilterStore  {
 
    submintGetMarkerFirstStep = () => {
       // const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      const filter = this.getFilterForPost(null);
+      // const filter = this.getFilterForPost(null);
       // const filter = FiterUtils.getFilterByCityPop(filterMatch, range.min, range.max);
-      AccidentService.fetchAggregatFilter(filter, 'latlon')
-         .then((data: any[] | undefined) => {
-            if (data !== null && data !== undefined) {
-               this.updateDataMarkersLean(data);
-            }
-         });
+      // AccidentService.fetchAggregatFilter(filter, 'latlon')
+      //    .then((data: any[] | undefined) => {
+      //       if (data !== null && data !== undefined) {
+      //          this.updateDataMarkersLean(data);
+      //       }
+      //    });
    }
    async submitCityNameAndLocation() {
       const cityId = this.cities.arrValues[0] || "";
@@ -892,35 +871,6 @@ class FilterStore implements IFilterStore  {
       //update groupby
       this.groupByDict.setValuesByQuery(params);
       this.group2Dict.setValuesByQuery(params);
-
-   }
-
-
-
-   // old code - backup for post req
-   getFilterForPost = (bounds: any, useBounds: boolean = false) => {
-      let filter = '{"$and" : [';
-      filter += `{"accident_year":  { "$gte" : ${this.startYear},"$lte": ${this.endYear}}}`;
-      // filter += FiterUtils.getMultiplefilter(this.injurySeverity);
-      // filter += FiterUtils.getfilterCity(this.cities);
-      if (useBounds && bounds != null) filter += FilterUtils.getfilterBounds(bounds);
-      //filter += FiterUtils.getMultiplefilter(this.dayNight);
-      // filter += FiterUtils.getFilterStreets(this.streets);
-      // filter += this.getFilterFromNumArray(this.roads, 'road1');
-      // filter += this.getFilterFromArray(this.roadSegment, 'road_segment_name');
-      // filter += FiterUtils.getMultiplefilter(this.injTypes);
-      // filter += FiterUtils.getMultiplefilter(this.genderTypes);
-      // filter += FiterUtils.getMultiplefilter(this.ageTypes);
-      // filter += FiterUtils.getMultiplefilter(this.populationTypes);
-      // filter += FiterUtils.getMultiplefilter(this.accidentType);
-      // filter += FiterUtils.getMultiplefilter(this.vehicleType);
-      // filter += FiterUtils.getMultiplefilter(this.roadTypes);
-      // filter += FiterUtils.getMultiplefilter(this.speedLimit);
-      // filter += FiterUtils.getMultiplefilter(this.roadWidth);
-      // filter += FiterUtils.getMultiplefilter(this.separator);
-      // filter += FiterUtils.getMultiplefilter(this.oneLane);
-      filter += ']}';
-      return filter;
    }
 
    @action
