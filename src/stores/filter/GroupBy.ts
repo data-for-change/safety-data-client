@@ -1,33 +1,49 @@
-import { observable } from 'mobx';
-import {reGroupResultIsSelfAcc} from '../../utils/groupByUtils';
+import { makeAutoObservable } from 'mobx';
+import { reGroupResultIsSelfAcc } from '../../utils/groupByUtils';
 import { ItemCount } from '../../types';
 
 export interface IGroupBy {
-  text: string
-  value: string;
-  limit: number;
-  sort: string|null;
-  reGroupResultFunc? : ((data: ItemCount[]) => ItemCount[]);
-}
-
-export default class GroupBy implements IGroupBy {
-  @observable
   text: string;
   value: string;
   limit: number;
-  sort:string|null;
-  reGroupResultFunc;
+  sort: string | null;
+  reGroupResultFunc?: (data: ItemCount[]) => ItemCount[];
+}
 
-  // text - headleine for GUI, value - name of value for filter
-  constructor(text: string, value: string, limit: number = 0, sort:string|null = null , reGroupResultFunc?:((data: ItemCount[]) => ItemCount[])) {
+export default class GroupBy implements IGroupBy {
+  text: string;
+  value: string;
+  limit: number;
+  sort: string | null;
+  reGroupResultFunc?: (data: ItemCount[]) => ItemCount[];
+
+  constructor(
+    text: string,
+    value: string,
+    limit: number = 0,
+    sort: string | null = null,
+    reGroupResultFunc?: (data: ItemCount[]) => ItemCount[]
+  ) {
     this.text = text;
     this.value = value;
     this.limit = limit;
     this.sort = sort;
-    if(reGroupResultFunc) this.reGroupResultFunc = reGroupResultFunc;
+    this.reGroupResultFunc = reGroupResultFunc;
+
+     // Make this class observable
+    makeAutoObservable(this);
   }
 
+  setLimit= (value: number) => {
+    this.limit = value;
+  }
+
+  setSort =(value: string | null) => {
+    this.sort = value;
+    console.log('setSort', this.text, value)
+  }
 }
+
 //init a group-by dictionary 
 export const initGroupMap = () => {
   const map = new Map();

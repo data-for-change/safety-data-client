@@ -217,6 +217,13 @@
   "severely-injured": "Severely-injured",
   "by-years": "By Years",
   "GroupBy": "Group By",
+  "SortBy": "Sort By",  
+  "SortType" :{
+    "NoSort": "No Sort",
+    "Ascending": "Ascending",
+    "Descending" : "Descending"
+  },
+  "Limit": "Limit",
   "Found": "Found",
   "resize": "Resize",
   "NoResultsFound": "No results found",

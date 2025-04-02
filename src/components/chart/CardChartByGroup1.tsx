@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
-import SelectGroupBy from '../atoms/SelectGroupBy';
+import SelectGroupBy from '../groupby/SelectGroupBy';
 import SmallCard2 from '../atoms/SmallCard2';
 import ChartBar from './ChartBar';
 import ConfigChart from './ConfigChart';
@@ -11,6 +11,7 @@ import ConfigModal from '../organisms/ConfigModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
 import { ItemCount } from '../../types';
+import SelectSortBy from '../groupby/SelectSortBy';
 
 const foramtDataPrecision = (data: ItemCount[]) => {
     const data2 = data.map((x) => {
@@ -54,10 +55,8 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     return (
        <SmallCard2 style={{marginBottom: '0.5rem'}}>
           <div style={styles.divConfig}>
-             <SelectGroupBy id="Graphs.Main" />
-             {/* <Button onClick={() => { setShowModal(!showModel); }}>
-                {memoSettingsIcon}
-             </Button> */}
+             <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+             <SelectSortBy id="Graphs.Main.SelectSort"/>
           </div>
           <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
              <ConfigChart />

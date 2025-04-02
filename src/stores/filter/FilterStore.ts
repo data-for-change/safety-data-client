@@ -20,6 +20,8 @@ import { BBoxType, Street, Casualty } from '../../types';
 import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
 // import citisNamesHeb from '../../assets/json/cities_names_heb.json';
 import { getCitiesNames, padDataYearsWith0 } from '../../utils/FilterUtils';
+import { observer } from 'mobx-react-lite';
+import { noConflict } from 'leaflet';
 // import autorun  from "mobx"
 
 export interface IFilterStore {
@@ -547,6 +549,18 @@ class FilterStore implements IFilterStore  {
       this.groupByName = name;
    }
 
+   @observable
+   GroupBySort: string|null = null;
+   
+   @action 
+   SetGroupBySort = (value:string|null) =>{
+      this.GroupBySort = value;
+   }
+   @action 
+   submitOnGroupByAfterSort =() =>{
+      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+   }
+
 
    @action
    updateGroupby = (key: string) => {      
@@ -614,7 +628,8 @@ class FilterStore implements IFilterStore  {
    submitfilterdGroup = (aGroupBy: GroupBy) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
       const filtermatch = this.getFilterQueryString(null);
-      const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
+      //const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
+      const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {

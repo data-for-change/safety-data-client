@@ -217,6 +217,13 @@
   "severely-injured": "פצועים קשים",
   "by-years": "לפי שנים",
   "GroupBy": "קבץ לפי",
+  "SortBy": "מיון",
+  "SortType" :{
+    "NoSort": "ללא מיון",
+    "Ascending": "מיון עולה",
+    "Descending" : "מיון יורד"
+  },
+  "Limit": "הגבלה",
   "Found": "נמצאו",
   "resize": "הגדלה",
   "NoResultsFound": "לא נמצאו תוצאות",

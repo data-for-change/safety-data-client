@@ -6,8 +6,8 @@ import { useStore } from '../../stores/storeConfig';
 import GroupBy2 from '../../stores/filter/GroupBy2';
 import GroupByTable from './GroupByTable';
 import SmallCard2 from '../atoms/SmallCard2';
-import SelectGroupBy from '../atoms/SelectGroupBy';
-import SelectGroupBy2 from '../atoms/SelectGroupBy2';
+import SelectGroupBy from '../groupby/SelectGroupBy';
+import SelectGroupBy2 from '../groupby/SelectGroupBy2';
 
 const CardGroupTables2: FC<{}> = observer(() => {
     const divStyle = {
