@@ -7,6 +7,10 @@ import ErrorBoundary from '../atoms/ErrorBoundary';
 import { useStore } from '../../stores/storeConfig';
 import Loader from '../atoms/Loader';
 import SmallCard2 from '../atoms/SmallCard2';
+import { useDispatch, useSelector, } from 'react-redux';
+import { AppDispatch, RootState } from '../../stores/store';
+import {setCurrentTab} from '../../stores';
+
 // import MapPage from '../../pages/MapPage';
 interface IProps {
   type: string;
@@ -26,10 +30,9 @@ const styles = {
 
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { t } = useTranslation();
-  const { mapStore, uiStore } = useStore();
-  const {currentTab} = uiStore;
-  // const [activeKey] = useState(uiStore.);
-  // defaultActiveKey={uiStore.currentTab}
+  const dispatch = useDispatch<AppDispatch>();
+  const { mapStore } = useStore();
+  const { currentTab } = useSelector((state: RootState) => state.appUi);
   return (
     <Tabs
       mountOnEnter
@@ -40,7 +43,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
           // map is renderd only when tab is shown to prevent leaflet bug
           mapStore.isReadyToRenderMap = true;
         } else mapStore.isReadyToRenderMap = false;
-        uiStore.setCurrentTab(tabActiveKey);
+        dispatch(setCurrentTab(tabActiveKey));
       }}
     >
       <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>     

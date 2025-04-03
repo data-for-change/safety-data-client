@@ -1,43 +1,41 @@
 import React, { useEffect } from 'react';
-import { observer } from 'mobx-react';
-// import FilterPanel from '../organisms/FilterPanel';
+import { useDispatch, useSelector } from 'react-redux';
 import TabsTemplate from './TabsTemplate';
-import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../filter/ConfigFilterModal';
 import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from "../../hooks/myUseMemo";
-// import CasualtiesSumLabel from '../atoms/CasualtiesSumLabel';
-// import FilterForm from "../organisms/FilterForm";
 import WithSidebarTemplate from './WithSidebarTemplate';
 import InfoPanel from '../molecules/InfoPanel';
+import { RootState, AppDispatch } from '../../stores/store';
+import { setCurrentPage, setStoreByQuery, setInitPage } from '../../stores/ui/appUiSlice';
+import { useStore } from '../../stores/storeConfig'; 
 
-interface IProps { }
-const HomeTemplate: React.FC<IProps> = observer(() => {
-   const { mapStore, filterStore, uiStore } = useStore();
+interface IProps {}
+
+const HomeTemplate: React.FC<IProps> = () => {
+   const dispatch = useDispatch<AppDispatch>();
+   const showFilterModal = useSelector((state: RootState) => state.appUi.showFilterModal);
+
+   // Keep using MobX stores for filtering and map logic
+   const { mapStore, filterStore } = useStore();
    const { setIsMultipleCities, updateCities, submitFilter } = filterStore;
-   const { setCurrentPage, setStoreByQuery, showFilterModal , setInitPage} = uiStore;
 
    useEffect(() => {
-      setCurrentPage('home');
-      // const query = useQuery(location);
-      // const tab = useTabFromQuery(query, 'charts');
-      // setCurrentTab(tab);
+      dispatch(setCurrentPage('home'));
       setIsMultipleCities(true);
-   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+   }, [dispatch, setIsMultipleCities]);
 
    mapStore.isReadyToRenderMap = false;
 
    useEffect(() => {
-      // mapStore.initBounds();
-      setInitPage(true);
+      dispatch(setInitPage(true));
       updateCities([], false);
-      setStoreByQuery('charts');
+      dispatch(setStoreByQuery({ defaultTab: "charts" }));
       submitFilter();
-      setInitPage(false)
-   }, [submitFilter, updateCities]);
+      dispatch(setInitPage(false));
+   }, [dispatch, submitFilter, updateCities]);
 
-
-   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />)
+   const memoConfigModal = useMemos([showFilterModal], <ConfigFilterModal />);
 
    return (
       <WithSidebarTemplate>
@@ -50,7 +48,7 @@ const HomeTemplate: React.FC<IProps> = observer(() => {
             <TabsTemplate type="home" />
          </div>
       </WithSidebarTemplate>
-   )
-})
+   );
+};
 
-export default HomeTemplate
+export default HomeTemplate;

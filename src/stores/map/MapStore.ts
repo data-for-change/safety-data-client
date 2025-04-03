@@ -7,6 +7,7 @@ import { setBrowserQueryString, delBrowserQueryString } from '../../utils/queryS
 import { BBoxType, MapMarkersType } from '../../types';
 import { useSelector } from 'react-redux';
 import { selectDataAllInjuries } from '../casualty/casualtySlice';
+import { store as reduxStore } from '../store';
 
 // import autorun  from "mobx"
 
@@ -144,7 +145,8 @@ export default class MapStore {
   // if this is init-page and query string has center- don't center by city location
   isCenterMapByCity = () => {
     let doCenterByCity = true;
-    if (this.rootStore.uiStore.initPage) {
+    const initPage  = reduxStore.getState().appUi.initPage;
+    if (initPage) {
       const params = new URLSearchParams(window.location.search);
       const center = this.getCenterByQuery(params);
       if (center) {
@@ -383,7 +385,7 @@ export default class MapStore {
         const south = mapBounds.getSouth() - boundsMargin;
         const north = mapBounds.getNorth() + boundsMargin;
         //const data = this.rootStore.filterStore.dataAllInjuries
-        const data = useSelector(selectDataAllInjuries)
+        const data  = reduxStore.getState().casualty.dataAllInjuries
           .filter((x) => x.latitude >= south
             && x.latitude <= north && x.longitude >= west && x.longitude <= east);
         // const zoom = this.mapRef.current.leafletElement.getZoom();

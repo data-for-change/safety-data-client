@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-// import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { observer } from 'mobx-react';
 import { TabsTemplate } from './TabsTemplate';
 // import FilterPanel from '../organisms/FilterPanel';
@@ -9,14 +9,17 @@ import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import InfoPanel from '../molecules/InfoPanel';
 import WithSidebarTemplate from './WithSidebarTemplate';
+import { setCurrentPage, setStoreByQuery, setInitPage } from '../../stores/ui/appUiSlice';
+import { RootState, AppDispatch } from '../../stores/store';
 
 interface IProps { }
 const CityTemplate: React.FC<IProps> = observer(() => {
-  // const { t } = useTranslation();
-  const { filterStore, uiStore } = useStore();
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const showFilterModal = useSelector((state: RootState) => state.appUi.showFilterModal);
+  const { filterStore } = useStore();
   const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
-  const { setCurrentPage, setStoreByQuery, showFilterModal, setInitPage} = uiStore;
-
+  
   useEffect(() => {
     setCurrentPage('city');
     filterStore.setIsMultipleCities(false);
@@ -30,7 +33,7 @@ const CityTemplate: React.FC<IProps> = observer(() => {
     setInitPage(true);
     if (cityResult === '' && isUpdateFromUrl) {
       setIsUpdateFromUrl(false);
-      setStoreByQuery('map','5000');
+      dispatch(setStoreByQuery({ defaultTab: 'map', defaultCity: '5000' }));
       filterStore.submitFilter();
     }
     setInitPage(false);

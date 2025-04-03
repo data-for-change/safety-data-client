@@ -7,6 +7,8 @@ import SelectGroupBy from '../groupby/SelectGroupBy';
 import SelectGroupBy2 from '../groupby/SelectGroupBy2';
 import SmallCard2 from '../atoms/SmallCard2';
 import ChartBar from './ChartBar';
+import { RootState } from '../../stores/store';
+import { useSelector } from 'react-redux';
 
 interface IProps { }
 const CardChartGrpBy2: FC<IProps> = observer(() => {
@@ -26,10 +28,10 @@ const CardChartGrpBy2: FC<IProps> = observer(() => {
       display: 'flex',
       flexWrap: 'wrap',
    } as React.CSSProperties;
-   const { filterStore, uiStore } = useStore();
+   const { filterStore } = useStore();
    const { group2Dict } = filterStore;
    const { groupBy } = group2Dict;
-   const { chartType, direction } = uiStore;
+   const { chartType, direction } = useSelector((state: RootState) => state.appUi);
    const metaDAta = (groupBy as GroupBy2).getBars();
    const reactDataGrp2 = toJS(filterStore.dataGroupby2);
    const show = true;

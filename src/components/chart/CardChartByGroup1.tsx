@@ -12,6 +12,8 @@ import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
 import { ItemCount } from '../../types';
 import SelectSortBy from '../groupby/SelectSortBy';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
 
 const foramtDataPrecision = (data: ItemCount[]) => {
     const data2 = data.map((x) => {
@@ -36,11 +38,12 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     };
     // const { t } = useTranslation();
     const [showModel, setShowModal] = useState(false);
-    const { filterStore, uiStore } = useStore();
+    const { filterStore } = useStore();
     const { dataFilterd } = filterStore;
     const reactData = toJS(dataFilterd);
     const dataFormated = foramtDataPrecision(reactData);
-    const { chartType, direction } = uiStore;
+    const { chartType, direction } = useSelector((state: RootState) => state.appUi);
+
     const chart = <ChartBar
        data={dataFormated}
        fill="#8884d8"

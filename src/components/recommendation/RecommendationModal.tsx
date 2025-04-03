@@ -5,13 +5,15 @@ import { Modal } from 'react-bootstrap';
 import RecommendationForm from './RecommendationForm';
 import { useStore } from '../../stores/storeConfig';
 import { Recommendation } from '../../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
 
 const RecommendationModal: React.FC = observer(() => {
   const { t } = useTranslation();
-  const { recommendationStore, uiStore } = useStore();
+  const { recommendationStore } = useStore();
   const {submitRecommendation, deleteRecommendation} = recommendationStore;
   const { isOpenModal, closeModal, selectedRecommendation } = recommendationStore;
-  const { language } = uiStore;
+  const language  = useSelector((state: RootState) => state.appUi.language);
 
   if (!isOpenModal) return null;
   const mode = (selectedRecommendation) ? "edit" : "create";

@@ -1,10 +1,11 @@
 import React from 'react';
-import { observer } from 'mobx-react-lite';
+import { useDispatch, useSelector } from 'react-redux';
 import LanguageSelector from '../../molecules/LanguageSelector';
 import NavigationList from '../../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar';
 import logo from '../../../assets/safety-logo.png';
-import { useStore } from '../../../stores/storeConfig';
+import { RootState, AppDispatch } from '../../../stores/store';
+import { setHeaderExpanded } from '../../../stores'; 
 import '../../../styles/tabs.css';
 import './header.css';
 
@@ -12,9 +13,15 @@ interface IProps {
    title: string;
 }
 
-const Header: React.FC<IProps> = observer(({ title }) => {
-   const { uiStore } = useStore();
-   const { isHeaderExpanded, toggleHeaderExpanded } = uiStore;
+const Header: React.FC<IProps> = ({ title }) => {
+   // Use Redux state instead of MobX
+   const dispatch = useDispatch<AppDispatch>();
+   const { isHeaderExpanded } = useSelector((state: RootState) => state.appUi); 
+
+   // Use the Redux dispatch to toggle header state
+   const toggleHeaderExpanded = () => {
+      dispatch(setHeaderExpanded(!isHeaderExpanded)); 
+   };
 
    return (
       <header className="header">
@@ -34,6 +41,6 @@ const Header: React.FC<IProps> = observer(({ title }) => {
          </Navbar>
       </header>
    );
-});
+};
 
 export default Header;

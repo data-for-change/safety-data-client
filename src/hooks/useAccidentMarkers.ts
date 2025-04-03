@@ -4,11 +4,13 @@ import { useStore } from "../stores/storeConfig";
 import { BBoxType, Accident } from "../types";
 import { useSelector } from "react-redux";
 import { selectDataAllInjuries } from "../stores/casualty/casualtySlice";
+import { RootState } from "../stores/store";
 
 export const useAccidentMarkers = () => {
-  const { filterStore, mapStore, uiStore } = useStore();
+  const { filterStore, mapStore } = useStore();
   const { isUse2StepsMarkers, markersLoadStep, dataMarkersLean } = filterStore;
   const { bboxType, dataMarkersInBounds, markerIconsType, markerColorType } = mapStore;
+  const { language } = useSelector((state: RootState) => state.appUi);
   const dataAllInjuries = useSelector(selectDataAllInjuries);
 
   let reactMarkers;
@@ -34,7 +36,7 @@ export const useAccidentMarkers = () => {
             key: `marker-${x._id}`,
             position: [latitude, longitude] as LatLngTuple,
             data: x,
-            language: uiStore.language,
+            language: language,
             colorBy: markerColorType,
             markerIconsType,
           };

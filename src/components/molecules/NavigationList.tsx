@@ -1,16 +1,14 @@
 import React from 'react';
-import { observer } from "mobx-react-lite";
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useStore } from '../../stores/storeConfig';
+import { setHeaderExpanded } from '../../stores';
 
-const NavigationList: React.FC = observer(() => {
+const NavigationList: React.FC = () => {
    const { t } = useTranslation();
-   const { uiStore } = useStore();
-   const {setHeaderExpanded} = uiStore;
-
+   const dispatch = useDispatch(); 
    const handleLinkClick = () => {
-      setHeaderExpanded(false);
+      dispatch(setHeaderExpanded(false));
    };
 
    return (
@@ -29,5 +27,5 @@ const NavigationList: React.FC = observer(() => {
          </Link>
       </>
    );
-});
+};
 export default NavigationList;

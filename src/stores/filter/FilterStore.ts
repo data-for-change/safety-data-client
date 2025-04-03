@@ -15,12 +15,15 @@ import RootStore from '../RootStore';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import logger from '../../services/logger';
+import { selectCurrentTab } from '../index';
 import { BBoxType, Street, Casualty } from '../../types';
 
 // import citisNamesHeb from '../../assets/json/cities_names_heb.json';
 import { getCitiesNames, padDataYearsWith0 } from '../../utils/FilterUtils';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText, fetchFilterData } from './filterSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 
@@ -691,8 +694,8 @@ class FilterStore implements IFilterStore  {
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
-      const lang = this.rootStore.uiStore.language;
-      if (this.rootStore.uiStore.currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, lang);
+      const {currentPage, language}  = reduxStore.getState().appUi;
+      if (currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, language);
    }
 
    submintMainDataFilter = () => {
@@ -816,8 +819,9 @@ class FilterStore implements IFilterStore  {
     */
    @action
    setBrowserQueryString = () => {
+      const currentTab  = reduxStore.getState().appUi.currentTab;
       const params = new URLSearchParams(window.location.search);
-      params.set('tab', this.rootStore.uiStore.currentTab);
+      params.set('tab', currentTab);
       this.startYear.setBrowserQueryString(params, false);
       this.endYear.setBrowserQueryString(params, false);
       this.injurySeverity.setBrowserQueryString(params, false);
@@ -900,15 +904,6 @@ class FilterStore implements IFilterStore  {
       if (arr.length > 0 && arr[0] !== '') {
          filter += ',{"$or": [';
          filter += arr.map((x: string) => `{"${filterName}" : "${x.trim()}"}`).join(',');
-         filter += ']}';
-      }
-      return filter;
-   }
-   getFilterFromNumArray = (arr: string[], filterName: string) => {
-      let filter: string = '';
-      if (arr.length > 0) {
-         filter += ',{"$or": [';
-         filter += arr.map((x: string) => `{"${filterName}" : ${parseInt(x, 10)}}`).join(',');
          filter += ']}';
       }
       return filter;
