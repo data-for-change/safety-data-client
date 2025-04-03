@@ -20,8 +20,9 @@ import { BBoxType, Street, Casualty } from '../../types';
 import { FilterLocalStorage, LocalStorageService } from '../../services/Localstorage.Service';
 // import citisNamesHeb from '../../assets/json/cities_names_heb.json';
 import { getCitiesNames, padDataYearsWith0 } from '../../utils/FilterUtils';
-import { observer } from 'mobx-react-lite';
-import { noConflict } from 'leaflet';
+import { store as reduxStore } from '../store';
+import { setIsLoading, setFiltersText, fetchFilterData } from './filterSlice';
+//import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 
 export interface IFilterStore {
@@ -724,6 +725,18 @@ class FilterStore implements IFilterStore  {
    }
 
    submintMainDataFilter = () => {
+      reduxStore.dispatch(setIsLoading(true));
+    
+      const filter = this.getFilterQueryString(null);
+      reduxStore.dispatch(setFiltersText(true));
+      this.setBrowserQueryString();
+    
+      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
+      
+      reduxStore.dispatch(fetchFilterData());
+    };
+
+   submintMainDataFilter_old = () => {
       this.setIsLoading(true);    
       const filter = this.getFilterQueryString(null);
       this.setFiltersText(true);
