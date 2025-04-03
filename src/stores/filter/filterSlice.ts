@@ -35,6 +35,7 @@ const filterSlice = createSlice({
       AccidentService.fetchGetList(filter, 'main').then((res: any) => {
         if (res?.data) {
           mobxStore.filterStore.updateAllInjuries(res.data);
+          mobxStore.filterStore.setIsLoading(false);
         }
       });
     },
