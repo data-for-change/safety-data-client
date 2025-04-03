@@ -5,6 +5,7 @@ import ImageStore from './image/ImageStore';
 import IRecommendationStore from './recommendation/RecommendationStore';
 import RecommendationStore from './recommendation/RecommendationStore';
 import UserStore from './user/UserStore';
+import LocalDBFilterStore from './filter/LocalDBFilterStore';
 
 export default class RootStore {
     appInitialized = false;
@@ -16,11 +17,13 @@ export default class RootStore {
       this.imageStore = new ImageStore(this);
       this.recommendationStore = new RecommendationStore(this);
       this.userStore = new UserStore(this);
+      this.localDbFilterStroe = new LocalDBFilterStore(this);
     }
 
     uiStore: UiStore;
     mapStore: MapStore;
     filterStore: FilterStore;
+    localDbFilterStroe: LocalDBFilterStore;
     imageStore: ImageStore;
     recommendationStore :IRecommendationStore;
     userStore: UserStore;
