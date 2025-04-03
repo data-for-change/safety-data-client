@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { store as mobxStore } from '../storeConfig'; // Import MobX store
+import { store as mobxStore } from '../storeConfig';
 import AccidentService from '../../services/AccidentService';
+import { store as reduxStore } from '../store';
+import { updateAllInjuries } from '../casualty/casualtySlice';
 
 interface FilterState {
   isLoading: boolean;
@@ -30,13 +32,14 @@ const filterSlice = createSlice({
     fetchFilterData: (state) => {
       state.isLoading = true;
       const filter = mobxStore.filterStore.getFilterQueryString(null); // Using MobX method
-
       // Call API (you can migrate this logic later)
       AccidentService.fetchGetList(filter, 'main').then((res: any) => {
         if (res?.data) {
-          mobxStore.filterStore.updateAllInjuries(res.data);
-          mobxStore.filterStore.setIsLoading(false);
+          //mobxStore.filterStore.updateAllInjuries(res.data);
+          reduxStore.dispatch(updateAllInjuries(res.data));         
         }
+        //state.isLoading = false;
+        mobxStore.filterStore.setIsLoading(false);
       });
     },
   },

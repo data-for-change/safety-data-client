@@ -22,6 +22,8 @@ import SmallCard2 from '../atoms/SmallCard2';
 import {Accident} from '../../types';
 import {exportCSV} from '../../utils/exportCSV';
 import DetailsTableFilter from './DetailsTableFilter';
+import { useSelector } from "react-redux";
+import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -43,9 +45,10 @@ interface IProps { }
 const AccidentsTable: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
   const { t } = useTranslation();
-  const reactMarkers = toJS(filterStore.dataAllInjuries);
+  //const reactMarkers = toJS(filterStore.dataAllInjuries);
+  const dataAllInjuries = useSelector(selectDataAllInjuries);
   //@ts-ignore
-  const defaultDAta2 = reactMarkers as Accident[];
+  const defaultDAta2 = dataAllInjuries as Accident[];
   const [data, _setData] = React.useState(() => [...defaultDAta2]);
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,

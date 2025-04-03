@@ -5,6 +5,9 @@ import logger from '../../services/logger';
 import RootStore from './../RootStore';
 import { setBrowserQueryString, delBrowserQueryString } from '../../utils/queryStringUtils';
 import { BBoxType, MapMarkersType } from '../../types';
+import { useSelector } from 'react-redux';
+import { selectDataAllInjuries } from '../casualty/casualtySlice';
+
 // import autorun  from "mobx"
 
 // const INIT_BOUNDS = [L.latLng(32.032, 34.739), L.latLng(32.115, 34.949)];
@@ -379,7 +382,8 @@ export default class MapStore {
         const east = mapBounds.getEast() + boundsMargin;
         const south = mapBounds.getSouth() - boundsMargin;
         const north = mapBounds.getNorth() + boundsMargin;
-        const data = this.rootStore.filterStore.dataAllInjuries
+        //const data = this.rootStore.filterStore.dataAllInjuries
+        const data = useSelector(selectDataAllInjuries)
           .filter((x) => x.latitude >= south
             && x.latitude <= north && x.longitude >= west && x.longitude <= east);
         // const zoom = this.mapRef.current.leafletElement.getZoom();

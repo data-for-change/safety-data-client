@@ -464,20 +464,6 @@ class FilterStore implements IFilterStore  {
    isLoadingInjuriesCount: boolean = false;
 
    @observable
-   dataAllInjuries: Casualty[] = [];
-
-   @action
-   updateAllInjuries = (data: Casualty[]) => {
-      // looger.log("updateAllInjuries ",data.length)
-      this.setMarkersLoadStep(2);
-      this.dataAllInjuries = data;
-      this.rootStore.mapStore.setBounds(data, this.cities.arrValues);
-      if (this.rootStore.mapStore.bboxType === BBoxType.LOCAL_BBOX) {
-         this.rootStore.mapStore.getMarkersInLocalBBox(0.1);
-      }
-   }
-
-   @observable
    dataMarkersLean: Casualty[] = []
 
    @action
@@ -706,7 +692,7 @@ class FilterStore implements IFilterStore  {
    submitFilter = () => {
       // this.setMarkersLoadStep(0);
       if (this.useLocalDb === 2) {
-         this.submitMainDataFilterLocalDb();
+         //this.submitMainDataFilterLocalDb();
       } else {
          if (this.rootStore.mapStore.bboxType === BBoxType.SERVER_BBOX) {
             this.rootStore.mapStore.submintGetMarkersBBox();
@@ -746,7 +732,7 @@ class FilterStore implements IFilterStore  {
       AccidentService.fetchGetList(filter, 'main')
          .then((res: any | undefined) => {
             if (res && res.data !== null && res.data !== undefined) {
-               this.updateAllInjuries(res.data);
+               // this.updateAllInjuries(res.data);
                // write Data to local db
                if (this.useLocalDb === 1) insertToDexie(res.data);
             }               
@@ -949,19 +935,19 @@ class FilterStore implements IFilterStore  {
    @observable
    useLocalDb = 0;
 
-   submitMainDataFilterLocalDb = () => {
-      this.setIsLoading(true);
-      const arrFilters = this.getFilterIDB();
-      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-      // logger.log(arrFilters);
-      getFromDexie(arrFilters)
-         .then((res: any | undefined) => {
-            if (res && res.data !== null && res.data !== undefined) {
-               this.updateAllInjuries(res.data);
-            }
-            this.setIsLoading(false);
-         });
-   }
+   // submitMainDataFilterLocalDb = () => {
+   //    this.setIsLoading(true);
+   //    const arrFilters = this.getFilterIDB();
+   //    this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
+   //    // logger.log(arrFilters);
+   //    getFromDexie(arrFilters)
+   //       .then((res: any | undefined) => {
+   //          if (res && res.data !== null && res.data !== undefined) {
+   //             this.updateAllInjuries(res.data);
+   //          }
+   //          this.setIsLoading(false);
+   //       });
+   // }
 
    submintGetMarkersBBoxIdb = (mapBounds: L.LatLngBounds) => {
       const arrFilters = this.getFilterBboxIDB(mapBounds);
