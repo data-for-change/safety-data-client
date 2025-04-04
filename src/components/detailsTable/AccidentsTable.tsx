@@ -11,6 +11,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  ColumnDef,
 } from '@tanstack/react-table';
 import { AccessorKeyColumnDef } from '@tanstack/react-table';
 import Button from 'react-bootstrap/Button';
@@ -21,7 +22,8 @@ import {exportCSV} from '../../utils/exportCSV';
 import DetailsTableFilter from './DetailsTableFilter';
 import { useSelector } from "react-redux";
 import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
-
+import { TFunction } from 'i18next';
+import CellRenderer from './CellRenderer';
 
 type AccidentColumn = AccessorKeyColumnDef<Accident, string>;
 
@@ -36,6 +38,58 @@ const getColumnsByWidth = (width: number, allColumns: AccidentColumn[]) => {
 
 const columnHelper = createColumnHelper<Accident>();
 
+export function getAccidentColumns(t: TFunction): ColumnDef<Accident>[] {
+  return [
+    {
+      accessorKey: 'accident_year',
+      cell: (info) => <CellRenderer value={info.getValue()} />,
+      header: t('Year'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'injury_severity_hebrew',
+      header: t('Severity'),
+      cell: info => info.renderValue(),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'injured_type_hebrew',
+      header: t('TypeInjured'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'accident_yishuv_name',
+      header: t('City'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'street1_hebrew',
+      header: t('Street'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'vehicle_vehicle_type_hebrew',
+      header: t('VehicleType'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'accident_type_hebrew',
+      header: t('AccidentType'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'age_group_hebrew',
+      header: t('Age'),
+      footer: info => info.column.id,
+    },
+    {
+      accessorKey: 'sex_hebrew',
+      header: t('Gender'),
+      footer: info => info.column.id,
+    },
+  ];
+}
+
 interface IProps { }
 
 const AccidentsTable: React.FC<IProps> = () => {
@@ -49,51 +103,22 @@ const AccidentsTable: React.FC<IProps> = () => {
     pageSize: 10,
   });
 
-  const allColumns : AccidentColumn[] = [
-    columnHelper.accessor('accident_year', {
-      cell: info => <i>{info.getValue()}</i>,
-      header: t('Year'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('injury_severity_hebrew', {
-      header: t('Severity'),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('injured_type_hebrew', {
-      header: t('TypeInjured'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('accident_yishuv_name', {
-      header: t('City'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('street1_hebrew', {
-      header: t('Street'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('vehicle_vehicle_type_hebrew', {
-      header: t('VehicleType'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('accident_type_hebrew', {
-      header: t('AccidentType'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('age_group_hebrew', {
-      header: t('Age'),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('sex_hebrew', {
-      header: t('Gender'),
-      footer: info => info.column.id,
-    }),
-  ];
+  const allColumnsDef = React.useMemo(() => getAccidentColumns(t), [t]);
  
-  const [columns, setColumns] = useState(() => getColumnsByWidth(window.innerWidth, allColumns));
+  // Function to handle dynamic column layout based on window width
+  const getColumnsByWidth = (width: number, columns: ColumnDef<Accident>[]) => {
+    // Adjust logic based on width to modify columns visibility or configuration
+    if (width < 600) {
+      // Example: return a smaller subset of columns for small screens
+      return columns.slice(0, 4); // Adjust based on your logic
+    }
+    return columns; // Default to all columns for larger screens
+  };
+  
+  const [columns, setColumns] = useState(() => getColumnsByWidth(window.innerWidth, allColumnsDef));
   useEffect(() => {
     const handleResize = () => {
-      setColumns(getColumnsByWidth(window.innerWidth, allColumns));
+      setColumns(getColumnsByWidth(window.innerWidth, allColumnsDef));
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
