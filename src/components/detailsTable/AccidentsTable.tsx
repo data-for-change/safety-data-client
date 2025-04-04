@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toJS } from 'mobx';
-import { observer } from 'mobx-react';
 import {
   Column,
   createColumnHelper,
@@ -17,14 +15,12 @@ import {
 import { AccessorKeyColumnDef } from '@tanstack/react-table';
 import Button from 'react-bootstrap/Button';
 import {Table as TableBootstrap}  from "react-bootstrap";
-import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 import {Accident} from '../../types';
 import {exportCSV} from '../../utils/exportCSV';
 import DetailsTableFilter from './DetailsTableFilter';
 import { useSelector } from "react-redux";
 import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 type AccidentColumn = AccessorKeyColumnDef<Accident, string>;
@@ -42,12 +38,10 @@ const columnHelper = createColumnHelper<Accident>();
 
 interface IProps { }
 
-const AccidentsTable: React.FC<IProps> = observer(() => {
-  const { filterStore } = useStore();
+const AccidentsTable: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  //const reactMarkers = toJS(filterStore.dataAllInjuries);
   const dataAllInjuries = useSelector(selectDataAllInjuries);
-  //@ts-ignore
+  console.log('dataAllInjuries', dataAllInjuries.length)
   const defaultDAta2 = dataAllInjuries as Accident[];
   const [data, _setData] = React.useState(() => [...defaultDAta2]);
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -56,7 +50,6 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
   });
 
   const allColumns : AccidentColumn[] = [
-
     columnHelper.accessor('accident_year', {
       cell: info => <i>{info.getValue()}</i>,
       header: t('Year'),
@@ -102,11 +95,9 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     const handleResize = () => {
       setColumns(getColumnsByWidth(window.innerWidth, allColumns));
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
 
   const table = useReactTable({
     columns,
@@ -253,7 +244,6 @@ const AccidentsTable: React.FC<IProps> = observer(() => {
     </div>
   </SmallCard2>
   )
-});
-
+};
 
 export default AccidentsTable;

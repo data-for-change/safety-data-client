@@ -13,13 +13,7 @@ const ButtonShowFilterModal: React.FC<IProps> = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { showFilterModal } = useSelector((state: RootState) => state.appUi);
     const memoFilterIcon = useMemos([],
-        <SvgIconFilter color={'var(--onprimary-color)'} height={40} width={34} />);
-    // const filterIcon = <IconWithImage
-    //     path={imgSrc}
-    //     style={{ lineHeight: '30px' }}
-    //     alt='open filter'
-    // />
-
+        <SvgIconFilter color={'var(--onprimary-color)'} height={36} width={36} />);
     return (
         <>
             <span

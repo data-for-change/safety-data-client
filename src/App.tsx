@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppDispatch } from './stores/store';
 import { initLang } from './stores/ui/appUiSlice';
+import {DirectionProvider} from './DirectionProvider';
 
 import HomePage from './pages/HomePage';
 import CityPage from './pages/CityPage';
@@ -14,6 +15,7 @@ import Footer from './components/templates/footer/Footer';
 //import Loader from './components/atoms/Loader';
 import './i18n';
 import './App.css';
+
 
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const RecommendationsPage = lazy(() => import('./pages/RecommendationsPage'));
@@ -34,31 +36,35 @@ function App() {
   useEffect(() => {
     dispatch(initLang()); // Load language on app start
   }, [dispatch]);
+
    return (
-      <BrowserRouter>
-         {/* <Card display="flex" height="100%"> */}
-         <div style={{ height: "100%" }}>
-            <Header title="Safety Data" />
-            <div style={styles.app}>
-        
-               <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/city" element={<CityPage/>} />
-                  <Route path="/recommend" element={<RecommendationsPage/>} />               
-                  <Route path="/map" element={<MapWithClusters />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/profile" element={<Profile />} />`
-               </Routes>
-           
+      <DirectionProvider>         
+         <BrowserRouter>
+            {/* <Card display="flex" height="100%"> */}
+            <div style={{ height: "100%" }}>
+               <Header title="Safety Data" />
+               <div style={styles.app}>
+         
+                  <Routes>
+                     <Route path="/" element={<HomePage />} />
+                     <Route path="/city" element={<CityPage/>} />
+                     <Route path="/recommend" element={<RecommendationsPage/>} />               
+                     <Route path="/map" element={<MapWithClusters />} />
+                     <Route path="/about" element={<AboutPage />} />
+                     <Route path="/login" element={<Login />} />
+                     <Route path="/register" element={<Register />} />
+                     <Route path="/profile" element={<Profile />} />`
+                  </Routes>
+            
+               </div>
+               <Footer />
             </div>
-            <Footer />
-         </div>
-         {/* </Card> */}
-      </BrowserRouter>
+            {/* </Card> */}
+         </BrowserRouter>
+      </DirectionProvider>
    );
 }
+
 
 
 export default App;

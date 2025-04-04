@@ -5,22 +5,12 @@
    margin-left: 1rem; */
 }
 
-.dir-rtl .filter-btn {
-   right: 7px;
-}
-
-.dir-ltr .filter-btn {
-   right: 7px;
-}
-
 .filter-btn {
    border-radius: 50%;
    background-color: var(--primary-second);
    opacity: 0.8;
-   height: 3rem;
    position: fixed;
    bottom: 30px;
-   /* display: flex; */
    justify-content: center;
    align-items: center;
    cursor: pointer;

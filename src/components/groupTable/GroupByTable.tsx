@@ -3,7 +3,6 @@ import React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import Table from "react-bootstrap/Table";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
   createColumnHelper,

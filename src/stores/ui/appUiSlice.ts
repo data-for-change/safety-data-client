@@ -67,9 +67,13 @@ const appUiSlice = createSlice({
   reducers: {
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
+      // Update the HTML element directly
+      document.documentElement.lang = action.payload;
     },
     setDirection: (state, action: PayloadAction<"ltr" | "rtl">) => {
       state.direction = action.payload;
+       // Update the HTML element directly
+       document.documentElement.dir = action.payload;
     },
     setShowFilterModal: (state, action: PayloadAction<boolean>) => {
       state.showFilterModal = action.payload;
@@ -124,5 +128,6 @@ export const {
 } = appUiSlice.actions;
 
 export const selectCurrentTab = (state: RootState) => state.appUi.currentTab;
-export const selectedLanguage  = (state: RootState) => state.appUi.language;
+export const selectDirection = (state: RootState) => state.appUi.direction;
+export const selectLanguage = (state: RootState) => state.appUi.language;
 export default appUiSlice.reducer;
