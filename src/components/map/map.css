@@ -1,6 +1,6 @@
   /* Customize the Clustered Markers */
   .marker-cluster-custom {
-    background: #9370db;
+    background: #b7172c;
     border: 3px solid #ededed;
     border-radius: 50%;
     color: #ededed;
@@ -14,6 +14,5 @@
      display: flex
   }
   .map-select-labelspan{
-    margin-top: 7px;
     font-weight: 700;
   }

@@ -10,7 +10,7 @@ export const Footer: React.FC<IProps> = () => {
     display: 'flex',
     gap: '1rem',
     height: '4rem',
-    padding: '0 1rem',
+    padding: '1rem',
   };
 
   const linkStyle: CSSProperties = {

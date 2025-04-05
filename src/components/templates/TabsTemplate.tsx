@@ -63,7 +63,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tabMap} eventKey="map" title={t('Map')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-            <SmallCard2>           
+            <SmallCard2 className="p-1 bg-white rounded shadow">           
               <MapAccidents />
             </SmallCard2>
           </Suspense>

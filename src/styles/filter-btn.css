@@ -1,32 +1,30 @@
-.filterLable {
-   font-weight: 700;
-   padding-right: 0 !important;
-   /* margin-right: 1rem;
-   margin-left: 1rem; */
-}
-
 .filter-btn {
    border-radius: 50%;
    background-color: var(--primary-second);
    opacity: 0.8;
    position: fixed;
-   bottom: 30px;
+   margin: 1rem 0.5rem;
+   top: 50px;
    justify-content: center;
    align-items: center;
    cursor: pointer;
    z-index: 1050;
-   margin: 1rem;
-   display: none;
-}
-
-@media screen and (min-width: 500px) {
-   .filter-btn {
-      margin: 1rem;
-      top: 70px;
-   }
-}
-
-.filter-btn:hover {
-   /* background-color: rgb(56, 170, 236); */
-   opacity: 1;
-}
+   display: none; /* hidden by default */
+   transition: opacity 0.3s ease; /* Optional smooth opacity transition */
+ }
+ 
+ /* When the button is visible */
+ .filter-btn.show {
+   display: block; /* Only show it when the 'show' class is added */
+ }
+ 
+ /* RTL */
+ :dir(rtl) .filter-btn {
+   left: 0.9rem;
+ }
+ 
+ /* LTR */
+ :dir(ltr) .filter-btn {
+   right: 0.9rem;
+ }
+ 
