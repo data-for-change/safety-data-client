@@ -129,7 +129,6 @@ const appUiSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchLatestCbsUpdate.fulfilled, (state, action) => {
-      console.log ('fetchLatestCbsUpdate', action.payload)
       state.dataUpdatedTo = action.payload;
     });
   }
