@@ -15,7 +15,6 @@ import RootStore from '../RootStore';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import logger from '../../services/logger';
-import { selectCurrentTab } from '../index';
 import { BBoxType, Street, Casualty } from '../../types';
 
 // import citisNamesHeb from '../../assets/json/cities_names_heb.json';
@@ -36,7 +35,6 @@ export interface IFilterStore {
    streets: ColumnFilterArray;
    roads: ColumnFilterArray;
    groupByDict: GroupMap;
-   dataUpdatedTo: Date|null; 
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
@@ -94,8 +92,7 @@ class FilterStore implements IFilterStore  {
       this.dataFilterdByYears = FC.initDataYreasfilterd();
       this.setDataFilterd(FC.initDataGrpBy1());
       this.dataGroupby2 = FC.initDataGrpBy2();
-      this.appInitialized = false;
-      this.dataUpdatedTo = new Date(2025,0,31);      
+      this.appInitialized = false;    
    }
 
    rootStore: RootStore;
@@ -124,10 +121,7 @@ class FilterStore implements IFilterStore  {
    @action setFormCardKey = (value: number) => {
       this.formCardKey = value;
    }
-   dataUpdatedTo: Date; 
-   setDataUpdatedTo(value: Date) {
-      this.dataUpdatedTo = value;
-    }
+
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // Severity
    // ///////////////////////////////////////////////////////////////////////////////////////////////

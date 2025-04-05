@@ -2,7 +2,7 @@ import React, { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppDispatch } from './stores/store';
-import { initLang } from './stores/ui/appUiSlice';
+import { initializeStore } from './stores/store';
 import {DirectionProvider} from './DirectionProvider';
 
 import HomePage from './pages/HomePage';
@@ -34,7 +34,8 @@ const styles = {
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(initLang()); // Load language on app start
+   // init redux stroe on app start, for example Load language
+    dispatch(initializeStore()); 
   }, [dispatch]);
 
    return (

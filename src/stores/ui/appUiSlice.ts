@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import i18n from "../../i18n";
 import { setBrowserQueryString } from "../../utils/queryStringUtils";
+import AccidentService from "../../services/AccidentService";
 import logger from "../../services/logger";
 import { store as mobxStore } from '../storeConfig';
 import { RootState } from "../store";
@@ -9,6 +10,7 @@ interface appUiState {
   appInitialized: boolean;
   language: string;
   direction: "ltr" | "rtl";
+  dataUpdatedTo: number|null; //epochSeconds
   showFilterModal: boolean;
   initPage: boolean;
   currentPage: string;
@@ -23,6 +25,7 @@ const initialState: appUiState = {
   appInitialized: false,
   language: "he",
   direction: "rtl",
+  dataUpdatedTo: null,
   showFilterModal: false,
   initPage: false,
   currentPage: "home",
@@ -60,6 +63,19 @@ export const initLang = createAsyncThunk('appUi/initLang', async (_, { dispatch 
       logger.log(error);
     }
   });
+
+export const fetchLatestCbsUpdate = createAsyncThunk<number>(
+  "appUi/fetchLatestCbsUpdate",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await AccidentService.getLatestCbsUpdateDate();
+      const epochSeconds = response.data.last_update;
+      return epochSeconds;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);  
 
 const appUiSlice = createSlice({
   name: "appUi",
@@ -111,6 +127,12 @@ const appUiSlice = createSlice({
         mobxStore.mapStore.setStoreByQuery(params);
       },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchLatestCbsUpdate.fulfilled, (state, action) => {
+      console.log ('fetchLatestCbsUpdate', action.payload)
+      state.dataUpdatedTo = action.payload;
+    });
+  }
 });
 
 export const {
@@ -127,7 +149,6 @@ export const {
   setStoreByQuery,
 } = appUiSlice.actions;
 
-export const selectCurrentTab = (state: RootState) => state.appUi.currentTab;
 export const selectDirection = (state: RootState) => state.appUi.direction;
 export const selectLanguage = (state: RootState) => state.appUi.language;
 export default appUiSlice.reducer;
