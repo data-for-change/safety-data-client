@@ -103,7 +103,7 @@ export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
         case 'הרוג':
-            res = '#CA273B';
+            res = '#CA273B';//
             break;
         default:
             res = '#F8A141';

@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
-import logoNatun from '../../../assets/natun-logo.png';
-import logoAnyway from '../../../assets/anyway-logo.png';
+import logoNatun from '../../../assets/logo/natun-logo.png';
+import logoAnyway from '../../../assets/logo/anyway-logo.png';
 import './footer.css';
 
 interface IProps {}
