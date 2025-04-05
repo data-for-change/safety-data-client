@@ -11,7 +11,7 @@ export const initializeStore = createAsyncThunk(
     // Load language 
     await dispatch(initLang());
     // Get CBS data date
-    await dispatch(fetchLatestCbsUpdate());    
+    //await dispatch(fetchLatestCbsUpdate());    
   }
 );
 

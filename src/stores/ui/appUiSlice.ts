@@ -25,7 +25,7 @@ const initialState: appUiState = {
   appInitialized: false,
   language: "he",
   direction: "rtl",
-  dataUpdatedTo: null,
+  dataUpdatedTo:  1738368000, //1.2.2025
   showFilterModal: false,
   initPage: false,
   currentPage: "home",

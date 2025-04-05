@@ -6,35 +6,49 @@ class AccidentService {
   apiUrl = API_URL || '';
 
   public fetchGetList = async (filter: string, type: string): Promise<Array<any> | undefined> => {
-    const url = `${API_URL2}/involved${filter}`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true, // equivalent to fetch's credentials: 'same-origin'
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching involved list:', error);
+    // Default options are marked with *
+    let url = `${API_URL2}/involved`;
+    //let url = `${this.apiUrl}/api/v1/accident/`;
+    url += filter;
+    // console.log(url);
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+    });
+    if (!response.ok) {
       return [];
     }
+    return response.json(); // parses JSON response into native JavaScript objects
   };
-
+  
   public fetchGetGroupBy = async (filter: string): Promise<Array<any> | undefined> => {
-    const url = `${API_URL2}/involved/groupby${filter}`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching groupby data:', error);
+    // Default options are marked with *
+    let url = `${API_URL2}/involved/groupby`
+    //let url = `${this.apiUrl}/api/v1/accident/groupby/`;
+    url += filter;
+    // console.log(url);
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+    });
+    if (!response.ok) {
       return [];
     }
+    return response.json(); // parses JSON response into native JavaScript objects
   };
   
   public getLatestCbsUpdateDate = async () => {
