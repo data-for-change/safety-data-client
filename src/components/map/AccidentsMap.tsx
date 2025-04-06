@@ -2,9 +2,9 @@ import React, { FC, useRef } from 'react';
 import { MapContainer, TileLayer, useMapEvents, useMap } from 'react-leaflet';
 import L, { Map as LeafletMap, LatLngTuple } from 'leaflet';
 import { observer } from 'mobx-react';
+import { Card } from 'react-bootstrap';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import { store } from '../../stores/storeConfig';
-import 'leaflet/dist/leaflet.css';
 import { MapMarkersType } from '../../types';
 import AccidentsMarkers from './AccidentsMarkers';
 import MapCenterUpdater from './MapCenterUpdater';
@@ -13,7 +13,7 @@ import LegendWarpper from './legend/LegendWarpper';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import SelectMapMarkersType from './SelectMapMarkersType';
-import { Card } from 'react-bootstrap';
+import 'leaflet/dist/leaflet.css';
 //import AccidentHeatLayer from './AccidentHeatLayer';
 
 // Function for creating custom icon for cluster group
@@ -28,16 +28,6 @@ const createClusterCustomIcon = function (cluster: any) {
     className: 'marker-cluster-custom',
     iconSize: L.point(40, 40, true),
   });
-};
-
-const styles: any = {
-  buttonsPanel: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap',
-    paddingTop: '0.2rem',
-    margin: '5px'
-  },
 };
 
 interface IProps {
@@ -113,7 +103,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
           </div>
         </Card.Body>
         <Card.Footer>
-          <div style={styles.buttonsPanel}>
+          <div className="map-select-wrapper">
             <SelectMapMarkersType />
             <SelectMarkersColorType />
             <SelectMarkersIConType />
