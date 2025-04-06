@@ -10,8 +10,8 @@ export const initializeStore = createAsyncThunk(
     // Dispatch initialization actions for different slices on app start
     // Load language 
     await dispatch(initLang());
-    // Get CBS data date
-    await dispatch(fetchLatestCbsUpdate());    
+    // Get CBS data date 
+    // await dispatch(fetchLatestCbsUpdate());    
   }
 );
 
