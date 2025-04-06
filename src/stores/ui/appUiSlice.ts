@@ -25,7 +25,7 @@ const initialState: appUiState = {
   appInitialized: false,
   language: "he",
   direction: "rtl",
-  dataUpdatedTo:  1738368000, //1.2.2025
+  dataUpdatedTo:  1738281600, //31.01.2025
   showFilterModal: false,
   initPage: false,
   currentPage: "home",
@@ -69,7 +69,8 @@ export const fetchLatestCbsUpdate = createAsyncThunk<number>(
   async (_, { rejectWithValue }) => {
     try {
       const response = await AccidentService.getLatestCbsUpdateDate();
-      const epochSeconds = response.data.last_update;
+      const epochSeconds = response.last_update;
+      //const epochSeconds = response.data.last_update;
       return epochSeconds;
     } catch (error) {
       return rejectWithValue(error);

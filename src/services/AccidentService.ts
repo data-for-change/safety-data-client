@@ -52,6 +52,26 @@ class AccidentService {
   };
   
   public getLatestCbsUpdateDate = async () => {
+        // Default options are marked with *
+        let url = `${API_URL2}/api/latest-cbs-update-date`
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *client
+        });
+        if (!response.ok) {
+          return null;
+        }
+        return response.json();
+  };
+  
+  public getLatestCbsUpdateDate1 = async () => {
     return axios.get(`${API_URL2}/api/latest-cbs-update-date`);
   };
 
