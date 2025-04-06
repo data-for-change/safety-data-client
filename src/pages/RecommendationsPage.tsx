@@ -39,7 +39,7 @@ const RecommendationsPage: React.FC = observer(() => {
           </Button>}
       </div>
       <Form.Group controlId="tagSelect" className="mb-3">
-        <Form.Label>Select Tag:</Form.Label>
+        <Form.Label>{t('Select_Tag')}:</Form.Label>
         <Form.Select value={selectedTag} onChange={handleChange}>
           {tagsOptions.map((tag) => (
             <option key={tag.value} value={tag.value}>

@@ -14,7 +14,7 @@ const NavigationList: React.FC = () => {
    return (
       <>
          <Link className="nav-link" to="/" onClick={handleLinkClick} data-testid="home-link">
-            {t('Home')}
+            {t('National')}
          </Link>
          <Link className="nav-link" to="/city" onClick={handleLinkClick} data-testid="city-link">
             {t('Cities')}

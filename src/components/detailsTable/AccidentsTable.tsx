@@ -123,11 +123,11 @@ const AccidentsTable: React.FC<IProps> = () => {
       </TableBootstrap>
 
       <Card.Footer className="bg-white p-2">
-        <div className="d-flex flex-wrap align-items-center gap-2">
+        <div className="d-flex flex-wrap align-items-center gap-2">        
+          <PaginationControls table={table} />
           <Button onClick={onExportClick} className="export-btn">
             {t('export-to-csv')}
           </Button>
-          <PaginationControls table={table} />
         </div>
       </Card.Footer>
     </Card>

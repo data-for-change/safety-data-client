@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from '@tanstack/react-table';
+import { t } from 'i18next';
 
 interface PaginationControlsProps<T> {
   table: Table<T>;
@@ -38,15 +39,15 @@ const PaginationControls = <T,>({ table }: PaginationControlsProps<T>) => {
       </button>
 
       <span className="d-flex align-items-center gap-1">
-        <span>Page</span>
+        <span>{t('Page')}</span>
         <strong>
-          {table.getState().pagination.pageIndex + 1} of{' '}
+          {table.getState().pagination.pageIndex + 1} {t('of')+' '}
           {table.getPageCount().toLocaleString()}
         </strong>
       </span>
 
       <span className="d-flex align-items-center gap-1">
-        | Go to page:
+        | {t('Go_to_page')}:
         <input
           type="number"
           min="1"
@@ -69,7 +70,7 @@ const PaginationControls = <T,>({ table }: PaginationControlsProps<T>) => {
       >
         {[10, 20, 30, 40, 50].map(pageSize => (
           <option key={pageSize} value={pageSize}>
-            Show {pageSize}
+            {t('Show')} {pageSize}
           </option>
         ))}
       </select>
