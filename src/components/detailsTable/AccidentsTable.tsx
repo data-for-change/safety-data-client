@@ -21,11 +21,14 @@ import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
 import AccidentColumns from './AccidentColumns';
 import PaginationControls from './PaginationControls';
 import './detailesTable.css';
+import TableView from './TableView';
+import AccidentDetailsCard from './AccidentDetailsCard';
 
 interface IProps { }
 
 const AccidentsTable: React.FC<IProps> = () => {
   const { t } = useTranslation();
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 600);
   const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
 
   const [data, setData] = React.useState(() => [...dataAllInjuries]);
@@ -37,27 +40,15 @@ const AccidentsTable: React.FC<IProps> = () => {
     setData([...dataAllInjuries]);
   }, [dataAllInjuries]);
 
-  const allColumnsDef = React.useMemo(() => AccidentColumns(t), [t]);
-
-  // Function to handle dynamic column layout based on window width
-  const getColumnsByWidth = (width: number, columns: ColumnDef<Accident>[]) => {
-    // Adjust logic based on width to modify columns visibility or configuration
-    if (width < 600) {
-      // Example: return a smaller subset of columns for small screens
-      return columns.slice(0, 4); // Adjust based on your logic
-    }
-    return columns; // Default to all columns for larger screens
-  };
-
-  const [columns, setColumns] = useState(() => getColumnsByWidth(window.innerWidth, allColumnsDef));
   useEffect(() => {
     const handleResize = () => {
-      setColumns(getColumnsByWidth(window.innerWidth, allColumnsDef));
+      setIsSmallScreen(window.innerWidth < 600);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const columns = React.useMemo(() => AccidentColumns(t), [t]);
   const table = useReactTable({
     columns,
     data,
@@ -79,51 +70,15 @@ const AccidentsTable: React.FC<IProps> = () => {
 
   return (
     <Card className="m-1 p-0 border-0">
-      <TableBootstrap striped bordered hover className="table-container">
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id} colSpan={header.colSpan}>
-                  <div
-                    {...{
-                      className: header.column.getCanSort()
-                        ? 'cursor-pointer select-none'
-                        : '',
-                      onClick: header.column.getToggleSortingHandler(),
-                    }}
-                  >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    {{
-                      asc: ' 🔼',
-                      desc: ' 🔽',
-                    }[header.column.getIsSorted() as string] ?? null}
-                    {header.column.getCanFilter() ? (
-                      <div className="d-flex align-items-center gap-1 filter-container">
-                        <DetailsTableFilter column={header.column} table={table} />
-                      </div>
-                    ) : null}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="table-body">
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </TableBootstrap>
-
+      <Card.Body>
+        {isSmallScreen ? (
+          <AccidentDetailsCard table={table} />
+        ) : (
+          <TableView table={table} />
+        )}
+      </Card.Body>
       <Card.Footer className="bg-white p-2">
-        <div className="d-flex flex-wrap align-items-center gap-2">        
+        <div className="d-flex flex-wrap align-items-center gap-2">
           <PaginationControls table={table} />
           <Button onClick={onExportClick} className="export-btn">
             {t('export-to-csv')}
