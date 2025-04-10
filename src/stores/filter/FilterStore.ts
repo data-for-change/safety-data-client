@@ -530,6 +530,19 @@ class FilterStore implements IFilterStore  {
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
    }
 
+   @observable
+   GroupByLimit: number|null = null;
+   
+   @action 
+   SetGroupByLimit = (value:number|null) =>{
+      this.GroupByLimit = value;
+   }
+   @action 
+   submitOnGroupByAfterLimit =() =>{
+      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+   }
+
+
 
    @action
    updateGroupby = (key: string) => {      

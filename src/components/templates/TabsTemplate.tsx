@@ -69,7 +69,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
           </Suspense>
         </ErrorBoundary>
       </Tab>
-      <Tab style={styles.tab} eventKey="table" title={t('Table')}>
+      <Tab style={styles.tab} eventKey="table" title={t('Details')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
             <div className="col-auto"><AccidentsTable /></div>
