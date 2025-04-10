@@ -3,26 +3,22 @@ import {
    runInAction
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
-import * as FC from './ColumnFilterCheckBoxList';
-import * as FilterUtils from '../../utils/FilterUtils';
 import { ColumnFilterArray } from './ColumnFilterArray';
 import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
+import * as FC from './ColumnFilterCheckBoxList';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
-import RootStore from '../RootStore';
+import { getCitiesNames, padDataYearsWith0, getFilterGroupBy, getfilterBounds, getFilterByCityPop } from '../../utils/FilterUtils';
+import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import logger from '../../services/logger';
 import { BBoxType, Street, Casualty } from '../../types';
-
-// import citisNamesHeb from '../../assets/json/cities_names_heb.json';
-import { getCitiesNames, padDataYearsWith0 } from '../../utils/FilterUtils';
+import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText, fetchFilterData } from './filterSlice';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 
@@ -38,8 +34,6 @@ export interface IFilterStore {
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
-
-   
 
    constructor(rootStore: RootStore) {
       // init app data
@@ -182,22 +176,6 @@ class FilterStore implements IFilterStore  {
             //[this.cityResult] = this.cities.arrValues;
          }
       }
-   }
-
-   // get city name by url query parmas
-   getCityIdFromQuery(query: URLSearchParams, defVal: string | undefined) {
-      let res = (defVal) ? [defVal] : [];
-      const id = query.get('city');
-      //let found = false;
-      if (id !== null) {
-         const arr = id.split(',');
-         if (arr.length > 1 && this.isMultipleCities) {
-            res = arr;
-         } else {
-            res =[id];
-         }
-      }
-      return res;
    }
 
    @observable
@@ -570,7 +548,7 @@ class FilterStore implements IFilterStore  {
    @action
    submitGroupByYears = () => {
       const filtermatch = this.getfilterBySeverityAndCity();
-      const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year');
+      const filter = getFilterGroupBy(filtermatch, 'year');
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
@@ -592,7 +570,7 @@ class FilterStore implements IFilterStore  {
       this.isLoadingInjuriesCount = true;
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
       const filtermatch = this.getFilterQueryString(null);
-      const filter = FilterUtils.getFilterGroupBy(filtermatch, 'year', range.min, range.max);
+      const filter = getFilterGroupBy(filtermatch, 'year', range.min, range.max);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
@@ -610,8 +588,7 @@ class FilterStore implements IFilterStore  {
    submitfilterdGroup = (aGroupBy: GroupBy) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
       const filtermatch = this.getFilterQueryString(null);
-      //const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, aGroupBy.sort);
-      const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
+      const filter = getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {
@@ -636,7 +613,7 @@ class FilterStore implements IFilterStore  {
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {  
          const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
-         const filter = FilterUtils.getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
+         const filter = getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
          AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
@@ -773,7 +750,7 @@ class FilterStore implements IFilterStore  {
       filter += this.endYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
-      if (useBounds && bounds != null) filter += FilterUtils.getfilterBounds(bounds);
+      if (useBounds && bounds != null) filter += getfilterBounds(bounds);
       filter += this.dayNight.getFilter();
       filter += this.streets.getFilter();
       filter += this.roads.getFilter();
@@ -792,7 +769,7 @@ class FilterStore implements IFilterStore  {
       filter += this.separator.getFilter();
       filter += this.oneLane.getFilter();
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      filter += FilterUtils.getFilterByCityPop(range.min, range.max)
+      filter += getFilterByCityPop(range.min, range.max)
       return filter;
    }
 
@@ -863,8 +840,12 @@ class FilterStore implements IFilterStore  {
       this.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
       this.dayNight.setValuesByQuery(params);
-      const citis = this.getCityIdFromQuery(params, defCity);
-      if (citis) this.updateCities(citis, true);
+      //const citis = this.getCityIdFromQuery(params, defCity);
+      const cities = getQueryParamValues(params, 'city', defCity, this.isMultipleCities);
+      if (cities) this.updateCities(cities, true);
+      const roads = getQueryParamValues(params, 'rd', undefined, true);
+      if (roads) this.updateCities(cities, true);
+      this.setRoads(roads);
       this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
       this.injTypes.setValuesByQuery(params);

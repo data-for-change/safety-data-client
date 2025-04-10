@@ -11,3 +11,20 @@ export const delBrowserQueryString = (name: string,) => {
   params.delete(name);
   window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
 }
+
+// get array of values by url query parmas
+export function getQueryParamValues(
+  query: URLSearchParams,
+  key: string,
+  defVal?: string,
+  isMultiple: boolean = false
+): string[] {
+  let res = defVal ? [defVal] : [];
+  const value = query.get(key);
+  
+  if (value !== null) {
+    const arr = value.split(',');
+    res = (arr.length > 1 && isMultiple) ? arr : [value];
+  }
+  return res;
+}
