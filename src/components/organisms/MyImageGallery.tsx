@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ImageGallery from "react-image-gallery";
 import 'react-image-gallery/styles/css/image-gallery.css';
-import ButtonToggle from '../atoms/ButtonToggle';
+import {ButtonToggle} from '../common';
 import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';

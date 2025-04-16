@@ -1,6 +1,5 @@
 import React from 'react';
 import Icons from '../../assets/transport_icons/all_icons.svg'; 
-//import { ReactComponent as Icons } from '../../assets/transport_icons/all_icons.svg';
 
 interface IProps {
   name:string,

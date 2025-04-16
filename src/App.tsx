@@ -12,7 +12,7 @@ import MapWithClusters from './pages/MapWithClusters';
 import Footer from './components/templates/footer/Footer';
 // import Card from 'react-bootstrap/Card';
 // import MapPage from './pages/MapPage';
-//import Loader from './components/atoms/Loader';
+//import {Loader} from './components/common';
 import './i18n';
 import './App.css';
 
