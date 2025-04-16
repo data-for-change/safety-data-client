@@ -10,7 +10,7 @@ import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
-import { getCitiesNames, padDataYearsWith0, getFilterGroupBy, getfilterBounds, getFilterByCityPop } from '../../utils/FilterUtils';
+import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds, createFilterQureyByCityPop } from '../../utils/FilterUtils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
@@ -548,7 +548,7 @@ class FilterStore implements IFilterStore  {
    @action
    submitGroupByYears = () => {
       const filtermatch = this.getfilterBySeverityAndCity();
-      const filter = getFilterGroupBy(filtermatch, 'year');
+      const filter = createFilterQureyByGroup(filtermatch, 'year');
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
@@ -570,7 +570,7 @@ class FilterStore implements IFilterStore  {
       this.isLoadingInjuriesCount = true;
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
       const filtermatch = this.getFilterQueryString(null);
-      const filter = getFilterGroupBy(filtermatch, 'year', range.min, range.max);
+      const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any[] | undefined) => {
             if (data !== undefined) {
@@ -588,7 +588,7 @@ class FilterStore implements IFilterStore  {
    submitfilterdGroup = (aGroupBy: GroupBy) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
       const filtermatch = this.getFilterQueryString(null);
-      const filter = getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
+      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {
@@ -613,7 +613,7 @@ class FilterStore implements IFilterStore  {
    submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {  
          const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
-         const filter = getFilterGroupBy(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
+         const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
          AccidentService.fetchGetGroupBy(filter)
             .then((data: any[] | undefined) => {
@@ -745,32 +745,32 @@ class FilterStore implements IFilterStore  {
     */
    getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
       //the oreder of the fileds is importnet for indexing in server
-      let filter = '?';
-      filter += this.startYear.getFilter();
-      filter += this.endYear.getFilter();
-      filter += this.injurySeverity.getFilter();
-      filter += this.cities.getFilter();
-      if (useBounds && bounds != null) filter += getfilterBounds(bounds);
-      filter += this.dayNight.getFilter();
-      filter += this.streets.getFilter();
-      filter += this.roads.getFilter();
-      filter += this.roadSegment.getFilter();
-      filter += this.injTypes.getFilter();
-      filter += this.genderTypes.getFilter();
-      filter += this.ageTypes.getFilter();
-      filter += this.populationTypes.getFilter();
-      filter += this.accidentType.getFilter();
-      filter += this.vehicleType.getFilter();
-      filter += this.involvedVehicle.getFilter();
-      filter += this.locationAccuracy.getFilter();
-      filter += this.roadTypes.getFilter();
-      filter += this.speedLimit.getFilter();
-      filter += this.roadWidth.getFilter();
-      filter += this.separator.getFilter();
-      filter += this.oneLane.getFilter();
+      let query = '?';
+      query += this.startYear.getFilter();
+      query += this.endYear.getFilter();
+      query += this.injurySeverity.getFilter();
+      query += this.cities.getFilter();
+      if (useBounds && bounds != null) query += getfilterBounds(bounds);
+      query += this.dayNight.getFilter();
+      query += this.streets.getFilter();
+      query += this.roads.getFilter();
+      query += this.roadSegment.getFilter();
+      query += this.injTypes.getFilter();
+      query += this.genderTypes.getFilter();
+      query += this.ageTypes.getFilter();
+      query += this.populationTypes.getFilter();
+      query += this.accidentType.getFilter();
+      query += this.vehicleType.getFilter();
+      query += this.involvedVehicle.getFilter();
+      query += this.locationAccuracy.getFilter();
+      query += this.roadTypes.getFilter();
+      query += this.speedLimit.getFilter();
+      query += this.roadWidth.getFilter();
+      query += this.separator.getFilter();
+      query += this.oneLane.getFilter();
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
-      filter += getFilterByCityPop(range.min, range.max)
-      return filter;
+      query += createFilterQureyByCityPop(range.min, range.max)
+      return query;
    }
 
 
