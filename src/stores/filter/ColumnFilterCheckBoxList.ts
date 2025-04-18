@@ -172,6 +172,7 @@ export const initInjurySeverity = () => {
   const col: IColumnFilter = new ColumnFilter('Severity', 'sev', -1, false);
   col.arrTypes.push(new FilterChecker('dead', true, [1]));
   col.arrTypes.push(new FilterChecker('severly-injured', false, [2]));
+  col.arrTypes.push(new FilterChecker('modarte-injured', false, [3]));
   col.setQueryVals();
   return col;
 };

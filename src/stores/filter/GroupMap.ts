@@ -68,6 +68,7 @@ export const initGroup2Map = () => {
     const sev = new GroupBy2('Severity', 'sev');
     sev.vals['הרוג'] = new GroupBy2Val('dead', '#8884D8');
     sev.vals['פצוע קשה'] = new GroupBy2Val('severly-injured', '#82CA9D');
+    sev.vals['פצוע קל'] = new GroupBy2Val('modarte-injured', '#F2D53B');
     dict.set(sev.name, sev);
 
     const gen = new GroupBy2('Gender', 'sex');

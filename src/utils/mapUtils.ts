@@ -103,10 +103,13 @@ export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
         case 'הרוג':
-            res = '#CA273B';//
+            res = '#CA273B'; // red
+            break;
+        case 'פצוע קשה':
+            res = '#F8A141'; // orange
             break;
         default:
-            res = '#F8A141';
+            res = '#F2D53B'; // yellow 
             break;
     }
     return res;
@@ -201,7 +204,7 @@ export const createLegendByColorType = (colorBy: string) =>
       let res = [];
       switch (colorBy) {
           case 'Severity':
-              grade = ['הרוג', 'פצוע קשה'];
+              grade = ['הרוג', 'פצוע קשה', 'פצוע קל'];
               res = createLegendArr(grade,getColorBySeverity);
               break;
           case 'Vehicle':
