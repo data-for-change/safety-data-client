@@ -109,7 +109,7 @@ export const getColorBySeverity = (severity: string) => {
             res = '#F8A141'; // orange
             break;
         default:
-            res = '#F2D53B'; // yellow 
+            res = '#FFDF88'; // yellow 
             break;
     }
     return res;
@@ -194,6 +194,11 @@ export const getColors = (colorBy: string, data: Accident) => {
     return res;
 };
 
+export const getNumSeverity = (severity: string) => {
+    const res = (severity == 'הרוג') ?1:(severity == 'פצוע קשה')? 2:3;
+    return res;
+};
+
 // export const legendHtmlFor = (colorBy: string) => [
 //     `<h3>${string}</h3>`,
 //     description && `<p>${description}</p>`,
@@ -263,6 +268,30 @@ export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
     }, []);
   };
 
+/**
+ * Generates a set of LatLng positions in a spiral arrangement
+ * around the center position.
+ * 
+ * @param center - The center position for the cluster.
+ * @param count - The number of positions to generate around the center.
+ * @returns An array of LatLngExpression positions.
+ */
+export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
+    const claterA  = count < 8;
+    const angleStep =  (claterA)? (1.5 * Math.PI) / count : 0.5; // Radians
+    const distanceStep = (claterA)? 0 : 0.00001; // ~1 meters per step at equator
+    const minRadius = (claterA)?  0.0004 : 0.00015;  
+    const [lat, lng] = center as [number, number];
+  
+    return Array.from({ length: count }, (_, i) => {
+      const angle = 3.1 + i * angleStep;
+      const radius = minRadius + i * distanceStep;
+      const latOffset = radius * Math.sin(angle);
+      const lngOffset = radius * Math.cos(angle);
+      return [lat + latOffset, lng + lngOffset];
+    });
+  };
+
   /**
  * Generates a set of LatLng positions in a flower-like arrangement
  * around the center position.
@@ -271,7 +300,7 @@ export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
  * @param count - The number of positions to generate around the center.
  * @returns An array of LatLngExpression positions.
  */
-export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
+export const generateClusterPositions1 = (center: LatLngExpression, count: number): LatLngExpression[] => {
     const radius = 0.0005; // Adjust for spacing
     const angleStep = (2 * Math.PI) / count;
     return Array.from({ length: count }, (_, i) => {

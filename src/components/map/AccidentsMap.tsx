@@ -10,25 +10,12 @@ import AccidentsMarkers from './AccidentsMarkers';
 import MapCenterUpdater from './MapCenterUpdater';
 import ClusteredMarkers from './ClusteredMarkers';
 import LegendWarpper from './legend/LegendWarpper';
+import {createClusterCustomIcon} from './markers/clusterCustomIcon';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import SelectMapMarkersType from './SelectMapMarkersType';
 import 'leaflet/dist/leaflet.css';
 //import AccidentHeatLayer from './AccidentHeatLayer';
-
-// Function for creating custom icon for cluster group
-// https://github.com/Leaflet/Leaflet.markercluster#customising-the-clustered-markers
-// NOTE: iconCreateFunction is running by leaflet, which is not support ES6 arrow func syntax
-// eslint-disable-next-line
-const createClusterCustomIcon = function (cluster: any) {
-  const allMarkers = cluster.getAllChildMarkers();
-  const totalCount = allMarkers.length;
-  return L.divIcon({
-    html: `<span>${totalCount}</span>`,
-    className: 'marker-cluster-custom',
-    iconSize: L.point(40, 40, true),
-  });
-};
 
 interface IProps {
 }
@@ -78,7 +65,9 @@ const AccidentsMap: FC<IProps> = observer(() => {
       <Card style={{ height: '100%' }}>
         <Card.Body style={{ padding: 0 }}>
           <div id="map" style={{ height: '90%', width: '100%' }}>
-            <MapContainer center={position} zoom={13}
+            <MapContainer center={position} 
+              
+              zoom={13}
               ref={mapRef}
               scrollWheelZoom={true}
               whenReady={handleMapReady}
