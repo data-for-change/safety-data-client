@@ -13,7 +13,7 @@ import AccidentPopUp from './AccidentPopUp';
 // };
 
 const customMarketIcon = (iconMarkup:any, isSmall :boolean = false) => {
-  const size = isSmall? 5:18;
+  const size = isSmall? 9:22;
   const res = divIcon({
     html: iconMarkup,
     className: 'ship-div-icon',
@@ -92,7 +92,8 @@ const MarkerSvg: React.FC<IProps> = (({
 }) => {
   //const lPoint = new L.LatLng(data.latitude, data.longitude);
   const color = getColors(colorBy, data);
-  const isAccuratePos = data.location_accuracy_hebrew === 'עיגון מדויק'; 
+  const isAccuratePos = data.location_accuracy_hebrew === 'עיגון מדויק';
+ 
   const severity = getNumSeverity(data.injury_severity_hebrew);
   const isSmall = severity === 3; 
   const icon = (markerIconsType === 'general') ? getEmptyIcon(color, isAccuratePos)

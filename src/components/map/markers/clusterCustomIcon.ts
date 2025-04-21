@@ -7,9 +7,9 @@ export const createClusterCustomIcon = function (cluster: any) {
   const allMarkers = cluster.getAllChildMarkers();
   const severities = allMarkers.map((m: any) => m.options.severity);
   // Determine dominant or worst severity
-  let color = '#FFDF88'; // default yellow
-  if (severities.includes(1)) color = '#CA273B';
-  else if (severities.includes(2)) color = '#F8A141';
+  let color = '#E6C153'; // default yellow
+  if (severities.includes(1)) color = '#A0202F';
+  else if (severities.includes(2)) color = '#D87F1D';
   const totalCount = allMarkers.length;
   return L.divIcon({
     html: `<div style="

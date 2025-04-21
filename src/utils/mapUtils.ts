@@ -103,13 +103,13 @@ export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
         case 'הרוג':
-            res = '#CA273B'; // red
+            res = '#A0202F'; // red
             break;
         case 'פצוע קשה':
-            res = '#F8A141'; // orange
+            res = '#D87F1D'; // orange
             break;
         default:
-            res = '#FFDF88'; // yellow 
+            res = '#E6C153'; // yellow 
             break;
     }
     return res;
