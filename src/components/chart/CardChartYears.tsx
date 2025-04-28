@@ -17,7 +17,7 @@ const CardChartYears: React.FC<{}> = observer(() => {
     const styles = {
        divChart: {
           width: '100%',
-          height: '60vh',
+          height: '58.5vh',
        },
     };
     return (
