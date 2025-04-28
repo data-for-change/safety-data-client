@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Select from '../atoms/Select';
+import { Select } from '../common';
 import { useStore } from '../../stores/storeConfig';
 import 'leaflet/dist/leaflet.css';
 
