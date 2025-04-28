@@ -1,34 +1,57 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next';
-import '../../styles/my-select.css'
-interface Props {
-   data: any[]
-   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
-   valProp?: string
-   contentProp?: string
-   value?: string
-   label?: string
-   style?: any
-   cssClass?: string
+import React from "react";
+import { useTranslation } from "react-i18next";
+import "../../styles/my-select.css";
+
+interface Props<T> {
+  data: T[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  valProp?: keyof T;
+  contentProp?: keyof T;
+  value?: string;
+  label?: string;
+  id?: string;
+  style?: React.CSSProperties;
+  cssClass?: string;
 }
 
-const MySelect: React.FC<Props> = ({ style, label, onChange, data, valProp, contentProp, value, cssClass='' }) => {
-   const { t } = useTranslation();
-   const cssname= "form-select form-select-sm " + cssClass;
-   return (
-      <div className="select-wrapper" style={style && style} >
-         {label && <label style={{'whiteSpace': 'nowrap'}}> {t(label)} </label>}
-         <select className={cssname} onChange={onChange} value={value}>
-            {data.map((item) => {
-               return <option
-                  key={valProp ? item[valProp] : item}
-                  value={valProp ? item[valProp] : item}>
-                  {t(contentProp ? item[contentProp] : item)}
-               </option>
-            })}
-         </select>
-      </div>
-   )
-}
+const MySelect = <T,>({
+  data,
+  style,
+  id,
+  label,
+  onChange,
+  valProp,
+  contentProp,
+  value,
+  cssClass = "",
+}: Props<T>) => {
+  const { t } = useTranslation();
+  const cssname = "form-select form-select-sm " + cssClass;
+  const labelText = label && t(label);
+  const labelId = id || (label ? `${label}-id` : undefined);
 
-export default MySelect
+  const mappedData = data.map((item) => {
+    const val = valProp ? String(item[valProp]) : String(item);
+    const content = contentProp ? String(item[contentProp]) : String(item);
+    return (
+      <option key={val} value={val}>
+        {t(content)}
+      </option>
+    );
+  });
+
+  return (
+    <div className="select-wrapper" style={style}>
+      {label && (
+        <label htmlFor={labelId} style={{ whiteSpace: "nowrap" }}>
+          {labelText}
+        </label>
+      )}
+      <select id={labelId} className={cssname} onChange={onChange} value={value}>
+        {mappedData}
+      </select>
+    </div>
+  );
+};
+
+export default MySelect;

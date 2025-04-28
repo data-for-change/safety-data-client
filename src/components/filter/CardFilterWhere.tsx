@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { Accordion, Card } from 'react-bootstrap';
-import GroupCheckbox from '../molecules/GroupCheckBox';
+import GroupCheckbox from './GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 import MySelect from '../atoms/MySelect';
 import CustomToggle from './CustomToggle';

@@ -40,7 +40,7 @@ type MarkerData = {
 // https://github.com/Leaflet/Leaflet.markercluster#customising-the-clustered-markers
 // NOTE: iconCreateFunction is running by leaflet, which is not support ES6 arrow func syntax
 // eslint-disable-next-line
-const createClusterCustomIcon = function (cluster:any) {
+export const createClusterCustomIcon = function (cluster:any) {
   const allMarkers = cluster.getAllChildMarkers(); 
   const totalCount = allMarkers.length; 
   return L.divIcon({
@@ -95,7 +95,6 @@ const ClusteredMarkers: React.FC = () => {
     return clusters;
   }, []);
   
-  console.log ('zoom',currZoom);
   const icon: L.Icon = ORANGE_ICON;
   return (
     <>

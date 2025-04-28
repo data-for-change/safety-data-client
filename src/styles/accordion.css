@@ -1,5 +1,25 @@
+.accordion {
+   border-radius: 3px;
+   overflow: hidden; 
+ }
+ 
+.accordion .card  {
+  border-bottom-width: 0 ;
+}
+
+.accordion .card:first-child {
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+ }
+ 
+ .accordion .card:last-child {
+   border-bottom-width: 1 ;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
+ }
+
 .accordion .card .card-header {
-   background-color: rgb(255, 255, 255);
+   background-color: rgb(249, 251, 251);
    /* border-bottom: 1.5px solid black */
 }
 

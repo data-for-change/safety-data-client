@@ -1,6 +1,14 @@
 export * from './Accident';
 export * from './MarkerData';
-export * from './CasualtyLean';
+export type {CasualtyLean} from './CasualtyLean';
+export type {Casualty} from './Casualty';
+export * from './InjuredPerson';
 export * from './BBoxType';
 export * from './MapMarkersType';
-export * from './InjuredPerson';
+export type {KeyVal} from './KeyVal';
+export type {CityKeyVal} from './CityKeyVal';
+export {GroupBy2Val} from './GroupBy2Val';
+export type {ItemCount} from './ItemCount';
+export type {Street} from './Street';
+export type {Recommendation} from './Recommendation';
+export type {NewRecommendation} from './Recommendation';

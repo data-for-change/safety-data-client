@@ -1,21 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
+import { useSelector } from 'react-redux';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 import ChartBar from './ChartBar';
+import { RootState } from '../../stores/store';
 
 const CardChartYears: React.FC<{}> = observer(() => {
     const { t } = useTranslation();
-    const { filterStore, uiStore } = useStore();
+    const { filterStore } = useStore();
     const { dataFilterdByYears, casualtiesNames } = filterStore;
-    const { direction } = uiStore;
+    const direction  = useSelector((state: RootState) => state.appUi.direction);
     const reactData2 = toJS(dataFilterdByYears);
     const styles = {
        divChart: {
           width: '100%',
-          height: '60vh',
+          height: '58.5vh',
        },
     };
     return (

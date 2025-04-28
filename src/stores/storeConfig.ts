@@ -13,6 +13,7 @@ export const useStore = (): RootStore => {
   return store
 };
 
+
 /* // see: https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables
 if(process.env.NODE_ENV !== 'production') {
   window['store'] = store;

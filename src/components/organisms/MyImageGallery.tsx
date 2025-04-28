@@ -6,11 +6,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ImageGallery from "react-image-gallery";
 import 'react-image-gallery/styles/css/image-gallery.css';
-import ButtonToggle from '../atoms/ButtonToggle';
+import {ButtonToggle} from '../common';
 import Select from '../atoms/Select';
 import { useStore } from '../../stores/storeConfig';
 import SmallCard2 from '../atoms/SmallCard2';
 import {API_URL} from '../../utils/globalEnvs';
+import { RootState } from '../../stores/store';
+import { useSelector } from 'react-redux';
 
 interface Props {
   type: string;
@@ -28,11 +30,11 @@ const styles = {
 };
 
 const MyImageGallery: React.FC<Props> = observer(({ type }) => {
-  const { imageStore, uiStore } = useStore();
+  const { imageStore} = useStore();
   const {
     getImages, setCurrImage, imageList, tagsArr, setCurrTag, currTag,
   } = imageStore;
-  const { language } = uiStore;
+  const language  = useSelector((state: RootState) => state.appUi.language);
   const isRTL = (language !== 'en');
   useEffect(() => {
     getImages(type);
@@ -112,9 +114,9 @@ const styleTitle: React.CSSProperties = {
   margin: '10px',
 };
 const ImageTitle: React.FC<{}> = observer(() => {
-  const { imageStore, uiStore } = useStore();
+  const { imageStore } = useStore();
   const { currImage } = imageStore;
-  const { language } = uiStore;
+  const language  = useSelector((state: RootState) => state.appUi.language);
   const titleKey = `title${language}`;
   // @ts-ignore
   const title: string = (currImage !== null) ? currImage[titleKey] : '';

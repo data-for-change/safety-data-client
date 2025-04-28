@@ -15,11 +15,10 @@ const WhenTitle: React.FC<{}> = observer(() => {
     <span>{res}</span>
   )
 });
-
-const WhereTitle: React.FC<{}> = observer(() => {
+const WhereMainTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { cities, cityPopSizeRange, roads, roadTypes, locationAccuracy } = filterStore;
+  const { cities, cityPopSizeRange, roads } = filterStore;
   let res = t('Israel');
   if (cities.text !== '') {
     res = `${cities.text}`; // maybe use t('several-cities');
@@ -27,10 +26,18 @@ const WhereTitle: React.FC<{}> = observer(() => {
     res = `${t('city_size')} ${cityPopSizeRange.text}`;
   } else if (roads.text !== '') {
     res = `${t(roads.name)} ${roads.text}`;
-    //res = (roads.length === 1) ? `${t('Road')} ${roads[0]}` : t('several-roads');
   }
-  else if (roadTypes.text !== '') {
-    res = `${roadTypes.text}`;
+  return (
+    <span>{res}</span>
+  )
+});
+const WhereTitle: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
+  const { filterStore } = useStore();
+  const { roadTypes, locationAccuracy } = filterStore;
+  let res = '';
+  if (roadTypes.text !== '') {
+    res += `, ${roadTypes.text}`;
   }
   if (locationAccuracy.text !== '') res += `, ${locationAccuracy.text}`;
   return (
@@ -70,40 +77,49 @@ const WhatVehicleTitle: React.FC<{}> = observer(() => {
     <span>{res}</span>
   )
 });
+const YearsTitle: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
+  const { filterStore } = useStore();
+  const { startYear, endYear } = filterStore;
+  let res = (startYear.text !== endYear.text) ? `, ${startYear.text} - ${endYear.text}` :  `, ${startYear.text}`;
+  return (
+    <span>{res}</span>
+  )
+});
+const InjuriesCountTitle: React.FC<{}> = observer(() => {
+  const { t } = useTranslation();
+  const { filterStore } = useStore();
+  const { injTypes, injuriesCount , casualtiesNames} = filterStore;
+  let res = (injuriesCount > 0)? `, ${t('Found')}  ${injuriesCount} ${t(casualtiesNames)}`: `, ${t('NoResultsFound')}`;
+  return (
+    <span>{res}</span>
+  )
+});
 
 const InfoPanel: React.FC<IProps> = observer(() => {
   const styles = {
     div: {
       marginTop: '0.8rem',
-      marginLeft: '1rem',
-      marginRight: '1rem',
-      marginBottom: '0.1rem'
+      marginLeft: '0.8rem',
+      marginRight: '0.8rem',
+      marginBottom: '0.2rem'
     }
   }
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { casualtiesNames, isLoadingInjuriesCount: isLoadingCountInjuries, injuriesCount } = filterStore;
-  if (isLoadingCountInjuries) return <div style={styles.div}> {t('Loading')} </div>
-  if (injuriesCount > 0) {
-    return (
-      <h5 style={styles.div}>
-        <WhereTitle />
-        <WhatVehicleTitle />
-        <WhoTitle />
-        <WhenTitle />
-        <WhatTitle />
-        {', '}
-        {t('Found')}
-        {' '}
-        {injuriesCount}
-        {' '}
-        {t(casualtiesNames)}
-        {' '}
-      </h5>
-    );
-  }
+  const { isLoadingInjuriesCount } = filterStore;
+  if (isLoadingInjuriesCount) return <div style={styles.div}> {t('Loading')} </div>
   return (
-    <h5 style={styles.div}>{t('NoResultsFound')}</h5>
+    <h5 style={styles.div}>
+      <WhereMainTitle /> 
+      <WhereTitle />
+      <WhatVehicleTitle />
+      <WhoTitle />
+      <WhenTitle />
+      <WhatTitle />
+      <YearsTitle />
+      <InjuriesCountTitle />
+    </h5>
   );
 });
 export default InfoPanel;

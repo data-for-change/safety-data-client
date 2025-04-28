@@ -14,4 +14,4 @@ EXPOSE 3000
 CMD ["npm", "run", "dev"]
 
 # run 
-# docker run -e REACT_APP_API_URL=http://localhost:5000 -p 3000:3000 saftey-data-react
+# docker run --env-file .env.development -p 3000:3000 saftey-data-react

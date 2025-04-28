@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import Select from '../atoms/Select';
+import 'leaflet/dist/leaflet.css';
 
 const SelectMarkersIConType: FC<{}> = observer(() => {
   const { t } = useTranslation();

@@ -4,6 +4,8 @@ import {
   fetchListImgByTag, fetchListImgByPlace, updateImgProps, uploadImg,
 } from '../../services/ImageService';
 import IimageEntity from './ImageEntity';
+import { useSelector } from 'react-redux';
+import { store as reduxStore } from '../store';
 
 export interface IImageStore {
   isLoading: boolean;
@@ -50,8 +52,8 @@ export default class ImageStore implements IImageStore{
   currTag: string = 'כללי';
   setCurrTag = (tag: string) => {
     this.currTag = tag;
-    const lang = this.rootStore.uiStore.language;
-    this.getImagesByTag(tag, lang);
+    const language  = reduxStore.getState().appUi.language;
+    this.getImagesByTag(tag, language);
   }
 
   tagsArr = [
@@ -94,12 +96,12 @@ export default class ImageStore implements IImageStore{
  
   // fetch imges from API 
   getImages = (type :string) => {
-    const lang = this.rootStore.uiStore.language;
+    const language  = reduxStore.getState().appUi.language;
     if (type === 'city') {
       const city = this.rootStore.filterStore.cityResult;
-      this.getImagesByPlace(city, lang);
+      this.getImagesByPlace(city, language);
     } else {
-      this.getImagesByTag(this.currTag, lang);
+      this.getImagesByTag(this.currTag, language);
     }
   }
 

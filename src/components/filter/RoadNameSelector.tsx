@@ -2,7 +2,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Form from 'react-bootstrap/Form';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { useStore } from '../../stores/storeConfig';
@@ -18,10 +17,10 @@ const RoadNameSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
   const {arrValues} = roads;
   const { t } = useTranslation();
   return (
-    <Form.Group controlId="filterForm.ControlRoad">
-      <Form.Label className="filterLable">
+    <div id="filterForm.ControlRoad">
+      <div className="filterLable">
         {t('Road')}:
-      </Form.Label>
+      </div>
       <Typeahead
         id="typeaheadCity"
         // defaultSelected={[store.city]}
@@ -36,7 +35,7 @@ const RoadNameSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
         multiple={isMultiple}
         selected={arrValues}
       />
-    </Form.Group>
+    </div>
   );
 });
 export default RoadNameSelector;

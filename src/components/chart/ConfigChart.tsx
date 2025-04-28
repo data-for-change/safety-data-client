@@ -3,17 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import { useStore } from '../../stores/storeConfig';
+import { useDispatch, useSelector } from 'react-redux';
+import {updateChartType} from '../../stores'
+import { RootState , AppDispatch } from '../../stores/store';
 // import Checkbox from '../atoms/Checkbox';
 
 interface IProps { }
 const ConfigChart: React.FC<IProps> = observer(() => {
   const { t } = useTranslation();
-  const { uiStore } = useStore();
-  const {
-    chartType, chartTypeList, updateChartType, // showPercentageChart, updateShowPercentageChart,
-  } = uiStore;
+  const dispatch = useDispatch<AppDispatch>();
+  const {chartType, chartTypeList}  = useSelector((state: RootState) => state.appUi);
   const onSelectChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    updateChartType(event.target.value);
+    dispatch(updateChartType(event.target.value));
   }, [updateChartType]);
   return (
     <div>

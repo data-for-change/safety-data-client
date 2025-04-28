@@ -28,6 +28,7 @@ jobs:
           build-args: |
             REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
             VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_API_URL2=${{ secrets.VITE_API_URL2 }}
   deploy:
     needs: Build-safety-data-client
     runs-on: ubuntu-latest

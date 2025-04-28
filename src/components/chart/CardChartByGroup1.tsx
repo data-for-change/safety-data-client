@@ -3,15 +3,19 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 // import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
-import SelectGroupBy from '../atoms/SelectGroupBy';
+import SelectGroupBy from '../groupby/SelectGroupBy';
 import SmallCard2 from '../atoms/SmallCard2';
 import ChartBar from './ChartBar';
 import ConfigChart from './ConfigChart';
 import ConfigModal from '../organisms/ConfigModal';
 import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
+import { ItemCount } from '../../types';
+import SelectSortBy from '../groupby/SelectSortBy';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../stores/store';
 
-const foramtDataPrecision = (data: any[]) => {
+const foramtDataPrecision = (data: ItemCount[]) => {
     const data2 = data.map((x) => {
        if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
           return { _id: x._id, count: x.count.toFixed(1) };
@@ -34,11 +38,12 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     };
     // const { t } = useTranslation();
     const [showModel, setShowModal] = useState(false);
-    const { filterStore, uiStore } = useStore();
+    const { filterStore } = useStore();
     const { dataFilterd } = filterStore;
     const reactData = toJS(dataFilterd);
     const dataFormated = foramtDataPrecision(reactData);
-    const { chartType, direction } = uiStore;
+    const { chartType, direction } = useSelector((state: RootState) => state.appUi);
+
     const chart = <ChartBar
        data={dataFormated}
        fill="#8884d8"
@@ -53,10 +58,8 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     return (
        <SmallCard2 style={{marginBottom: '0.5rem'}}>
           <div style={styles.divConfig}>
-             <SelectGroupBy id="Graphs.Main" />
-             {/* <Button onClick={() => { setShowModal(!showModel); }}>
-                {memoSettingsIcon}
-             </Button> */}
+             <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+             <SelectSortBy id="Graphs.Main.SelectSort"/>
           </div>
           <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
              <ConfigChart />

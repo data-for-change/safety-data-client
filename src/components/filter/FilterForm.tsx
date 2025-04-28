@@ -10,6 +10,7 @@ import CardFilterWho from './CardFilterWho';
 import CardFilterWhat from './CardFilterWhat';
 import CardFilterWhatVehicle from './CardFilterWhatVehicle';
 import CardFilterWhatRoad from './CardFilterWhatRoad';
+import CardFilterSeverty from './CardFilterSeverty';
 // import { useQuery, useInjTypeByQuery } from '../../hooks/queryHooks';
 import '../../styles/accordion.css'
 
@@ -30,12 +31,8 @@ const FilterForm: React.FC<IProps> = observer(() => {
                <CardFilterWho />
                <CardFilterWhat />
                <CardFilterWhatRoad />
+               <CardFilterSeverty />
             </Accordion>
-            <GroupCheckbox
-               formName="filterForm"
-               colFilter={injurySeverity}
-               onChange={updateInjurySeverity}
-            />
          </Form>
       </React.Fragment>
    );

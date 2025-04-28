@@ -1,10 +1,31 @@
-  .filter-input {
-    min-width: 100px;
-    max-width: 150px;
-    width: 100%;
-  }
+.card-layout .card {
+  border-radius: 0.5rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  font-size: 14px; 
+  line-height: 1.4;
+  padding: 0.75rem;
+}
+.card-layout .card div {
+  margin-bottom: 0.25rem;
+}
 
-  .filter-input-number {
-    min-width: 20px;
-    max-width: 70px;
-  }
+.table-responsive-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  font-size: 14px; 
+}
+.card-layout .card strong {
+  font-weight: 500;
+  color: #555;
+}
+.filter-input {
+  min-width: 70px;
+  max-width: 150px;
+  width: 60%;
+}
+
+.filter-input-number {
+  min-width: 20px;
+  max-width: 70px;
+}
