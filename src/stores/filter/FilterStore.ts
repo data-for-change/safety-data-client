@@ -619,7 +619,7 @@ class FilterStore implements IFilterStore  {
             .then((data: any[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
-                     const fixData = (this.group2Dict.groupBy as GroupBy2).fixStrcutTable(data);
+                     const fixData = (this.group2Dict.groupBy as GroupBy2).normalizeGroupedCounts(data);
                      this.setDataGroupBy2(fixData);
                   } catch (error) {
                      logger.log(error);

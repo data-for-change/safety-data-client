@@ -20,28 +20,30 @@ export default class GroupBy2 implements IGroupBy2 {
     this.vals = {};
   }
 
-  revTrnas = (key: string) => {
-    if (key === '') return '';
-    const res = this.vals[key].name;
-    return res;
-  }
+  lookupName= (key: string | null | undefined): string => {
+    if (!key) return 'unknown';
+    return this.vals[key]?.name ?? 'unknown'; 
+  };
 
   // input sample: {count : [{grp2: "זכר", count: 3},  {grp2: "נקבה", count: 2} ]}
   // output sample: {_id: "2015", male: 3, female: 2}
-  fixStrcutTable = (data: any[]) => {
-    const res = data.map((x) => {
-      const arr = x.count.map((y: any) => {
-        const engVal = this.revTrnas(y.grp2);
-        return (`"${engVal}":${y.count}`);
-      }).join(',');
-      // eslint-disable-next-line no-underscore-dangle
+  normalizeGroupedCounts = (data: any[]) => {
+    return data.map((x) => {
+      const obj: Record<string, any> = {};  
+      // set _id
       let xId = x._id;
-      if (xId !== null && xId !== undefined && typeof (xId) === 'string') xId = xId.replace('"', '\\"');
-      let sObject = `{"_id":"${xId}",${arr}}`;
-      sObject = JSON.parse(sObject);
-      return (sObject);
+      if (typeof xId === 'string') {
+        xId = xId.replace(/"/g, '\\"');
+      }
+      obj['_id'] = xId;  
+      // set counts
+      (x.count || []).forEach((y: any) => {
+        const engVal = this.lookupName(y.grp2);
+        obj[engVal] = y.count;
+      });
+  
+      return obj;
     });
-    return res;
   }
 
   getBars = () => {
