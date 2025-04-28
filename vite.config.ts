@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
@@ -9,6 +9,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true, // optional: to avoid importing 'expect', 'describe', etc
-    setupFiles: './src/setupTests.ts', // optional for setting up things like jest-dom
+    setupFiles: ['./src/setupTests.ts'],
+  // Make sure DOM elements get cleaned up between tests
+    deps: {
+      inline: ['@testing-library/jest-dom']
+    },
   },
 });

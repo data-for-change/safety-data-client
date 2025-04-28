@@ -13,7 +13,7 @@ i18n
   .init({
     fallbackLng: 'he',
     lng: 'he',
-    debug: true,
+    debug: process.env.NODE_ENV === 'development',
     // hardcoding translations for the sake of simplicity,
     // id more complex - get it from backend.
     // i18next has a small plugin that makes it easy.
