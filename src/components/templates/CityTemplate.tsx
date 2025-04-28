@@ -5,7 +5,7 @@ import { TabsTemplate } from './TabsTemplate';
 // import FilterPanel from '../organisms/FilterPanel';
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../filter/ConfigFilterModal';
-import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
+import { ButtonShowFilterModal } from '../common';
 import { useMemos } from '../../hooks/myUseMemo';
 import InfoPanel from '../molecules/InfoPanel';
 import WithSidebarTemplate from './WithSidebarTemplate';

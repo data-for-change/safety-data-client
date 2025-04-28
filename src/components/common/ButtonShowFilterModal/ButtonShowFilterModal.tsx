@@ -1,11 +1,11 @@
 import React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMemos } from '../../hooks/myUseMemo';
-import { AppDispatch, RootState } from '../../stores/store';
-import { setShowFilterModal } from '../../stores';
-import SvgIconFilter from '../../assets/SvgIconFilter';
-import '../../styles/filter-btn.css'
+import { useMemos } from '../../../hooks/myUseMemo';
+import { AppDispatch, RootState } from '../../../stores/store';
+import { setShowFilterModal } from '../../../stores';
+import SvgIconFilter from '../../../assets/SvgIconFilter';
+import '../../../styles/filter-btn.css'
 
 interface IProps { }
 const ButtonShowFilterModal: React.FC<IProps> = () => {
@@ -17,6 +17,7 @@ const ButtonShowFilterModal: React.FC<IProps> = () => {
     return (
         <>
             <span
+                data-testid="filter-button" 
                 title="Filter"
                 // aria-label="This is information"
                 className="btn-sm filter-btn"

@@ -6,7 +6,7 @@ import logger from "../../services/logger";
 import { store as mobxStore } from '../storeConfig';
 import { RootState } from "../store";
 
-interface appUiState {
+export interface appUiState {
   appInitialized: boolean;
   language: string;
   direction: "ltr" | "rtl";

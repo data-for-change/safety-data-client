@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TabsTemplate from './TabsTemplate';
 import ConfigFilterModal from '../filter/ConfigFilterModal';
-import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
+import { ButtonShowFilterModal } from '../common';
 import { useMemos } from "../../hooks/myUseMemo";
 import WithSidebarTemplate from './WithSidebarTemplate';
 import InfoPanel from '../molecules/InfoPanel';

@@ -1,7 +1,7 @@
-import { configureStore, createAsyncThunk} from '@reduxjs/toolkit';
+import { Reducer, configureStore, createAsyncThunk} from '@reduxjs/toolkit';
 import filterReducer from './filter/filterSlice';
 import casualtyReducer from './casualty/casualtySlice';
-import appUiSliceReducer, { fetchLatestCbsUpdate } from './ui/appUiSlice';
+import appUiSliceReducer, { fetchLatestCbsUpdate, appUiState } from './ui/appUiSlice';
 import { initLang } from './ui/appUiSlice';
 
 export const initializeStore = createAsyncThunk(
