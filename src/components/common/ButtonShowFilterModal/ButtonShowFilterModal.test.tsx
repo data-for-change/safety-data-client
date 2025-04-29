@@ -3,7 +3,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import appUiReducer, { setShowFilterModal } from '../../../stores/ui/appUiSlice';
 import ButtonShowFilterModal from './ButtonShowFilterModal';
 
 describe('ButtonShowFilterModal Component', () => {

@@ -18,7 +18,8 @@ import logger from '../../services/logger';
 import { BBoxType, Street, Casualty } from '../../types';
 import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
-import { setIsLoading, setFiltersText, fetchFilterData } from './filterSlice';
+import { setIsLoading, setFiltersText } from './filterSlice';
+import { fetchFilterData } from './filterThunks'; 
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 

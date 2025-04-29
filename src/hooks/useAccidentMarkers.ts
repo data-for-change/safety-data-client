@@ -4,7 +4,7 @@ import { useStore } from "../stores/storeConfig";
 import { BBoxType, Accident } from "../types";
 import { useSelector } from "react-redux";
 import { selectDataAllInjuries } from "../stores/casualty/casualtySlice";
-import { RootState } from "../stores/store";
+import type { RootState } from "../stores/types";
 
 export const useAccidentMarkers = () => {
   const { filterStore, mapStore } = useStore();

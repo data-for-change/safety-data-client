@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../types";
+import { setBrowserQueryString } from "../../utils/queryStringUtils";
 
 export interface appUiState {
   appInitialized: boolean;
@@ -37,9 +38,13 @@ const appUiSlice = createSlice({
   reducers: {
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
+      // Update the HTML element directly
+      document.documentElement.lang = action.payload;
     },
     setDirection: (state, action: PayloadAction<"ltr" | "rtl">) => {
       state.direction = action.payload;
+      // Update the HTML element directly
+      document.documentElement.dir = action.payload;
     },
     setShowFilterModal: (state, action: PayloadAction<boolean>) => {
       state.showFilterModal = action.payload;
@@ -52,6 +57,7 @@ const appUiSlice = createSlice({
     },
     setCurrentTab: (state, action: PayloadAction<string>) => {
       state.currentTab = action.payload;
+      setBrowserQueryString("tab", action.payload)
     },
     updateChartType: (state, action: PayloadAction<string>) => {
       state.chartType = action.payload;
