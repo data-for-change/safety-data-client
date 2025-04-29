@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
 import { Accordion } from 'react-bootstrap';
 import { useStore } from '../../stores/storeConfig';
-import GroupCheckbox from '../molecules/GroupCheckBox';
 import CardFilterWhen from './CardFilterWhen';
 import CardFilterWhere from './CardFilterWhere';
 import CardFilterWho from './CardFilterWho';

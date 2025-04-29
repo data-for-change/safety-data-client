@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
-import Checkbox from '../atoms/Checkbox';
+import { Checkbox } from '../common';
 import { IColumnFilter } from '../../stores/filter/ColumnFilterCheckBoxList';
 import { useMemos } from "../../hooks/myUseMemo";
 import './groupCheckBox.css';
