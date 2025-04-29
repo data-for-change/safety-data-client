@@ -4,3 +4,4 @@ export {Checkbox} from './CheckBox';
 export {ErrorBoundary}  from './ErrorBoundary';
 export {Loader} from './Loader';
 export {Select} from './Select';
+export {SmallCard} from './SmallCard';

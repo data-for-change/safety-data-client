@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {ErrorBoundary, Loader} from '../common/';
+import {ErrorBoundary, Loader, SmallCard} from '../common/';
 import { useStore } from '../../stores/storeConfig';
-import SmallCard2 from '../atoms/SmallCard2';
 import { useDispatch, useSelector, } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores/store';
 import {setCurrentTab} from '../../stores';
@@ -62,9 +61,9 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
       <Tab style={styles.tabMap} eventKey="map" title={t('Map')}>
         <ErrorBoundary>
           <Suspense fallback={<Loader />}>
-            <SmallCard2 className="p-1 bg-white rounded shadow">           
+            <SmallCard className="p-1 bg-white rounded shadow">           
               <MapAccidents />
-            </SmallCard2>
+            </SmallCard>
           </Suspense>
         </ErrorBoundary>
       </Tab>
