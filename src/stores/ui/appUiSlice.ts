@@ -1,16 +1,11 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import i18n from "../../i18n";
-import { setBrowserQueryString } from "../../utils/queryStringUtils";
-import AccidentService from "../../services/AccidentService";
-import logger from "../../services/logger";
-import { store as mobxStore } from '../storeConfig';
-import { RootState } from "../store";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../types";
 
 export interface appUiState {
   appInitialized: boolean;
   language: string;
   direction: "ltr" | "rtl";
-  dataUpdatedTo: number|null; //epochSeconds
+  dataUpdatedTo: number | null;
   showFilterModal: boolean;
   initPage: boolean;
   currentPage: string;
@@ -25,7 +20,7 @@ const initialState: appUiState = {
   appInitialized: false,
   language: "he",
   direction: "rtl",
-  dataUpdatedTo:  1738281600, //31.01.2025
+  dataUpdatedTo: 1738281600,
   showFilterModal: false,
   initPage: false,
   currentPage: "home",
@@ -36,61 +31,15 @@ const initialState: appUiState = {
   isHeaderExpanded: false,
 };
 
-// Async thunk to handle language change side effect
-export const updateLanguage = createAsyncThunk<void, string>(
-  "ui/updateLanguage",
-  async (lang: string, { dispatch }) => {
-    try {
-      await i18n.changeLanguage(lang);
-      localStorage.setItem("lang", JSON.stringify(lang));
-      dispatch(setLanguage(lang));
-      dispatch(setDirection(lang === "en" ? "ltr" : "rtl"));
-      dispatch(setHeaderExpanded(false));
-    } catch (error) {
-      console.error("Failed to update language:", error);
-    }
-  }
-);
-
-export const initLang = createAsyncThunk('appUi/initLang', async (_, { dispatch }) => {
-    try {
-      const storedLang = localStorage.getItem('lang');
-      if (storedLang) {
-        const parsedLang = JSON.parse(storedLang);
-        dispatch(updateLanguage(parsedLang)); // Dispatch language update
-      }
-    } catch (error) {
-      logger.log(error);
-    }
-  });
-
-export const fetchLatestCbsUpdate = createAsyncThunk<number>(
-  "appUi/fetchLatestCbsUpdate",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await AccidentService.getLatestCbsUpdateDate();
-      const epochSeconds = response.last_update;
-      //const epochSeconds = response.data.last_update;
-      return epochSeconds;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);  
-
 const appUiSlice = createSlice({
   name: "appUi",
   initialState,
   reducers: {
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
-      // Update the HTML element directly
-      document.documentElement.lang = action.payload;
     },
     setDirection: (state, action: PayloadAction<"ltr" | "rtl">) => {
       state.direction = action.payload;
-       // Update the HTML element directly
-       document.documentElement.dir = action.payload;
     },
     setShowFilterModal: (state, action: PayloadAction<boolean>) => {
       state.showFilterModal = action.payload;
@@ -103,7 +52,6 @@ const appUiSlice = createSlice({
     },
     setCurrentTab: (state, action: PayloadAction<string>) => {
       state.currentTab = action.payload;
-      setBrowserQueryString("tab", action.payload);
     },
     updateChartType: (state, action: PayloadAction<string>) => {
       state.chartType = action.payload;
@@ -117,22 +65,10 @@ const appUiSlice = createSlice({
     toggleHeaderExpanded: (state) => {
       state.isHeaderExpanded = !state.isHeaderExpanded;
     },
-    setStoreByQuery: (state, action: PayloadAction<{ defaultTab: string; defaultCity?: string }>) => {
-        const params = new URLSearchParams(window.location.search);
-        const tab = params.get("tab") || action.payload.defaultTab;  
-        if (tab) {
-          state.currentTab = tab; 
-        }  
-        // Sync with MobX store (temporary)
-        mobxStore.filterStore.setStoreByQuery(params, action.payload.defaultCity);
-        mobxStore.mapStore.setStoreByQuery(params);
-      },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchLatestCbsUpdate.fulfilled, (state, action) => {
+    setDataUpdatedTo: (state, action: PayloadAction<number>) => {
       state.dataUpdatedTo = action.payload;
-    });
-  }
+    },
+  },
 });
 
 export const {
@@ -146,9 +82,10 @@ export const {
   updateShowPercentageChart,
   setHeaderExpanded,
   toggleHeaderExpanded,
-  setStoreByQuery,
+  setDataUpdatedTo,
 } = appUiSlice.actions;
 
 export const selectDirection = (state: RootState) => state.appUi.direction;
 export const selectLanguage = (state: RootState) => state.appUi.language;
+
 export default appUiSlice.reducer;

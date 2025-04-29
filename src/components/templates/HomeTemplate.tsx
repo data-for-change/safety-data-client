@@ -7,7 +7,8 @@ import { useMemos } from "../../hooks/myUseMemo";
 import WithSidebarTemplate from './WithSidebarTemplate';
 import InfoPanel from '../molecules/InfoPanel';
 import { RootState, AppDispatch } from '../../stores/store';
-import { setCurrentPage, setStoreByQuery, setInitPage } from '../../stores/ui/appUiSlice';
+import { setCurrentPage, setInitPage } from '../../stores/ui/appUiSlice';
+import { setStoreByQuery } from '../../stores/ui/appUiThunks';
 import { useStore } from '../../stores/storeConfig'; 
 
 interface IProps {}

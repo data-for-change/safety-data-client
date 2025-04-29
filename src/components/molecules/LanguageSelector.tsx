@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores/store';
-import { updateLanguage, setDirection } from '../../stores';
+import { setDirection } from '../../stores';
+import { updateLanguage } from '../../stores/ui/appUiThunks';
 import MySelect from '../atoms/MySelect';
 
 const LanguageSelector = () => {
