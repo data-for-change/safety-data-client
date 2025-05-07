@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../../i18n';
 import MySelect from './MySelect';
 import '@testing-library/jest-dom';
 
@@ -12,14 +14,16 @@ describe('MySelect', () => {
 
   it('renders options and label', () => {
     render(
-      <MySelect
-        data={options}
-        valProp="id"
-        contentProp="name"
-        label="Select Fruit"
-        id="fruit-select"
-        onChange={() => {}}
-      />
+      <I18nextProvider i18n={i18n}>
+        <MySelect
+          data={options}
+          valProp="id"
+          contentProp="name"
+          label="Select Fruit"
+          id="fruit-select"
+          onChange={() => {}}
+        />
+      </I18nextProvider>
     );
 
     // label is rendered
