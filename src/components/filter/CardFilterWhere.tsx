@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { Accordion, Card } from 'react-bootstrap';
 import GroupCheckbox from './GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
-import MySelect from '../atoms/MySelect';
+import { MySelect } from '../common';
 import CustomToggle from './CustomToggle';
 import CitySelector from './CitySelector';
 import StreetSelector from './StreetSelector';

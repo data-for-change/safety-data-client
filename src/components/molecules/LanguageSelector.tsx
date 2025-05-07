@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores/store';
 import { setDirection } from '../../stores';
 import { updateLanguage } from '../../stores/ui/appUiThunks';
-import MySelect from '../atoms/MySelect';
+import { MySelect } from '../common';
 
 const LanguageSelector = () => {
    const dispatch = useDispatch<AppDispatch>();  

@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import "../../styles/my-select.css";
+import { Form } from "react-bootstrap";
+import "./my-select.css";
 
 interface Props<T> {
   data: T[];
@@ -26,31 +27,31 @@ const MySelect = <T,>({
   cssClass = "",
 }: Props<T>) => {
   const { t } = useTranslation();
-  const cssname = "form-select form-select-sm " + cssClass;
-  const labelText = label && t(label);
-  const labelId = id || (label ? `${label}-id` : undefined);
-
-  const mappedData = data.map((item) => {
-    const val = valProp ? String(item[valProp]) : String(item);
-    const content = contentProp ? String(item[contentProp]) : String(item);
-    return (
-      <option key={val} value={val}>
-        {t(content)}
-      </option>
-    );
-  });
+  const controlId = id || (label ? `${label}-id` : undefined);
 
   return (
-    <div className="select-wrapper" style={style}>
+    <Form.Group controlId={controlId} style={style} className={`mb-2 ${cssClass}`}>
       {label && (
-        <label htmlFor={labelId} style={{ whiteSpace: "nowrap" }}>
-          {labelText}
-        </label>
+        <Form.Label className="mb-1" style={{ whiteSpace: "nowrap" }}>
+          {t(label)}
+        </Form.Label>
       )}
-      <select id={labelId} className={cssname} onChange={onChange} value={value}>
-        {mappedData}
-      </select>
-    </div>
+      <Form.Select
+        size="sm"
+        value={value}
+        onChange={onChange}
+      >
+        {data.map((item) => {
+          const val = valProp ? String(item[valProp]) : String(item);
+          const content = contentProp ? String(item[contentProp]) : String(item);
+          return (
+            <option key={val} value={val}>
+              {t(content)}
+            </option>
+          );
+        })}
+      </Form.Select>
+    </Form.Group>
   );
 };
 
