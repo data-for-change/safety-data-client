@@ -62,4 +62,4 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
     </div>
   );
 });
-export default GroupCheckbox;
+export default React.memo(GroupCheckbox);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import Form from 'react-bootstrap/Form';
+// import Form from 'react-bootstrap/Form';
 import { Accordion } from 'react-bootstrap';
 import { useStore } from '../../stores/storeConfig';
 import CardFilterWhen from './CardFilterWhen';
@@ -22,7 +22,7 @@ const FilterForm: React.FC<IProps> = observer(() => {
    // console.log(injurySeverity)
    return (
       <React.Fragment>
-         <Form>
+        
             <Accordion defaultActiveKey={formCardKey.toString()}>
                <CardFilterWhen />
                <CardFilterWhatVehicle />
@@ -32,7 +32,7 @@ const FilterForm: React.FC<IProps> = observer(() => {
                <CardFilterWhatRoad />
                <CardFilterSeverty />
             </Accordion>
-         </Form>
+       
       </React.Fragment>
    );
 });
