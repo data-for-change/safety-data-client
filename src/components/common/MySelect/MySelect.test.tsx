@@ -38,14 +38,16 @@ describe('MySelect', () => {
     const handleChange = vi.fn();
 
     render(
-      <MySelect
-        data={options}
-        valProp="id"
-        contentProp="name"
-        label="Fruit"
-        onChange={handleChange}
-        value="1"
-      />
+      <I18nextProvider i18n={i18n}>
+        <MySelect
+          data={options}
+          valProp="id"
+          contentProp="name"
+          label="Fruit"
+          onChange={handleChange}
+          value="1"
+        />
+      </I18nextProvider>
     );
 
     const select = screen.getByLabelText('Fruit');
