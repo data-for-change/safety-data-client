@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ListGroup, Badge, Button } from 'react-bootstrap';
-import { Recommendation } from '../../types';
+import { Recommendation, TagScore } from '../../types';
 import './RecommendationItem.css';
 
 interface Props {
@@ -28,11 +28,11 @@ const RecommendationItem: React.FC<Props> = ({ recommendation, onEdit, hasEditPe
         </div>
         <p className="recommendation-description">{recommendation.description}</p>
         <div className="recommendation-tags">
-          {recommendation.tags.map((tag: string, index: number) => (
-            <Badge key={index} className="recommendation-badge">{tag}</Badge>
+          {recommendation.tags.map((tag: TagScore, index: number) => (
+            <Badge key={index} className="recommendation-badge">{tag.name}</Badge>
           ))}
         </div>
-        {recommendation.references.length > 0 && (
+        {recommendation.references && recommendation.references.length > 0 && (
           <div className="recommendation-references">
             <strong>{t('References')}:</strong>
             <ul>
