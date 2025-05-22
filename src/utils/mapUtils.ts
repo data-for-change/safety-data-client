@@ -269,12 +269,12 @@ export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
  * @returns An array of LatLngExpression positions.
  */
 export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
-    const radius = 0.0005; // Adjust for spacing
+    const radius = (count > 4)? 0.0002 :0.0001; // Adjust for spacing
     const angleStep = (2 * Math.PI) / count;
     return Array.from({ length: count }, (_, i) => {
       const angle = i * angleStep;
-      const latOffset = radius * Math.sin(angle);
-      const lngOffset = radius * Math.cos(angle);
+      const latOffset = radius * Math.sin(angle)- 0.0001;
+      const lngOffset = (radius * Math.cos(angle))- 0.00005;
       return [
         (center as [number, number])[0] + latOffset,
         (center as [number, number])[1] + lngOffset,

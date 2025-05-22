@@ -16,8 +16,8 @@ const customMarketIcon = (iconMarkup:any) => {
   const res = divIcon({
     html: iconMarkup,
     className: 'ship-div-icon',
-    iconAnchor: [0, 30],
-    popupAnchor: [1, -32],
+    iconAnchor: [0, 25],
+    popupAnchor: [1, -23],
   });
   return res;
 };
