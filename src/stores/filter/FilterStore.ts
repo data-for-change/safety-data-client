@@ -816,6 +816,7 @@ class FilterStore implements IFilterStore  {
       this.ageTypes.setBrowserQueryString(params);
       this.populationTypes.setBrowserQueryString(params);
       this.cities.setBrowserQueryString(params);
+      this.streets.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
       this.locationAccuracy.setBrowserQueryString(params);
       this.accidentType.setBrowserQueryString(params);
@@ -844,6 +845,8 @@ class FilterStore implements IFilterStore  {
       //const citis = this.getCityIdFromQuery(params, defCity);
       const cities = getQueryParamValues(params, 'city', defCity, this.isMultipleCities);
       if (cities) this.updateCities(cities, true);
+      const streets = getQueryParamValues(params, 'st', undefined, true);
+      if (streets) this.updateStreets(streets);
       const roads = getQueryParamValues(params, 'rd', undefined, true);
       if (roads) this.updateCities(cities, true);
       this.setRoads(roads);
