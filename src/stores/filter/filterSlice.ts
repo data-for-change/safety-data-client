@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import type { RootState } from '../types';
 import { store as mobxStore } from '../storeConfig';
-import AccidentService from '../../services/AccidentService';
-import { store as reduxStore } from '../store';
-import { updateAllInjuries } from '../casualty/casualtySlice';
 
 interface FilterState {
   isLoading: boolean;
@@ -27,24 +24,10 @@ const filterSlice = createSlice({
     setFiltersText: (state, action: PayloadAction<boolean>) => {
       state.filtersText = action.payload;
       // Sync with MobX store (temporary)
-      mobxStore.filterStore.setFiltersText(action.payload);
-    },
-    fetchFilterData: (state) => {
-      state.isLoading = true;
-      const filter = mobxStore.filterStore.getFilterQueryString(null); // Using MobX method
-      // Call API (you can migrate this logic later)
-      AccidentService.fetchGetList(filter, 'main').then((res: any) => {
-        if (res?.data) {
-          //mobxStore.filterStore.updateAllInjuries(res.data);
-          reduxStore.dispatch(updateAllInjuries(res.data));         
-        }
-        //state.isLoading = false;
-        mobxStore.filterStore.setIsLoading(false);
-      });
-    },
+      mobxStore.filterStore.setFiltersText(action.payload);    },
   },
 });
 
-export const { setIsLoading, setFiltersText, fetchFilterData } = filterSlice.actions;
+export const { setIsLoading, setFiltersText } = filterSlice.actions;
 export const selectIsLoading = (state: RootState): boolean => state.filter.isLoading;
 export default filterSlice.reducer;

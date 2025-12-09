@@ -5,7 +5,7 @@ import axios from 'axios';
 class AccidentService {
   apiUrl = API_URL || '';
 
-  public fetchGetList = async (filter: string, type: string): Promise<Array<any> | undefined> => {
+  public fetchGetList = async (filter: string, type: string): Promise<any | undefined> => {
     // Default options are marked with *
     let url = `${API_URL2}/involved`;
     //let url = `${this.apiUrl}/api/v1/accident/`;
@@ -25,7 +25,7 @@ class AccidentService {
     if (!response.ok) {
       return [];
     }
-    return response.json(); // parses JSON response into native JavaScript objects
+    return await response.json(); // parses JSON response into native JavaScript objects
   };
   
   public fetchGetGroupBy = async (filter: string): Promise<Array<any> | undefined> => {

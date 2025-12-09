@@ -5,7 +5,7 @@ import { useStore } from '../../stores/storeConfig';
 import GroupBy2 from '../../stores/filter/GroupBy2';
 import SelectGroupBy from '../groupby/SelectGroupBy';
 import SelectGroupBy2 from '../groupby/SelectGroupBy2';
-import SmallCard2 from '../atoms/SmallCard2';
+import { SmallCard } from '../common';
 import ChartBar from './ChartBar';
 import { RootState } from '../../stores/store';
 import { useSelector } from 'react-redux';
@@ -39,7 +39,7 @@ const CardChartGrpBy2: FC<IProps> = observer(() => {
       <div>
          {show
             && (
-               <SmallCard2>
+               <SmallCard>
                   <div style={divConstolsRow}>
                      <SelectGroupBy id="Graphs.Grp2" labelText="" />
                      {' '}
@@ -51,7 +51,7 @@ const CardChartGrpBy2: FC<IProps> = observer(() => {
                   <div style={styles.divChart}>
                      <ChartBar data={reactDataGrp2} metaData={metaDAta} chartType={chartType} dir={direction} />
                   </div>
-               </SmallCard2>
+               </SmallCard>
             )}
       </div>
    );

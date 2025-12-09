@@ -1,12 +1,12 @@
 import React, { PropsWithChildren } from 'react';
 
-interface SmallCard2Props extends PropsWithChildren<any> {
+interface SmallCardProps extends PropsWithChildren<any> {
   header?: string;
   style?: React.CSSProperties;
   className?: string;
 }
 
-const SmallCard2: React.FC<SmallCard2Props> = ({ children, header, style, className }) => {
+const SmallCard: React.FC<SmallCardProps> = ({ children, header, style, className }) => {
   const cardHeader = header ? (
     <>
       <h6>{header}</h6>
@@ -27,4 +27,4 @@ const SmallCard2: React.FC<SmallCard2Props> = ({ children, header, style, classN
   );
 };
 
-export default SmallCard2;
+export default SmallCard;

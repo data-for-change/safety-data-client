@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 import GroupByTable from './GroupByTable';
-import SmallCard2 from '../atoms/SmallCard2';
+import { SmallCard } from '../common';
 
 const CardGroupTablesYears2: FC<{}> = observer(() => {
     const { t } = useTranslation();
@@ -13,9 +13,9 @@ const CardGroupTablesYears2: FC<{}> = observer(() => {
     const reactData2 = toJS(dataFilterdByYears);
     if (reactData2.length > 0) {
       return (
-        <SmallCard2 header={`${t(casualtiesNames)} ${t('by-years')}`}>
+        <SmallCard header={`${t(casualtiesNames)} ${t('by-years')}`}>
           <GroupByTable data={reactData2} />
-        </SmallCard2>
+        </SmallCard>
       );
     }
     return null;

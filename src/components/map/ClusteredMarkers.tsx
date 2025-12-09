@@ -25,7 +25,7 @@ const ClusteredMarkers: React.FC = observer(() => {
             />
           );
         } else {
-          // Clustered markers - show as flower arrangement
+          // Clustered markers - show as spiral arrangement
           const flowerPositions = generateClusterPositions(cluster[0].position, cluster.length);
           return flowerPositions.map((position, i) => (
             <MarkerSvg

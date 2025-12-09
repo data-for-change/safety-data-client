@@ -29,12 +29,24 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, onDelete, la
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTagChange = (index: number, field: "name" | "score", value: string) => {
+    const updatedTagss = [...formData.tags];
+    updatedTagss[index] = { ...updatedTagss[index], [field]: value };
+    setFormData((prev) => ({ ...prev, tags: updatedTagss }));
+  };
+  const removeTag = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      tags: e.target.value.split(",").map((tag) => tag.trim()),
+      tags: prev.tags.filter((_, i) => i !== index),
     }));
   };
+  const addTag = () => {
+    setFormData((prev) => ({
+      ...prev,
+      tags: [...prev.tags, { name: "", score: 100 }],
+    }));
+  };
+
 
   const handleReferenceChange = (index: number, field: "title" | "url", value: string) => {
     const updatedReferences = [...formData.references];
@@ -82,12 +94,8 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, onDelete, la
 
         <Form.Group className="mb-3">
           <Form.Label>Description</Form.Label>
-          <Form.Control as="textarea" name="description" value={formData.description} onChange={handleChange} required />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Tags (comma-separated)</Form.Label>
-          <Form.Control type="text" value={formData.tags.join(", ")} onChange={handleTagChange} />
+          <Form.Control as="textarea" name="description" value={formData.description} rows={4}
+          onChange={handleChange} required />
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -98,6 +106,42 @@ const RecommendationForm: React.FC<Props> = ({ initialData, onSave, onDelete, la
         <Form.Group className="mb-3">
           <Form.Label>Lang</Form.Label>
           <Form.Control type="text" name="lang" value={formData.lang} onChange={handleChange} required />
+        </Form.Group>
+
+       <Form.Group className="mb-3">
+          <Form.Label>Tags</Form.Label>
+           {formData.tags.map((ref, index) =>(
+            <Row key={index}  className="mb-2">
+              <Col><Form.Control
+                  type="text"
+                  placeholder="Tag"
+                  value={ref.name}
+                  onChange={(e) => handleTagChange(index, "name", e.target.value)}
+                  required
+                /></Col>
+                <Col>
+                  <Form.Group controlId={`score-${index}`}>
+                    <Form.Control
+                      type="number"
+                      placeholder="Score"
+                      value={ref.score}
+                      min={1}
+                      max={100}
+                      onChange={(e) => handleTagChange(index, "score", e.target.value)}
+                      isInvalid={ref.score < 1 || ref.score > 100}
+                      required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Score must be between 1 and 100.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+              </Col>
+               <Col xs="auto">
+                <Button variant="danger" onClick={() => removeTag(index)}>X</Button>
+              </Col>
+            </Row>
+           )) }
+           <Button variant="secondary" onClick={addTag}>Add Tag</Button>
         </Form.Group>
 
         {/* References Section */}

@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { Casualty, Accident} from '../../types'; 
-import { store as mobxStore } from '../storeConfig';
+import type { RootState } from "../types";
+import type { Casualty } from '../../types/Casualty'; 
 
 interface CasualtyState {
-  dataAllInjuries: Casualty[] |Accident[];
+  dataAllInjuries: Casualty[];
 }
 
 const initialState: CasualtyState = {
@@ -17,14 +16,6 @@ const casualtySlice = createSlice({
   reducers: {
     updateAllInjuries: (state, action: PayloadAction<Casualty[]>) => {
       state.dataAllInjuries = action.payload;
-
-      // Temporary sync with MobX (until migration is complete)
-      mobxStore.filterStore.setMarkersLoadStep(2);
-      mobxStore.mapStore.setBounds(action.payload, mobxStore.filterStore.cities.arrValues);
-
-      //if (mobxStore.mapStore.bboxType === 'LOCAL_BBOX') {
-        //mobxStore.mapStore.getMarkersInLocalBBox(0.1);
-      //}
     },
   },
 });

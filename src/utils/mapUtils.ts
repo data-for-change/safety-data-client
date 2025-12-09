@@ -103,10 +103,13 @@ export const getColorBySeverity = (severity: string) => {
     let res = '';
     switch (severity) {
         case 'הרוג':
-            res = '#CA273B';//
+            res = '#A0202F'; // red
+            break;
+        case 'פצוע קשה':
+            res = '#D87F1D'; // orange
             break;
         default:
-            res = '#F8A141';
+            res = '#E6C153'; // yellow 
             break;
     }
     return res;
@@ -191,6 +194,11 @@ export const getColors = (colorBy: string, data: Accident) => {
     return res;
 };
 
+export const getNumSeverity = (severity: string) => {
+    const res = (severity == 'הרוג') ?1:(severity == 'פצוע קשה')? 2:3;
+    return res;
+};
+
 // export const legendHtmlFor = (colorBy: string) => [
 //     `<h3>${string}</h3>`,
 //     description && `<p>${description}</p>`,
@@ -201,7 +209,7 @@ export const createLegendByColorType = (colorBy: string) =>
       let res = [];
       switch (colorBy) {
           case 'Severity':
-              grade = ['הרוג', 'פצוע קשה'];
+              grade = ['הרוג', 'פצוע קשה', 'פצוע קל'];
               res = createLegendArr(grade,getColorBySeverity);
               break;
           case 'Vehicle':
@@ -260,8 +268,8 @@ export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
     }, []);
   };
 
-  /**
- * Generates a set of LatLng positions in a flower-like arrangement
+/**
+ * Generates a set of LatLng positions in a spiral arrangement
  * around the center position.
  * 
  * @param center - The center position for the cluster.
@@ -273,8 +281,8 @@ export const generateClusterPositions = (center: LatLngExpression, count: number
     const angleStep = (2 * Math.PI) / count;
     return Array.from({ length: count }, (_, i) => {
       const angle = i * angleStep;
-      const latOffset = radius * Math.sin(angle);
-      const lngOffset = radius * Math.cos(angle);
+      const latOffset = radius * Math.sin(angle)- 0.0001;
+      const lngOffset = (radius * Math.cos(angle))- 0.00005;
       return [
         (center as [number, number])[0] + latOffset,
         (center as [number, number])[1] + lngOffset,

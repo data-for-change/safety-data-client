@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
-import { KeyVal } from '../../types';
+import { KeyVal } from '../../../types';
 
 interface IProps {
   label?: string;

@@ -6,10 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ImageGallery from "react-image-gallery";
 import 'react-image-gallery/styles/css/image-gallery.css';
-import {ButtonToggle} from '../common';
-import Select from '../atoms/Select';
+import { ButtonToggle, Select, SmallCard } from '../common';
 import { useStore } from '../../stores/storeConfig';
-import SmallCard2 from '../atoms/SmallCard2';
 import {API_URL} from '../../utils/globalEnvs';
 import { RootState } from '../../stores/store';
 import { useSelector } from 'react-redux';
@@ -56,7 +54,7 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
   };
 
   return (
-    <SmallCard2>
+    <SmallCard>
       <div style={styles.divImageGallery}>
       <Row >
         <Col md={3} style={styles.styleCol}>
@@ -85,7 +83,7 @@ const MyImageGallery: React.FC<Props> = observer(({ type }) => {
       )}
       {!isGotImages && <ImageMsg />}
       </div>
-    </SmallCard2>
+    </SmallCard>
   );
 });
 

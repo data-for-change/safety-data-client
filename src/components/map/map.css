@@ -1,13 +1,12 @@
   /* Customize the Clustered Markers */
-  .marker-cluster-custom {
-    background: #b7172c;
+  .marker-cluster-custom {   
     border: 3px solid #ededed;
     border-radius: 50%;
     color: #ededed;
-    height: 40px;
-    line-height: 37px;
+    height: 30px;
+    line-height: 26px;
     text-align: center;
-    width: 40px;
+    width: 30px;
   }
 
   .map-select-wrapper {
