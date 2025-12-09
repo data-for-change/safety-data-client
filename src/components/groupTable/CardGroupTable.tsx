@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 import GroupByTable from './GroupByTable';
-import SmallCard2 from '../atoms/SmallCard2';
+import { SmallCard } from '../common';
 import SelectGroupBy from '../groupby/SelectGroupBy';
 
 const CardGroupTable: FC<{}> = observer(() => {
@@ -17,13 +17,13 @@ const CardGroupTable: FC<{}> = observer(() => {
     
     if (reactData.length > 0) {
       return (
-        <SmallCard2 style={{marginBottom: '0.5rem'}}>
+        <SmallCard style={{marginBottom: '0.5rem'}}>
           <div style={divStyle}>
             <SelectGroupBy id="Tables.Main" />
           </div>
           <hr />
           <GroupByTable data={reactData} dataName={groupByDict.groupBy.text} />
-        </SmallCard2>
+        </SmallCard>
       );
     }
     return null;

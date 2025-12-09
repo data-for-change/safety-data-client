@@ -6,7 +6,7 @@ import RecommendationForm from './RecommendationForm';
 import { useStore } from '../../stores/storeConfig';
 import { Recommendation } from '../../types';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../stores/store';
+import type { RootState } from '../../stores/types';
 
 const RecommendationModal: React.FC = observer(() => {
   const { t } = useTranslation();

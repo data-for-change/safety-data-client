@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { toJS, reaction } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
 import GroupBy from '../../stores/filter/GroupBy';
-import MySelect from '../atoms/MySelect';
+import { MySelect } from '../common';
 
 interface IProps {
   id: string;

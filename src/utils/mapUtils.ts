@@ -277,36 +277,12 @@ export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
  * @returns An array of LatLngExpression positions.
  */
 export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
-    const claterA  = count < 8;
-    const angleStep =  (claterA)? (1.5 * Math.PI) / count : 0.5; // Radians
-    const distanceStep = (claterA)? 0 : 0.00001; // ~1 meters per step at equator
-    const minRadius = (claterA)?  0.0004 : 0.00015;  
-    const [lat, lng] = center as [number, number];
-  
-    return Array.from({ length: count }, (_, i) => {
-      const angle = 3.1 + i * angleStep;
-      const radius = minRadius + i * distanceStep;
-      const latOffset = radius * Math.sin(angle);
-      const lngOffset = radius * Math.cos(angle);
-      return [lat + latOffset, lng + lngOffset];
-    });
-  };
-
-  /**
- * Generates a set of LatLng positions in a flower-like arrangement
- * around the center position.
- * 
- * @param center - The center position for the cluster.
- * @param count - The number of positions to generate around the center.
- * @returns An array of LatLngExpression positions.
- */
-export const generateClusterPositions1 = (center: LatLngExpression, count: number): LatLngExpression[] => {
     const radius = 0.0005; // Adjust for spacing
     const angleStep = (2 * Math.PI) / count;
     return Array.from({ length: count }, (_, i) => {
       const angle = i * angleStep;
-      const latOffset = radius * Math.sin(angle);
-      const lngOffset = radius * Math.cos(angle);
+      const latOffset = radius * Math.sin(angle)- 0.0001;
+      const lngOffset = (radius * Math.cos(angle))- 0.00005;
       return [
         (center as [number, number])[0] + latOffset,
         (center as [number, number])[1] + lngOffset,

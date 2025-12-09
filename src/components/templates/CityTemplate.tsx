@@ -5,11 +5,12 @@ import { TabsTemplate } from './TabsTemplate';
 // import FilterPanel from '../organisms/FilterPanel';
 import { useStore } from '../../stores/storeConfig';
 import ConfigFilterModal from '../filter/ConfigFilterModal';
-import ButtonShowFilterModal from '../atoms/ButtonShowFilterModal';
+import { ButtonShowFilterModal } from '../common';
 import { useMemos } from '../../hooks/myUseMemo';
 import InfoPanel from '../molecules/InfoPanel';
 import WithSidebarTemplate from './WithSidebarTemplate';
-import { setCurrentPage, setStoreByQuery, setInitPage } from '../../stores/ui/appUiSlice';
+import { setCurrentPage, setInitPage } from '../../stores/ui/appUiSlice';
+import { setStoreByQuery } from '../../stores/ui/appUiThunks';
 import { RootState, AppDispatch } from '../../stores/store';
 
 interface IProps { }

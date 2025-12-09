@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { useSelector } from 'react-redux';
 import { toJS } from 'mobx';
 import { useStore } from '../../stores/storeConfig';
-import SmallCard2 from '../atoms/SmallCard2';
+import { SmallCard } from '../common';
 import ChartBar from './ChartBar';
 import { RootState } from '../../stores/store';
 
@@ -21,11 +21,11 @@ const CardChartYears: React.FC<{}> = observer(() => {
        },
     };
     return (
-       <SmallCard2 styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
+       <SmallCard styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
           <div style={styles.divChart}>
              <ChartBar data={reactData2} fill="#FE9772" dir={direction} />
           </div>
-       </SmallCard2>
+       </SmallCard>
     );
  });
 

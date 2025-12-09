@@ -4,7 +4,7 @@ import { toJS } from 'mobx';
 // import Button from 'react-bootstrap/Button';
 import { useStore } from '../../stores/storeConfig';
 import SelectGroupBy from '../groupby/SelectGroupBy';
-import SmallCard2 from '../atoms/SmallCard2';
+import { SmallCard } from '../common';
 import ChartBar from './ChartBar';
 import ConfigChart from './ConfigChart';
 import ConfigModal from '../organisms/ConfigModal';
@@ -56,7 +56,8 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     );
     // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
     return (
-       <SmallCard2 style={{marginBottom: '0.5rem'}}>
+      <>
+       <SmallCard style={{marginBottom: '0.5rem'}}>
           <div style={styles.divConfig}>
              <SelectGroupBy id="Graphs.Main.SelectGroupby" />
              <SelectSortBy id="Graphs.Main.SelectSort"/>
@@ -70,7 +71,9 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
                 {chart}
              </div>
           </div>
-       </SmallCard2>
+       </SmallCard>
+       
+       </>
     );
  });
  

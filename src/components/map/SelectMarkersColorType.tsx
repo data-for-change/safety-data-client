@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
-import Select from '../atoms/Select';
+import { Select } from '../common';
 import 'leaflet/dist/leaflet.css';
 
 const SelectMarkersColorType: FC<{}> = observer(() => {

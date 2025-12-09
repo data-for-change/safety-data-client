@@ -2,11 +2,11 @@ import React, { ChangeEvent, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Form from 'react-bootstrap/Form';
-import { useStore } from '../../stores/storeConfig';
+// import { useStore } from '../../stores/storeConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import {updateChartType} from '../../stores'
 import { RootState , AppDispatch } from '../../stores/store';
-// import Checkbox from '../atoms/Checkbox';
+
 
 interface IProps { }
 const ConfigChart: React.FC<IProps> = observer(() => {
