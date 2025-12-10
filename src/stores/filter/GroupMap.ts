@@ -103,7 +103,6 @@ export const initGroup2Map = () => {
     dayNight.vals['לילה'] = new GroupBy2Val('night', '#559E54');
     dict.set(dayNight.name, dayNight);
 
-
     const injt = new GroupBy2('TypeInjured', 'injt');
     injt.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
     injt.vals['נהג - אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');

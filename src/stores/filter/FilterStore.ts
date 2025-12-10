@@ -15,7 +15,7 @@ import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import logger from '../../services/logger';
-import { BBoxType, Street, Casualty } from '../../types';
+import { BBoxType, Street, Casualty, ItemCount, ItemCount2 } from '../../types';
 import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText } from './filterSlice';
@@ -551,7 +551,7 @@ class FilterStore implements IFilterStore  {
       const filtermatch = this.getfilterBySeverityAndCity();
       const filter = createFilterQureyByGroup(filtermatch, 'year');
       AccidentService.fetchGetGroupBy(filter)
-         .then((data: any[] | undefined) => {
+         .then((data: ItemCount[] | undefined) => {
             if (data !== undefined) {
                const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                this.setDataByYears(dataPadded);                  
@@ -573,7 +573,7 @@ class FilterStore implements IFilterStore  {
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
       AccidentService.fetchGetGroupBy(filter)
-         .then((data: any[] | undefined) => {
+         .then((data: ItemCount2[] | undefined) => {
             if (data !== undefined) {
                const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
                this.setDataFilterdByYears(dataPadded);
@@ -593,8 +593,8 @@ class FilterStore implements IFilterStore  {
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {
-            if(aGroupBy.reGroupResultFunc) {
-               data = aGroupBy.reGroupResultFunc(data);
+            if(aGroupBy.transformFetchResult) {
+               data = aGroupBy.transformFetchResult(data);
             }
             if (data !== undefined) this.setDataFilterd(data);
          });
@@ -617,9 +617,12 @@ class FilterStore implements IFilterStore  {
          const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
          AccidentService.fetchGetGroupBy(filter)
-            .then((data: any[] | undefined) => {
+            .then((data: ItemCount2[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
+                     if(aGroupBy.transformFetchResult) {
+                        data = aGroupBy.transformFetchResult(data) as ItemCount2[];
+                     }
                      const fixData = (this.group2Dict.groupBy as GroupBy2).normalizeGroupedCounts(data);
                      this.setDataGroupBy2(fixData);
                   } catch (error) {

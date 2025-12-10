@@ -1,13 +1,13 @@
 import { makeAutoObservable } from 'mobx';
-import { reGroupResultIsSelfAcc } from '../../utils/groupByUtils';
-import { ItemCount } from '../../types';
+import { reGroupResultIsSelfAcc, changeInjuredTypeValues } from '../../utils/groupByUtils';
+import { ItemCount, ItemCount2 } from '../../types';
 
 export interface IGroupBy {
   text: string;
   value: string;
   limit: number;
   sort: string | null;
-  reGroupResultFunc?: (data: ItemCount[]) => ItemCount[];
+  transformFetchResult?: (data: ItemCount[]| ItemCount2[]) => ItemCount[]|ItemCount2[];
 }
 
 export default class GroupBy implements IGroupBy {
@@ -15,20 +15,20 @@ export default class GroupBy implements IGroupBy {
   value: string;
   limit: number;
   sort: string | null;
-  reGroupResultFunc?: (data: ItemCount[]) => ItemCount[];
+  transformFetchResult?: (data: ItemCount[]| ItemCount2[]) => ItemCount[]|ItemCount2[];
 
   constructor(
     text: string,
     value: string,
     limit: number = 0,
     sort: string | null = null,
-    reGroupResultFunc?: (data: ItemCount[]) => ItemCount[]
+    reGroupResultFunc?: (data: ItemCount[]| ItemCount2[]) => ItemCount[]|ItemCount2[]
   ) {
     this.text = text;
     this.value = value;
     this.limit = limit;
     this.sort = sort;
-    this.reGroupResultFunc = reGroupResultFunc;
+    this.transformFetchResult = reGroupResultFunc;
 
      // Make this class observable
     makeAutoObservable(this);
@@ -48,7 +48,7 @@ export default class GroupBy implements IGroupBy {
 export const initGroupMap = () => {
   const map = new Map();
   map.set('sev', new GroupBy('Severity', 'sev'));
-  map.set('injt', new GroupBy('TypeInjured', 'injt'));
+  map.set('injt', new GroupBy('TypeInjured', 'injt',0,null, changeInjuredTypeValues));
   map.set('vcl', new GroupBy('Vehicle', 'vcl'));
   map.set('sex', new GroupBy('Gender', 'sex'));
   map.set('age', new GroupBy('Age', 'age'));

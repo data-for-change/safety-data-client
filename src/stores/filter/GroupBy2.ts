@@ -1,4 +1,5 @@
 import { observable } from 'mobx';
+import { ItemCount2 } from '../../types';
  
 export interface IGroupBy2 {
   text: string;
@@ -27,7 +28,7 @@ export default class GroupBy2 implements IGroupBy2 {
 
   // input sample: {count : [{grp2: "זכר", count: 3},  {grp2: "נקבה", count: 2} ]}
   // output sample: {_id: "2015", male: 3, female: 2}
-  normalizeGroupedCounts = (data: any[]) => {
+  normalizeGroupedCounts = (data: ItemCount2[]) => {
     return data.map((x) => {
       const obj: Record<string, any> = {};  
       // set _id

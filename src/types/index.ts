@@ -8,7 +8,7 @@ export * from './MapMarkersType';
 export type { KeyVal } from './KeyVal';
 export type { CityKeyVal } from './CityKeyVal';
 export { GroupBy2Val } from './GroupBy2Val';
-export type { ItemCount } from './ItemCount';
+export type { ItemCount, ItemCount2, IGroupCont } from './ItemCount';
 export type { Street } from './Street';
 export type { Recommendation } from './Recommendation';
 export type { TagScore } from './Recommendation';
