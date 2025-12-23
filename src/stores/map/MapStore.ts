@@ -282,6 +282,7 @@ export default class MapStore {
     { val: 'SelfOrNotAcc', text: 'SelfOrNotAcc' },
     { val: "DayNight", text: 'DayNight' },
     { val: "Gender", text: 'Gender' },
+    { val: "Population", text: 'Population' },
     { val: 'RoadType', text: 'RoadType' }
   ];
 
