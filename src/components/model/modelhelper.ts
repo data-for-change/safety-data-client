@@ -1,4 +1,4 @@
-import { Accident, ClusterRow } from "../../types";
+import { Accident, ClusterRow, ModelSeverityMode } from "../../types";
 
 const JUNCTION_RADIUS_METERS = 50;
 
@@ -27,8 +27,16 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
   const clusters: Accident[][] = [];
   const assigned = new Set<number>();
 
+  // 🚫 Remove inaccurate junction points completely
+  const filteredPoints = points.filter(
+    p =>
+      !(
+        p.road_type_hebrew === "עירונית בצומת" &&
+        p.location_accuracy_hebrew !== "עיגון מדויק"
+      )
+  );
   // 1. Extract junctions
-  const junctions = points
+  const junctions = filteredPoints
     .map((p, i) => ({ p, i }))
     .filter(x => x.p.road_type_hebrew === "עירונית בצומת");
 
@@ -36,10 +44,10 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
   for (const { p: junction, i: junctionIndex } of junctions) {
     const cluster: Accident[] = [];
 
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < filteredPoints.length; i++) {
       if (assigned.has(i)) continue;
 
-      const point = points[i];
+      const point = filteredPoints[i];
       const distance = haversineDistance(junction, point);
 
       if (distance <= junctionRaduis) {
@@ -56,10 +64,10 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
   // 3. Remaining points → group by street name
   const streetMap = new Map<string, Accident[]>();
 
-  for (let i = 0; i < points.length; i++) {
+  for (let i = 0; i < filteredPoints.length; i++) {
     if (assigned.has(i)) continue;
 
-    const point = points[i];
+    const point = filteredPoints[i];
     const street = point.street1_hebrew || "__NO_STREET__";
 
     if (!streetMap.has(street)) {
@@ -78,14 +86,16 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
 }
 
 export function buildClusterTable(
-  clusters: Accident[][]
+  clusters: Accident[][],
+  minValue: number = 4,
+  mode: ModelSeverityMode = 1
 ): ClusterRow[] {
   const junctionRows: ClusterRow[] = [];
   const streetRows: ClusterRow[] = [];
 
   for (const cluster of clusters) {
     const count = cluster.length;
-    const severityIndex = calcSeverityIndex(cluster);
+    const severityIndex = calcSeverityIndex(cluster, mode);
 
     const junctionPoint = cluster.find(
       p => p.road_type_hebrew === "עירונית בצומת"
@@ -98,8 +108,8 @@ export function buildClusterTable(
         severityIndex,
         roadType: "junction",
         name: `${junctionPoint.street1_hebrew ?? ""} / ${junctionPoint.street2_hebrew ?? ""}`.trim(),
-        latitude: junctionPoint.latitude,
-        longitude: junctionPoint.longitude,
+        latitude: Number(junctionPoint.latitude),
+        longitude: Number(junctionPoint.longitude),
       });
       continue;
     }
@@ -112,8 +122,8 @@ export function buildClusterTable(
       severityIndex,
       roadType: "street",
       name: representative.street1_hebrew ?? "__UNKNOWN__",
-      latitude: representative.latitude,
-      longitude: representative.longitude,
+      latitude: Number(representative.latitude),
+      longitude: Number(representative.longitude),
     });
   }
 
@@ -121,16 +131,60 @@ export function buildClusterTable(
   junctionRows.sort((a, b) => b.severityIndex - a.severityIndex);
   streetRows.sort((a, b) => b.severityIndex - a.severityIndex);
 
-  // Combine: junctions first, then streets
-  return [...junctionRows, ...streetRows];
+  // Combine and filter by minValue
+  return [...junctionRows, ...streetRows].filter(
+    row => row.severityIndex >= minValue
+  );
 }
-
 //weighted severity index
-function calcSeverityIndex(points: Accident[]): number {
+function calcSeverityIndex(
+  points: Accident[],
+  mode: ModelSeverityMode = 1
+): number {
   return points.reduce((sum, p) => {
-    return sum + (p.injury_severity_hebrew === "הרוג" ? 2.1 : 1);
+    let weight = 1;
+
+    switch (mode) {
+      // 1️⃣ All accidents equal
+      case 1:
+        weight = 1;
+        break;
+
+      // 2️⃣ Pedestrian = 2
+      case 2:
+        weight =
+          p.vehicle_vehicle_type_hebrew === "הולך רגל" ? 2 : 1;
+        break;
+
+      // 3️⃣ Pedestrian = 2, electric bike / scooter = 1.5
+      case 3:
+        if (p.vehicle_vehicle_type_hebrew === "הולך רגל") {
+          weight = 2;
+        } else if (
+          p.vehicle_vehicle_type_hebrew === "אופניים חשמליים" ||
+          p.vehicle_vehicle_type_hebrew === "קורקינט חשמלי"||
+           p.vehicle_vehicle_type_hebrew === "אופניים" 
+        ) {
+          weight = 1.5;
+        } else {
+          weight = 1;
+        }
+        break;
+
+      // 4️⃣ Same as 1–3, but fatal = 2 
+      case 4:
+        if (p.injury_severity_hebrew === "הרוג") {
+          weight = 2.5;
+        } else {
+          weight = 1;
+        }
+        break;
+    }
+
+    return sum + weight;
   }, 0);
 }
+
 
 //centroid (mean location)
 function centroid(points: Accident[]): { lat: number; lon: number } {

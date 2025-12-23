@@ -1,0 +1,1 @@
+export type ModelSeverityMode = 1 | 2 | 3 | 4;
