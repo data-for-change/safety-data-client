@@ -13,3 +13,4 @@ export type { Street } from './Street';
 export type { Recommendation } from './Recommendation';
 export type { TagScore } from './Recommendation';
 export type { NewRecommendation } from './Recommendation';
+export type { ClusterRow } from './ClusterRow';
