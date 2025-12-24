@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
 import { ModelSeverityMode } from '../../types';
 
 type SeverityModePickerProps = {
@@ -6,15 +7,18 @@ type SeverityModePickerProps = {
   onChange: (value: ModelSeverityMode) => void;
 };
 
-export const SeverityModePicker: React.FC<
-  SeverityModePickerProps
-> = ({ value, onChange }) => {
+export const SeverityModePicker: React.FC<SeverityModePickerProps> = ({
+  value,
+  onChange,
+}) => {
   return (
-    <div className="d-flex align-items-center gap-2">
-      <label className="fw-semibold">Severity mode:</label>
+    <Form.Group className="d-flex align-items-center gap-2 mb-0">
+      <Form.Label className="fw-semibold mb-0">
+        Severity mode:
+      </Form.Label>
 
-      <select
-        className="form-select form-select-sm"
+      <Form.Select
+        size="sm"
         style={{ width: 260 }}
         value={value}
         onChange={e =>
@@ -25,7 +29,7 @@ export const SeverityModePicker: React.FC<
         <option value={2}>Pedestrian weighted</option>
         <option value={3}>Pedestrian + electric</option>
         <option value={4}>Fatal override</option>
-      </select>
-    </div>
+      </Form.Select>
+    </Form.Group>
   );
 };

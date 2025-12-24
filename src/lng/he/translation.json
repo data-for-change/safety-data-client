@@ -178,6 +178,7 @@
   "urban-road": "דרך עירונית",
   "non-urban-junction": "צומת בינעירוני",
   "non-urban-road": "דרך בינעירונית",
+  "junction" : "צומת",
   "SpeedLimit": "מגבלת מהירות",
   "speed50": "עד 50",
   "speed60": "60",

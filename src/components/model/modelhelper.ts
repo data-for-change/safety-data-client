@@ -1,4 +1,4 @@
-import { Accident, ClusterRow, ModelSeverityMode } from "../../types";
+import { Accident, ClusterRow, ModelFilterType, ModelSeverityMode, ModelSeverityRange } from "../../types";
 
 const JUNCTION_RADIUS_METERS = 50;
 
@@ -21,7 +21,6 @@ function haversineDistance(a: Accident, b: Accident): number {
 
   return 2 * R * Math.asin(Math.sqrt(h));
 }
-
 
 export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADIUS_METERS): Accident[][] {
   const clusters: Accident[][] = [];
@@ -87,11 +86,13 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
 
 export function buildClusterTable(
   clusters: Accident[][],
+  mode: ModelSeverityMode = 1,
+  filterType: ModelFilterType = ModelFilterType.All,
+  maxClusters: number = 20,
   minValue: number = 4,
-  mode: ModelSeverityMode = 1
 ): ClusterRow[] {
-  const junctionRows: ClusterRow[] = [];
-  const streetRows: ClusterRow[] = [];
+  let junctionRows: ClusterRow[] = [];
+  let streetRows: ClusterRow[] = [];
 
   for (const cluster of clusters) {
     const count = cluster.length;
@@ -131,11 +132,31 @@ export function buildClusterTable(
   junctionRows.sort((a, b) => b.severityIndex - a.severityIndex);
   streetRows.sort((a, b) => b.severityIndex - a.severityIndex);
 
-  // Combine and filter by minValue
-  return [...junctionRows, ...streetRows].filter(
-    row => row.severityIndex >= minValue
-  );
+  let maxResults = maxClusters;
+  let result: ClusterRow[];
+  switch (filterType) {
+    case ModelFilterType.Junctions:
+      result = junctionRows;
+      break;
+
+    case ModelFilterType.Streets:
+      result = streetRows;
+      break;
+
+    case ModelFilterType.All:
+    default:   
+      junctionRows = junctionRows.slice(0,maxResults/2);
+      streetRows = streetRows.slice(0,maxResults/2);   
+      result = [...junctionRows, ...streetRows];
+      break;
+  }
+  //filter by minValue
+  //result = result.filter(row => row.severityIndex >= minValue);
+  //filter by max maxClusters
+  result = result.slice(0, maxResults);
+  return result;
 }
+
 //weighted severity index
 function calcSeverityIndex(
   points: Accident[],
@@ -185,7 +206,6 @@ function calcSeverityIndex(
   }, 0);
 }
 
-
 //centroid (mean location)
 function centroid(points: Accident[]): { lat: number; lon: number } {
   const sum = points.reduce(
@@ -224,3 +244,70 @@ function closestToCentroid(points: Accident[]): Accident {
 
   return best;
 }
+
+
+///map model helper functons 
+// Get min / max of severityIndex
+export function getSeverityMinMax(clusters: ClusterRow[]) {
+  if (!clusters.length) {
+    return { min: 0, max: 0 };
+  }
+
+  let min = clusters[0].severityIndex;
+  let max = clusters[0].severityIndex;
+
+  for (const c of clusters) {
+    if (c.severityIndex < min) min = c.severityIndex;
+    if (c.severityIndex > max) max = c.severityIndex;
+  }
+  return { min, max };
+}
+
+export function buildSeveritySectors(
+  min: number,
+  max: number,
+  sectorsCount = 5
+): ModelSeverityRange[] {
+  if (min === max) {
+    return [
+      {
+        index: 0,
+        from: min,
+        to: max,
+      },
+    ];
+  }
+
+  const step = (max - min) / sectorsCount;
+
+  return Array.from({ length: sectorsCount }, (_, i) => ({
+    index: i,
+    from: min + step * i,
+    to: i === sectorsCount - 1 ? max : min + step * (i + 1),
+  }));
+}
+
+export function getSeverityColor(
+  severityIndex: number,
+  sectors: ModelSeverityRange[]
+): string {
+  if (!sectors.length) {
+    return '#FFF176';
+  }
+  const sector =
+    sectors.find(
+      s => severityIndex >= s.from && severityIndex <= s.to
+    ) ?? sectors[sectors.length - 1];
+
+  return RED_SCALE[Math.min(sector.index, RED_SCALE.length - 1)];
+}
+
+const RED_SCALE: string[] = [
+  '#FFF176', // yellow (least severe)
+  '#FFB74D', // light orange
+  '#F57C00', // orange
+  '#d72424ff', // dark red
+  '#CC0000', // deep red (most severe)
+];
+
+

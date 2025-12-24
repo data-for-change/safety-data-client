@@ -12,7 +12,7 @@ import WithSidebarTemplate from './WithSidebarTemplate';
 import { setCurrentPage, setInitPage } from '../../stores/ui/appUiSlice';
 import { setStoreByQuery } from '../../stores/ui/appUiThunks';
 import { RootState, AppDispatch } from '../../stores/store';
-import ModelMainTab from '../model/ModelMainTab';
+import ModelTabs from '../model/ModelTabs';
 
 interface IProps { }
 const ModelTemplate: React.FC<IProps> = observer(() => {
@@ -50,7 +50,7 @@ const ModelTemplate: React.FC<IProps> = observer(() => {
           <ButtonShowFilterModal />
         </div>
         {showFilterModal && memoConfigModal}
-        <ModelMainTab />
+        <ModelTabs />
       </div>
     </WithSidebarTemplate>
   );

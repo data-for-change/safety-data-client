@@ -15,3 +15,5 @@ export type { TagScore } from './Recommendation';
 export type { NewRecommendation } from './Recommendation';
 export type { ClusterRow } from './ClusterRow';
 export type { ModelSeverityMode } from './ModelSeverityMode';
+export type { ModelSeverityRange } from './ModelSeverityRange';
+export * from './ModelFilterType';

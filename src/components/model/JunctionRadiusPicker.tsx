@@ -1,4 +1,6 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
+
 type JunctionRadiusPickerProps = {
   value: number;
   onChange: (value: number) => void;
@@ -6,22 +8,19 @@ type JunctionRadiusPickerProps = {
   max?: number;
 };
 
-export const JunctionRadiusPicker: React.FC<
-  JunctionRadiusPickerProps
-> = ({
+export const JunctionRadiusPicker: React.FC<JunctionRadiusPickerProps> = ({
   value,
   onChange,
   min = 20,
   max = 150,
 }) => {
   return (
-    <div className="d-flex align-items-center gap-2">
-      <label className="fw-semibold">
+    <Form.Group className="d-flex align-items-center gap-2 mb-0">
+      <Form.Label className="fw-semibold mb-0">
         Junction radius (meters):
-      </label>
+      </Form.Label>
 
-      <input
-        type="range"
+      <Form.Range
         min={min}
         max={max}
         step={10}
@@ -30,6 +29,6 @@ export const JunctionRadiusPicker: React.FC<
       />
 
       <span className="fw-bold">{value}m</span>
-    </div>
+    </Form.Group>
   );
 };
