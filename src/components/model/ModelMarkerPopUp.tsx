@@ -13,13 +13,14 @@ interface IProps {
 const ModelMarkerPopUp: React.FC<IProps> = (({ data: x, language }) => {
   const pStyle = {
     color: '#004ba0',
+    fontWeight: 600, 
   };
   const { t } = useTranslation();
   if (x.severityIndex !== undefined) {
     return (
       <Popup>
         <div className={`text${language}`}>
-          <div><span style={pStyle}></span> {x.roadType}, {x.name}: index: {x.severityIndex}, count: {x.count},  </div>
+          <div><span style={pStyle}>{t(x.roadType)} {x.name}</span>: {t('Severity')}: {x.severityIndex},  {t('casualties')}: {x.count} </div>
           </div>
       </Popup>
     );

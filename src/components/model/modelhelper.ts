@@ -107,7 +107,7 @@ export function buildClusterTable(
       junctionRows.push({
         count,
         severityIndex,
-        roadType: "junction",
+        roadType: "Junction",
         name: `${junctionPoint.street1_hebrew ?? ""} / ${junctionPoint.street2_hebrew ?? ""}`.trim(),
         latitude: Number(junctionPoint.latitude),
         longitude: Number(junctionPoint.longitude),
@@ -121,7 +121,7 @@ export function buildClusterTable(
     streetRows.push({
       count,
       severityIndex,
-      roadType: "street",
+      roadType: "Street",
       name: representative.street1_hebrew ?? "__UNKNOWN__",
       latitude: Number(representative.latitude),
       longitude: Number(representative.longitude),
