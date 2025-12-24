@@ -1,6 +1,7 @@
 import {
    observable, action, computed, makeAutoObservable,
-   runInAction
+   runInAction,
+   reaction
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import { ColumnFilterArray } from './ColumnFilterArray';
@@ -19,7 +20,7 @@ import { BBoxType, Street, Casualty, ItemCount, ItemCount2 } from '../../types';
 import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText } from './filterSlice';
-import { fetchFilterData } from './filterThunks'; 
+import { fetchFilterData } from './filterThunks';
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 
@@ -87,7 +88,13 @@ class FilterStore implements IFilterStore  {
       this.dataFilterdByYears = FC.initDataYreasfilterd();
       this.setDataFilterd(FC.initDataGrpBy1());
       this.dataGroupby2 = FC.initDataGrpBy2();
-      this.appInitialized = false;    
+      this.appInitialized = false;
+      // Reaction to city changes
+      this.updateModerateDisabledState();
+      reaction(
+         () => this.cities.arrValues,
+         () => this.updateModerateDisabledState()
+      );
    }
 
    rootStore: RootStore;
@@ -171,17 +178,32 @@ class FilterStore implements IFilterStore  {
             const cityId = this.cities.arrValues[0];
             const srvCity = new CityService();
             const streets = await srvCity.getStreetsByCity(cityId);
-            this.SetCityStreets(streets);           
-         }         
+            this.SetCityStreets(streets);
+         }
          if (updateCityResult) {
             //[this.cityResult] = this.cities.arrValues;
          }
       }
    }
 
+   @action
+   updateModerateDisabledState = () => {
+      const moderateOption = this.injurySeverity.arrTypes[2]; // moderate is at index 2
+      // Check if any city is selected (filter out empty strings)
+      const hasCitySelected = this.cities.arrValues.length > 0 &&
+                              this.cities.arrValues.some(val => val && val.trim() !== '');
+      moderateOption.disabled = !hasCitySelected;
+
+      // If moderate is disabled and currently checked, uncheck it
+      if (moderateOption.disabled && moderateOption.checked) {
+         moderateOption.checked = false;
+         this.injurySeverity.setQueryVals();
+      }
+   }
+
    @observable
    cityResult: string = '';
-   @action 
+   @action
    updateCityResult = (value:string) => {
       this.previousCity = this.cityResult;
       this.cityResult = value;
@@ -189,7 +211,7 @@ class FilterStore implements IFilterStore  {
 
    @observable
    previousCity: string | null = null;
-   
+
    @observable
    cityStreets: Street [] |null = null;
    @action
@@ -331,7 +353,7 @@ class FilterStore implements IFilterStore  {
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What Vehicle 
+   // What Vehicle
    // ///////////////////////////////////////////////////////////////////////////////////////////////
 
    /**
@@ -345,7 +367,7 @@ class FilterStore implements IFilterStore  {
       this.updateFilters(this.injTypes, aType, val);
    }
 
-   // vehicle Type of the killed / injured 
+   // vehicle Type of the killed / injured
    @observable
    vehicleType: IColumnFilter;
 
@@ -499,24 +521,24 @@ class FilterStore implements IFilterStore  {
 
    @observable
    GroupBySort: string|null = null;
-   
-   @action 
+
+   @action
    SetGroupBySort = (value:string|null) =>{
       this.GroupBySort = value;
    }
-   @action 
+   @action
    submitOnGroupByAfterSort =() =>{
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
    }
 
    @observable
    GroupByLimit: number|null = null;
-   
-   @action 
+
+   @action
    SetGroupByLimit = (value:number|null) =>{
       this.GroupByLimit = value;
    }
-   @action 
+   @action
    submitOnGroupByAfterLimit =() =>{
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
    }
@@ -524,24 +546,24 @@ class FilterStore implements IFilterStore  {
 
 
    @action
-   updateGroupby = (key: string) => {      
+   updateGroupby = (key: string) => {
       this.groupByDict.setFilter(key);
       this.setGroupByName((this.groupByDict.groupBy as GroupBy).value)
-      
+
        // Add additional logic after state update
       runInAction(() => {
-         this.groupByDict.setBrowserQueryString();     
+         this.groupByDict.setBrowserQueryString();
          this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
          if (this.groupByDict.groupBy.text !== 'CityByPop') {
             const gb2 = (this.group2Dict.groupBy as GroupBy2).name;
             this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2);
          }
       });
-    
+
    }
 
    /**
-    * Dictionary with key-value list of the group-by  
+    * Dictionary with key-value list of the group-by
     */
    @observable
    groupByDict: GroupMap;
@@ -554,12 +576,12 @@ class FilterStore implements IFilterStore  {
          .then((data: ItemCount[] | undefined) => {
             if (data !== undefined) {
                const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
-               this.setDataByYears(dataPadded);                  
+               this.setDataByYears(dataPadded);
             }
          });
    }
 
-  
+
 
    getCountFromGroupByRes = (data: any[]) => {
       const res = data.reduce((b: number, x: any) => b + x.count, 0);
@@ -569,7 +591,7 @@ class FilterStore implements IFilterStore  {
    @action
    submitfilterdGroupByYears = () => {
       this.isLoadingInjuriesCount = true;
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
       AccidentService.fetchGetGroupBy(filter)
@@ -581,13 +603,13 @@ class FilterStore implements IFilterStore  {
                this.setInjuriesCount(count);
             }
          });
-      
+
    }
 
 
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
-      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());     
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
       // logger.log(filter);
@@ -611,7 +633,7 @@ class FilterStore implements IFilterStore  {
    }
 
    @action
-   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {  
+   submitfilterdGroup2 = (aGroupBy: GroupBy, groupName2: string) => {
          const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
          const filtermatch = this.getFilterQueryString(null);
          const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
@@ -678,7 +700,7 @@ class FilterStore implements IFilterStore  {
       }
       this.submitCityNameAndLocation();
       this.submitGroupByYears();
-      this.submitfilterdGroupByYears();      
+      this.submitfilterdGroupByYears();
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
@@ -688,18 +710,18 @@ class FilterStore implements IFilterStore  {
 
    submintMainDataFilter = () => {
       reduxStore.dispatch(setIsLoading(true));
-    
+
       const filter = this.getFilterQueryString(null);
       reduxStore.dispatch(setFiltersText(true));
       this.setBrowserQueryString();
-    
+
       this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-      
+
       reduxStore.dispatch(fetchFilterData());
     };
 
    submintMainDataFilter_old = () => {
-      this.setIsLoading(true);    
+      this.setIsLoading(true);
       const filter = this.getFilterQueryString(null);
       this.setFiltersText(true);
       this.setBrowserQueryString();
@@ -711,10 +733,10 @@ class FilterStore implements IFilterStore  {
                // this.updateAllInjuries(res.data);
                // write Data to local db
                if (this.rootStore.localDbFilterStroe.useLocalDb === 1) this.rootStore.localDbFilterStroe.writeToLocalDB(res.data);
-            }               
+            }
             this.setIsLoading(false);
          });
-   
+
    }
 
    submintGetMarkerFirstStep = () => {
@@ -730,8 +752,8 @@ class FilterStore implements IFilterStore  {
    }
    async submitCityNameAndLocation() {
       const cityId = this.cities.arrValues[0] || "";
-      this.updateCityResult(cityId);    
-      if (!cityId || !this.rootStore.mapStore.isCenterMapByCity()) return;    
+      this.updateCityResult(cityId);
+      if (!cityId || !this.rootStore.mapStore.isCenterMapByCity()) return;
       try {
         const srvCity = new CityService();
         const cityData = await srvCity.getCityByid(cityId);
@@ -742,7 +764,7 @@ class FilterStore implements IFilterStore  {
     }
 
    /**
-    * get filter query string for the server request. 
+    * get filter query string for the server request.
     * @param bounds gis bound (rect) to filter
     * @param useBounds if true will use gis bound to filter reqest
     * @returns query string , for example ?sy=2017&sev=1&city="תל אביב -יפו","חיפה"

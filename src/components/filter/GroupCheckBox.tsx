@@ -39,7 +39,7 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
   );
   const isvalid = (isAllValsFalse) ? feedback : null;
   const list = arrTypes.map((fChecker, index) => {
-    return useMemos([fChecker.checked], <Checkbox
+    return useMemos([fChecker.checked, fChecker.disabled], <Checkbox
       key={fChecker.label}
       label={fChecker.label}
       group={colFilter.name}
@@ -48,6 +48,7 @@ const GroupCheckbox: React.FC<IProps> = observer(({ formName, colFilter, onChang
       onChange={(e: ChangeEvent<HTMLInputElement>) => {
         onGroupChange(index, e.target.checked);
       }}
+      disabled={fChecker.disabled}
     />);
   });
   return (

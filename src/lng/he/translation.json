@@ -245,7 +245,7 @@
   "Select_Tag": "תחום",
   "Edit": "עריכה",
   "Edit Recommendation": "עריכת המלצה",
-  "Create Recommendation" : "יצירת המלצה", 
+  "Create Recommendation" : "יצירת המלצה",
   "References": "הפניות",
   "Recommendation_added": "ההמלצה נוספה בהצלחה!",
   "Recommendation_updated": "ההמלצה עודכנה בהצלחה!",
@@ -258,5 +258,6 @@
   "#Map": "=========Map==========",
   "MarkersColorType": "צבע לפי",
   "MarkersIconType": "סמנים לפי",
-  "MapMarkersType":"סוג מפה"
+  "MapMarkersType":"סוג מפה",
+  "ToChooseSeverityModerate": "לבחירת חומרה ברמה קלה, יש לבחור יישוב"
 }
