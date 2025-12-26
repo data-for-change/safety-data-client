@@ -7,14 +7,15 @@ interface IProps {
   group: string;
   id: number;
   checked: boolean;
+  disabled?: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => any;
 }
 
 const Checkbox: React.FC<IProps> = ({
-  group, label, id, checked, onChange,
+  group, label, id, checked, disabled, onChange,
 }) => {
-  const { t } = useTranslation();  
-  const checkboxId = `cbox${group}${id}`;  
+  const { t } = useTranslation();
+  const checkboxId = `cbox${group}${id}`;
 
   return (
     <Form.Check
@@ -25,6 +26,7 @@ const Checkbox: React.FC<IProps> = ({
       id={checkboxId}  // Ensure the id matches
       checked={checked}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 };

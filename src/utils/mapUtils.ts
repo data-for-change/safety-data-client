@@ -127,6 +127,27 @@ export const getColorByDayNight = (value: string) => {
     }
     return res;
 };
+export const getColorByPopType = (value: string) => {
+    let res = '';
+    switch (value) {
+        case 'יהודים':
+            res = '#1E6091';
+            break;
+        case 'ערבים':
+            res = '#0ea85eff';
+            break;
+        case 'זרים':
+            res = '#6dc587ff';
+            break;
+        case 'אחרים':
+            res = '#5a6860ff';
+            break;
+        default:
+            res = '#FDE2E4';
+            break;
+    }
+    return res;
+};
 export const getColorByGender = (value: string) => {
     let res = '';
     switch (value) {
@@ -178,6 +199,9 @@ export const getColors = (colorBy: string, data: Accident) => {
         case 'Gender':
             res = getColorByGender(data.sex_hebrew);
             break;
+        case 'Population':
+            res = getColorByPopType(data.population_type_hebrew);
+            break;
         case 'RoadType':
             res = getColorByRoadType(data.road_type_hebrew);
             break;
@@ -224,6 +248,10 @@ export const createLegendByColorType = (colorBy: string) =>
               grade = ['נקבה', 'זכר', 'לא ידוע'];
               res = createLegendArr(grade,getColorByGender);
               break;
+          case 'Population':
+              grade = ['יהודים', 'ערבים', 'זרים', 'אחרים'];
+              res = createLegendArr(grade,getColorByPopType);
+              break; 
           case 'RoadType':
               grade = ['לא בצומת', 'בצומת'];
               res = createLegendArr(grade,getColorByRoadType);

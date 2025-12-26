@@ -260,5 +260,6 @@
   "MarkersIconType": "סמנים לפי",
   "MapMarkersType":"סוג מפה",
   "outside_range": "מחוץ לטווח",
-  "data_range": "טווח נתונים"
+  "data_range": "טווח נתונים",
+  "ToChooseSeverityModerate": "לבחירת חומרה ברמה קלה, יש לבחור יישוב"
 }

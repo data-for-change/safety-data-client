@@ -260,5 +260,6 @@
   "MarkersIconType": "Icon By",
   "MapMarkersType": "Map Type",
   "outside_range": "Outside Range",
-  "data_range": "Data Range"
+  "data_range": "Data Range",
+  "ToChooseSeverityModerate": "To choose severity moderate, please choose a city"
 }

@@ -1,6 +1,7 @@
 import {
    observable, action, computed, makeAutoObservable,
-   runInAction
+   runInAction,
+   reaction
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import { ColumnFilterArray } from './ColumnFilterArray';
@@ -91,6 +92,12 @@ class FilterStore implements IFilterStore  {
       this.setDataFilterd(FC.initDataGrpBy1());
       this.dataGroupby2 = FC.initDataGrpBy2();
       this.appInitialized = false;
+      // Reaction to city changes
+      this.updateModerateDisabledState();
+      reaction(
+         () => this.cities.arrValues,
+         () => this.updateModerateDisabledState()
+      );
    }
 
    rootStore: RootStore;
@@ -179,6 +186,21 @@ class FilterStore implements IFilterStore  {
          if (updateCityResult) {
             //[this.cityResult] = this.cities.arrValues;
          }
+      }
+   }
+
+   @action
+   updateModerateDisabledState = () => {
+      const moderateOption = this.injurySeverity.arrTypes[2]; // moderate is at index 2
+      // Check if any city is selected (filter out empty strings)
+      const hasCitySelected = this.cities.arrValues.length > 0 &&
+                              this.cities.arrValues.some(val => val && val.trim() !== '');
+      moderateOption.disabled = !hasCitySelected;
+
+      // If moderate is disabled and currently checked, uncheck it
+      if (moderateOption.disabled && moderateOption.checked) {
+         moderateOption.checked = false;
+         this.injurySeverity.setQueryVals();
       }
    }
 
