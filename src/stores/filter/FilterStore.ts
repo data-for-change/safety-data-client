@@ -497,11 +497,12 @@ class FilterStore implements IFilterStore  {
    // Action to set group by name
    @action
    setGroupByName = (name: string) => {
+      console.log('🚀 ~ FilterStore ~ name:', name)
       this.groupByName = name;
    }
 
    @observable
-   GroupBySort: string|null = null;
+   GroupBySort: string|null = 'd';
 
    @action
    SetGroupBySort = (value:string|null) =>{
@@ -529,7 +530,13 @@ class FilterStore implements IFilterStore  {
    @action
    updateGroupby = (key: string) => {
       this.groupByDict.setFilter(key);
-      this.setGroupByName((this.groupByDict.groupBy as GroupBy).value)
+      const groupBy = this.groupByDict.groupBy as GroupBy;
+      this.setGroupByName(groupBy.value)
+      if (groupBy.value !== 'age') {
+         this.GroupBySort = 'd';
+      } else {
+         this.GroupBySort = null;
+      }
 
        // Add additional logic after state update
       runInAction(() => {
@@ -872,6 +879,12 @@ class FilterStore implements IFilterStore  {
       //update groupby
       this.groupByDict.setValuesByQuery(params);
       this.group2Dict.setValuesByQuery(params);
+      const groupBy = this.groupByDict.groupBy as GroupBy;
+      if (groupBy.value !== 'age') {
+         this.GroupBySort = 'd';
+      } else {
+         this.GroupBySort = null;
+      }
    }
 
    @action
