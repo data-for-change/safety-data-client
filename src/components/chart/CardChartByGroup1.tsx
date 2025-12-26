@@ -14,17 +14,9 @@ import { ItemCount } from '../../types';
 import SelectSortBy from '../groupby/SelectSortBy';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../stores/store';
+import ChartDataFilterSlider from '../organisms/ChartDataFilterSlider';
+import { EchartId } from '../types';
 
-const foramtDataPrecision = (data: ItemCount[]) => {
-    const data2 = data.map((x) => {
-       if (typeof x.count === 'number' && !Number.isInteger(x.count)) {
-          return { _id: x._id, count: x.count.toFixed(1) };
-       }
-       return { _id: x._id, count: x.count };
-    });
-    return data2;
- };
- 
 const CardChartByGroup1: React.FC<{}> = observer(() => {
     const styles = {
        divConfig: {
@@ -39,9 +31,9 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     // const { t } = useTranslation();
     const [showModel, setShowModal] = useState(false);
     const { filterStore } = useStore();
-    const { dataFilterd } = filterStore;
-    const reactData = toJS(dataFilterd);
-    const dataFormated = foramtDataPrecision(reactData);
+    const { dataFilterd, getChartData } = filterStore;
+    const chartId = EchartId.Group_1;
+    const dataFormated = getChartData(chartId);
     const { chartType, direction } = useSelector((state: RootState) => state.appUi);
 
     const chart = <ChartBar
@@ -54,12 +46,15 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     const memoSettingsIcon = useMemos([],
        <SvgIconSettings color={'var(--onprimary-color)'} />
     );
-    // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;   
+    // const memoSettingsIcon = <SvgIconSettings color={'var(--onprimary-color)'} />;
     return (
       <>
        <SmallCard style={{marginBottom: '0.5rem'}}>
           <div style={styles.divConfig}>
-             <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+                <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+                <div style={{ width: '40%', margin: '0 auto' }}>
+                   <ChartDataFilterSlider id={chartId} data={dataFilterd} />
+                </div>
              <SelectSortBy id="Graphs.Main.SelectSort"/>
           </div>
           <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
@@ -72,9 +67,9 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
              </div>
           </div>
        </SmallCard>
-       
+
        </>
     );
  });
- 
+
  export default CardChartByGroup1;
