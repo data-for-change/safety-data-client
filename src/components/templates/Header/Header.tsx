@@ -1,11 +1,17 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
+import { useTranslation } from 'react-i18next';
+import { useGoogleLogin } from '@react-oauth/google';
+import { Button } from 'react-bootstrap';
 import LanguageSelector from '../../molecules/LanguageSelector';
 import NavigationList from '../../molecules/NavigationList';
 import Navbar from 'react-bootstrap/Navbar';
 import logo from '../../../assets/logo/safety-logo-white.png';
 import { RootState, AppDispatch } from '../../../stores/store';
-import { setHeaderExpanded } from '../../../stores'; 
+import { setHeaderExpanded } from '../../../stores';
+import { useStore } from '../../../stores/storeConfig';
 import '../../../styles/tabs.css';
 import './header.css';
 
@@ -13,15 +19,42 @@ interface IProps {
    title: string;
 }
 
-const Header: React.FC<IProps> = ({ title }) => {
-   // Use Redux state instead of MobX
+const Header: React.FC<IProps> = observer(({ title }) => {
+   const { t } = useTranslation();
    const dispatch = useDispatch<AppDispatch>();
-   const { isHeaderExpanded } = useSelector((state: RootState) => state.appUi); 
+   const { isHeaderExpanded } = useSelector((state: RootState) => state.appUi);
+   const { userStore } = useStore();
+   const { isAuthenticated, logout, googleLogin, user } = userStore;
 
-   // Use the Redux dispatch to toggle header state
    const toggleHeaderExpanded = () => {
-      dispatch(setHeaderExpanded(!isHeaderExpanded)); 
+      dispatch(setHeaderExpanded(!isHeaderExpanded));
    };
+
+   const login = useGoogleLogin({
+      onSuccess: async (tokenResponse) => {
+         if (tokenResponse.access_token) {
+            await googleLogin(tokenResponse.access_token);
+         }
+      },
+      onError: () => console.error('Login Failed'),
+   });
+
+   const onLoginHandler = () => {
+      if (isAuthenticated) {
+         logout();
+      } else {
+         login();
+      }
+   };
+
+   const UserIcon = () => (
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16" style={{ marginRight: '6px' }}>
+         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+         <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+      </svg>
+   );
+
+   const loginText = isAuthenticated ? t('Logout') : t('Login');
 
    return (
       <header className="header">
@@ -33,14 +66,29 @@ const Header: React.FC<IProps> = ({ title }) => {
                   <div className="navbar-nav">
                      <NavigationList />
                   </div>
-                  <div style={{padding: '10px 5px'}}>
-                     <LanguageSelector />
+
+                  <div className="d-flex align-items-center ms-auto">
+                     <div className="me-3">
+                         <Button
+                              variant="outline-light"
+                              size="sm"
+                              className="d-flex align-items-center px-3"
+                              onClick={onLoginHandler}
+                              style={{ borderRadius: '20px', fontWeight: 500 }}
+                           >
+                              {loginText}
+                              <UserIcon/>
+                           </Button>
+                     </div>
+                     <div style={{marginTop: '8px'}}>
+                        <LanguageSelector />
+                     </div>
                   </div>
                </Navbar.Collapse>
             </div>
          </Navbar>
       </header>
    );
-};
+});
 
 export default Header;

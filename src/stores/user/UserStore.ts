@@ -12,7 +12,7 @@ export default class UserStore {
         makeAutoObservable(this);
         this.loadUser(); // Load from localStorage on init
     }
-    
+
     async login(username: string, password: string): Promise<boolean> {
         try {
             const serv = new AuthService();
@@ -28,6 +28,22 @@ export default class UserStore {
         }
     }
 
+    async googleLogin(credential: string): Promise<boolean> {
+        try {
+            const serv = new AuthService();
+            const response = await serv.googleLogin(credential);
+            const token = response.data.token;
+
+            saveToken(token);
+            this.updateUserFromToken(token);
+
+            return true;
+        } catch (err) {
+            console.error("Google login failed", err);
+            return false;
+        }
+    }
+
     logout() {
         removeToken();
         this.user = null;
@@ -36,7 +52,11 @@ export default class UserStore {
     updateUserFromToken(token: string) {
         const payload = decodeToken(token);
         if (payload) {
-            this.user = { id: payload.id, role: payload.role };
+            this.user = {
+                id: payload.id,
+                role: payload.role,
+                name: payload.name
+            };
         }
     }
 
@@ -65,4 +85,3 @@ export default class UserStore {
         return this.isAdmin || this.isEditor;
     }
 }
-

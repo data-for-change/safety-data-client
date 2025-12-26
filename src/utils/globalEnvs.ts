@@ -1,2 +1,7 @@
 export const API_URL = import.meta.env.VITE_API_URL as string;
 export const API_URL2 = import.meta.env.VITE_API_URL2 as string;
+export const GOOGLE_CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID as string) || "";
+
+if (!GOOGLE_CLIENT_ID && process.env.NODE_ENV !== 'test') {
+  console.error("VITE_GOOGLE_CLIENT_ID is missing from environment variables.");
+}
