@@ -18,7 +18,7 @@ const AccidentsPopUp: React.FC<IProps> = (({ data: x, language }) => {
   if (x.injured_type_hebrew !== undefined) {
     return (
       <Popup>
-        <div style={{fontSize: '16px'}} className={`text${language}`}>
+        <div style={{fontSize: '14px'}} className={`text${language}`}>
           <div><span style={pStyle}>{t('When')}: </span>{x.accident_timestamp.slice(0, 16)}, {x.day_in_week_hebrew}, {x.day_night_hebrew}</div>
           <div><span style={pStyle}>{t('Who')}: </span>{x.injured_type_hebrew}, {x.injury_severity_hebrew}, {x.vehicle_vehicle_type_hebrew ? `${x.vehicle_vehicle_type_hebrew}, ` : ''} {x.sex_hebrew}, {x.age_group_hebrew}, {x.population_type_hebrew}</div>
           <div><span style={pStyle}>{t('Where')}: </span> 
