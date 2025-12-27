@@ -61,7 +61,7 @@ export const initGroupMap = () => {
   map.set('lca', new  GroupBy('LocationAccuracy', 'lca'))
   map.set('city', new GroupBy('City', 'city', 20, 'd'));
   map.set('cpop', new GroupBy('CityByPop', 'cpop'));
-  map.set('st', new GroupBy('Street', 'st', 30, 'd'));
+  map.set('st', new GroupBy('Street', 'st', 40, 'd'));
   map.set('rd', new GroupBy('Road', 'rd', 20, 'd'));
   map.set('acc', new GroupBy('AccidentType', 'acc',0,'d'));
   map.set('selfacc', new GroupBy('SelfOrNotAcc', 'selfacc', 0, null, reGroupResultIsSelfAcc));
