@@ -5,6 +5,8 @@
  * @param metaData Optional metadata for grouped charts
  * @returns Transformed data array
  */
+
+import { toJS } from 'mobx';
 export const sliceDataWithAggregation = (
   data: any[],
   range: { start: number, end: number },
@@ -18,6 +20,9 @@ export const sliceDataWithAggregation = (
   const end = Math.max(start, Math.min(range.end, totalLength));
 
   if (start === 0 && end === totalLength) return data;
+
+  let data1 = toJS(data); 
+  const visibleData1 = data.slice(start, end);
 
   const visibleData = data.slice(start, end);
   const outsideData = [

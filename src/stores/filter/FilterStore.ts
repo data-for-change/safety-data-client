@@ -478,9 +478,9 @@ class FilterStore implements IFilterStore  {
 
    // casualties groupd by some group, filterd on main filter
    @observable
-   dataFilterd: any[] = []
+   dataFilterd: ItemCount[] = []
    @action
-   setDataFilterd(data:any[]){
+   setDataFilterd(data:ItemCount[]){
       this.dataFilterd = data;
    }
 
@@ -554,12 +554,7 @@ class FilterStore implements IFilterStore  {
       this.groupByDict.setFilter(key);
       const groupBy = this.groupByDict.groupBy as GroupBy;
       this.setGroupByName(groupBy.value)
-      if (groupBy.value !== 'age') {
-         this.GroupBySort = 'd';
-      } else {
-         this.GroupBySort = null;
-      }
-
+      this.GroupBySort=  groupBy.sort;
        // Add additional logic after state update
       runInAction(() => {
          this.groupByDict.setBrowserQueryString();
@@ -955,7 +950,7 @@ class FilterStore implements IFilterStore  {
    }
 
    getChartData = (id: EchartId) => {
-      let data: any[] = [];
+      let data: ItemCount[] = [];
       let metaData: any[] | undefined = undefined;
       let usePrecision = true;
 

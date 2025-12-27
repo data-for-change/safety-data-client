@@ -4,6 +4,7 @@ import { useStore } from '../../stores/storeConfig';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../stores/store';
+import { ItemCount } from '../../types';
 
 interface IProps {
   id: string;
@@ -60,6 +61,7 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Math.min(Number(e.target.value), localRange.end - 1);
     setLocalRange((prev: {start: number, end: number}) => ({ ...prev, start: val }));
+    console.log('handleStartChange', val)
     setChartDataRange(id, val, localRange.end);
   };
 
