@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logging in...</title>
+</head>
+<body>
+    <script>
+        // This page is reached after the backend redirect cycle (/sd-callback/google -> redirect_url)
+        // It simply closes the popup window. The main window will detect it's closed and refresh.
+        window.close();
+    </script>
+</body>
+</html>

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useTranslation } from 'react-i18next';
-import { useGoogleLogin } from '@react-oauth/google';
 import { Button } from 'react-bootstrap';
 import LanguageSelector from '../../molecules/LanguageSelector';
 import NavigationList from '../../molecules/NavigationList';
@@ -24,31 +23,22 @@ const Header: React.FC<IProps> = observer(({ title }) => {
    const dispatch = useDispatch<AppDispatch>();
    const { isHeaderExpanded } = useSelector((state: RootState) => state.appUi);
    const { userStore } = useStore();
-   const { isAuthenticated, logout, googleLogin, user } = userStore;
+   const { isAuthenticated, user } = userStore;
 
    const toggleHeaderExpanded = () => {
       dispatch(setHeaderExpanded(!isHeaderExpanded));
    };
 
-   const login = useGoogleLogin({
-      onSuccess: async (tokenResponse) => {
-         if (tokenResponse.access_token) {
-            await googleLogin(tokenResponse.access_token);
-         }
-      },
-      onError: () => console.error('Login Failed'),
-   });
-
    const onLoginHandler = () => {
       if (isAuthenticated) {
-         logout();
+         userStore.logout();
       } else {
-         login();
+         userStore.login();
       }
    };
 
    const UserIcon = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16" style={{ marginRight: '6px' }}>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16" style={{ marginInlineStart: '8px' }}>
          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
          <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
       </svg>
@@ -69,16 +59,27 @@ const Header: React.FC<IProps> = observer(({ title }) => {
 
                   <div className="d-flex align-items-center ms-auto">
                      <div className="me-3">
-                         <Button
-                              variant="outline-light"
-                              size="sm"
-                              className="d-flex align-items-center px-3"
-                              onClick={onLoginHandler}
-                              style={{ borderRadius: '20px', fontWeight: 500 }}
+                        {isAuthenticated && (
+                           <Link
+                              to="/profile"
+                              className="text-white text-decoration-none small d-none d-md-inline hover-opacity me-3"
+                              style={{ fontWeight: 500 }}
                            >
-                              {loginText}
-                              <UserIcon/>
-                           </Button>
+                              {t('Welcome')}, {user?.name || t('User')}
+                           </Link>
+                        )}
+                        {isAuthenticated && <div className="vr d-none d-md-block text-white opacity-50 me-3" style={{ height: '20px', display: 'inline-block' }}></div>}
+
+                        <Button
+                           variant="outline-light"
+                           size="sm"
+                           className="d-flex align-items-center px-3"
+                           onClick={onLoginHandler}
+                           style={{ borderRadius: '20px', fontWeight: 500 }}
+                        >
+                           {loginText}
+                           <UserIcon />
+                        </Button>
                      </div>
                      <div style={{marginTop: '8px'}}>
                         <LanguageSelector />
