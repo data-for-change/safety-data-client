@@ -271,7 +271,7 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
       // Calculate total for the specific outside candle
       const totalOutside = metaData.reduce((sum, method) => sum + (outsideItem[method.key] || 0), 0);
       chartDatasets.push({
-        label: `${t('outside_range')} (${t('total')})`,
+        label: `${t('outside_range')}`,
         data: [...Array(visibleItems.length).fill(null), totalOutside],
         backgroundColor: '#FF4136',
         // borderRadius: 4,

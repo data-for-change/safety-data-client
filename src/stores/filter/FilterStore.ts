@@ -529,6 +529,7 @@ class FilterStore implements IFilterStore  {
    @action
    SetGroupBySort = (value:string|null) =>{
       this.GroupBySort = value;
+      this.resetChartRanges();
    }
    @action
    submitOnGroupByAfterSort =() =>{
@@ -558,6 +559,7 @@ class FilterStore implements IFilterStore  {
        // Add additional logic after state update
       runInAction(() => {
          this.groupByDict.setBrowserQueryString();
+         this.resetChartRanges();
          this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
          if (this.groupByDict.groupBy.text !== 'CityByPop') {
             const gb2 = (this.group2Dict.groupBy as GroupBy2).name;
@@ -670,6 +672,7 @@ class FilterStore implements IFilterStore  {
       this.group2Dict.setFilter(key);
       this.setGroupBy2Name((this.group2Dict.groupBy as GroupBy2).name);
       this.group2Dict.setBrowserQueryString();
+      this.resetChartRanges();
       const gb2name = (this.group2Dict.groupBy as GroupBy2).name
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2name);
    }
@@ -709,6 +712,7 @@ class FilterStore implements IFilterStore  {
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
+      this.resetChartRanges();
       const {currentPage, language}  = reduxStore.getState().appUi;
       if (currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, language);
    }
@@ -949,8 +953,13 @@ class FilterStore implements IFilterStore  {
       return this.chartDataRanges.get(id) || { start: 0, end: 100 };
    }
 
+   @action
+   resetChartRanges = () => {
+      this.chartDataRanges.clear();
+   }
+
    getChartData = (id: EchartId) => {
-      let data: ItemCount[] = [];
+      let data: any[] = [];
       let metaData: any[] | undefined = undefined;
       let usePrecision = true;
 
@@ -970,7 +979,16 @@ class FilterStore implements IFilterStore  {
             return [];
       }
 
-      const range = this.chartDataRanges.get(id) || { start: 0, end: data.length };
+      const getItemValue = (item: any) => {
+        if (item.count !== undefined) return Number(item.count);
+        if (metaData) {
+          return Math.max(...metaData.map(m => Number(item[m.key]) || 0));
+        }
+        return 0;
+      };
+
+      const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
+      const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
       const sliced = sliceDataWithAggregation(data, range, metaData);
       return usePrecision ? formatDataPrecision(sliced) : sliced;
    }

@@ -6,7 +6,6 @@
  * @returns Transformed data array
  */
 
-import { toJS } from 'mobx';
 export const sliceDataWithAggregation = (
   data: any[],
   range: { start: number, end: number },
@@ -14,21 +13,24 @@ export const sliceDataWithAggregation = (
 ): any[] => {
   if (!data || data.length === 0) return [];
 
-  const totalLength = data.length;
-  // Ensure range is within bounds
-  const start = Math.max(0, Math.min(range.start, totalLength));
-  const end = Math.max(start, Math.min(range.end, totalLength));
+  const getItemValue = (item: any) => {
+    if (item.count !== undefined) return Number(item.count);
+    if (metaData) {
+      // Find the maximum value among all grouped datasets for this item
+      return Math.max(...metaData.map(m => Number(item[m.key]) || 0));
+    }
+    return 0;
+  };
 
-  if (start === 0 && end === totalLength) return data;
+  const visibleData = data.filter(item => {
+    const val = getItemValue(item);
+    return val >= range.start && val <= range.end;
+  });
 
-  let data1 = toJS(data); 
-  const visibleData1 = data.slice(start, end);
-
-  const visibleData = data.slice(start, end);
-  const outsideData = [
-    ...data.slice(0, start),
-    ...data.slice(end)
-  ];
+  const outsideData = data.filter(item => {
+    const val = getItemValue(item);
+    return val < range.start || val > range.end;
+  });
 
   if (outsideData.length === 0) return visibleData;
 
@@ -36,10 +38,8 @@ export const sliceDataWithAggregation = (
   const aggregated: any = { _id: 'outside_range' };
 
   if (!metaData) {
-    // Simple ItemCount
-    aggregated.count = outsideData.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+    aggregated.count = outsideData.reduce((sum, item) => sum + getItemValue(item), 0);
   } else {
-    // Grouped data (e.g. from GroupBy2)
     metaData.forEach((meta) => {
       aggregated[meta.key] = outsideData.reduce((sum, item) => sum + (Number(item[meta.key]) || 0), 0);
     });

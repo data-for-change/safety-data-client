@@ -8,60 +8,47 @@ import { ItemCount } from '../../types';
 
 interface IProps {
   id: string;
-  data: any[];
+  data: ItemCount[];
 }
 
 const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
-  const dataLength = data?.length || 0;
   const { filterStore } = useStore();
   const { chartDataRanges, setChartDataRange } = filterStore;
   const { t } = useTranslation();
   const direction = useSelector((state: RootState) => state.appUi.direction);
   const isRtl = direction === 'rtl';
 
-  const chartDataRange = chartDataRanges.get(id) || { start: 0, end: dataLength || 100 };
+  // Calculate actual max value for the slider scale (Y-axis)
+  const getItemValue = (item: any) => {
+    if (item.count !== undefined) return Number(item.count);
+    // For grouped data, find the maximum individual bar value among all groups
+    const values = Object.keys(item)
+      .filter(key => key !== '_id' && typeof item[key] === 'number')
+      .map(key => Number(item[key]));
+    return values.length > 0 ? Math.max(...values) : 0;
+  };
+
+  const maxVal = data?.reduce((max, item) => Math.max(max, getItemValue(item)), 0) || 100;
+  const chartDataRange = chartDataRanges.get(id) || { start: 0, end: maxVal };
 
   // Local state for smooth dragging before updating store
   const [localRange, setLocalRange] = useState(chartDataRange);
 
   useEffect(() => {
-    // Reset range or sync with store when dataLength changes
-    if (dataLength > 0 && (chartDataRange.end > dataLength || chartDataRange.end === 0)) {
-        setChartDataRange(id, 0, dataLength);
-        setLocalRange({ start: 0, end: dataLength });
-    } else {
-        setLocalRange(chartDataRange);
-    }
-  }, [id, dataLength, chartDataRange.start, chartDataRange.end, setChartDataRange]);
-
-  // Calculate cumulative sums for values display
-  const getSumAt = (index: number) => {
-    if (!data || data.length === 0) return 0;
-    let sum = 0;
-    const limit = Math.min(index, data.length);
-    for (let i = 0; i < limit; i++) {
-      const item = data[i];
-      if (item.count !== undefined) {
-        sum += Number(item.count);
+    // Sync with store when data changes or maxVal updates
+    if (data && data.length > 0) {
+      if (chartDataRange.end > maxVal || chartDataRange.end === 0) {
+        setChartDataRange(id, 0, maxVal);
+        setLocalRange({ start: 0, end: maxVal });
       } else {
-        // Fallback for grouped data: sum all numeric values except _id
-        Object.keys(item).forEach(key => {
-          if (key !== '_id' && typeof item[key] === 'number') {
-            sum += item[key];
-          }
-        });
+        setLocalRange(chartDataRange);
       }
     }
-    return Math.round(sum);
-  };
-
-  const startSum = getSumAt(localRange.start);
-  const endSum = getSumAt(localRange.end);
+  }, [id, data, maxVal, chartDataRange.start, chartDataRange.end, setChartDataRange]);
 
   const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Math.min(Number(e.target.value), localRange.end - 1);
     setLocalRange((prev: {start: number, end: number}) => ({ ...prev, start: val }));
-    console.log('handleStartChange', val)
     setChartDataRange(id, val, localRange.end);
   };
 
@@ -71,10 +58,10 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
     setChartDataRange(id, localRange.start, val);
   };
 
-  if (dataLength <= 1) return null;
+  if (!data || data.length <= 1) return null;
 
-  const leftPosStart = isRtl ? `${100 - (localRange.start / dataLength) * 100}%` : `${(localRange.start / dataLength) * 100}%`;
-  const leftPosEnd = isRtl ? `${100 - (localRange.end / dataLength) * 100}%` : `${(localRange.end / dataLength) * 100}%`;
+  const leftPosStart = isRtl ? `${100 - (localRange.start / maxVal) * 100}%` : `${(localRange.start / maxVal) * 100}%`;
+  const leftPosEnd = isRtl ? `${100 - (localRange.end / maxVal) * 100}%` : `${(localRange.end / maxVal) * 100}%`;
 
   return (
     <div className="chart-range-slider-container" style={styles.container}>
@@ -87,7 +74,7 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
         <input
           type="range"
           min={0}
-          max={dataLength}
+          max={maxVal}
           value={localRange.start}
           onChange={handleStartChange}
           style={{ ...styles.slider, ...styles.sliderStart }}
@@ -95,7 +82,7 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
         <input
           type="range"
           min={0}
-          max={dataLength}
+          max={maxVal}
           value={localRange.end}
           onChange={handleEndChange}
           style={{ ...styles.slider, ...styles.sliderEnd }}
@@ -104,17 +91,17 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
         <div
           style={{
             ...styles.rangeHighlight,
-            left: isRtl ? `${100 - (localRange.end / dataLength) * 100}%` : `${(localRange.start / dataLength) * 100}%`,
-            right: isRtl ? `${(localRange.start / dataLength) * 100}%` : `${100 - (localRange.end / dataLength) * 100}%`
+            left: isRtl ? `${100 - (localRange.end / maxVal) * 100}%` : `${(localRange.start / maxVal) * 100}%`,
+            right: isRtl ? `${(localRange.start / maxVal) * 100}%` : `${100 - (localRange.end / maxVal) * 100}%`
           }}
         />
 
         {/* Value labels below handles */}
         <div style={{ ...styles.thumbValue, left: leftPosStart, transform: 'translateX(-50%) translateY(20px)' }}>
-          {startSum}
+          {localRange.start}
         </div>
         <div style={{ ...styles.thumbValue, left: leftPosEnd, transform: 'translateX(-50%) translateY(20px)' }}>
-          {endSum}
+          {localRange.end}
         </div>
 
         {/* Endpoints */}
@@ -130,7 +117,7 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
           left: isRtl ? '0%' : '100%',
           transform: `translateX(${isRtl ? '-50%' : '50%'}) translateY(20px)`
         }}>
-          {getSumAt(dataLength)}
+          {maxVal}
         </div>
       </div>
     </div>
