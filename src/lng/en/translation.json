@@ -266,5 +266,7 @@
 	"MapMarkersType": "Map Type",
 	"ToChooseSeverityModerate": "To choose severity moderate, please choose a city",
 	"LoginOrSwitchUser": "Login / Switch User",
-	"ContactForMoreDetails": "For more details contact us"
+	"ContactForMoreDetails": "For more details contact us",
+	"outside_range": "Outside Range",
+	"data_range": "Data Range"
 }
