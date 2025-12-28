@@ -19,6 +19,7 @@ const GroupByTablesPanel = lazy(() => import('../groupTable/GroupByTablesPanel')
 const MapAccidents = lazy(() => import('../map/AccidentsMap'));
 const AccidentsTable = lazy(() => import('../detailsTable/AccidentsTable'));
 const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
+const RiskHotspotModel = lazy(() => import('../organisms/RiskHotspotModel'));
 
 const styles = {
   tab: { marginTop: '0.5rem' },
@@ -32,56 +33,69 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
   const { mapStore } = useStore();
   const { currentTab } = useSelector((state: RootState) => state.appUi);
   return (
-    <Tabs
-      mountOnEnter
-      activeKey={currentTab}
-      id="main-tabs"
-      onSelect={(tabActiveKey: any) => {
-        if (tabActiveKey === 'map') {
-          // map is renderd only when tab is shown to prevent leaflet bug
-          mapStore.isReadyToRenderMap = true;
-        } else mapStore.isReadyToRenderMap = false;
-        dispatch(setCurrentTab(tabActiveKey));
-      }}
-    >
-      <Tab style={styles.tab} eventKey="charts" title={t('Charts')}>     
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>  
-            <GroupByGraphsPanel />
-          </Suspense>
-        </ErrorBoundary>
-      </Tab>
-      <Tab style={styles.tab} eventKey="groups" title={t('Groups')}>
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
-            <GroupByTablesPanel />
-          </Suspense>
-        </ErrorBoundary>
-      </Tab>
-      <Tab style={styles.tabMap} eventKey="map" title={t('Map')}>
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
-            <SmallCard className="p-1 bg-white rounded shadow">           
-              <MapAccidents />
-            </SmallCard>
-          </Suspense>
-        </ErrorBoundary>
-      </Tab>
-      <Tab style={styles.tab} eventKey="table" title={t('Details')}>
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
-            <div className="col-auto"><AccidentsTable /></div>
-          </Suspense>
-        </ErrorBoundary>
-      </Tab>
-      <Tab style={styles.tab} eventKey="image" title={t('Images')}>
-        <ErrorBoundary>
-          <Suspense fallback={<Loader />}>
-            <div className="col-auto"><MyImageGallery type={type} /></div>
-          </Suspense>
-        </ErrorBoundary>
-      </Tab>
-    </Tabs>
+		<Tabs
+			mountOnEnter
+			activeKey={currentTab}
+			id='main-tabs'
+			onSelect={(tabActiveKey: any) => {
+				if (tabActiveKey === 'map') {
+					// map is renderd only when tab is shown to prevent leaflet bug
+					mapStore.isReadyToRenderMap = true;
+				} else mapStore.isReadyToRenderMap = false;
+				dispatch(setCurrentTab(tabActiveKey));
+			}}
+		>
+			<Tab style={styles.tab} eventKey='charts' title={t('Charts')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<GroupByGraphsPanel />
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+			<Tab style={styles.tab} eventKey='groups' title={t('Groups')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<GroupByTablesPanel />
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+			<Tab style={styles.tabMap} eventKey='map' title={t('Map')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<SmallCard className='p-1 bg-white rounded shadow'>
+							<MapAccidents />
+						</SmallCard>
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+			<Tab style={styles.tab} eventKey='table' title={t('Details')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<div className='col-auto'>
+							<AccidentsTable />
+						</div>
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+			<Tab style={styles.tab} eventKey='image' title={t('Images')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<div className='col-auto'>
+							<MyImageGallery type={type} />
+						</div>
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+			<Tab style={styles.tab} eventKey='riskModel' title={t('RiskModel')}>
+				<ErrorBoundary>
+					<Suspense fallback={<Loader />}>
+						<div className='col-auto'>
+							<RiskHotspotModel />
+						</div>
+					</Suspense>
+				</ErrorBoundary>
+			</Tab>
+		</Tabs>
   );
 });
 export default TabsTemplate;

@@ -27,7 +27,7 @@ export function removeToken() {
     localStorage.removeItem("token");
 }
 
-export function decodeToken(token: string): { id: string; role: string; exp: number } | null {
+export function decodeToken(token: string): { id: string; role: string; exp: number; name?: string; email?: string } | null {
     try {
         const payload = JSON.parse(atob(token.split(".")[1]));
         return payload;
@@ -36,4 +36,3 @@ export function decodeToken(token: string): { id: string; role: string; exp: num
         return null;
     }
 }
-

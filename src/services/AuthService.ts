@@ -1,21 +1,34 @@
 import axios from 'axios';
-import { API_URL } from '../utils/globalEnvs';
+import { API_SAFETY_DATA_URL } from '../utils/globalEnvs';
 
 class AuthService {
-    apiUrl = `${API_URL}/api/v1/auth` ;
-    registerUser = async (username: string, password: string) => {
-        return axios.post(`${this.apiUrl}/register`, { username, password });
-    };
-    
-    loginUser = async (username: string, password: string) => {
-        return axios.post(`${this.apiUrl}/login`, { username, password });
-    };
+	apiUrl = API_SAFETY_DATA_URL;
 
-    getProfile = async (token: string) => {
-        return axios.get(`${API_URL}/api/v1/users/profile`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-    };
+	// Safety Data session-based endpoints
+	isLoggedIn = async () => {
+		return axios.get(`${this.apiUrl}/sd-user/is_user_logged_in`, { withCredentials: true });
+	};
+
+	getUserInfo = async () => {
+		return axios.get(`${this.apiUrl}/sd-user/info`, { withCredentials: true });
+	};
+
+	logout = async () => {
+		return axios.get(`${this.apiUrl}/logout`, { withCredentials: true });
+	};
+
+	/**
+	 * Documentation Flow: Step 1: Initiate OAuth Login
+	 * Redirect the user to the authorization endpoint:
+	 * GET /sd-authorize/google
+	 */
+	getAuthorizeUrl = (redirectUrl?: string) => {
+		const url = new URL(`${this.apiUrl}/sd-authorize/google`);
+		if (redirectUrl) {
+			url.searchParams.append('redirect_url', redirectUrl);
+		}
+		return url.toString();
+	};
 }
 
 export default AuthService;
