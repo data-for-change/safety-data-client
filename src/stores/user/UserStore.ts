@@ -1,16 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import RootStore from '../RootStore';
 import AuthService from '../../services/AuthService';
-
-export interface IUser {
-	id: string;
-	email: string;
-	first_name?: string;
-	last_name?: string;
-	name?: string;
-	role: string;
-	roles?: string[];
-}
+import { isFeatureEnabled, FeatureFlags } from '../../utils/featureFlags';
+import { IUser } from '../../types/User';
 
 export default class UserStore {
 	user: IUser | null = null;
@@ -27,6 +19,9 @@ export default class UserStore {
 
 	async checkAuthStatus() {
 		this.isLoading = true;
+		if (!isFeatureEnabled(FeatureFlags.AUTH)) {
+			return;
+		}
 		try {
 			const response = await this.authService.isLoggedIn();
 			if (response.data.is_user_logged_in) {
@@ -51,13 +46,26 @@ export default class UserStore {
 			runInAction(() => {
 				const data = response.data;
 				this.user = {
+					app: data.app,
 					id: data.id,
 					email: data.email,
 					first_name: data.first_name,
 					last_name: data.last_name,
-					name: data.first_name ? `${data.first_name} ${data.last_name || ''}`.trim() : data.email,
+					full_name: data.first_name ? `${data.first_name} ${data.last_name || ''}`.trim() : data.email,
 					role: data.roles?.[0] || 'authenticated',
 					roles: data.roles,
+					oauth_provider: data.oauth_provider,
+					oauth_provider_user_name: data.oauth_provider_user_name,
+					oauth_provider_user_picture_url: data.oauth_provider_user_picture_url,
+					phone: data.phone,
+					user_desc: data.user_desc,
+					user_register_date: data.user_register_date,
+					user_type: data.user_type,
+					user_url: data.user_url,
+					is_active: data.is_active,
+					is_user_completed_registration: data.is_user_completed_registration,
+					organizations: data.organizations,
+					grants: data.grants,
 				};
 			});
 		} catch (err) {
@@ -76,7 +84,7 @@ export default class UserStore {
 		const top = window.screenY + (window.outerHeight - height) / 2;
 
 		// Use the current origin as the redirect URL for the backend to send the user back to
-		const redirectUrl = window.location.origin + '/public/close-popup.html';
+		const redirectUrl = window.location.origin + '/close-popup.html';
 		const authUrl = this.authService.getAuthorizeUrl(redirectUrl);
 
 		const popup = window.open(

@@ -267,5 +267,7 @@
 	"MapMarkersType": "סוג מפה",
 	"ToChooseSeverityModerate": "לבחירת חומרה ברמה קלה, יש לבחור יישוב",
 	"LoginOrSwitchUser": "להתחברות / החלף משתמש",
-	"ContactForMoreDetails": "לפרטים נוספים צרו קשר"
+	"ContactForMoreDetails": "לפרטים נוספים צרו קשר",
+	"outside_range": "מחוץ לטווח",
+	"data_range": "טווח נתונים"
 }
