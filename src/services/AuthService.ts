@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { API_SAFETY_DATA_URL } from '../utils/globalEnvs';
+import { API_ANYWAY_URL } from '../utils/globalEnvs';
 
 class AuthService {
-	apiUrl = API_SAFETY_DATA_URL;
+	apiUrl = API_ANYWAY_URL;
 
 	// Safety Data session-based endpoints
 	isLoggedIn = async () => {
