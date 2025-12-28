@@ -22,7 +22,7 @@ export const FEATURE_FLAGS = {
 	 * New Redirect-based Authentication flow
 	 * Disabled in production for now.
 	 */
-	AUTH: true,
+	AUTH: !isProd,
 };
 
 /**

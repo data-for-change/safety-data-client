@@ -72,22 +72,6 @@ const Header: React.FC<IProps> = observer(({ title }) => {
 						<div className='d-flex align-items-center ms-auto'>
 							{isFeatureEnabled(FeatureFlags.AUTH) && (
 								<div className='me-3'>
-									{isAuthenticated && (
-										<Link
-											to='/profile'
-											className='text-white text-decoration-none small d-none d-md-inline hover-opacity me-3'
-											style={{ fontWeight: 500 }}
-										>
-											{t('Welcome')}, {user?.name || t('User')}
-										</Link>
-									)}
-									{isAuthenticated && (
-										<div
-											className='vr d-none d-md-block text-white opacity-50 me-3'
-											style={{ height: '20px', display: 'inline-block' }}
-										></div>
-									)}
-
 									<Button
 										variant='outline-light'
 										size='sm'
@@ -96,7 +80,11 @@ const Header: React.FC<IProps> = observer(({ title }) => {
 										style={{ borderRadius: '20px', fontWeight: 500 }}
 									>
 										{loginText}
-										<UserIcon />
+										{isAuthenticated && user?.oauth_provider_user_picture_url ? (
+											<img src={user?.oauth_provider_user_picture_url || ''} alt='user' />
+										) : (
+											<UserIcon />
+										)}
 									</Button>
 								</div>
 							)}

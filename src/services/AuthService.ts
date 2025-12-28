@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_ANYWAY_URL } from '../utils/globalEnvs';
-import { IUserLoggedIn } from '../types/User';
+import { IUserLoggedIn, IUser } from '../types/User';
 
 class AuthService {
 	apiUrl = API_ANYWAY_URL;
@@ -10,12 +10,12 @@ class AuthService {
 		return axios.get(`${this.apiUrl}/sd-user/is_user_logged_in`, { withCredentials: true });
 	};
 
-	getUserInfo = async () => {
+	getUserInfo = async (): Promise<AxiosResponse<IUser>> => {
 		return axios.get(`${this.apiUrl}/sd-user/info`, { withCredentials: true });
 	};
 
 	logout = async () => {
-		return axios.get(`${this.apiUrl}/logout`, { withCredentials: true });
+		return axios.get(`${this.apiUrl}/sd-user/logout`, { withCredentials: true });
 	};
 
 	/**
