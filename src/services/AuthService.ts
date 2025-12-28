@@ -1,11 +1,12 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { API_ANYWAY_URL } from '../utils/globalEnvs';
+import { IUserLoggedIn } from '../types/User';
 
 class AuthService {
 	apiUrl = API_ANYWAY_URL;
 
 	// Safety Data session-based endpoints
-	isLoggedIn = async () => {
+	isLoggedIn = async (): Promise<AxiosResponse<IUserLoggedIn>> => {
 		return axios.get(`${this.apiUrl}/sd-user/is_user_logged_in`, { withCredentials: true });
 	};
 

@@ -1,17 +1,18 @@
-import React, { FunctionComponent, lazy, Suspense, } from 'react';
+import React, { FunctionComponent, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import {ErrorBoundary, Loader, SmallCard} from '../common/';
+import { ErrorBoundary, Loader, SmallCard } from '../common/';
 import { useStore } from '../../stores/storeConfig';
-import { useDispatch, useSelector, } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores/store';
-import {setCurrentTab} from '../../stores';
+import { setCurrentTab } from '../../stores';
+import { FeatureFlags, isFeatureEnabled } from '../../utils/featureFlags';
 
 // import MapPage from '../../pages/MapPage';
 interface IProps {
-  type: string;
+	type: string;
 }
 
 const GroupByGraphsPanel = lazy(() => import('../chart/GroupByGraphsPanel'));
@@ -22,17 +23,17 @@ const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
 const RiskHotspotModel = lazy(() => import('../organisms/RiskHotspotModel'));
 
 const styles = {
-  tab: { marginTop: '0.5rem' },
-  tabMap: { marginTop: '0.1rem' },
-  mapCard: { width: '150px', height: '35px' }
+	tab: { marginTop: '0.5rem' },
+	tabMap: { marginTop: '0.1rem' },
+	mapCard: { width: '150px', height: '35px' },
 };
 
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const { mapStore } = useStore();
-  const { currentTab } = useSelector((state: RootState) => state.appUi);
-  return (
+	const { t } = useTranslation();
+	const dispatch = useDispatch<AppDispatch>();
+	const { mapStore } = useStore();
+	const { currentTab } = useSelector((state: RootState) => state.appUi);
+	return (
 		<Tabs
 			mountOnEnter
 			activeKey={currentTab}
@@ -86,16 +87,18 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
 					</Suspense>
 				</ErrorBoundary>
 			</Tab>
-			<Tab style={styles.tab} eventKey='riskModel' title={t('RiskModel')}>
-				<ErrorBoundary>
-					<Suspense fallback={<Loader />}>
-						<div className='col-auto'>
-							<RiskHotspotModel />
-						</div>
-					</Suspense>
-				</ErrorBoundary>
-			</Tab>
+			{isFeatureEnabled(FeatureFlags.RISK_MODEL) && (
+				<Tab style={styles.tab} eventKey='riskModel' title={t('RiskModel')}>
+					<ErrorBoundary>
+						<Suspense fallback={<Loader />}>
+							<div className='col-auto'>
+								<RiskHotspotModel />
+							</div>
+						</Suspense>
+					</ErrorBoundary>
+				</Tab>
+			)}
 		</Tabs>
-  );
+	);
 });
 export default TabsTemplate;

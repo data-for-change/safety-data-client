@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import RootStore from '../RootStore';
 import AuthService from '../../services/AuthService';
+import { isFeatureEnabled, FeatureFlags } from '../../utils/featureFlags';
 
 export interface IUser {
 	id: string;
@@ -27,6 +28,9 @@ export default class UserStore {
 
 	async checkAuthStatus() {
 		this.isLoading = true;
+		if (!isFeatureEnabled(FeatureFlags.AUTH)) {
+			return;
+		}
 		try {
 			const response = await this.authService.isLoggedIn();
 			if (response.data.is_user_logged_in) {
@@ -76,7 +80,7 @@ export default class UserStore {
 		const top = window.screenY + (window.outerHeight - height) / 2;
 
 		// Use the current origin as the redirect URL for the backend to send the user back to
-		const redirectUrl = window.location.origin + '/public/close-popup.html';
+		const redirectUrl = window.location.origin + '/close-popup.html';
 		const authUrl = this.authService.getAuthorizeUrl(redirectUrl);
 
 		const popup = window.open(
