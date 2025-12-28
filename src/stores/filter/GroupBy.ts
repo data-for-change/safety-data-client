@@ -59,13 +59,13 @@ export const initGroupMap = () => {
   map.set('wd', new GroupBy('WeekDay', 'wd'));
   map.set('rt', new GroupBy('RoadType', 'rt'));
   map.set('lca', new  GroupBy('LocationAccuracy', 'lca'))
-  map.set('city', new GroupBy('City', 'city', 15, 'd'));
+  map.set('city', new GroupBy('City', 'city', 20, 'd'));
   map.set('cpop', new GroupBy('CityByPop', 'cpop'));
-  map.set('st', new GroupBy('Street', 'st', 15, 'd'));
-  map.set('rd', new GroupBy('Road', 'rd', 10, 'd'));
-  map.set('acc', new GroupBy('AccidentType', 'acc'));
+  map.set('st', new GroupBy('Street', 'st', 40, 'd'));
+  map.set('rd', new GroupBy('Road', 'rd', 20, 'd'));
+  map.set('acc', new GroupBy('AccidentType', 'acc',0,'d'));
   map.set('selfacc', new GroupBy('SelfOrNotAcc', 'selfacc', 0, null, reGroupResultIsSelfAcc));
-  map.set('vcli', new GroupBy('Vehicles', 'vcli'));
+  map.set('vcli', new GroupBy('Vehicles', 'vcli', 0, 'd'));
   map.set('sp', new GroupBy('SpeedLimit', 'sp'));
   map.set('rw', new GroupBy('RoadWidth', 'rw'));
   map.set('ml', new GroupBy('Separator', 'ml'));

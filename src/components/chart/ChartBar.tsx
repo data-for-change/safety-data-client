@@ -217,62 +217,103 @@ export const options = {
 
 const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
-  // if metaData == undefined - chart of 1 group
-  //if (metaData == undefined) {
-  const label = t('casualties');
-  const backgroundColor = getColorPallete(chartType, data.length, fill);
-  //}
-  // Extract labels and data
-  const labels = data.map(item => item._id);
 
-  // Create the chart data structure
-  let datasets: any;
-  if (metaData === undefined) {
-    // chart of gorup 1
-    const counts = data.map(item => item.count);
-    datasets = [
-      {
-        label: label,
-        data: counts,
-        backgroundColor: backgroundColor
-      },
-    ];
-  } else {
-    // Dynamically generate datasets based on MethData and data
-    datasets = metaData.map((method) => {
-      return {
-        label: t(method.key), //method.key.charAt(0).toUpperCase() + method.key.slice(1),  
-        data: data.map(item => item[method.key] || 0),  // Use key from MethData to access values in data
-        backgroundColor: method.color, // backgroundColor from MethData
-        axis: 'x',
-      };
-    });
+  // Separate visible items from the aggregated outside item
+  const outsideItem = data.find(item => item._id === 'outside_range');
+  const visibleItems = data.filter(item => item._id !== 'outside_range');
+
+  // Construct shared labels
+  const labels = visibleItems.map(item => item._id);
+  if (outsideItem) {
+    labels.push(t('outside_range'));
   }
+
+  const labelPrefix = t('casualties');
+  const isBar = chartType === 'BarChart' || chartType === 'HorizontalBar';
+  const backgroundColor = getColorPallete(chartType, visibleItems.length, fill);
+
+  let chartDatasets: any[] = [];
+
+  if (metaData === undefined) {
+    // Single Dataset Chart (Category only)
+    const backgroundColor = getColorPallete(chartType, visibleItems.length, fill);
+
+    // Main Dataset
+    chartDatasets.push({
+      label: labelPrefix,
+      data: [...visibleItems.map(item => item.count), outsideItem ? null : undefined].filter(x => x !== undefined),
+      backgroundColor: backgroundColor,
+    });
+
+    // Outside Dataset (Only for Bar charts)
+    if (outsideItem && isBar) {
+      chartDatasets.push({
+        label: t('outside_range'),
+        data: [...Array(visibleItems.length).fill(null), outsideItem.count],
+        backgroundColor: '#FF4136',
+        // borderRadius: 4,
+      });
+    }
+  } else {
+    // Grouped/Multi-Dataset Chart (e.g. Gender, Age)
+    // 1. Visible datasets
+    metaData.forEach((method) => {
+      chartDatasets.push({
+        label: t(method.key),
+        data: [...visibleItems.map(item => item[method.key] || 0), outsideItem ? null : undefined].filter(x => x !== undefined),
+        backgroundColor: method.color,
+        axis: 'x',
+      });
+    });
+
+    // 2. Summary Outside Dataset (Single combined bar for all groups)
+    if (outsideItem && isBar) {
+      // Calculate total for the specific outside candle
+      const totalOutside = metaData.reduce((sum, method) => sum + (outsideItem[method.key] || 0), 0);
+      chartDatasets.push({
+        label: `${t('outside_range')}`,
+        data: [...Array(visibleItems.length).fill(null), totalOutside],
+        backgroundColor: '#FF4136',
+        // borderRadius: 4,
+        // barPercentage: 0.5, // Make it look more like a "candle"
+      });
+    }
+  }
+
   const chartData = {
-    labels: labels, // Years as labels
-    datasets: datasets
+    labels: labels,
+    datasets: chartDatasets
   };
-  if (chartType === 'BarChart') {    
-    Object.assign(options.plugins, { datalabels: datalabelsOptions }); 
+
+  if (chartType === 'BarChart') {
+    Object.assign(options.plugins, { datalabels: datalabelsOptions });
     return (
       <div style={{ height: '100%'}}>
         <Bar options={options} data={chartData} />
       </div>
     );
-  } else if (chartType === 'PieChart') {       
+  } else if (chartType === 'PieChart') {
+    // For Pie charts, we keep one dataset with all slices (including outside)
+    // because multiple datasets in Pie/Pie results in multi-level doughnuts.
+    const pieData = {
+      labels: labels,
+      datasets: [{
+        data: data.map(item => item.count || metaData?.reduce((s: number, m: any) => s + (item[m.key] || 0), 0)),
+        backgroundColor: data.map((item, index) => {
+          if (item._id === 'outside_range') return '#FF4136';
+          if (metaData) return 'grey'; // Fixed color for grouped data in pie
+          return Array.isArray(backgroundColor) ? backgroundColor[index % backgroundColor.length] : backgroundColor;
+        })
+      }]
+    };
     return (
       <>
-        <Pie options={options} data={chartData} />
+        <Pie options={options} data={pieData} />
       </>
     );
-  } else { 
-    //HorizontalBar
-    //options.indexAxis= "y" as "y";
-    const options1 = ({indexAxis: "y" as "y"})
-    // chartData.datasets = chartData.datasets.map((dataset: any) => ({
-    //   ...dataset,
-    //   axis: "y",
-    // }));
+  } else {
+    // HorizontalBar
+    const options1 = ({indexAxis: "y" as "y"});
     return (
       <div >
         <Bar options={options1} data={chartData} />

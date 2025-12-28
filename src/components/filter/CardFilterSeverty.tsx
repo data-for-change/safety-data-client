@@ -30,6 +30,7 @@ const CardFilterSeverty = observer(() => {
                 colFilter={injurySeverity}
                 onChange={updateInjurySeverity}
                 />
+            <span style={{ color: 'grey', fontSize: '10px', marginTop: '10px' }}>{t('ToChooseSeverityModerate')}</span>
              </div>
           </Accordion.Collapse>
        </Card>

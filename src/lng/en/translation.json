@@ -220,7 +220,7 @@
   "severely-injured": "Severely-injured",
   "by-years": "By Years",
   "GroupBy": "Group By",
-  "SortBy": "Sort By",  
+  "SortBy": "Sort By",
   "SortType" :{
     "NoSort": "No Sort",
     "Ascending": "Ascending",
@@ -247,7 +247,7 @@
   "Select_Tag": "Select Tag",
   "Edit": "Edit",
   "Edit Recommendation": "Edit Recommendation",
-  "Create Recommendation" : "Create Recommendation", 
+  "Create Recommendation" : "Create Recommendation",
   "References": "References",
   "Recommendation_added": "Recommendation added successfully!",
   "Recommendation_updated": "Recommendation updated successfully!",
@@ -260,5 +260,8 @@
   "#Map": "=========Map==========",
   "MarkersColorType": "Color By",
   "MarkersIconType": "Icon By",
-  "MapMarkersType": "Map Type"
+  "MapMarkersType": "Map Type",
+  "outside_range": "Outside Range",
+  "data_range": "Data Range",
+  "ToChooseSeverityModerate": "To choose severity moderate, please choose a city"
 }
