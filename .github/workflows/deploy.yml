@@ -28,4 +28,3 @@ jobs:
                       REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
                       VITE_API_URL=${{ secrets.VITE_API_URL }}
                       VITE_API_ANYWAY_URL=${{ secrets.VITE_API_ANYWAY_URL }}
-                      VITE_API_SAFETY_DATA_URL=${{ secrets.VITE_API_SAFETY_DATA_URL }}
