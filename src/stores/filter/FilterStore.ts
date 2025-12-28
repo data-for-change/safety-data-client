@@ -21,6 +21,8 @@ import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText } from './filterSlice';
 import { fetchFilterData } from './filterThunks';
+import { sliceDataWithAggregation, formatDataPrecision } from '../../utils/chartDataUtils';
+import { EchartId } from '../../components/types';
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
 
@@ -46,7 +48,8 @@ class FilterStore implements IFilterStore  {
          endYear: observable,
          streets: observable,
          groupByDict: observable,
-         dataByYears: observable
+         dataByYears: observable,
+         chartDataRanges: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
@@ -475,9 +478,9 @@ class FilterStore implements IFilterStore  {
 
    // casualties groupd by some group, filterd on main filter
    @observable
-   dataFilterd: any[] = []
+   dataFilterd: ItemCount[] = []
    @action
-   setDataFilterd(data:any[]){
+   setDataFilterd(data:ItemCount[]){
       this.dataFilterd = data;
    }
 
@@ -516,15 +519,17 @@ class FilterStore implements IFilterStore  {
    // Action to set group by name
    @action
    setGroupByName = (name: string) => {
+      console.log('🚀 ~ FilterStore ~ name:', name)
       this.groupByName = name;
    }
 
    @observable
-   GroupBySort: string|null = null;
+   GroupBySort: string|null = 'd';
 
    @action
    SetGroupBySort = (value:string|null) =>{
       this.GroupBySort = value;
+      this.resetChartRanges();
    }
    @action
    submitOnGroupByAfterSort =() =>{
@@ -548,11 +553,13 @@ class FilterStore implements IFilterStore  {
    @action
    updateGroupby = (key: string) => {
       this.groupByDict.setFilter(key);
-      this.setGroupByName((this.groupByDict.groupBy as GroupBy).value)
-
+      const groupBy = this.groupByDict.groupBy as GroupBy;
+      this.setGroupByName(groupBy.value)
+      this.GroupBySort=  groupBy.sort;
        // Add additional logic after state update
       runInAction(() => {
          this.groupByDict.setBrowserQueryString();
+         this.resetChartRanges();
          this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
          if (this.groupByDict.groupBy.text !== 'CityByPop') {
             const gb2 = (this.group2Dict.groupBy as GroupBy2).name;
@@ -665,6 +672,7 @@ class FilterStore implements IFilterStore  {
       this.group2Dict.setFilter(key);
       this.setGroupBy2Name((this.group2Dict.groupBy as GroupBy2).name);
       this.group2Dict.setBrowserQueryString();
+      this.resetChartRanges();
       const gb2name = (this.group2Dict.groupBy as GroupBy2).name
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, gb2name);
    }
@@ -704,6 +712,7 @@ class FilterStore implements IFilterStore  {
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
       this.setCasualtiesNames(this.injurySeverity);
+      this.resetChartRanges();
       const {currentPage, language}  = reduxStore.getState().appUi;
       if (currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, language);
    }
@@ -891,6 +900,12 @@ class FilterStore implements IFilterStore  {
       //update groupby
       this.groupByDict.setValuesByQuery(params);
       this.group2Dict.setValuesByQuery(params);
+      const groupBy = this.groupByDict.groupBy as GroupBy;
+      if (groupBy.value !== 'age') {
+         this.GroupBySort = 'd';
+      } else {
+         this.GroupBySort = null;
+      }
    }
 
    @action
@@ -926,6 +941,57 @@ class FilterStore implements IFilterStore  {
       return filter;
    }
 
+   @observable
+   chartDataRanges: Map<string, { start: number, end: number }> = new Map();
+
+   @action
+   setChartDataRange = (id: string, start: number, end: number) => {
+      this.chartDataRanges.set(id, { start, end });
+   }
+
+   getChartDataRange = (id: string) => {
+      return this.chartDataRanges.get(id) || { start: 0, end: 100 };
+   }
+
+   @action
+   resetChartRanges = () => {
+      this.chartDataRanges.clear();
+   }
+
+   getChartData = (id: EchartId) => {
+      let data: any[] = [];
+      let metaData: any[] | undefined = undefined;
+      let usePrecision = true;
+
+      switch (id) {
+         case EchartId.Group_1:
+            data = this.dataFilterd;
+            break;
+         case EchartId.Group_2:
+            data = this.dataGroupby2;
+            metaData = (this.group2Dict.groupBy as GroupBy2).getBars();
+            usePrecision = false; // Group 2 metadata handles its own display
+            break;
+         case EchartId.Years:
+            data = this.dataFilterdByYears;
+            break;
+         default:
+            return [];
+      }
+
+      const getItemValue = (item: any) => {
+        if (item.count !== undefined) return Number(item.count);
+        if (metaData) {
+          return Math.max(...metaData.map(m => Number(item[m.key]) || 0));
+        }
+        return 0;
+      };
+
+      const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
+      const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
+      const sliced = sliceDataWithAggregation(data, range, metaData);
+      return usePrecision ? formatDataPrecision(sliced) : sliced;
+   }
 }
 
 export default FilterStore;
