@@ -16,4 +16,5 @@ export type { NewRecommendation } from './Recommendation';
 export type { ClusterRow } from './ClusterRow';
 export type { ModelSeverityMode } from './ModelSeverityMode';
 export type { ModelSeverityRange } from './ModelSeverityRange';
+export type { ModelPointWithDensity }  from './ModelPointWithDensity';
 export * from './ModelFilterType';

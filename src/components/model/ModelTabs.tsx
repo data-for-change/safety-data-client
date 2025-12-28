@@ -23,7 +23,7 @@ import PaginationControls from '../detailsTable/PaginationControls';
 
 import TableView from '../detailsTable/TableView';
 import AccidentDetailsCard from '../detailsTable/AccidentDetailsCard';
-import { buildClusterTable, clusterPoints } from './modelhelper';
+import { buildClusterTable, clusterPoints , calculateKernelDensity, buildDensityClustersTable} from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';
 import ClusterTable from './ClusterTable';
@@ -45,6 +45,16 @@ const ModelTabs: React.FC<IProps> = () => {
     React.useState<ModelFilterType>(ModelFilterType.All);
   const [maxClusters, setMaxClusters] =
     React.useState<number>(20);
+
+  // density 
+  const denstiyPoints = React.useMemo(
+    () => calculateKernelDensity(dataAllInjuries, 100),
+    [dataAllInjuries]
+  );
+  const clusterTableDensity = React.useMemo(
+    () => buildDensityClustersTable(denstiyPoints, 80),
+    [denstiyPoints]
+  );
 
   // -------- Clustering --------
   const clusters = React.useMemo(
@@ -96,6 +106,10 @@ const ModelTabs: React.FC<IProps> = () => {
         mountOnEnter
         id="model-tabs"
       >
+        <Tab eventKey="tableDensity" title={t('TableDensity')}>
+          <ClusterTable clusterTable={clusterTableDensity} />
+        </Tab>
+
         <Tab eventKey="table" title={t('Table')}>
           <ClusterTable clusterTable={clusterTable} />
         </Tab>

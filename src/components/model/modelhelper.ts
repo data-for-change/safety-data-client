@@ -1,26 +1,7 @@
-import { Accident, ClusterRow, ModelFilterType, ModelSeverityMode, ModelSeverityRange } from "../../types";
+import { Accident, ClusterRow, ModelFilterType, ModelPointWithDensity, ModelSeverityMode, ModelSeverityRange } from "../../types";
 
 const JUNCTION_RADIUS_METERS = 50;
 
-function haversineDistance(a: Accident, b: Accident): number {
-  const R = 6371000; // Earth radius in meters
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-
-  const dLat = toRad(b.latitude - a.latitude);
-  const dLon = toRad(b.longitude - a.longitude);
-
-  const lat1 = toRad(a.latitude);
-  const lat2 = toRad(b.latitude);
-
-  const sinLat = Math.sin(dLat / 2);
-  const sinLon = Math.sin(dLon / 2);
-
-  const h =
-    sinLat * sinLat +
-    Math.cos(lat1) * Math.cos(lat2) * sinLon * sinLon;
-
-  return 2 * R * Math.asin(Math.sqrt(h));
-}
 
 export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADIUS_METERS): Accident[][] {
   const clusters: Accident[][] = [];
@@ -155,6 +136,132 @@ export function buildClusterTable(
   //filter by max maxClusters
   result = result.slice(0, maxResults);
   return result;
+}
+
+// calculate Kernel Density Function (Quartic) for all points 
+export function calculateKernelDensity(
+  points: Accident[],
+  radius: number = 100 // meters
+): ModelPointWithDensity[] {
+  const accuratePoints = filterAccuratePoints(points);
+  // evaluation points (distinct locations)
+  const distinctPoints = distinctByCoordinates(accuratePoints);
+
+  return distinctPoints.map(point => ({
+    ...point,
+    density: calculateDensityForPoint(
+      point,
+      accuratePoints, 
+      radius
+    )
+  }));
+}
+
+export function buildDensityClustersTable(
+  points: ModelPointWithDensity[],
+  topX: number
+): ClusterRow[] {
+  // 1️⃣ sort once
+  const sorted = [...points].sort((a, b) => b.density - a.density);
+
+  // 2️⃣ take top X
+  let topPoints = sorted.slice(0, topX);
+
+  // 3️⃣ split by road type
+  const junctionPoints = topPoints.filter(
+    p => p.road_type_hebrew === "עירונית בצומת"
+  );
+
+  const streetPoints = topPoints.filter(
+    p => p.road_type_hebrew !== "עירונית בצומת"
+  );
+
+  // 4️⃣ map junctions
+  const junctionClusters: ClusterRow[] = junctionPoints.map(p => ({
+    count: 1,
+    severityIndex: p.density * 10000,
+    roadType: "Junction",
+    name: `${p.street1_hebrew ?? ""} / ${p.street2_hebrew ?? ""}`.trim(),
+    latitude: p.latitude,
+    longitude: p.longitude
+  }));
+
+  // 5️⃣ map streets
+  const streetClusters: ClusterRow[] = streetPoints.map(p => ({
+    count: 1,
+    severityIndex: p.density* 10000,
+    roadType: "Street",
+    name: p.street1_hebrew ?? "Unknown street",
+    latitude: p.latitude,
+    longitude: p.longitude
+  }));
+
+  // 6️⃣ combine
+  return [...junctionClusters, ...streetClusters];
+}
+
+//calculat distance in meters
+function haversineDistance(a: Accident, b: Accident): number {
+  const R = 6371000; // Earth radius in meters
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+
+  const dLat = toRad(b.latitude - a.latitude);
+  const dLon = toRad(b.longitude - a.longitude);
+
+  const lat1 = toRad(a.latitude);
+  const lat2 = toRad(b.latitude);
+
+  const sinLat = Math.sin(dLat / 2);
+  const sinLon = Math.sin(dLon / 2);
+
+  const h =
+    sinLat * sinLat +
+    Math.cos(lat1) * Math.cos(lat2) * sinLon * sinLon;
+
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+// make point distinct
+function distinctByCoordinates<T extends { latitude: number; longitude: number }>(
+  points: T[]
+): T[] {
+  const map = new Map<string, T>();
+  for (const p of points) {
+    const key = `${p.latitude},${p.longitude}`;
+    if (!map.has(key)) {
+      map.set(key, p);
+    }
+  }
+  return Array.from(map.values());
+}
+
+// filter out not accurate points
+function filterAccuratePoints(points: Accident[]): Accident[] {
+  return points.filter(
+    p => p.location_accuracy_hebrew === "עיגון מדויק"
+  );
+}
+
+
+// calculat Kernel Density Function (Quartic) for one point
+function calculateDensityForPoint(
+  center: Accident,
+  points: Accident[],
+  radois: number
+): number {
+  let sum = 0;
+  for (const p of points) {
+    const distMeters = haversineDistance(center, p);
+    sum += kernelWeight(distMeters, radois);
+  }
+  return sum / (radois * radois);
+}
+
+// calculate the kernelWeight for given distance 
+function kernelWeight(distance: number, radois: number): number {
+  if (distance > radois) return 0;
+  const ratio = (distance * distance) / (radois * radois);
+  return (3 / Math.PI) * Math.pow(1 - ratio, 2);
 }
 
 //weighted severity index
