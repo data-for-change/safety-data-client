@@ -163,44 +163,56 @@ export function calculateKernelDensity(
 
 export function buildDensityClustersTable(
   points: ModelPointWithDensity[],
-  topX: number
-): ClusterRow[] {
-  // 1️⃣ sort once
-  const sorted = [...points].sort((a, b) => b.density - a.density);
+  filterType: ModelFilterType = ModelFilterType.All,
+  topX: number,
+  ): ClusterRow[] {
+  // 1️⃣ filter by type
+  const filteredPoints = points.filter(p => {
+    if (filterType === ModelFilterType.All) return true;
+    if (filterType === ModelFilterType.Junctions)
+      return p.road_type_hebrew === "עירונית בצומת";
+    if (filterType === ModelFilterType.Streets)
+      return p.road_type_hebrew !== "עירונית בצומת";
+    return true;
+  });
 
-  // 2️⃣ take top X
-  let topPoints = sorted.slice(0, topX);
+  // 2️⃣ sort by density
+  const sorted = [...filteredPoints].sort(
+    (a, b) => b.density - a.density
+  );
 
-  // 3️⃣ split by road type
+  // 3️⃣ take top X
+  const topPoints = sorted.slice(0, topX);
+
+  // 4️⃣ split
   const junctionPoints = topPoints.filter(
     p => p.road_type_hebrew === "עירונית בצומת"
   );
-
   const streetPoints = topPoints.filter(
     p => p.road_type_hebrew !== "עירונית בצומת"
   );
 
-  // 4️⃣ map junctions
+  // 5️⃣ map junctions
   const junctionClusters: ClusterRow[] = junctionPoints.map(p => ({
     count: p.pointCount,
-    severityIndex: p.density * 10000,
+    severityIndex: Math.round(p.density * 10000 * 100) / 100,
     roadType: "Junction",
     name: `${p.street1_hebrew ?? ""} / ${p.street2_hebrew ?? ""}`.trim(),
     latitude: p.latitude,
     longitude: p.longitude
   }));
 
-  // 5️⃣ map streets
+  // 6️⃣ map streets
   const streetClusters: ClusterRow[] = streetPoints.map(p => ({
     count: p.pointCount,
-    severityIndex: p.density* 10000,
+    severityIndex: Math.round(p.density * 10000 * 100) / 100,
     roadType: "Street",
     name: p.street1_hebrew ?? "Unknown street",
     latitude: p.latitude,
     longitude: p.longitude
   }));
 
-  // 6️⃣ combine
+  // 7️⃣ combine
   return [...junctionClusters, ...streetClusters];
 }
 

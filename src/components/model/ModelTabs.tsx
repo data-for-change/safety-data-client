@@ -44,7 +44,7 @@ const ModelTabs: React.FC<IProps> = () => {
   const [filterType, setFilterType] =
     React.useState<ModelFilterType>(ModelFilterType.All);
   const [maxClusters, setMaxClusters] =
-    React.useState<number>(20);
+    React.useState<number>(80);
 
   // density 
   const denstiyPoints = React.useMemo(
@@ -52,11 +52,11 @@ const ModelTabs: React.FC<IProps> = () => {
     [dataAllInjuries]
   );
   const clusterTableDensity = React.useMemo(
-    () => buildDensityClustersTable(denstiyPoints, 80),
-    [denstiyPoints]
+    () => buildDensityClustersTable(denstiyPoints,filterType, maxClusters),
+    [denstiyPoints, filterType, maxClusters]
   );
 
-  // -------- Clustering --------
+  // -------- simple Clustering --------
   const clusters = React.useMemo(
     () => clusterPoints(dataAllInjuries, junctionRadius),
     [dataAllInjuries, junctionRadius]
@@ -109,6 +109,9 @@ const ModelTabs: React.FC<IProps> = () => {
         <Tab eventKey="tableDensity" title={t('TableDensity')}>
           <ClusterTable clusterTable={clusterTableDensity} />
         </Tab>
+        <Tab eventKey="hetmap" title={t('HeatMap')}>
+          <ModelMap clusters={clusterTableDensity}/> 
+        </Tab>
 
         <Tab eventKey="table" title={t('Table')}>
           <ClusterTable clusterTable={clusterTable} />
@@ -116,7 +119,7 @@ const ModelTabs: React.FC<IProps> = () => {
 
         <Tab eventKey="map" title={t('Map')}>
           <ModelMap clusters={clusterTable}/> 
-        </Tab>
+        </Tab> 
       </Tabs>
       </Card.Body>
     </Card>
