@@ -139,6 +139,7 @@ export function buildClusterTable(
 }
 
 // calculate Kernel Density Function (Quartic) for all points 
+// (1/ℎ^2)*Σ((3/𝜋)*(1−(𝑑𝑖𝑗^2/ℎ^2))^2)
 export function calculateKernelDensity(
   points: Accident[],
   radius: number = 100
