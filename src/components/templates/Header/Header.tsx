@@ -75,13 +75,16 @@ const Header: React.FC<IProps> = observer(({ title }) => {
 									<Button
 										variant='outline-light'
 										size='sm'
-										className='d-flex align-items-center px-3'
+										className='d-flex align-items-center px-3 gap-2'
 										onClick={onLoginHandler}
 										style={{ borderRadius: '20px', fontWeight: 500 }}
 									>
 										{loginText}
 										{isAuthenticated && user?.oauth_provider_user_picture_url ? (
-											<img src={user?.oauth_provider_user_picture_url || ''} alt='user' />
+											<img src={user?.oauth_provider_user_picture_url || ''} 
+											alt='user' 
+											style={{ width: 18, height: 18, borderRadius: '5%' }}
+											/>
 										) : (
 											<UserIcon />
 										)}

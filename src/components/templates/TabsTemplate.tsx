@@ -8,7 +8,6 @@ import { useStore } from '../../stores/storeConfig';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../stores/store';
 import { setCurrentTab } from '../../stores';
-import { FeatureFlags, isFeatureEnabled } from '../../utils/featureFlags';
 
 // import MapPage from '../../pages/MapPage';
 interface IProps {
@@ -20,7 +19,7 @@ const GroupByTablesPanel = lazy(() => import('../groupTable/GroupByTablesPanel')
 const MapAccidents = lazy(() => import('../map/AccidentsMap'));
 const AccidentsTable = lazy(() => import('../detailsTable/AccidentsTable'));
 const MyImageGallery = lazy(() => import('../organisms/MyImageGallery'));
-const RiskHotspotModel = lazy(() => import('../organisms/RiskHotspotModel'));
+//const RiskHotspotModel = lazy(() => import('../organisms/RiskHotspotModel'));
 
 const styles = {
 	tab: { marginTop: '0.5rem' },
@@ -87,7 +86,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
 					</Suspense>
 				</ErrorBoundary>
 			</Tab>
-			{isFeatureEnabled(FeatureFlags.RISK_MODEL) && (
+			{/* {isFeatureEnabled(FeatureFlags.RISK_MODEL) && (
 				<Tab style={styles.tab} eventKey='riskModel' title={t('RiskModel')}>
 					<ErrorBoundary>
 						<Suspense fallback={<Loader />}>
@@ -97,7 +96,7 @@ export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
 						</Suspense>
 					</ErrorBoundary>
 				</Tab>
-			)}
+			)} */}
 		</Tabs>
 	);
 });

@@ -12,7 +12,8 @@ import WithSidebarTemplate from './WithSidebarTemplate';
 import { setCurrentPage, setInitPage } from '../../stores/ui/appUiSlice';
 import { setStoreByQuery } from '../../stores/ui/appUiThunks';
 import { RootState, AppDispatch } from '../../stores/store';
-import ModelTabs from '../model/ModelTabs';
+import { FeatureFlags, isFeatureEnabled } from '../../utils/featureFlags';
+import RiskHotspotModel from '../organisms/RiskHotspotModel';
 
 interface IProps { }
 const ModelTemplate: React.FC<IProps> = observer(() => {
@@ -50,7 +51,7 @@ const ModelTemplate: React.FC<IProps> = observer(() => {
           <ButtonShowFilterModal />
         </div>
         {showFilterModal && memoConfigModal}
-        <ModelTabs />
+        {isFeatureEnabled(FeatureFlags.RISK_MODEL) && (<RiskHotspotModel />)}        
       </div>
     </WithSidebarTemplate>
   );
