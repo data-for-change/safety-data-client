@@ -19,9 +19,10 @@ const ModelMarkerPopUp: React.FC<IProps> = (({ data: x, language }) => {
   if (x.severityIndex !== undefined) {
     return (
       <Popup>
-        <div className={`text${language}`}>
-          <div><span style={pStyle}>{t(x.roadType)} {x.name}</span>: {t('Severity')}: {x.severityIndex},  {t('casualties')}: {x.count} </div>
-          </div>
+        <div style={{fontSize: '14px'}} className={`text${language}`}>
+          <div><span style={pStyle}>{t(x.roadType)} {x.name}</span></div>
+          <div>{t('Severity')}: {x.severityIndex},  {t('casualties')}: {x.count}</div>  
+        </div>
       </Popup>
     );
   }
