@@ -141,20 +141,24 @@ export function buildClusterTable(
 // calculate Kernel Density Function (Quartic) for all points 
 export function calculateKernelDensity(
   points: Accident[],
-  radius: number = 100 // meters
+  radius: number = 100
 ): ModelPointWithDensity[] {
   const accuratePoints = filterAccuratePoints(points);
-  // evaluation points (distinct locations)
   const distinctPoints = distinctByCoordinates(accuratePoints);
 
-  return distinctPoints.map(point => ({
-    ...point,
-    density: calculateDensityForPoint(
+  return distinctPoints.map(point => {
+    const { density, pointCount } = calculateDensityForPoint(
       point,
-      accuratePoints, 
+      accuratePoints,
       radius
-    )
-  }));
+    );
+
+    return {
+      ...point,
+      density,
+      pointCount
+    };
+  });
 }
 
 export function buildDensityClustersTable(
@@ -178,7 +182,7 @@ export function buildDensityClustersTable(
 
   // 4️⃣ map junctions
   const junctionClusters: ClusterRow[] = junctionPoints.map(p => ({
-    count: 1,
+    count: p.pointCount,
     severityIndex: p.density * 10000,
     roadType: "Junction",
     name: `${p.street1_hebrew ?? ""} / ${p.street2_hebrew ?? ""}`.trim(),
@@ -188,7 +192,7 @@ export function buildDensityClustersTable(
 
   // 5️⃣ map streets
   const streetClusters: ClusterRow[] = streetPoints.map(p => ({
-    count: 1,
+    count: p.pointCount,
     severityIndex: p.density* 10000,
     roadType: "Street",
     name: p.street1_hebrew ?? "Unknown street",
@@ -199,6 +203,40 @@ export function buildDensityClustersTable(
   // 6️⃣ combine
   return [...junctionClusters, ...streetClusters];
 }
+
+// calculat Kernel Density Function (Quartic) for one point
+function calculateDensityForPoint(
+  center: Accident,
+  points: Accident[],
+  radius: number
+): { density: number; pointCount: number } {
+  let sum = 0;
+  let pointCount = 0;
+
+  for (const p of points) {
+    const distMeters = haversineDistance(center, p);
+    const weight = kernelWeight(distMeters, radius);
+
+    if (weight > 0) {
+      pointCount++;
+      sum += weight;
+    }
+  }
+
+  return {
+    density: sum / (radius * radius),
+    pointCount
+  };
+}
+
+// calculate the kernelWeight for given distance 
+function kernelWeight(distance: number, radois: number): number {
+  if (distance > radois) return 0;
+  const ratio = (distance * distance) / (radois * radois);
+  return (3 / Math.PI) * Math.pow(1 - ratio, 2);
+}
+
+///map model helper functons
 
 //calculat distance in meters
 function haversineDistance(a: Accident, b: Accident): number {
@@ -240,28 +278,6 @@ function filterAccuratePoints(points: Accident[]): Accident[] {
   return points.filter(
     p => p.location_accuracy_hebrew === "עיגון מדויק"
   );
-}
-
-
-// calculat Kernel Density Function (Quartic) for one point
-function calculateDensityForPoint(
-  center: Accident,
-  points: Accident[],
-  radois: number
-): number {
-  let sum = 0;
-  for (const p of points) {
-    const distMeters = haversineDistance(center, p);
-    sum += kernelWeight(distMeters, radois);
-  }
-  return sum / (radois * radois);
-}
-
-// calculate the kernelWeight for given distance 
-function kernelWeight(distance: number, radois: number): number {
-  if (distance > radois) return 0;
-  const ratio = (distance * distance) / (radois * radois);
-  return (3 / Math.PI) * Math.pow(1 - ratio, 2);
 }
 
 //weighted severity index
@@ -352,8 +368,6 @@ function closestToCentroid(points: Accident[]): Accident {
   return best;
 }
 
-
-///map model helper functons 
 // Get min / max of severityIndex
 export function getSeverityMinMax(clusters: ClusterRow[]) {
   if (!clusters.length) {
