@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import RootStore from '../RootStore';
 import AuthService from '../../services/AuthService';
 import { isFeatureEnabled, FeatureFlags } from '../../utils/featureFlags';
-import { IUser } from '../../types/User';
+import { EUserGrants, IUser } from '../../types/User';
 
 export default class UserStore {
 	user: IUser | null = null;
@@ -151,11 +151,7 @@ export default class UserStore {
 		return this.user?.roles?.includes('admins') || this.user?.role === 'admin';
 	}
 
-	get isEditor() {
-		return this.user?.roles?.includes('editor') || this.user?.role === 'editor';
-	}
-
-	get hasEditPermission() {
-		return this.isAdmin || this.isEditor;
+	get isHotSpotGrants() {
+		return this.user?.grants?.includes(EUserGrants.hot_spots_tab_grant);
 	}
 }

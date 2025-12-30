@@ -24,3 +24,7 @@ export interface IUser {
 	full_name: string | null;
 	role: string | null;
 }
+
+export enum EUserGrants {
+	hot_spots_tab_grant = 'hot_spots_tab_grant',
+}
