@@ -8,3 +8,4 @@ export * from './IconQuestion';
 export * from './IconTruck';
 export * from './IconVehicle';
 export * from './IconWalk';
+export * from './IconCircle';

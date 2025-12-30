@@ -23,15 +23,16 @@ export const JunctionRadiusPicker: React.FC<JunctionRadiusPickerProps> = ({
       <Form.Label className="fw-semibold mb-0">
         {text}
       </Form.Label>
-
+<div style={{ width: 100 }}>
       <Form.Range
+         
         min={min}
         max={max}
         step={step}
         value={value}
         onChange={e => onChange(Number(e.target.value))}
       />
-
+</div>
       <span className="fw-bold">{value}m</span>
     </Form.Group>
   );

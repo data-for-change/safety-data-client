@@ -81,11 +81,6 @@ const ModelTabs: React.FC<IProps> = () => {
         {/* -------- Controls -------- */}
        <div className="d-flex flex-wrap gap-4 mb-3">
           <JunctionRadiusPicker
-            value={junctionRadius}
-            onChange={setJunctionRadius}
-            text = "Junction radius"
-          />
-          <JunctionRadiusPicker
             value={heatmapRadius}
             onChange={setHeatmapRadius}
             text = {"heatmap radius"}
@@ -93,6 +88,12 @@ const ModelTabs: React.FC<IProps> = () => {
             max = {200}
             step = {50}
           />
+          <JunctionRadiusPicker
+            value={junctionRadius}
+            onChange={setJunctionRadius}
+            text = "Junction radius"
+          />
+       
 
           <SeverityModePicker
             value={severityMode}
@@ -120,7 +121,7 @@ const ModelTabs: React.FC<IProps> = () => {
           <ClusterTable clusterTable={clusterTableDensity} />
         </Tab>
         <Tab eventKey="hetmap" title={t('HeatMap')}>
-          <ModelMap clusters={clusterTableDensity}/> 
+          <ModelMap clusters={clusterTableDensity} isHeat={true}/> 
         </Tab>
 
         <Tab eventKey="table" title={t('Table')}>
@@ -128,7 +129,7 @@ const ModelTabs: React.FC<IProps> = () => {
         </Tab>
 
         <Tab eventKey="map" title={t('Map')}>
-          <ModelMap clusters={clusterTable}/> 
+          <ModelMap clusters={clusterTable} isHeat={false}/> 
         </Tab> 
       </Tabs>
       </Card.Body>

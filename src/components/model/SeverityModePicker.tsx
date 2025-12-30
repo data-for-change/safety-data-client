@@ -19,16 +19,16 @@ export const SeverityModePicker: React.FC<SeverityModePickerProps> = ({
 
       <Form.Select
         size="sm"
-        style={{ width: 260 }}
+        style={{ width: 170 }}
         value={value}
         onChange={e =>
           onChange(Number(e.target.value) as ModelSeverityMode)
         }
       >
         <option value={1}>All accidents equal</option>
-        <option value={2}>Pedestrian weighted</option>
-        <option value={3}>Pedestrian + electric</option>
-        <option value={4}>Fatal override</option>
+        <option value={2}>Pedestrian*2</option>
+        <option value={3}>Pedestrian*2, Bike*1.5</option>
+        <option value={4}>Fatal*2</option>
       </Form.Select>
     </Form.Group>
   );

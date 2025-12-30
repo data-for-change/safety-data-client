@@ -16,6 +16,7 @@ export const MaxClustersPicker: React.FC<Props> = ({
     <Form.Group>
       <Form.Label>Max clusters</Form.Label>
       <Form.Select
+        size="sm"
         value={value}
         onChange={e => onChange(Number(e.target.value))}
       >

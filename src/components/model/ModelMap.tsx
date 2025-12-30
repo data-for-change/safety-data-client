@@ -9,6 +9,7 @@ import ModelClusterMarkers from './ModelClusterMarkers';
 
 type Props = {
     clusters: ClusterRow[];
+    isHeat: boolean;
 };
 
 /** ---------- Auto-fit map to clusters ---------- */
@@ -28,7 +29,7 @@ const FitBounds: React.FC<{ clusters: ClusterRow[] }> = ({ clusters }) => {
     return null;
 };
 
-export const ModelMap: React.FC<Props> = ({ clusters }) => {
+export const ModelMap: React.FC<Props> = ({ clusters, isHeat}) => {
     const mapRef = useRef<LeafletMap | null>(null);
     return (
         <Card style={{ height: '100%', padding: '0' }}>
@@ -43,7 +44,7 @@ export const ModelMap: React.FC<Props> = ({ clusters }) => {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <ModelClusterMarkers clusters={clusters} colorBy='1' />
+                    <ModelClusterMarkers clusters={clusters} colorBy='1' isHeat={isHeat} />
                 </MapContainer>
             </div>
         </Card>
