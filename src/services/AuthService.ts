@@ -15,7 +15,7 @@ class AuthService {
 	};
 
 	logout = async () => {
-		return axios.get(`${this.apiUrl}/sd-user/logout`, { withCredentials: true });
+		return axios.get(`${this.apiUrl}/logout`, { withCredentials: true });
 	};
 
 	/**
