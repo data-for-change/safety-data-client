@@ -39,6 +39,7 @@ const ModelTabs: React.FC<IProps> = () => {
 
   const [activeTab, setActiveTab] = React.useState<'table' | 'map'>('table');
   const [junctionRadius, setJunctionRadius] = React.useState(50);
+  const [heatmapRadius, setHeatmapRadius] = React.useState(100);
   const [severityMode, setSeverityMode] =
     React.useState<ModelSeverityMode>(1);
   const [filterType, setFilterType] =
@@ -48,8 +49,8 @@ const ModelTabs: React.FC<IProps> = () => {
 
   // density 
   const denstiyPoints = React.useMemo(
-    () => calculateKernelDensity(dataAllInjuries, 100),
-    [dataAllInjuries]
+    () => calculateKernelDensity(dataAllInjuries, heatmapRadius),
+    [dataAllInjuries, heatmapRadius]
   );
   const clusterTableDensity = React.useMemo(
     () => buildDensityClustersTable(denstiyPoints,filterType, maxClusters),
@@ -82,6 +83,15 @@ const ModelTabs: React.FC<IProps> = () => {
           <JunctionRadiusPicker
             value={junctionRadius}
             onChange={setJunctionRadius}
+            text = "Junction radius"
+          />
+          <JunctionRadiusPicker
+            value={heatmapRadius}
+            onChange={setHeatmapRadius}
+            text = {"heatmap radius"}
+            min = {100}
+            max = {200}
+            step = {50}
           />
 
           <SeverityModePicker
