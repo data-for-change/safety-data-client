@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
-import { API_ANYWAY_URL } from '../utils/globalEnvs';
+import { API_URL } from '../utils/globalEnvs';
 import { IUserLoggedIn, IUser } from '../types/User';
 
 class AuthService {
-	apiUrl = API_ANYWAY_URL;
+	apiUrl = API_URL;
 
 	// Safety Data session-based endpoints
 	isLoggedIn = async (): Promise<AxiosResponse<IUserLoggedIn>> => {
@@ -24,10 +24,8 @@ class AuthService {
 	 * GET /sd-authorize/google
 	 */
 	getAuthorizeUrl = (redirectUrl?: string) => {
-		const url = new URL(`https://www.anyway.co.il/sd-authorize/google`);
-		if (redirectUrl) {
-			url.searchParams.append('redirect_url', redirectUrl);
-		}
+		// redirect url to safety-data-client
+		const url = new URL(`${this.apiUrl}/sd-authorize/google?redirect_url=${redirectUrl}`);
 		return url.toString();
 	};
 }
