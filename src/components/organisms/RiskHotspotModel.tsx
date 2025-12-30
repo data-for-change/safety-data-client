@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Loader } from '../common';
+import ModelTabs from '../model/ModelTabs';
 
 const EnvelopeIcon = ({ color = 'white', size = 20 }: { color?: string; size?: number }) => (
 	<svg
@@ -28,17 +29,15 @@ const EnvelopeIcon = ({ color = 'white', size = 20 }: { color?: string; size?: n
 const RiskHotspotModel = observer(() => {
 	const { t } = useTranslation();
 	const { userStore } = useStore();
-
 	if (userStore.isLoading) {
 		return <Loader />;
 	}
-
 	const hasPermission = userStore.isAuthenticated && userStore.hasEditPermission;
 
 	if (hasPermission) {
 		return (
 			<div>
-				<h1>{t('RiskModel')}</h1>
+				<ModelTabs/>
 			</div>
 		);
 	}

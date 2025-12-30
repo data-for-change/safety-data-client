@@ -1,0 +1,48 @@
+.cluster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+}
+
+.cluster-table th,
+.cluster-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.cluster-table thead th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.cluster-table tbody tr:hover {
+  background: #f3f4f6;
+}
+
+.cluster-table tbody tr:nth-child(even) {
+  background: #fcfcfd;
+}
+
+/* Highlight junctions */
+.cluster-table tr.junction {
+  background: #eef6ff;
+}
+
+.cluster-table tr.junction:hover {
+  background: #e0efff;
+}
+
+/* Numbers alignment */
+.cluster-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Severity emphasis */
+.cluster-table .severity {
+  font-weight: 600;
+}

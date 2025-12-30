@@ -16,13 +16,13 @@ export const FEATURE_FLAGS = {
 	 * Risk Hotspot Model feature
 	 * Disabled in production for now.
 	 */
-	RISK_MODEL: !isProd,
+	RISK_MODEL: true,
 
 	/**
 	 * New Redirect-based Authentication flow
 	 * Disabled in production for now.
 	 */
-	AUTH: !isProd,
+	AUTH: true,
 };
 
 /**
