@@ -15,7 +15,7 @@ class AuthService {
 	};
 
 	logout = async () => {
-		return axios.get(`${this.apiUrl}/sd-user/logout`, { withCredentials: true });
+		return axios.get(`${this.apiUrl}/logout`, { withCredentials: true });
 	};
 
 	/**
@@ -23,7 +23,7 @@ class AuthService {
 	 * Redirect the user to the authorization endpoint:
 	 * GET /sd-authorize/google
 	 */
-	getAuthorizeUrl = (redirectUrl?: string) => {
+	getAuthorizeUrl = (redirectUrl: string) => {
 		const url = new URL(`${this.apiUrl}/sd-authorize/google`);
 		if (redirectUrl) {
 			url.searchParams.append('redirect_url', redirectUrl);

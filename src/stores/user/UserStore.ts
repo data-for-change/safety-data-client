@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import RootStore from '../RootStore';
 import AuthService from '../../services/AuthService';
 import { isFeatureEnabled, FeatureFlags } from '../../utils/featureFlags';
-import { IUser } from '../../types/User';
+import { EUserGrants, IUser } from '../../types/User';
 
 export default class UserStore {
 	user: IUser | null = null;
@@ -77,30 +77,60 @@ export default class UserStore {
 	 * Documentation Flow: Initiates the redirect to the backend auth endpoint.
 	 * We use a popup window to handle the redirect cycle so the user doesn't leave the current page.
 	 */
+	private popupWindow: Window | null = null;
+
 	login() {
 		const width = 500;
-		const height = 600;
+		const height = 650;
 		const left = window.screenX + (window.outerWidth - width) / 2;
 		const top = window.screenY + (window.outerHeight - height) / 2;
+		const name = 'Google Authentication';
+		const strWindowFeatures = `toolbar=no, menubar=no, width=${width}, height=${height}, top=${top}, left=${left}, status=no, resizable=yes, scrollbars=yes`;
 
-		// Use the current origin as the redirect URL for the backend to send the user back to
-		const redirectUrl = window.location.origin + '/close-popup.html';
+		// Use the specific trusted route name from the Anyway app config
+		const redirectUrl = window.location.origin + '/login-popup-redirect';
 		const authUrl = this.authService.getAuthorizeUrl(redirectUrl);
 
-		const popup = window.open(
-			authUrl,
-			'googleLogin',
-			`width=${width},height=${height},left=${left},top=${top},status=no,resizable=yes,toolbar=no,menubar=no,scrollbars=yes`
-		);
+		// Remove any existing event listeners before adding a new one
+		window.removeEventListener('message', this.handleAuthMessage);
+		window.addEventListener('message', this.handleAuthMessage);
 
-		// Check if popup is closed and then refresh auth status
+		if (this.popupWindow === null || this.popupWindow.closed) {
+			this.popupWindow = window.open(authUrl, name, strWindowFeatures);
+		} else {
+			this.popupWindow.focus();
+			if (this.popupWindow.location.origin !== window.location.origin) {
+				this.popupWindow.location.href = authUrl;
+			}
+		}
+
+		// Fallback: Check if popup was closed manually
 		const checkPopup = setInterval(() => {
-			if (!popup || popup.closed) {
+			if (!this.popupWindow || this.popupWindow.closed) {
 				clearInterval(checkPopup);
 				this.checkAuthStatus();
 			}
 		}, 1000);
 	}
+
+	private handleAuthMessage = (event: MessageEvent) => {
+		// Verify the origin for security as per provided Anyway app code
+		if (event.origin !== window.location.origin) {
+			console.warn('Authentication redirect origin is not valid');
+			return;
+		}
+
+		if (event.data === 'login-success') {
+			console.info('authentication success!, redirect to main page...');
+			if (this.popupWindow) {
+				this.popupWindow.close();
+			}
+			window.removeEventListener('message', this.handleAuthMessage);
+
+			// Refresh the app to ensure all stores and cookies are in sync
+			window.location.pathname = '/';
+		}
+	};
 
 	async logout() {
 		try {
@@ -121,11 +151,7 @@ export default class UserStore {
 		return this.user?.roles?.includes('admins') || this.user?.role === 'admin';
 	}
 
-	get isEditor() {
-		return this.user?.roles?.includes('editor') || this.user?.role === 'editor';
-	}
-
-	get hasEditPermission() {
-		return this.isAdmin || this.isEditor;
+	get isHotSpotGrants() {
+		return this.user?.grants?.includes(EUserGrants.hot_spots_tab_grant);
 	}
 }

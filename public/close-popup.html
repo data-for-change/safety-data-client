@@ -5,9 +5,14 @@
 </head>
 <body>
     <script>
-        // This page is reached after the backend redirect cycle (/sd-callback/google -> redirect_url)
-        // It simply closes the popup window. The main window will detect it's closed and refresh.
-        window.close();
+        // Send a message to the main application window that login was successful
+        if (window.opener) {
+            window.opener.postMessage('login-success', window.location.origin);
+        }
+        // Close the popup after a tiny delay to ensure message is sent
+        setTimeout(() => {
+            window.close();
+        }, 100);
     </script>
 </body>
 </html>
