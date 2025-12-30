@@ -24,6 +24,7 @@ class AuthService {
 	 * GET /sd-authorize/google
 	 */
 	getAuthorizeUrl = (redirectUrl?: string) => {
+		// redirect url to safety-data-client
 		const url = new URL(`${this.apiUrl}/sd-authorize/google?redirect_url=${redirectUrl}`);
 		return url.toString();
 	};
