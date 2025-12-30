@@ -32,7 +32,7 @@ const RiskHotspotModel = observer(() => {
 	if (userStore.isLoading) {
 		return <Loader />;
 	}
-	const hasPermission = userStore.isAuthenticated && userStore.hasEditPermission;
+	const hasPermission = userStore.isAuthenticated && userStore.isHotSpotGrants;
 
 	if (hasPermission) {
 		return (
