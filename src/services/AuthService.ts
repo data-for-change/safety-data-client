@@ -24,11 +24,8 @@ class AuthService {
 	 * GET /sd-authorize/google
 	 */
 	getAuthorizeUrl = (redirectUrl?: string) => {
-		console.log('🚀 ~ AuthService ~ redirectUrl:', redirectUrl);
 		// redirect url to safety-data-client
-		const url = new URL(`${this.apiUrl}/sd-authorize/google?redirect_url=https://www.safety-data.anyway.co.il/`);
-		console.log('🚀 ~ AuthService ~ his.apiUrl:', this.apiUrl);
-		console.log('🚀 ~ AuthService ~ API_URL:', API_ANYWAY_URL);
+		const url = new URL(`${this.apiUrl}/sd-authorize/google?redirect_url=${redirectUrl}`);
 
 		return url.toString();
 	};
