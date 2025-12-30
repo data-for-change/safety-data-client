@@ -81,9 +81,10 @@ const Header: React.FC<IProps> = observer(({ title }) => {
 									>
 										{loginText}
 										{isAuthenticated && user?.oauth_provider_user_picture_url ? (
-											<img src={user?.oauth_provider_user_picture_url || ''} 
-											alt='user' 
-											style={{ width: 18, height: 18, borderRadius: '5%' }}
+											<img
+												src={user?.oauth_provider_user_picture_url || ''}
+												alt='user'
+												style={{ width: 18, height: 18, borderRadius: '50%' }}
 											/>
 										) : (
 											<UserIcon />
