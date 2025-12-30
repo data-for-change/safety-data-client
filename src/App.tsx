@@ -20,6 +20,7 @@ const RecommendationsPage = lazy(() => import('./pages/RecommendationsPage'));
 const Login = lazy(() => import('./components/auth/Login'));
 const Register = lazy(() => import('./components/auth/Register'));
 const Profile = lazy(() => import('./components/auth/Profile'));
+const LoginPopupRedirect = lazy(() => import('./components/auth/LoginPopupRedirect'));
 
 const styles = {
   app: {
@@ -78,28 +79,29 @@ function App() {
   }, [dispatch]);
 
   return (
-    <DirectionProvider>
-      <BrowserRouter>
-        <GoogleAnalyticsTracker />
-        <div style={{ height: "100%" }}>
-          <Header title="Safety Data" />
-          <div style={styles.app}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/city" element={<CityPage />} />
-              <Route path="/model" element={<ModelPage />} />
-              <Route path="/recommend" element={<RecommendationsPage />} />
-              <Route path="/map" element={<MapWithClusters />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </div>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </DirectionProvider>
+		<DirectionProvider>
+			<BrowserRouter>
+				<GoogleAnalyticsTracker />
+				<div style={{ height: '100%' }}>
+					<Header title='Safety Data' />
+					<div style={styles.app}>
+						<Routes>
+							<Route path='/' element={<HomePage />} />
+							<Route path='/city' element={<CityPage />} />
+							<Route path='/model' element={<ModelPage />} />
+							<Route path='/recommend' element={<RecommendationsPage />} />
+							<Route path='/map' element={<MapWithClusters />} />
+							<Route path='/about' element={<AboutPage />} />
+							<Route path='/login' element={<Login />} />
+							<Route path='/register' element={<Register />} />
+							<Route path='/profile' element={<Profile />} />
+							<Route path='/login-popup-redirect' element={<LoginPopupRedirect />} />
+						</Routes>
+					</div>
+					<Footer />
+				</div>
+			</BrowserRouter>
+		</DirectionProvider>
   );
 }
 
