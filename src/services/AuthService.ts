@@ -24,7 +24,10 @@ class AuthService {
 	 * GET /sd-authorize/google
 	 */
 	getAuthorizeUrl = (redirectUrl?: string) => {
-		const url = new URL(`${this.apiUrl}/sd-authorize/google?redirect_url=${redirectUrl}`);
+		const url = new URL(`${this.apiUrl}/sd-authorize/google`);
+		if (redirectUrl) {
+			url.searchParams.append('redirect_url', redirectUrl);
+		}
 		return url.toString();
 	};
 }
