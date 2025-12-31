@@ -37,7 +37,7 @@ const ModelTabs: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
 
-  const [activeTab, setActiveTab] = React.useState<'table' | 'map'>('table');
+  const [activeTab, setActiveTab] = React.useState<'densityTable'| 'densityMap' |'clusterTable' | 'clusterMap'>('densityMap');
   const [junctionRadius, setJunctionRadius] = React.useState(50);
   const [heatmapRadius, setHeatmapRadius] = React.useState(200);
   const [severityMode, setSeverityMode] =
@@ -113,22 +113,22 @@ const ModelTabs: React.FC<IProps> = () => {
 
         <Tabs
         activeKey={activeTab}
-        onSelect={key => setActiveTab(key as 'table' | 'map')}
+        onSelect={key => setActiveTab(key as 'densityTable'| 'densityMap' |'clusterTable' | 'clusterMap')}
         mountOnEnter
         id="model-tabs"
       >
-        <Tab eventKey="tableDensity" title={t('TableDensity')}>
+        <Tab eventKey="densityTable" title={t('DensityTable')}>
           <ClusterTable clusterTable={clusterTableDensity} />
         </Tab>
-        <Tab eventKey="hetmap" title={t('HeatMap')}>
+        <Tab eventKey="densityMap" title={t('DensityMap')}>
           <ModelMap clusters={clusterTableDensity} isHeat={true} sizeHeat={heatmapRadius}/> 
         </Tab>
 
-        <Tab eventKey="table" title={t('Table')}>
+        <Tab eventKey="clusterTable" title={t('ClusterTable')}>
           <ClusterTable clusterTable={clusterTable} />
         </Tab>
 
-        <Tab eventKey="map" title={t('Map')}>
+        <Tab eventKey="culsterMap" title={t('ClusterMap')}>
           <ModelMap clusters={clusterTable} isHeat={false} sizeHeat={heatmapRadius}/> 
         </Tab> 
       </Tabs>

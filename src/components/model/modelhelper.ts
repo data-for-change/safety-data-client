@@ -423,7 +423,8 @@ export function buildSeveritySectors(
 
 export function getSeverityColor(
   severityIndex: number,
-  sectors: ModelSeverityRange[]
+  sectors: ModelSeverityRange[],
+  isHeat : boolean
 ): string {
   if (!sectors.length) {
     return '#FFF176';
@@ -432,8 +433,10 @@ export function getSeverityColor(
     sectors.find(
       s => severityIndex >= s.from && severityIndex <= s.to
     ) ?? sectors[sectors.length - 1];
-
-  return RED_SCALE[Math.min(sector.index, RED_SCALE.length - 1)];
+  const colorScale = isHeat ? RED_SCALE_HEAT : RED_SCALE;
+  const index = Math.min(sector.index, colorScale.length - 1);
+  const res = colorScale[index];
+  return res;
 }
 
 const RED_SCALE: string[] = [
@@ -444,4 +447,10 @@ const RED_SCALE: string[] = [
   '#CC0000', // deep red (most severe)
 ];
 
-
+export const RED_SCALE_HEAT: string[] = [
+  '#FF8A80', // very light red (low heat)
+  '#FF5252', // light red
+  '#FF1744', // medium red
+  '#D50000', // strong red
+  '#B71C1C', // deep dark red (high heat)
+];

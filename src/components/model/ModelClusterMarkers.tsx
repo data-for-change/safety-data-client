@@ -21,7 +21,7 @@ const ModelClusterMarkers: FC<Props> = observer(
     return (
       <div>
         {clusters.map((cluster, index) => {
-          const color = getSeverityColor(cluster.severityIndex, sectors);
+          const color = getSeverityColor(cluster.severityIndex, sectors, isHeat);
           return (
           <ModelMarker
             key={`${cluster.name}-${index}`}
