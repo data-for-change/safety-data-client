@@ -1,14 +1,63 @@
 import React from 'react';
 import { divIcon, LatLngExpression } from 'leaflet';
-import { Marker } from 'react-leaflet';
+import { Marker, Circle } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ClusterRow } from '../../types';
 import { IconEmpty, IconCircle } from '../map/markers';
 import ModelMarkerPopUp from './ModelMarkerPopUp';
 
-// const iconSize = {
-//   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-// };
+interface IProps { 
+  data: ClusterRow, 
+  position: LatLngExpression; 
+  language: string, 
+  color : string, 
+  markerIconsType: string, 
+  isHeat: boolean,
+  size: number
+}
+const HEAT_RADIUS_METERS =200;
+
+const ModelMarker: React.FC<IProps> = ({
+  data,
+  position,
+  language,
+  color,
+  isHeat,
+  size = HEAT_RADIUS_METERS
+  
+}) => {
+  const severity = 1; // example
+
+  if (isHeat) {
+    return (
+      <Circle
+        center={position}
+        radius={size}   
+        pathOptions={{
+          color,
+          fillColor: color,
+          fillOpacity: 0.35,
+          weight: 1,
+        }}
+      >
+        <ModelMarkerPopUp data={data} language={language} />
+      </Circle>
+    );
+  }
+
+  // normal marker
+  const icon = getEmptyIcon(color, false);
+
+  return (
+    <Marker
+      position={position}
+      icon={icon}
+    >
+      <ModelMarkerPopUp data={data} language={language} />
+    </Marker>
+  );
+};
+
 
 const customMarketIcon = (iconMarkup:any, size :number = 40) => {
   const half = size / 2;
@@ -32,27 +81,5 @@ const getEmptyIcon = (color: string, isHeat: boolean) => {
   return res;
 };
 
-interface IProps {
-  data: ClusterRow,
-  position: LatLngExpression;
-  language: string,
-  color : string,
-  markerIconsType: string,
-  isHeat: boolean
-}
-const ModelMarker: React.FC<IProps> = (({
-  data, position, language, color, isHeat,
-}) => {
-  const severity = 1;// getNumSeverity(data.injury_severity_hebrew);
-  const icon =  getEmptyIcon(color, isHeat);  
-  return (
-    <Marker position={position} icon={icon}
-      // @ts-ignore to allow custom props in Marker options
-      severity={severity}
-    >
-     <ModelMarkerPopUp data={data} language={language} />
-    </Marker>
-  );
-});
-
 export default ModelMarker;
+

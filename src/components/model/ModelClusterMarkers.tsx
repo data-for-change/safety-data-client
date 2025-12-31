@@ -10,10 +10,11 @@ type Props = {
   clusters: ClusterRow[];
   colorBy?: string;
   isHeat: boolean;  
+  sizeHeat: number;
 };
 
 const ModelClusterMarkers: FC<Props> = observer(
-  ({ clusters, colorBy, isHeat }) => {
+  ({ clusters, colorBy, isHeat , sizeHeat}) => {
    const { language } = useSelector((state: RootState) => state.appUi);
    const { min, max } = getSeverityMinMax(clusters);
    const sectors = buildSeveritySectors(min, max);
@@ -29,6 +30,7 @@ const ModelClusterMarkers: FC<Props> = observer(
             language={language}
             color={color}
             isHeat={isHeat}
+            size= {sizeHeat}
             markerIconsType={'general'}
           />
         );

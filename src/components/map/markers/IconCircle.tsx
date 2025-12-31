@@ -33,7 +33,7 @@ export const IconCircle: React.FC<Props> = ({
         fill={fill}
         fillOpacity={opacity}
         stroke={stroke}
-        strokeWidth={2}
+        strokeWidth={1}
       />
 
       {/* center dot */}

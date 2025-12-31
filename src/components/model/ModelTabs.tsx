@@ -39,7 +39,7 @@ const ModelTabs: React.FC<IProps> = () => {
 
   const [activeTab, setActiveTab] = React.useState<'table' | 'map'>('table');
   const [junctionRadius, setJunctionRadius] = React.useState(50);
-  const [heatmapRadius, setHeatmapRadius] = React.useState(100);
+  const [heatmapRadius, setHeatmapRadius] = React.useState(200);
   const [severityMode, setSeverityMode] =
     React.useState<ModelSeverityMode>(1);
   const [filterType, setFilterType] =
@@ -121,7 +121,7 @@ const ModelTabs: React.FC<IProps> = () => {
           <ClusterTable clusterTable={clusterTableDensity} />
         </Tab>
         <Tab eventKey="hetmap" title={t('HeatMap')}>
-          <ModelMap clusters={clusterTableDensity} isHeat={true}/> 
+          <ModelMap clusters={clusterTableDensity} isHeat={true} sizeHeat={heatmapRadius}/> 
         </Tab>
 
         <Tab eventKey="table" title={t('Table')}>
@@ -129,7 +129,7 @@ const ModelTabs: React.FC<IProps> = () => {
         </Tab>
 
         <Tab eventKey="map" title={t('Map')}>
-          <ModelMap clusters={clusterTable} isHeat={false}/> 
+          <ModelMap clusters={clusterTable} isHeat={false} sizeHeat={heatmapRadius}/> 
         </Tab> 
       </Tabs>
       </Card.Body>
