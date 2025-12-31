@@ -1,6 +1,6 @@
 import React from 'react';
 import { divIcon, LatLngExpression } from 'leaflet';
-import { Marker, Circle } from 'react-leaflet';
+import { Marker, Circle, CircleMarker } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ClusterRow } from '../../types';
 import { IconEmpty, IconCircle } from '../map/markers';
@@ -28,11 +28,12 @@ const ModelMarker: React.FC<IProps> = ({
 }) => {
   const severity = 1; // example
 
-  if (isHeat) {
-    return (
+if (isHeat) {
+  return (
+    <>
       <Circle
         center={position}
-        radius={size}   
+        radius={size}   // meters
         pathOptions={{
           color,
           fillColor: color,
@@ -40,10 +41,23 @@ const ModelMarker: React.FC<IProps> = ({
           weight: 1,
         }}
       >
-        <ModelMarkerPopUp data={data} language={language} />
       </Circle>
-    );
-  }
+      <CircleMarker
+        center={position}
+        pane="center-dot"
+        radius={3}      
+        pathOptions={{
+          color,
+          fillColor: 'red',
+          fillOpacity: 1,
+          weight: 0,
+        }}
+      >       
+        <ModelMarkerPopUp data={data} language={language} />
+      </CircleMarker>
+    </>
+  );
+}
 
   // normal marker
   const icon = getEmptyIcon(color, false);

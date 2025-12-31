@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L, { Map as LeafletMap, LatLngTuple } from 'leaflet';
 import type { ClusterRow } from '../../types';
@@ -6,6 +6,7 @@ import { Card } from 'react-bootstrap';
 import '../map/map.css';
 import 'leaflet/dist/leaflet.css';
 import ModelClusterMarkers from './ModelClusterMarkers';
+import CreateCenterDotPane from './CreateCenterDotPane';
 
 type Props = {
     clusters: ClusterRow[];
@@ -45,6 +46,7 @@ export const ModelMap: React.FC<Props> = ({ clusters, isHeat, sizeHeat}) => {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+                    <CreateCenterDotPane /> 
                     <ModelClusterMarkers clusters={clusters} colorBy='1' isHeat={isHeat} sizeHeat={sizeHeat} />
                 </MapContainer>
             </div>
