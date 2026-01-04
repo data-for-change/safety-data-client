@@ -18,3 +18,5 @@ export type { ModelSeverityMode } from './ModelSeverityMode';
 export type { ModelSeverityRange } from './ModelSeverityRange';
 export type { ModelPointWithDensity }  from './ModelPointWithDensity';
 export * from './ModelFilterType';
+export type { RoadSegment } from './RoadSegment';
+export type { SegmentOption } from './SegmentOption';

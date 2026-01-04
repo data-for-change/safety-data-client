@@ -11,7 +11,7 @@ import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
-import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds, createFilterQureyByCityPop } from '../../utils/FilterUtils';
+import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds, createFilterQureyByCityPop, getRoadSegments } from '../../utils/FilterUtils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
@@ -61,7 +61,7 @@ class FilterStore implements IFilterStore  {
       this.locationAccuracy = FC.initLocationAccuracy();
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road', 'rd', false);
-      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
+      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', false);
       this.cities = new ColumnFilterArray('City', 'city', false);
       this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
@@ -250,8 +250,8 @@ class FilterStore implements IFilterStore  {
    roadSegment: ColumnFilterArray;
 
    @action
-   updateRoadSegment = (names: string) => {
-      this.roadSegment.setFilter(names.split(','));
+   updateRoadSegment = (names: number[]) => {
+      this.roadSegment.setFilter(names.map(String));
    }
 
    @observable

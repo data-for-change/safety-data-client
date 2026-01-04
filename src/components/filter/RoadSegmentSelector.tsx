@@ -1,32 +1,53 @@
-import React, { ChangeEvent } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
-import Form from 'react-bootstrap/Form';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { useStore } from '../../stores/storeConfig';
+import { getRoadSegments, toSegmentOptions } from '../../utils/FilterUtils';
+
 
 interface IProps {
-  isMultiple?: boolean
+  isMultiple?: boolean;
 }
-const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
+
+const RoadSegmentSelector: React.FC<IProps> = observer(({ isMultiple = true }) => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { cities, roadSegment, updateRoadSegment } = filterStore;
-  if (cities.arrValues.length === 0) {
-    return (
-      <Form.Group controlId="filterForm.ControlRoadSegment">
-        <Form.Label className="filterLable">
-          {t('RoadSegment')}
-          :
-        </Form.Label>
-        <Form.Control
-          type="input"
-          placeholder=""
-          value={roadSegment.arrValues.toString()} onChange={(e: ChangeEvent<HTMLInputElement>) => { updateRoadSegment(e.target.value); }}
-        />
-      </Form.Group>
+  const { roads, roadSegment, updateRoadSegment } = filterStore;
 
+  const allSegments = useMemo(() => getRoadSegments(), []);
+
+  /** 🔹 Filter segments by selected roads */
+  const filteredOptions = useMemo(() => {
+    if (roads.arrValues.length === 0) return [];
+    const roadNumbers = roads.arrValues.map(Number);
+    return toSegmentOptions(
+      allSegments.filter(s => roadNumbers.includes(s.road))
     );
-  }
-  return null;
+  }, [roads.arrValues, allSegments]);
+
+  return (
+    <div id="filterForm.ControlRoadSegment">
+      <div className="filterLable">
+        {t('RoadSegment')}:
+      </div>
+      <Typeahead
+        id="typeaheadRoadSegment"
+        options={filteredOptions}
+        labelKey="label"
+        multiple={isMultiple}
+        selected={filteredOptions.filter(o =>
+          roadSegment.arrValues.includes(String(o.id))
+        )}
+        onChange={(selected) => {
+          const ids = selected.map(o => (o as { id: number }).id);
+          updateRoadSegment(ids);
+        }}
+        placeholder={t('Select road segment')}
+      />
+    </div>
+  );
 });
+
 export default RoadSegmentSelector;
