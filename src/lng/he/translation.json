@@ -6,8 +6,8 @@
 	"HeatMap": "מפת חום",
 	"DensityTable": "טבלת צפיפות",
 	"DensityMap": "מפת צפיפות",
-	"ClusterTable" : "טבלת מקבצים",
-	"ClusterMap" : "מפת מקבצים",
+	"ClusterTable": "טבלת מקבצים",
+	"ClusterMap": "מפת מקבצים",
 	"Markers": "מרקרים",
 	"Clusters": "קלסטרס",
 	"Cities": "יישובים",
@@ -184,7 +184,7 @@
 	"urban-road": "דרך עירונית",
 	"non-urban-junction": "צומת בינעירוני",
 	"non-urban-road": "דרך בינעירונית",
-	"Junction" : "צומת",
+	"Junction": "צומת",
 	"SpeedLimit": "מגבלת מהירות",
 	"speed50": "עד 50",
 	"speed60": "60",
@@ -272,8 +272,9 @@
 	"MarkersIconType": "סמנים לפי",
 	"MapMarkersType": "סוג מפה",
 	"ToChooseSeverityModerate": "לבחירת חומרה ברמה קלה, יש לבחור יישוב",
-	"LoginOrSwitchUser": "להתחברות / החלף משתמש",
+	"SwitchUser": "החלף משתמש",
 	"ContactForMoreDetails": "לפרטים נוספים צרו קשר",
 	"outside_range": "מחוץ לטווח",
-	"data_range": "טווח נתונים"
+	"data_range": "טווח נתונים",
+	"ForAuthorizedUsersOnly": "לקבלת גישה יש להתחבר או ליצור קשר:"
 }

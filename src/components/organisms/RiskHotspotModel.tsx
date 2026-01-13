@@ -37,13 +37,14 @@ const RiskHotspotModel = observer(() => {
 	if (hasPermission) {
 		return (
 			<div>
-				<ModelTabs/>
+				<ModelTabs />
 			</div>
 		);
 	}
 
 	return (
 		<div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '400px', gap: '20px' }}>
+			<span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--bs-body-color)' }}>{t('ForAuthorizedUsersOnly')}</span>
 			<Button
 				variant='success'
 				className='rounded-3 px-5 py-3 shadow-sm'
@@ -53,12 +54,12 @@ const RiskHotspotModel = observer(() => {
 					color: 'black',
 					fontWeight: '500',
 					fontSize: '1.2rem',
-					width: '320px',
+					width: '350px',
 					borderRadius: '15px',
 				}}
 				onClick={() => userStore.login()}
 			>
-				{t('LoginOrSwitchUser')}
+				{userStore.isAuthenticated ? t('SwitchUser') : t('Login')}
 			</Button>
 			<Button
 				variant='dark'
@@ -67,7 +68,7 @@ const RiskHotspotModel = observer(() => {
 					backgroundColor: '#4E6A5C',
 					border: 'none',
 					fontSize: '1.2rem',
-					width: '320px',
+					width: '350px',
 					borderRadius: '15px',
 				}}
 				href='mailto:gal@natoon.co.il'
