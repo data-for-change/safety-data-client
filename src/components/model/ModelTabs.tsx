@@ -45,7 +45,7 @@ const ModelTabs: React.FC<IProps> = () => {
   const [filterType, setFilterType] =
     React.useState<ModelFilterType>(ModelFilterType.All);
   const [maxClusters, setMaxClusters] =
-    React.useState<number>(80);
+    React.useState<number>(30);
 
   // density 
   const denstiyPoints = React.useMemo(
