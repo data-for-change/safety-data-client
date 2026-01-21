@@ -523,6 +523,7 @@ class FilterStore implements IFilterStore  {
       this.groupByName = name;
    }
 
+   // GroupBySort
    @observable
    GroupBySort: string|null = 'd';
 
@@ -535,10 +536,10 @@ class FilterStore implements IFilterStore  {
    submitOnGroupByAfterSort =() =>{
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
    }
-
+ 
+   // GroupByLimit - the max number of groups in "groupby"
    @observable
-   GroupByLimit: number|null = null;
-
+   GroupByLimit: number|null = 1000;
    @action
    SetGroupByLimit = (value:number|null) =>{
       this.GroupByLimit = value;
@@ -617,8 +618,9 @@ class FilterStore implements IFilterStore  {
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+      const limit = this.GroupByLimit as number;
       const filtermatch = this.getFilterQueryString(null);
-      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
+      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', limit, this.GroupBySort);
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {

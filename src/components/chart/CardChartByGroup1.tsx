@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
-import { toJS } from 'mobx';
-// import Button from 'react-bootstrap/Button';
+import { useSelector } from 'react-redux';
 import { useStore } from '../../stores/storeConfig';
-import SelectGroupBy from '../groupby/SelectGroupBy';
+import { RootState } from '../../stores/store';
+import { useMemos } from '../../hooks/myUseMemo';
 import { SmallCard } from '../common';
 import ChartBar from './ChartBar';
 import ConfigChart from './ConfigChart';
 import ConfigModal from '../organisms/ConfigModal';
-import { useMemos } from '../../hooks/myUseMemo';
 import SvgIconSettings from '../../assets/SvgIconSettings';
-import { ItemCount } from '../../types';
-import SelectSortBy from '../groupby/SelectSortBy';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../stores/store';
 import ChartDataFilterSlider from '../organisms/ChartDataFilterSlider';
+import SelectGroupBy from '../groupby/SelectGroupBy';
+import SelectSortBy from '../groupby/SelectSortBy';
+import LimitInput from '../groupby/limitInput/LimitInput';
 import { EchartId } from '../types';
+import './card-charts.css';
 
 const CardChartByGroup1: React.FC<{}> = observer(() => {
     const styles = {
        divConfig: {
           display: 'flex',
+          flexWrap: 'wrap',
           justifyContent: 'space-between',
        },
        divChart: {
@@ -50,12 +50,13 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
     return (
       <>
        <SmallCard style={{marginBottom: '0.5rem'}}>
-          <div style={styles.divConfig}>
-                <SelectGroupBy id="Graphs.Main.SelectGroupby" />
-                <div style={{ width: '40%', margin: '0 auto' }}>
-                   <ChartDataFilterSlider id={chartId} data={dataFilterd} />
-                </div>
-             <SelectSortBy id="Graphs.Main.SelectSort"/>
+          <div className="chart-config">
+            <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+            <div style={{ width: '200px', margin: '0 auto' }}>
+               <ChartDataFilterSlider id={chartId} data={dataFilterd} />
+            </div>
+            <LimitInput id="Graphs.Main.LimitInput"/>
+            <SelectSortBy id="Graphs.Main.SelectSort"/>
           </div>
           <ConfigModal title="Chart Options" showModal={showModel} setShow={setShowModal}>
              <ConfigChart />

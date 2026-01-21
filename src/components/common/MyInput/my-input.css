@@ -1,0 +1,12 @@
+.my-input-sm {
+  width: 70px;
+  height: 30px;
+  padding: 2px 6px;  
+  font-size: 0.85rem; 
+	padding: 2px 4px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 600;
+	color: var(--primary-color);
+}

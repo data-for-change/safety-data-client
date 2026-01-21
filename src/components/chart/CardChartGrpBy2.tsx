@@ -49,7 +49,7 @@ const CardChartGrpBy2: FC<IProps> = observer(() => {
                      &nbsp;
                      <SelectGroupBy2 id="Graphs" />
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
-                  <div style={{ width: '40%', margin: '0 auto' }}>
+                  <div style={{ width: '250px', margin: '0 auto' }}>
                      <ChartDataFilterSlider id={chartId} data={dataGroupby2} />
                   </div>
                   </div>

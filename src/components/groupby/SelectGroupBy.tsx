@@ -14,10 +14,6 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
   const { filterStore } = useStore();
   const { groupByDict, updateGroupby, groupByName } = filterStore;
 
-  // Debug logging
-  //console.log('Render: groupByDict', toJS(groupByDict));
-  //console.log('Render: groupBy', toJS(groupByName));
-
   const onSelectChange = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     updateGroupby(event.target.value);
   }, [updateGroupby]);
@@ -36,7 +32,6 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
       contentProp="text" 
       value={val} 
       style={{ display: 'flex', height: '30px' }} 
-      cssClass="form-select-m" 
     />
   );
 });

@@ -274,5 +274,6 @@
 	"LoginOrSwitchUser": "Login / Switch User",
 	"ContactForMoreDetails": "For more details contact us",
 	"outside_range": "Outside Range",
-	"data_range": "Data Range"
+	"data_range": "Data Range",
+	"groups_limit": "Groups_limit"
 }

@@ -25,7 +25,7 @@ const CardChartYears: React.FC<{}> = observer(() => {
     };
     return (
         <SmallCard styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
-           <div style={{ padding: '0 10px', width: '80%', margin: '0 auto' }}>
+           <div style={{ padding: '0 10px', width: '250px', margin: '0 auto' }}>
               <ChartDataFilterSlider id={chartId} data={dataFilterdByYears} />
            </div>
            <div style={styles.divChart}>
