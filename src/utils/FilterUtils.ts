@@ -33,7 +33,10 @@ export const createFilterQureyByCityPop = (popMin: number, popMax: number) => {
   return filter;
 };
 
-
+export const getfilterDatasource = (datasource: number) => {
+  let filter = (datasource !== 1)? "": `&pc=1`;
+  return filter;
+};
 
 export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
   let filter = `&lat=${mapBounds.getSouth()},${mapBounds.getNorth()}`;

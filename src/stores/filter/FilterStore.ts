@@ -11,7 +11,8 @@ import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
-import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds, createFilterQureyByCityPop, getRoadSegments } from '../../utils/FilterUtils';
+import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds,
+    createFilterQureyByCityPop, getRoadSegments, getfilterDatasource } from '../../utils/FilterUtils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
@@ -49,7 +50,8 @@ class FilterStore implements IFilterStore  {
          streets: observable,
          groupByDict: observable,
          dataByYears: observable,
-         chartDataRanges: observable
+         chartDataRanges: observable,
+         dataSource: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
@@ -155,6 +157,16 @@ class FilterStore implements IFilterStore  {
       else if (!deadChecker.checked && sevIngChecker.checked) res = 'severely-injured';
       this.casualtiesNames = res;
    }
+
+   //datasource of acciednt - 1 police, 3 common file (tik claly), 4 - Offense repot (shomay haderch)
+   @observable
+   dataSource: number = 1;
+
+   @action
+   updateDataSource = (sourceVal: number) => {
+     this.dataSource = sourceVal;
+   }
+
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // where
@@ -786,6 +798,7 @@ class FilterStore implements IFilterStore  {
       query += this.startYear.getFilter();
       query += this.endYear.getFilter();
       query += this.injurySeverity.getFilter();
+      query += getfilterDatasource(this.dataSource);
       query += this.cities.getFilter();
       if (useBounds && bounds != null) query += getfilterBounds(bounds);
       query += this.dayNight.getFilter();

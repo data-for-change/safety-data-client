@@ -6,6 +6,7 @@ import GroupCheckbox from './GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
 import CustomToggle from './CustomToggle';
 import '../../styles/accordion.css'
+import UseTd3Checkbox from './UseTd3Checkbox';
 
 const CardFilterSeverty = observer(() => {
     const { t } = useTranslation();
@@ -25,13 +26,18 @@ const CardFilterSeverty = observer(() => {
              eventKey="6"
              className="filterControls">
              <div>
-                <GroupCheckbox
+               <div>
+               <GroupCheckbox
                 formName="filterForm"
                 colFilter={injurySeverity}
                 onChange={updateInjurySeverity}
                 />
-            <span style={{ color: 'grey', fontSize: '10px', marginTop: '10px' }}>{t('ToChooseSeverityModerate')}</span>
-             </div>
+                <span style={{ color: 'grey', fontSize: '10px', marginTop: '10px' }}>{t('ToChooseSeverityModerate')}</span>
+               </div>
+                <div>
+                   <UseTd3Checkbox />
+                </div>               
+             </div>            
           </Accordion.Collapse>
        </Card>
     );
