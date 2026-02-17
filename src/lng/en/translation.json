@@ -277,5 +277,6 @@
 	"ContactForMoreDetails": "For more details contact us",
 	"outside_range": "Outside Range",
 	"data_range": "Data Range",
+	"hide_out_of_range_column": "Hide out of range column ({{count}})",
 	"ForAuthorizedUsersOnly": "To gain access, please log in or contact us:"
 }

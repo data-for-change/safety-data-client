@@ -277,6 +277,7 @@
 	"ContactForMoreDetails": "לפרטים נוספים צרו קשר",
 	"outside_range": "מחוץ לטווח",
 	"data_range": "טווח נתונים",
+	"hide_out_of_range_column": "הסתר עמודת מחוץ לטווח ({{count}})",
 	"groups_limit": "גבול קבוצות",
 	"ForAuthorizedUsersOnly": "לקבלת גישה יש להתחבר או ליצור קשר:"
 }
