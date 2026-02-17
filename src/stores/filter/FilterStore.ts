@@ -51,6 +51,8 @@ class FilterStore implements IFilterStore  {
          groupByDict: observable,
          dataByYears: observable,
          chartDataRanges: observable,
+         chartHideOutOfRange: observable,
+         chartOutOfRangeCounts: observable,
          dataSource: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
@@ -959,9 +961,20 @@ class FilterStore implements IFilterStore  {
    @observable
    chartDataRanges: Map<string, { start: number, end: number }> = new Map();
 
+   @observable
+   chartHideOutOfRange: Map<string, boolean> = new Map();
+
+   @observable
+   chartOutOfRangeCounts: Map<string, number> = new Map();
+
    @action
    setChartDataRange = (id: string, start: number, end: number) => {
       this.chartDataRanges.set(id, { start, end });
+   }
+
+   @action
+   setChartHideOutOfRange = (id: string, value: boolean) => {
+      this.chartHideOutOfRange.set(id, value);
    }
 
    getChartDataRange = (id: string) => {
@@ -971,6 +984,8 @@ class FilterStore implements IFilterStore  {
    @action
    resetChartRanges = () => {
       this.chartDataRanges.clear();
+      this.chartHideOutOfRange.clear();
+      this.chartOutOfRangeCounts.clear();
    }
 
    getChartData = (id: EchartId) => {
@@ -1004,7 +1019,19 @@ class FilterStore implements IFilterStore  {
 
       const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
       const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
-      const sliced = sliceDataWithAggregation(data, range, metaData);
+      let sliced = sliceDataWithAggregation(data, range, metaData);
+      const outsideItem = sliced.find((item: any) => item._id === 'outside_range');
+      const outOfRangeCount = outsideItem
+         ? (metaData
+            ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
+            : Number(outsideItem.count) || 0)
+         : 0;
+      runInAction(() => {
+         this.chartOutOfRangeCounts.set(id, outOfRangeCount);
+      });
+      if (this.chartHideOutOfRange.get(id)) {
+         sliced = sliced.filter((item: any) => item._id !== 'outside_range');
+      }
       return usePrecision ? formatDataPrecision(sliced) : sliced;
    }
 }
