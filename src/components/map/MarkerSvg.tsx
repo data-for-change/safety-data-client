@@ -53,9 +53,9 @@ const getSVGPinByCategory = (category: string, color: string, isAccuratePos: boo
     case 'אוטובוס זעיר':
       pin = <IconBus fill={color} isAccuratePos={isAccuratePos} width={width} height={height}/>;
       break;
-    case 'משא 3.6 עד 9.9 טון':
-    case 'משא 10.0 עד 12.0 טון':
-    case 'משא 12.1 עד 15.9 טון':
+    case 'משא 3.6 טון עד 9.9 טון':
+    case 'משא 10.0 טון עד 12.0 טון':
+    case 'משא 12.1 טון עד 15.9 טון':
     case 'משא 16.0 עד 33.9 טון':
     case 'משא 34.0+ טון':
       pin = <IconTruck fill={color} isAccuratePos={isAccuratePos} width={width} height={height}/>;

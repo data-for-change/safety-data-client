@@ -105,14 +105,20 @@ export const initGroup2Map = () => {
 
     const injt = new GroupBy2('TypeInjured', 'injt');
     injt.vals['הולך רגל'] = new GroupBy2Val('pedestrian', '#82CA9D');
-    injt.vals['נהג - אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');
-    injt.vals['נוסע - אופניים (לא נהג)'] = new GroupBy2Val('cyclist-p', '#559E54');
-    injt.vals['נהג - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-d', '#305A30');
-    injt.vals['נוסע - רכב לא ידוע'] = new GroupBy2Val('inj-unknown-p', '#305A30');
-    injt.vals['נהג - אופנוע'] = new GroupBy2Val('motorcycle-d', '#1258DC');
-    injt.vals['נוסע - אופנוע (לא נהג)'] = new GroupBy2Val('motorcycle-p', '#1258DC');
-    injt.vals['נהג - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
-    injt.vals['נוסע - רכב בעל 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
+    injt.vals['נהג אופניים'] = new GroupBy2Val('cyclist-d', '#559E54');
+    injt.vals['נוסע אופניים'] = new GroupBy2Val('cyclist-p', '#559E54');
+    injt.vals['נהג אופניים חשמליים'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    injt.vals['נוסע אופניים חשמליים'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    injt.vals['נהג קורקינט חשמלי'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    injt.vals['נוסע קורקינט חשמלי'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    injt.vals['נהג רכב אחר ולא ידוע'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    injt.vals['נוסע רכב אחר ולא ידוע'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    injt.vals['נהג קלנועית'] = new GroupBy2Val('inj-unknown-d', '#305A30');
+    injt.vals['נוסע קלנועית'] = new GroupBy2Val('inj-unknown-p', '#305A30');
+    injt.vals['נהג אופנוע'] = new GroupBy2Val('motorcycle-d', '#1258DC');
+    injt.vals['נוסע אופנוע'] = new GroupBy2Val('motorcycle-p', '#1258DC');
+    injt.vals['נהג רכב 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-d', '#0A337F');
+    injt.vals['נוסע רכב 4 גלגלים ויותר'] = new GroupBy2Val('wheels4+-p', '#0A337F');
     dict.set(injt.name, injt);
 
     const acc=  new GroupBy2('AccidentType', 'acc');

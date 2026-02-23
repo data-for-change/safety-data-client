@@ -170,17 +170,17 @@ export class ColumnFilter implements IColumnFilter {
 
 export const initInjurySeverity = () => {
   const col: IColumnFilter = new ColumnFilter('Severity', 'sev', -1, false);
-  col.arrTypes.push(new FilterChecker('dead', true, [1]));
-  col.arrTypes.push(new FilterChecker('severly-injured', false, [2]));
-  col.arrTypes.push(new FilterChecker('modarte-injured', false, [3]));
+  col.arrTypes.push(new FilterChecker('dead', true, [111]));
+  col.arrTypes.push(new FilterChecker('severly-injured', false, [1194]));
+  col.arrTypes.push(new FilterChecker('modarte-injured', false, [108]));
   col.setQueryVals();
   return col;
 };
 
 export const initDayNight = () => {
   const col: IColumnFilter = new ColumnFilter('DayNight', 'dn');
-  col.arrTypes.push(new FilterChecker('day', true, [1]));
-  col.arrTypes.push(new FilterChecker('night', true, [5]));
+  col.arrTypes.push(new FilterChecker('day', true, [0]));
+  col.arrTypes.push(new FilterChecker('night', true, [1]));
   return col;
 };
 
@@ -218,8 +218,8 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('pedestrian', false, [0]));
   col.arrTypes.push(new FilterChecker('mobilityscooter', false, [22]));
   col.arrTypes.push(new FilterChecker('bicycle', false, [15]));
-  col.arrTypes.push(new FilterChecker('e-scooter', false, [21]));
-  col.arrTypes.push(new FilterChecker('e-bike', false, [23]));
+  col.arrTypes.push(new FilterChecker('e-scooter', false, [34]));
+  col.arrTypes.push(new FilterChecker('e-bike', false, [36]));
   col.arrTypes.push(new FilterChecker('motorcycle', false,
     [8, 9, 10, 19]));
   col.arrTypes.push(new FilterChecker('car', false, [1]));
@@ -228,7 +228,7 @@ export const initVehicleTypes = () => {
   col.arrTypes.push(new FilterChecker('tender', false, [3]));
   col.arrTypes.push(new FilterChecker('bus', false, [11, 18]));
   col.arrTypes.push(new FilterChecker('truck', false,
-    [24, 25, 5, 6, 7]));
+    [4, 37, 5, 6, 7]));
   col.arrTypes.push(new FilterChecker('tractor', false, [14]));
   col.arrTypes.push(new FilterChecker('train', false, [16]));
   col.arrTypes.push(new FilterChecker('other', false, [17]));
@@ -239,22 +239,26 @@ export const initVehicleTypesFull = () => {
   const col: IColumnFilter = new ColumnFilter('VehicleType', 'vcl', 0);
   col.arrTypes.push(new FilterChecker('vclType.all', true, []));
   col.arrTypes.push(new FilterChecker('vclType.pedestrian', false, [0]));
-  col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [22]));
+   col.arrTypes.push(new FilterChecker('vclType.scooter', false, [32]));
   col.arrTypes.push(new FilterChecker('vclType.bicycle', false, [15]));
-  col.arrTypes.push(new FilterChecker('vclType.e-scooter', false, [21]));
-  col.arrTypes.push(new FilterChecker('vclType.e-bike', false, [23]));
+  col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [35]));
+  col.arrTypes.push(new FilterChecker('vclType.segway', false, [30]));
+  col.arrTypes.push(new FilterChecker('vclType.e-scooter', false, [34]));
+  col.arrTypes.push(new FilterChecker('vclType.e-bike', false, [36]));
+  col.arrTypes.push(new FilterChecker('vclType.atv', false, [33]));
   col.arrTypes.push(new FilterChecker('vclType.motorcycle1', false, [8]));
   col.arrTypes.push(new FilterChecker('vclType.motorcycle2', false, [9]));
   col.arrTypes.push(new FilterChecker('vclType.motorcycle3', false, [10]));
   col.arrTypes.push(new FilterChecker('vclType.motorcycle4', false, [19]));
   col.arrTypes.push(new FilterChecker('vclType.car', false, [1]));
   col.arrTypes.push(new FilterChecker('vclType.taxi', false, [12]));
+  col.arrTypes.push(new FilterChecker('vclType.trailer', false, [31]));
   col.arrTypes.push(new FilterChecker('vclType.tranzit', false, [2]));
   col.arrTypes.push(new FilterChecker('vclType.tender', false, [3]));
   col.arrTypes.push(new FilterChecker('vclType.minbuss', false, [18]));
   col.arrTypes.push(new FilterChecker('vclType.bus', false, [11]));
-  col.arrTypes.push(new FilterChecker('vclType.truck1', false, [24]));
-  col.arrTypes.push(new FilterChecker('vclType.truck2', false, [25]));
+  col.arrTypes.push(new FilterChecker('vclType.truck1', false, [4]));
+  col.arrTypes.push(new FilterChecker('vclType.truck2', false, [37]));
   col.arrTypes.push(new FilterChecker('vclType.truck3', false, [5]));
   col.arrTypes.push(new FilterChecker('vclType.truck4', false, [6]));
   col.arrTypes.push(new FilterChecker('vclType.truck5', false, [7]));
@@ -330,23 +334,24 @@ export const initLocationAccuracy = () => {
 
 export const initRoadTypes = () => {
   const col: IColumnFilter = new ColumnFilter('RoadType', 'rt');
-  col.arrTypes.push(new FilterChecker('urban-junction', true, [1]));
-  col.arrTypes.push(new FilterChecker('urban-road', true, [2]));
-  col.arrTypes.push(new FilterChecker('non-urban-junction', true, [3]));
-  col.arrTypes.push(new FilterChecker('non-urban-road', true, [4]));
+  col.arrTypes.push(new FilterChecker('urban-junction', true, [2]));
+  col.arrTypes.push(new FilterChecker('urban-road', true, [1]));
+  col.arrTypes.push(new FilterChecker('non-urban-junction', true, [4]));
+  col.arrTypes.push(new FilterChecker('non-urban-road', true, [3]));
   return col;
 };
 export const initSpeedLimit = () => {
   const col: IColumnFilter = new ColumnFilter('SpeedLimit', 'sp', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('speed50', false, [1]));
-  col.arrTypes.push(new FilterChecker('speed60', false, [2]));
-  col.arrTypes.push(new FilterChecker('speed70', false, [3]));
-  col.arrTypes.push(new FilterChecker('speed80', false, [4]));
-  col.arrTypes.push(new FilterChecker('speed90', false, [5]));
-  col.arrTypes.push(new FilterChecker('speed100', false, [6]));
-  col.arrTypes.push(new FilterChecker('speed110', false, [7]));
-  col.arrTypes.push(new FilterChecker('speed120', false, [8]));
+  col.arrTypes.push(new FilterChecker('speed50', false, [768]));
+  col.arrTypes.push(new FilterChecker('speed60', false, [769]));
+  col.arrTypes.push(new FilterChecker('speed70', false, [773]));
+  col.arrTypes.push(new FilterChecker('speed80', false, [774]));
+  col.arrTypes.push(new FilterChecker('speed90', false, [775]));
+  col.arrTypes.push(new FilterChecker('speed100', false, [776]));
+  col.arrTypes.push(new FilterChecker('speed110', false, [1233]));
+  col.arrTypes.push(new FilterChecker('speed120', false, [3383]));
+  col.arrTypes.push(new FilterChecker('speed130', false, [5955]));
   col.arrTypes.push(new FilterChecker('speed-unknown', false, [0]));
   return col;
 };
@@ -385,24 +390,27 @@ export const initOneLane = () => {
 export const initAccidentType = () => {
   const col: IColumnFilter = new ColumnFilter('AccidentType', 'acc', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('accType.ped', false, [1]));
-  col.arrTypes.push(new FilterChecker('accType.front-side', false, [2]));
-  col.arrTypes.push(new FilterChecker('accType.front-front', false, [5]));
-  col.arrTypes.push(new FilterChecker('accType.front-rear', false, [3]));
-  col.arrTypes.push(new FilterChecker('accType.side-side', false, [4]));
-  col.arrTypes.push(new FilterChecker('accType.obstacle1', false, [6]));
-  col.arrTypes.push(new FilterChecker('accType.obstacle2', false, [7]));
-  col.arrTypes.push(new FilterChecker('accType.obstacle3', false, [8]));
-  col.arrTypes.push(new FilterChecker('accType.offroad', false, [9]));
-  col.arrTypes.push(new FilterChecker('accType.turning-over', false, [10]));
-  col.arrTypes.push(new FilterChecker('accType.slip', false, [11]));
-  col.arrTypes.push(new FilterChecker('accType.passenger', false, [12]));
-  col.arrTypes.push(new FilterChecker('accType.falloff', false, [13]));
-  col.arrTypes.push(new FilterChecker('accType.rear-front', false, [17]));
-  col.arrTypes.push(new FilterChecker('accType.rear-side', false, [18]));
-  col.arrTypes.push(new FilterChecker('accType.animal', false, [19]));
-  col.arrTypes.push(new FilterChecker('accType.cargo', false, [20]));
-  col.arrTypes.push(new FilterChecker('accType.other', false, [15]));
+  col.arrTypes.push(new FilterChecker('accType.ped', false, [1369]));
+  col.arrTypes.push(new FilterChecker('accType.front-side', false, [1370]));
+  col.arrTypes.push(new FilterChecker('accType.front-front', false, [1207]));
+  col.arrTypes.push(new FilterChecker('accType.front-rear', false, [1205]));
+  col.arrTypes.push(new FilterChecker('accType.side-side', false, [1206]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle1', false, [1208]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle2', false, [1209]));
+  col.arrTypes.push(new FilterChecker('accType.obstacle3', false, [1210]));
+  col.arrTypes.push(new FilterChecker('accType.offroad', false, [1211]));
+  col.arrTypes.push(new FilterChecker('accType.turning-over', false, [1212]));
+  col.arrTypes.push(new FilterChecker('accType.slip', false, [1213]));
+  col.arrTypes.push(new FilterChecker('accType.passenger', false, [1214]));
+  col.arrTypes.push(new FilterChecker('accType.falloff', false, [1215]));
+  col.arrTypes.push(new FilterChecker('accType.fire', false, [1216]));
+  col.arrTypes.push(new FilterChecker('accType.cargo', false, [1217]));
+  col.arrTypes.push(new FilterChecker('accType.rear-front', false, [1219]));
+  col.arrTypes.push(new FilterChecker('accType.rear-side', false, [1220]));
+  col.arrTypes.push(new FilterChecker('accType.rear-rear', false, [1738]));
+  col.arrTypes.push(new FilterChecker('accType.animal', false, [1221]));
+  col.arrTypes.push(new FilterChecker('accType.other-collsion', false, [1222]))
+  col.arrTypes.push(new FilterChecker('accType.other', false, [0]));
   return col;
 
 };
