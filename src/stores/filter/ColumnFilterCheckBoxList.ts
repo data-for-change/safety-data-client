@@ -179,8 +179,8 @@ export const initInjurySeverity = () => {
 
 export const initDayNight = () => {
   const col: IColumnFilter = new ColumnFilter('DayNight', 'dn');
-  col.arrTypes.push(new FilterChecker('day', true, [0]));
-  col.arrTypes.push(new FilterChecker('night', true, [1]));
+  col.arrTypes.push(new FilterChecker('day', true, [1]));
+  col.arrTypes.push(new FilterChecker('night', true, [0]));
   return col;
 };
 
@@ -358,33 +358,34 @@ export const initSpeedLimit = () => {
 export const initRoadWidth = () => {
   const col: IColumnFilter = new ColumnFilter('RoadWidth', 'rw', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('road-width-5', false, [1]));
-  col.arrTypes.push(new FilterChecker('road-width-7', false, [2]));
-  col.arrTypes.push(new FilterChecker('road-width-10', false, [3]));
-  col.arrTypes.push(new FilterChecker('road-width-14', false, [4]));
-  col.arrTypes.push(new FilterChecker('road-width-14+', false, [5]));
+  col.arrTypes.push(new FilterChecker('road-width-5', false, [777]));
+  col.arrTypes.push(new FilterChecker('road-width-7', false, [778]));
+  col.arrTypes.push(new FilterChecker('road-width-10', false, [779]));
+  col.arrTypes.push(new FilterChecker('road-width-14', false, [780]));
+  col.arrTypes.push(new FilterChecker('road-width-14+', false, [781]));
   col.arrTypes.push(new FilterChecker('unknown', false, [0]));
   return col;
 };
 export const initSeparator = () => {
   const col: IColumnFilter = new ColumnFilter('Separator', 'ml', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('separator-fence', false, [2]));
-  col.arrTypes.push(new FilterChecker('separator-built', false, [3]));
-  col.arrTypes.push(new FilterChecker('separator-not-built', false, [4]));
-  col.arrTypes.push(new FilterChecker('separator-paint', false, [1]));
-  col.arrTypes.push(new FilterChecker('separator-ohter', false, [5]));
+  col.arrTypes.push(new FilterChecker('separator-fence', false, [764]));
+  col.arrTypes.push(new FilterChecker('separator-built', false, [765]));
+  col.arrTypes.push(new FilterChecker('separator-not-built', false, [766]));
+  col.arrTypes.push(new FilterChecker('separator-paint', false, [763]));
+  col.arrTypes.push(new FilterChecker('separator-ohter', false, [767]));
+  col.arrTypes.push(new FilterChecker('separator-unknown', false, [0]));
   // col.arrTypes.push(new FilterChecker('separator-not-relevant', false, [-1]));
   return col;
 };
 export const initOneLane = () => {
   const col: IColumnFilter = new ColumnFilter('OneLane', 'ol', 0);
   col.arrTypes.push(new FilterChecker('all', true, []));
-  col.arrTypes.push(new FilterChecker('onelane-oneway', false, [1]));
-  col.arrTypes.push(new FilterChecker('onelane-twoway-line', false, [2]));
-  col.arrTypes.push(new FilterChecker('onelane-twoway-noline', false, [3]));
-  col.arrTypes.push(new FilterChecker('onelane-unknown', false, [9]));
-  // col.arrTypes.push(new FilterChecker('onelane-not-relevant', false, [-1]));
+  col.arrTypes.push(new FilterChecker('onelane-oneway', false, [759]));
+  col.arrTypes.push(new FilterChecker('onelane-twoway-line', false, [760]));
+  col.arrTypes.push(new FilterChecker('onelane-twoway-noline', false, [761]));
+  col.arrTypes.push(new FilterChecker('onelane-other', false, [762]));
+  col.arrTypes.push(new FilterChecker('onelane-unknown', false, [0]));
   return col;
 };
 export const initAccidentType = () => {
