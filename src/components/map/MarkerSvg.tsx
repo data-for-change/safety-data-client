@@ -23,15 +23,18 @@ const customMarketIcon = (iconMarkup:any, isSmall :boolean = false) => {
   return res;
 };
 
-const getSVGPinByCategory = (category: string, color: string, isAccuratePos: boolean, isSmall :boolean = false) => {
+const getSVGPinByVehicleType = (VehicleType: string, color: string, isAccuratePos: boolean, isSmall :boolean = false) => {
   let pin;
   const width = (isSmall)? 16.2: 24.6; 
   const height= (isSmall)? 20: 30;
-  switch (category) {
+  switch (VehicleType) {
     case 'הולך רגל':
       pin = <IconWalk fill={color} isAccuratePos={isAccuratePos} width={width} height={height} />;
       break;
     case 'רכב נוסעים פרטי':
+    case 'מונית':
+    case 'משא עד 3.5 טון - אחוד (טרנזיט)':
+    case 'משא עד 3.5 טון - לא אחוד (טנדר)':
       pin = <IconCar fill={color} isAccuratePos={isAccuratePos} width={width} height={height}/>;
       break;
     case 'אופנוע עד 50 סמ"ק':
@@ -53,9 +56,9 @@ const getSVGPinByCategory = (category: string, color: string, isAccuratePos: boo
     case 'אוטובוס זעיר':
       pin = <IconBus fill={color} isAccuratePos={isAccuratePos} width={width} height={height}/>;
       break;
-    case 'משא 3.6 טון עד 9.9 טון':
-    case 'משא 10.0 טון עד 12.0 טון':
-    case 'משא 12.1 טון עד 15.9 טון':
+    case 'משא 3.6 עד 9.9 טון':
+    case 'משא 10.0 עד 12.0 טון':
+    case 'משא 12.1 עד 15.9 טון':
     case 'משא 16.0 עד 33.9 טון':
     case 'משא 34.0+ טון':
       pin = <IconTruck fill={color} isAccuratePos={isAccuratePos} width={width} height={height}/>;
@@ -97,7 +100,7 @@ const MarkerSvg: React.FC<IProps> = (({
   const severity = getNumSeverity(data.injury_severity_hebrew);
   const isSmall = severity === 3; 
   const icon = (markerIconsType === 'general') ? getEmptyIcon(color, isAccuratePos)
-    : getSVGPinByCategory(data.vehicle_vehicle_type_hebrew, color, isAccuratePos, isSmall);
+    : getSVGPinByVehicleType(data.vehicle_vehicle_type_hebrew, color, isAccuratePos, isSmall);
   // console.log(data.vehicle_vehicle_type_hebrew);
   // const icon: L.Icon = setIconBySeverity(data.injury_severity_hebrew, useSmallMarkers);
   return (
