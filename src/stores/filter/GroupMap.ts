@@ -100,7 +100,7 @@ export const initGroup2Map = () => {
 
     const dayNight = new GroupBy2('DayNight', 'dn');
     dayNight.vals['יום'] = new GroupBy2Val('day', '#82CA9D');
-    dayNight.vals['לילה'] = new GroupBy2Val('night', '#559E54');
+    dayNight.vals['לילה '] = new GroupBy2Val('night', '#559E54');
     dict.set(dayNight.name, dayNight);
 
     const injt = new GroupBy2('TypeInjured', 'injt');
@@ -123,22 +123,22 @@ export const initGroup2Map = () => {
 
     const acc=  new GroupBy2('AccidentType', 'acc');
     acc.vals['פגיעה בהולך רגל'] = new GroupBy2Val('accType.ped', '#e3eaa7');
-    acc.vals['התנגשות חזית בצד'] = new GroupBy2Val('accType.front-side', '#03045E');
-    acc.vals['התנגשות חזית בחזית'] = new GroupBy2Val('accType.front-front', '#4673FA');
-    acc.vals['התנגשות חזית באחור'] = new GroupBy2Val('accType.front-rear', '#00b4d8');
-    acc.vals['התנגשות צד בצד'] = new GroupBy2Val('accType.side-side', '#90e0ef');
-    acc.vals['התנגשות עם עצם דומם'] = new GroupBy2Val('accType.obstacle3', '#ef6351');
-    acc.vals['התנגשות עם רכב חונה'] = new GroupBy2Val('accType.obstacle2', '#f38375');
-    acc.vals['התנגשות עם רכב שנעצר ללא חניה'] = new GroupBy2Val('accType.obstacle1', '#f7a399');
-    acc.vals['ירידה מהכביש או עלייה למדרכה'] = new GroupBy2Val('accType.offroad', '#fbc3bc');
+    acc.vals['התנגשות חזית אל צד'] = new GroupBy2Val('accType.front-side', '#03045E');
+    acc.vals['התנגש חזית בחזית'] = new GroupBy2Val('accType.front-front', '#4673FA');
+    acc.vals['התנגש חזית באחור'] = new GroupBy2Val('accType.front-rear', '#00b4d8');
+    acc.vals['התנגש צד בצד'] = new GroupBy2Val('accType.side-side', '#90e0ef');
+    acc.vals['התנגש עם עצם דומם'] = new GroupBy2Val('accType.obstacle3', '#ef6351');
+    acc.vals['התנגש עם רכב חונה'] = new GroupBy2Val('accType.obstacle2', '#f38375');
+    acc.vals['התנגש עם רכב שנעצר'] = new GroupBy2Val('accType.obstacle1', '#f7a399');
+    acc.vals['ירידה מהכביש'] = new GroupBy2Val('accType.offroad', '#fbc3bc');
     acc.vals['התהפכות'] = new GroupBy2Val('accType.turning-over', '#FA6E2D');
     acc.vals['החלקה'] = new GroupBy2Val('accType.slip', '#BD5422');
     acc.vals['אחר'] = new GroupBy2Val('accType.other', '#a53860');
-    acc.vals['פגיעה בנוסע בתוך כלי הרכב'] = new GroupBy2Val('accType.passenger', '#31572c');
+    acc.vals['פגיעה בנוסע רכב'] = new GroupBy2Val('accType.passenger', '#31572c');
     acc.vals['נפילה מרכב נע'] = new GroupBy2Val('accType.falloff', '#4f772d');
     acc.vals['התנגשות אחור בחזית'] = new GroupBy2Val('accType.rear-front', '#CAF0F8');
     acc.vals['התנגשות אחור אל צד'] = new GroupBy2Val('accType.rear-side', '#CAF0F8');
-    acc.vals['התנגשות עם בעל חיים'] = new GroupBy2Val('accType.animal', '#ecf39e');
+    acc.vals['התנגשות בבעל חיים'] = new GroupBy2Val('accType.animal', '#ecf39e');
     acc.vals['פגיעה ממטען של רכב'] = new GroupBy2Val('accType.cargo', '#0A337F');
     dict.set(acc.name, acc);
 
