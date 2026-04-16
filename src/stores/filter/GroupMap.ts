@@ -84,10 +84,10 @@ export const initGroup2Map = () => {
     dict.set(roadt.name, roadt);
 
     const year = new GroupBy2('Year', 'year');
-    year.vals[2015] = new GroupBy2Val('2015', '#A3D9A5'); // Light green
-    year.vals[2016] = new GroupBy2Val('2016', '#82CA9D'); // Medium-light green
-    year.vals[2017] = new GroupBy2Val('2017', '#66B886'); // Slightly darker green
-    year.vals[2018] = new GroupBy2Val('2018', '#559E54'); // Darker green
+    // year.vals[2015] = new GroupBy2Val('2015', '#A3D9A5'); // Light green
+    // year.vals[2016] = new GroupBy2Val('2016', '#82CA9D'); // Medium-light green
+    // year.vals[2017] = new GroupBy2Val('2017', '#66B886'); // Slightly darker green
+    // year.vals[2018] = new GroupBy2Val('2018', '#559E54'); // Darker green
     year.vals[2019] = new GroupBy2Val('2019', '#3E7C3C'); // Deep green    
     year.vals[2020] = new GroupBy2Val('2020', '#A3C7F2'); // Light blue
     year.vals[2021] = new GroupBy2Val('2021', '#71A3E6'); // Medium-light blue
