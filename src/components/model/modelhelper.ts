@@ -1,7 +1,7 @@
 import { Accident, ClusterRow, ModelFilterType, ModelPointWithDensity, ModelSeverityMode, ModelSeverityRange } from "../../types";
 
 const JUNCTION_RADIUS_METERS = 50;
-
+const JUNCTION_HEB_VAL = "עירונית בצומת (כולל צמתים בגבולות יישובים)";
 
 export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADIUS_METERS): Accident[][] {
   const clusters: Accident[][] = [];
@@ -11,14 +11,14 @@ export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADI
   const filteredPoints = points.filter(
     p =>
       !(
-        p.road_type_hebrew === "עירונית בצומת" &&
+        p.road_type_hebrew === JUNCTION_HEB_VAL &&
         p.location_accuracy_hebrew !== "עיגון מדויק"
       )
   );
   // 1. Extract junctions
   const junctions = filteredPoints
     .map((p, i) => ({ p, i }))
-    .filter(x => x.p.road_type_hebrew === "עירונית בצומת");
+    .filter(x => x.p.road_type_hebrew === JUNCTION_HEB_VAL);
 
   // 2. Junction-based clustering
   for (const { p: junction, i: junctionIndex } of junctions) {
@@ -80,7 +80,7 @@ export function buildClusterTable(
     const severityIndex = calcSeverityIndex(cluster, mode);
 
     const junctionPoint = cluster.find(
-      p => p.road_type_hebrew === "עירונית בצומת"
+      p => p.road_type_hebrew === JUNCTION_HEB_VAL
     );
 
     // ----- Junction cluster -----
@@ -171,9 +171,9 @@ export function buildDensityClustersTable(
   const filteredPoints = points.filter(p => {
     if (filterType === ModelFilterType.All) return true;
     if (filterType === ModelFilterType.Junctions)
-      return p.road_type_hebrew === "עירונית בצומת";
+      return p.road_type_hebrew === JUNCTION_HEB_VAL;
     if (filterType === ModelFilterType.Streets)
-      return p.road_type_hebrew !== "עירונית בצומת";
+      return p.road_type_hebrew !== JUNCTION_HEB_VAL;
     return true;
   });
 
@@ -187,10 +187,10 @@ export function buildDensityClustersTable(
 
   // 4️⃣ split
   const junctionPoints = topPoints.filter(
-    p => p.road_type_hebrew === "עירונית בצומת"
+    p => p.road_type_hebrew === JUNCTION_HEB_VAL
   );
   const streetPoints = topPoints.filter(
-    p => p.road_type_hebrew !== "עירונית בצומת"
+    p => p.road_type_hebrew !== JUNCTION_HEB_VAL
   );
 
   // 5️⃣ map junctions
