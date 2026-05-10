@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from "react-redux";
 import {
-  PaginationState,
-  Table,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-  ColumnDef,
+	PaginationState,
+	Table,
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+	ColumnDef,
 } from '@tanstack/react-table';
 import Button from 'react-bootstrap/Button';
 import { Table as TableBootstrap, Card, Tabs, Tab } from "react-bootstrap";
@@ -23,118 +23,99 @@ import PaginationControls from '../detailsTable/PaginationControls';
 
 import TableView from '../detailsTable/TableView';
 import AccidentDetailsCard from '../detailsTable/AccidentDetailsCard';
-import { buildClusterTable, clusterPoints , calculateKernelDensity, buildDensityClustersTable} from './modelhelper';
+import { buildClusterTable, clusterPoints, calculateKernelDensity, buildDensityClustersTable } from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';
 import ClusterTable from './ClusterTable';
 import { ModelMap } from './ModelMap';
 import { ClusterFilterTypePicker } from './ClusterFilterTypePicker';
 import { MaxClustersPicker } from './MaxClustersPicker';
+import SectionsTable from './SectionsTable';
 
 interface IProps { }
 
+type TTabs = 'densityTable' | 'densityMap' | 'clusterTable' | 'clusterMap' | 'sectionTable';
+
 const ModelTabs: React.FC<IProps> = () => {
-  const { t } = useTranslation();
-  const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
+	const { t } = useTranslation();
+	const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
 
-  const [activeTab, setActiveTab] = React.useState<'densityTable'| 'densityMap' |'clusterTable' | 'clusterMap'>('densityMap');
-  const [junctionRadius, setJunctionRadius] = React.useState(50);
-  const [heatmapRadius, setHeatmapRadius] = React.useState(200);
-  const [severityMode, setSeverityMode] =
-    React.useState<ModelSeverityMode>(1);
-  const [filterType, setFilterType] =
-    React.useState<ModelFilterType>(ModelFilterType.All);
-  const [maxClusters, setMaxClusters] =
-    React.useState<number>(30);
+	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
+	const [junctionRadius, setJunctionRadius] = React.useState(50);
+	const [heatmapRadius, setHeatmapRadius] = React.useState(200);
+	const [severityMode, setSeverityMode] = React.useState<ModelSeverityMode>(1);
+	const [filterType, setFilterType] = React.useState<ModelFilterType>(ModelFilterType.All);
+	const [maxClusters, setMaxClusters] = React.useState<number>(30);
 
-  // density 
-  const denstiyPoints = React.useMemo(
-    () => calculateKernelDensity(dataAllInjuries, heatmapRadius),
-    [dataAllInjuries, heatmapRadius]
-  );
-  const clusterTableDensity = React.useMemo(
-    () => buildDensityClustersTable(denstiyPoints,filterType, maxClusters),
-    [denstiyPoints, filterType, maxClusters]
-  );
+	// density
+	const denstiyPoints = React.useMemo(() => calculateKernelDensity(dataAllInjuries, heatmapRadius), [dataAllInjuries, heatmapRadius]);
+	const clusterTableDensity = React.useMemo(
+		() => buildDensityClustersTable(denstiyPoints, filterType, maxClusters),
+		[denstiyPoints, filterType, maxClusters],
+	);
 
-  // -------- simple Clustering --------
-  const clusters = React.useMemo(
-    () => clusterPoints(dataAllInjuries, junctionRadius),
-    [dataAllInjuries, junctionRadius]
-  );
+	// -------- simple Clustering --------
+	const clusters = React.useMemo(() => {
+		return clusterPoints(dataAllInjuries, junctionRadius);
+	}, [dataAllInjuries, junctionRadius]);
 
-  const clusterTable = React.useMemo(
-    () =>
-      buildClusterTable(
-        clusters,
-        severityMode,
-        filterType,
-        maxClusters,
-        4 // minValue
-      ),
-    [clusters, severityMode,filterType, maxClusters ]
-  );
+	const clusterTable = React.useMemo(
+		() =>
+			buildClusterTable(
+				clusters,
+				severityMode,
+				filterType,
+				maxClusters,
+				4, // minValue
+			),
+		[clusters, severityMode, filterType, maxClusters],
+	);
 
-  return (
-    <Card className="m-1 p-0 border-0">
-      <Card.Body>
-        {/* -------- Controls -------- */}
-       <div className="d-flex flex-wrap gap-4 mb-3">
-          <JunctionRadiusPicker
-            value={heatmapRadius}
-            onChange={setHeatmapRadius}
-            text = {"heatmap radius"}
-            min = {100}
-            max = {200}
-            step = {50}
-          />
-          <JunctionRadiusPicker
-            value={junctionRadius}
-            onChange={setJunctionRadius}
-            text = "Junction radius"
-          />
-       
+	return (
+		<Card className='m-1 p-0 border-0'>
+			<Card.Body>
+				{/* -------- Controls -------- */}
+				<div className='d-flex flex-wrap gap-4 mb-3'>
+					<JunctionRadiusPicker
+						value={heatmapRadius}
+						onChange={setHeatmapRadius}
+						text={'heatmap radius'}
+						min={100}
+						max={200}
+						step={50}
+					/>
+					<JunctionRadiusPicker value={junctionRadius} onChange={setJunctionRadius} text='Junction radius' />
 
-          <SeverityModePicker
-            value={severityMode}
-            onChange={setSeverityMode}
-          />
+					<SeverityModePicker value={severityMode} onChange={setSeverityMode} />
 
-          <ClusterFilterTypePicker
-            value={filterType}
-            onChange={setFilterType}
-          />
+					<ClusterFilterTypePicker value={filterType} onChange={setFilterType} />
 
-          <MaxClustersPicker
-            value={maxClusters}
-            onChange={setMaxClusters}
-          />
-        </div>
+					<MaxClustersPicker value={maxClusters} onChange={setMaxClusters} />
+				</div>
 
-        <Tabs
-        activeKey={activeTab}
-        onSelect={key => setActiveTab(key as 'densityTable'| 'densityMap' |'clusterTable' | 'clusterMap')}
-        mountOnEnter
-        id="model-tabs"
-      >
-        <Tab eventKey="densityTable" title={t('DensityTable')}>
-          <ClusterTable clusterTable={clusterTableDensity} />
-        </Tab>
-        <Tab eventKey="densityMap" title={t('DensityMap')}>
-          <ModelMap clusters={clusterTableDensity} isHeat={true} sizeHeat={heatmapRadius}/> 
-        </Tab>
+				<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key as TTabs)} mountOnEnter id='model-tabs'>
+					<Tab eventKey='densityTable' title={t('DensityTable')}>
+						<ClusterTable clusterTable={clusterTableDensity} />
+					</Tab>
+					<Tab eventKey='densityMap' title={t('DensityMap')}>
+						<ModelMap clusters={clusterTableDensity} isHeat={true} sizeHeat={heatmapRadius} />
+					</Tab>
 
-        <Tab eventKey="clusterTable" title={t('ClusterTable')}>
-          <ClusterTable clusterTable={clusterTable} />
-        </Tab>
+					<Tab eventKey='clusterTable' title={t('ClusterTable')}>
+						<ClusterTable clusterTable={clusterTable} />
+					</Tab>
 
-        <Tab eventKey="culsterMap" title={t('ClusterMap')}>
-          <ModelMap clusters={clusterTable} isHeat={false} sizeHeat={heatmapRadius}/> 
-        </Tab> 
-      </Tabs>
-      </Card.Body>
-    </Card>
-  );
-};
+					<Tab eventKey='culsterMap' title={t('ClusterMap')}>
+						<ModelMap clusters={clusterTable} isHeat={false} sizeHeat={heatmapRadius} />
+					</Tab>
+
+					<Tab eventKey='sectionTable' title={t('SectionTable')}>
+						<SectionsTable accidents={dataAllInjuries} />
+					</Tab>
+				</Tabs>
+			</Card.Body>
+		</Card>
+	);
+};;;;
 
 export default ModelTabs;

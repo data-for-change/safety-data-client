@@ -5,6 +5,7 @@ import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react';
 import { Loader } from '../common';
 import ModelTabs from '../model/ModelTabs';
+import { environment } from '../../utils/env.utils';
 
 const EnvelopeIcon = ({ color = 'white', size = 20 }: { color?: string; size?: number }) => (
 	<svg
@@ -29,10 +30,11 @@ const EnvelopeIcon = ({ color = 'white', size = 20 }: { color?: string; size?: n
 const RiskHotspotModel = observer(() => {
 	const { t } = useTranslation();
 	const { userStore } = useStore();
-	if (userStore.isLoading) {
+
+	if (userStore.isLoading && !environment.isLocalMode) {
 		return <Loader />;
 	}
-	const hasPermission = userStore.isAuthenticated && userStore.isHotSpotGrants;
+	const hasPermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isHotSpotGrants);
 
 	if (hasPermission) {
 		return (
