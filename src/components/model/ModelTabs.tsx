@@ -49,6 +49,14 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const { filterStore, userStore } = useStore();
 
 	const showSections = isDev || SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? '');
+	console.log(
+		'🚀 ~ SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase():',
+		SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? ''),
+	);
+	console.log('🚀 ~ SECTIONS_ALLOWED_EMAIL:', SECTIONS_ALLOWED_EMAIL);
+	console.log('🚀 ~ userStore.user?.email.toLowerCase():', userStore.user?.email.toLowerCase());
+	console.log('🚀 ~ userStore.user:', userStore.user);
+	console.log('🚀 ~ showSections:', showSections);
 
 	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
 	const [junctionRadius, setJunctionRadius] = React.useState(50);
