@@ -41,7 +41,7 @@
 		"preview": "vite preview",
 		"test": "vitest",
 		"test:watch": "vitest --watch",
-		"process-streets": "node telAvivDataStreets/shp-to-processed-json.mjs telAvivDataStreets/TA_streets_dat.shp"
+		"process-streets": "node telAvivDataStreets/shp-to-processed-json.mjs"
 	},
 	"eslintConfig": {
 		"extends": [

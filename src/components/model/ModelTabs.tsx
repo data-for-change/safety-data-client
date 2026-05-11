@@ -31,14 +31,24 @@ import { ModelMap } from './ModelMap';
 import { ClusterFilterTypePicker } from './ClusterFilterTypePicker';
 import { MaxClustersPicker } from './MaxClustersPicker';
 import SectionsTable from './SectionsTable';
+import SectionsMap from './SectionsMap';
+import { useStore } from '../../stores/storeConfig';
+import { observer } from 'mobx-react-lite';
+import { useStreetSections } from './useStreetSections';
+
+const SECTIONS_ALLOWED_EMAIL = ['galraij@gmail.com', 'sejo1981@gmail.com'];
+const isDev = import.meta.env.DEV;
 
 interface IProps { }
 
-type TTabs = 'densityTable' | 'densityMap' | 'clusterTable' | 'clusterMap' | 'sectionTable';
+type TTabs = 'densityTable' | 'densityMap' | 'clusterTable' | 'clusterMap' | 'sectionTable' | 'sectionMap';
 
-const ModelTabs: React.FC<IProps> = () => {
+const ModelTabs: React.FC<IProps> = observer(() => {
 	const { t } = useTranslation();
 	const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
+	const { filterStore, userStore } = useStore();
+
+	const showSections = isDev || SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? '');
 
 	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
 	const [junctionRadius, setJunctionRadius] = React.useState(50);
@@ -46,6 +56,7 @@ const ModelTabs: React.FC<IProps> = () => {
 	const [severityMode, setSeverityMode] = React.useState<ModelSeverityMode>(1);
 	const [filterType, setFilterType] = React.useState<ModelFilterType>(ModelFilterType.All);
 	const [maxClusters, setMaxClusters] = React.useState<number>(30);
+	const [maxDistanceMeters, setMaxDistanceMeters] = React.useState<number>(20);
 
 	// density
 	const denstiyPoints = React.useMemo(() => calculateKernelDensity(dataAllInjuries, heatmapRadius), [dataAllInjuries, heatmapRadius]);
@@ -71,6 +82,11 @@ const ModelTabs: React.FC<IProps> = () => {
 		[clusters, severityMode, filterType, maxClusters],
 	);
 
+	// -------- Street sections --------
+	const selectedCityIds = filterStore.cities.arrValues ?? [];
+	const { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched } =
+		useStreetSections(selectedCityIds, dataAllInjuries, maxDistanceMeters);
+
 	return (
 		<Card className='m-1 p-0 border-0'>
 			<Card.Body>
@@ -91,6 +107,16 @@ const ModelTabs: React.FC<IProps> = () => {
 					<ClusterFilterTypePicker value={filterType} onChange={setFilterType} />
 
 					<MaxClustersPicker value={maxClusters} onChange={setMaxClusters} />
+					{(activeTab === 'sectionTable' || activeTab === 'sectionMap') && (
+						<JunctionRadiusPicker
+							value={maxDistanceMeters}
+							onChange={setMaxDistanceMeters}
+							text='Max distance'
+							min={0}
+							max={100}
+							step={5}
+						/>
+					)}
 				</div>
 
 				<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key as TTabs)} mountOnEnter id='model-tabs'>
@@ -109,13 +135,28 @@ const ModelTabs: React.FC<IProps> = () => {
 						<ModelMap clusters={clusterTable} isHeat={false} sizeHeat={heatmapRadius} />
 					</Tab>
 
-					<Tab eventKey='sectionTable' title={t('SectionTable')}>
-						<SectionsTable accidents={dataAllInjuries} />
-					</Tab>
+					{showSections && (
+						<Tab eventKey='sectionTable' title={t('SectionTable')}>
+							<SectionsTable
+								matched={matched}
+								unmatched={unmatched}
+								streetSections={streetSections}
+								loadError={sectionsLoadError}
+								telAvivAccidents={telAvivAccidents}
+								isTelAvivSelected={isTelAvivSelected}
+							/>
+						</Tab>
+					)}
+
+					{showSections && (
+						<Tab eventKey='sectionMap' title={t('SectionMap')}>
+							<SectionsMap matched={matched} unmatched={unmatched} streetSections={streetSections} />
+						</Tab>
+					)}
 				</Tabs>
 			</Card.Body>
 		</Card>
 	);
-};;;;
+});
 
 export default ModelTabs;

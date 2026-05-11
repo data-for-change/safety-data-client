@@ -1,110 +1,96 @@
-import { open } from 'shapefile';
-import { mkdir, writeFile } from 'fs/promises';
-import proj4 from 'proj4';
+import { readFile, mkdir, writeFile } from 'fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// --- Coordinate systems ---
-const itm =
-	'+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 ' +
-	'+k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 ' +
-	'+towgs84=0,0,0,0,0,0,0 +units=m +no_defs';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const wgs84 = proj4.WGS84;
-
-// --- Convert ITM → WGS84 ---
-function convert([x, y]) {
-	const [lng, lat] = proj4(itm, wgs84, [x, y]);
-	return { lat, lng };
-}
-
-// --- Normalize street name ---
 function normalizeStreet(name) {
 	if (!name) return null;
 	return name.replace(/['"]/g, '').trim();
 }
 
-// --- Compute bounding box ---
 function computeBounds(polyline) {
-	let minLat = Infinity;
-	let maxLat = -Infinity;
-	let minLng = Infinity;
-	let maxLng = -Infinity;
-
+	let minLat = Infinity, maxLat = -Infinity, minLng = Infinity, maxLng = -Infinity;
 	for (const p of polyline) {
 		if (p.lat < minLat) minLat = p.lat;
 		if (p.lat > maxLat) maxLat = p.lat;
 		if (p.lng < minLng) minLng = p.lng;
 		if (p.lng > maxLng) maxLng = p.lng;
 	}
-
 	return { minLat, maxLat, minLng, maxLng };
 }
 
-// --- Main processing ---
-async function processShapeFile(shpPath, outPath, encoding = 'utf-8') {
-	const dbfPath = shpPath.replace(/\.shp$/i, '.dbf');
-	const source = await open(shpPath, dbfPath, { encoding });
+async function readGeoJson(geojsonName, result, seenBaseIds, seq) {
+	const filePath = path.join(__dirname, geojsonName);
+	const raw = await readFile(filePath, 'utf8');
+	const geojson = JSON.parse(raw);
 
-	const result = [];
+	let added = 0;
+	let skipped = 0;
 
-	while (true) {
-		const { done, value } = await source.read();
-		if (done) break;
+	for (const feature of geojson.features) {
+		const props = feature.properties || {};
+		const geometry = feature.geometry;
+		if (!geometry) continue;
+		if (geometry.type !== 'LineString' && geometry.type !== 'MultiLineString') continue;
 
-		const props = value.properties || {};
-		const geometry = value.geometry;
+		const baseId = props.UniqueId ?? null;
+		if (baseId != null && seenBaseIds.has(baseId)) { skipped++; continue; }
+		if (baseId != null) seenBaseIds.add(baseId);
 
-		if (!geometry || geometry.type !== 'LineString') continue;
-
-		// Extract street name safely
-		const streetRaw = props.t_rechov ?? props.T_RECHOV ?? null;
-
+		const streetRaw = props.t_rechov_r ?? props.t_rechov ?? props.T_RECHOV ?? null;
 		const streetName = normalizeStreet(streetRaw);
 
-		// Convert full polyline
-		const polyline = geometry.coordinates.map(convert);
-
-		// Compute bounds
-		const bounds = computeBounds(polyline);
-
-		// Build normalized object
-		const section = {
-			id: props.UniqueId || null,
-			lamas_id: props.ms_lamas,
-			streetName,
-
-			geometry: {
-				polyline,
-			},
-
-			bounds,
-
-			metadata: {
-				lanes: props.n_lanes ?? null,
-				isTwoWay: props.du_sitri === 1,
-				length: props.length ?? null,
-			},
+		const metadata = {
+			lanes: props.n_lanes ?? null,
+			isTwoWay: props.du_sitri === 1,
+			length: props.ms_orech ?? props.Shape_Leng ?? props.length ?? null,
 		};
 
-		result.push(section);
+		const coordGroups =
+			geometry.type === 'LineString'
+				? [geometry.coordinates]
+				: geometry.coordinates;
+
+		for (const coords of coordGroups) {
+			const polyline = coords.map(([lng, lat]) => ({ lat, lng }));
+			const bounds = computeBounds(polyline);
+			result.push({
+				id: `${baseId}-${seq.value++}`,
+				lamas_id: props.ms_lamas,
+				streetName,
+				geometry: { polyline },
+				bounds,
+				metadata,
+			});
+			added++;
+		}
 	}
+
+	return { added, skipped };
+}
+
+async function main(outPath) {
+	const result = [];
+	const seenBaseIds = new Set();
+	const seq = { value: 0 };
+
+	const r1 = await readGeoJson('TA_streets_dat_geo_json.geojson', result, seenBaseIds, seq);
+	console.log(`TA_streets_dat:        +${r1.added} sections`);
+
+	const r2 = await readGeoJson('Roads_With_Junc_ID_V1_geo_json.geojson', result, seenBaseIds, seq);
+	console.log(`Roads_With_Junc_ID_V1: +${r2.added} sections  (${r2.skipped} skipped)`);
 
 	await mkdir(path.dirname(outPath), { recursive: true });
 	await writeFile(outPath, JSON.stringify(result, null, 2), 'utf8');
 
-	console.log(`✅ Processed ${result.length} street sections`);
+	console.log(`\n✅ Total: ${result.length} street sections`);
 	console.log(`📁 Saved to ${outPath}`);
 }
 
-// --- CLI ---
-const [, , shpPath, encodingArg = 'utf-8'] = process.argv;
+const OUT_PATH = path.join(__dirname, '..', 'public', 'data', 'telAviv_streets.json');
 
-if (!shpPath) {
-	console.error('Usage: node shp-to-processed-json.mjs <input.shp> [encoding]');
-	process.exit(1);
-}
-
-processShapeFile(shpPath, 'public/data/telAviv_streets.json', encodingArg).catch((err) => {
+main(OUT_PATH).catch((err) => {
 	console.error(err);
 	process.exit(1);
 });

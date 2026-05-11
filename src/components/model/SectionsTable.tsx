@@ -1,167 +1,117 @@
 import React from 'react';
 import { Accident } from "../../types";
 import './modelMainTab.css';
-import { useStore } from '../../stores/storeConfig';
-import type { StreetSection } from '../../services/accidentSectionMatcher';
-import { mapAccidentsToStreetSections } from '../../services/accidentSectionMatcher';
-import type { StreetIdCoverageRow } from '../../services/streetNameCoverage';
-import { buildStreetIdCoverageRows } from '../../services/streetNameCoverage';
+import type { StreetSection, MatchedAccidentRow, UnmatchedAccidentRow } from '../../services/accidentSectionMatcher';
+// import type { StreetIdCoverageRow } from '../../services/streetNameCoverage';
+// import { buildStreetIdCoverageRows } from '../../services/streetNameCoverage';
 
 type Props = {
-  accidents: Accident[];
+	matched: MatchedAccidentRow[];
+	unmatched: UnmatchedAccidentRow[];
+	streetSections: StreetSection[] | null;
+	loadError: string | null;
+	telAvivAccidents: Accident[];
+	isTelAvivSelected: boolean;
 };
 
-const TEL_AVIV_CITY_ID = '5000';
+function SectionsTable({ matched, unmatched, streetSections, loadError, telAvivAccidents, isTelAvivSelected }: Props) {
+	// const streetIdCoverageRows = React.useMemo<StreetIdCoverageRow[]>(() => {
+	// 	if (!isTelAvivSelected) return [];
+	// 	if (!streetSections) return [];
+	// 	return buildStreetIdCoverageRows(streetSections, telAvivAccidents);
+	// }, [isTelAvivSelected, streetSections, telAvivAccidents]);
 
-function SectionsTable ({ accidents }: Props) {
-  const { filterStore } = useStore();
-  const selectedCityIds = filterStore.cities.arrValues ?? [];
+	return (
+		<div>
+			{!isTelAvivSelected && (
+				<div className='mb-2'>
+					Select <strong>תל אביב - יפו</strong> in the city filter to view section matching.
+				</div>
+			)}
 
-  const isTelAvivSelected = React.useMemo(() => {
-    return selectedCityIds.includes(TEL_AVIV_CITY_ID);
-  }, [selectedCityIds]);
+			{isTelAvivSelected && !streetSections && !loadError && <div className='mb-2'>Loading street sections…</div>}
+			{isTelAvivSelected && loadError && (
+				<div className='mb-2' style={{ color: 'var(--bs-danger)' }}>
+					Failed to load `telAviv_streets.json`: {loadError}
+				</div>
+			)}
 
-  const [streetSections, setStreetSections] = React.useState<StreetSection[] | null>(null);
-  const [loadError, setLoadError] = React.useState<string | null>(null);
+			<table className='cluster-table'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Accident severity</th>
+						<th>Street name (from json)</th>
+						<th>LAMAS ID</th>
+						<th>Accident street1</th>
+						<th>street1 ID</th>
+						<th>Accident street2</th>
+						<th>street2 ID</th>
+						<th>Accident latitude</th>
+						<th>Accident longitude</th>
+					</tr>
+				</thead>
+				<tbody>
+					{matched.map((row, index) => (
+						<tr key={row.accidentId ?? index}>
+							<td className='num'>{index + 1}</td>
+							<td>{row.severity}</td>
+							<td>{row.streetNameFromJson}</td>
+							<td className='num'>{row.matchedLamasId ?? ''}</td>
+							<td>{row.accidentStreet1 ?? ''}</td>
+							<td className='num'>{row.accidentStreet1Id ?? ''}</td>
+							<td>{row.accidentStreet2 ?? ''}</td>
+							<td className='num'>{row.accidentStreet2Id ?? ''}</td>
+							<td className='num'>{Number(row.latitude).toFixed(6)}</td>
+							<td className='num'>{Number(row.longitude).toFixed(6)}</td>
+						</tr>
+					))}
+					{isTelAvivSelected && streetSections && matched.length === 0 && (
+						<tr>
+							<td colSpan={10}>No matched accidents (within threshold).</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
 
-  React.useEffect(() => {
-    let cancelled = false;
+			<div className='mt-4 mb-2'>
+				<strong>Unmatched accidents</strong>
+			</div>
+			<table className='cluster-table'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Accident street1</th>
+						<th>street1 ID</th>
+						<th>Accident street2</th>
+						<th>street2 ID</th>
+						<th>Accident type</th>
+						<th>Accident latitude</th>
+						<th>Accident longitude</th>
+					</tr>
+				</thead>
+				<tbody>
+					{unmatched.map((row, index) => (
+						<tr key={row.accidentId ?? index}>
+							<td className='num'>{index + 1}</td>
+							<td>{row.accidentStreet1 ?? ''}</td>
+							<td className='num'>{row.accidentStreet1Id ?? ''}</td>
+							<td>{row.accidentStreet2 ?? ''}</td>
+							<td className='num'>{row.accidentStreet2Id ?? ''}</td>
+							<td>{row.accidentType}</td>
+							<td className='num'>{Number(row.latitude).toFixed(6)}</td>
+							<td className='num'>{Number(row.longitude).toFixed(6)}</td>
+						</tr>
+					))}
+					{isTelAvivSelected && streetSections && unmatched.length === 0 && (
+						<tr>
+							<td colSpan={8}>No unmatched accidents.</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
 
-    async function load () {
-      try {
-        setLoadError(null);
-        // Large file: served from public/data (generated by `npm run process-streets`).
-        const res = await fetch(`${import.meta.env.BASE_URL}data/telAviv_streets.json`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = (await res.json()) as StreetSection[];
-        if (!cancelled) setStreetSections(data);
-      } catch (e: any) {
-        if (!cancelled) setLoadError(e?.message ?? 'Failed to load street sections JSON');
-      }
-    }
-
-    if (isTelAvivSelected) load();
-    else setStreetSections(null);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isTelAvivSelected]);
-
-  const telAvivAccidents = React.useMemo(() => {
-    // If data is already filtered upstream, keep it; otherwise filter here.
-    const hasAnyCity = accidents.some(a => !!a.accident_yishuv_name);
-    if (!hasAnyCity) return accidents;
-    return accidents.filter(a => a.accident_yishuv_name === 'תל אביב - יפו');
-  }, [accidents]);
-
-  const { matched, unmatched } = React.useMemo(() => {
-    if (!isTelAvivSelected) return { matched: [], unmatched: [] };
-    if (!streetSections) return { matched: [], unmatched: [] };
-    return mapAccidentsToStreetSections(telAvivAccidents, streetSections, {
-      boundsPaddingMeters: 5,
-      maxDistanceMeters: 10,
-      enableGeoOnlyFallback: true,
-    });
-  }, [isTelAvivSelected, streetSections, telAvivAccidents]);
-
-  const streetIdCoverageRows = React.useMemo<StreetIdCoverageRow[]>(() => {
-    if (!isTelAvivSelected) return [];
-    if (!streetSections) return [];
-    return buildStreetIdCoverageRows(streetSections, telAvivAccidents);
-  }, [isTelAvivSelected, streetSections, telAvivAccidents]);
-
-  return (
-    <div>
-      {!isTelAvivSelected && (
-        <div className="mb-2">
-          Select <strong>תל אביב - יפו</strong> in the city filter to view section matching.
-        </div>
-      )}
-
-      {isTelAvivSelected && !streetSections && !loadError && <div className="mb-2">Loading street sections…</div>}
-      {isTelAvivSelected && loadError && (
-        <div className="mb-2" style={{ color: 'var(--bs-danger)' }}>
-          Failed to load `telAviv_streets.json`: {loadError}
-        </div>
-      )}
-
-      <table className="cluster-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Accident severity</th>
-            <th>Street name (from json)</th>
-            <th>LAMAS ID</th>
-            <th>Accident street1</th>
-            <th>street1 ID</th>
-            <th>Accident street2</th>
-            <th>street2 ID</th>
-            <th>Accident latitude</th>
-            <th>Accident longitude</th>
-          </tr>
-        </thead>
-        <tbody>
-          {matched.map((row, index) => (
-            <tr key={row.accidentId ?? index}>
-              <td className="num">{index + 1}</td>
-              <td>{row.severity}</td>
-              <td>{row.streetNameFromJson}</td>
-              <td className="num">{row.matchedLamasId ?? ''}</td>
-              <td>{row.accidentStreet1 ?? ''}</td>
-              <td className="num">{row.accidentStreet1Id ?? ''}</td>
-              <td>{row.accidentStreet2 ?? ''}</td>
-              <td className="num">{row.accidentStreet2Id ?? ''}</td>
-              <td className="num">{Number(row.latitude).toFixed(6)}</td>
-              <td className="num">{Number(row.longitude).toFixed(6)}</td>
-            </tr>
-          ))}
-          {isTelAvivSelected && streetSections && matched.length === 0 && (
-            <tr>
-              <td colSpan={10}>No matched accidents (within threshold).</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      <div className="mt-4 mb-2">
-        <strong>Unmatched accidents</strong>
-      </div>
-      <table className="cluster-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Accident street1</th>
-            <th>street1 ID</th>
-            <th>Accident street2</th>
-            <th>street2 ID</th>
-            <th>Accident type</th>
-            <th>Accident latitude</th>
-            <th>Accident longitude</th>
-          </tr>
-        </thead>
-        <tbody>
-          {unmatched.map((row, index) => (
-            <tr key={row.accidentId ?? index}>
-              <td className="num">{index + 1}</td>
-              <td>{row.accidentStreet1 ?? ''}</td>
-              <td className="num">{row.accidentStreet1Id ?? ''}</td>
-              <td>{row.accidentStreet2 ?? ''}</td>
-              <td className="num">{row.accidentStreet2Id ?? ''}</td>
-              <td>{row.accidentType}</td>
-              <td className="num">{Number(row.latitude).toFixed(6)}</td>
-              <td className="num">{Number(row.longitude).toFixed(6)}</td>
-            </tr>
-          ))}
-          {isTelAvivSelected && streetSections && unmatched.length === 0 && (
-            <tr>
-              <td colSpan={8}>No unmatched accidents.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      <div className="mt-4 mb-2">
+			{/* <div className="mt-4 mb-2">
         <strong>Street ID coverage (lamas_id: JSON vs accidents)</strong>
       </div>
       <table className="cluster-table">
@@ -190,8 +140,8 @@ function SectionsTable ({ accidents }: Props) {
             </tr>
           )}
         </tbody>
-      </table>
-    </div>
-  );
+      </table> */}
+		</div>
+	);
 }
 export default SectionsTable;
