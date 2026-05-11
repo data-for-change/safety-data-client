@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logging in...</title>
+</head>
+<body>
+    <script>
+        // Send a message to the main application window that login was successful
+        if (window.opener) {
+            window.opener.postMessage('login-success', window.location.origin);
+        }
+        // Close the popup after a tiny delay to ensure message is sent
+        setTimeout(() => {
+            window.close();
+        }, 100);
+    </script>
+</body>
+</html>
