@@ -29,6 +29,7 @@ export const Footer: React.FC<IProps> = () => {
       <a href="https://www.anyway.co.il/" title="anyway.co.il" style={linkStyle}>
         <img src={logoAnyway} alt="Anyway logo" style={imgStyle} />
       </a>
+      <span style={{fontSize:'14px', paddingTop: '5px'}}>פותח בשיתוף המטה לבטיחות בדרכים בעיריית תל אביב-יפו</span>
     </footer>
   );
 };

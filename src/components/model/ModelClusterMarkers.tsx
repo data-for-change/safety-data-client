@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react';
 import { ClusterRow } from '../../types';
-import MarkerSvg from '../map/MarkerSvg';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../stores/types';
 import ModelMarker from './ModelMarker';
@@ -9,18 +8,20 @@ import { buildSeveritySectors, getSeverityColor, getSeverityMinMax } from './mod
 
 type Props = {
   clusters: ClusterRow[];
-  colorBy?: string;  
+  colorBy?: string;
+  isHeat: boolean;  
+  sizeHeat: number;
 };
 
 const ModelClusterMarkers: FC<Props> = observer(
-  ({ clusters, colorBy }) => {
+  ({ clusters, colorBy, isHeat , sizeHeat}) => {
    const { language } = useSelector((state: RootState) => state.appUi);
    const { min, max } = getSeverityMinMax(clusters);
    const sectors = buildSeveritySectors(min, max);
     return (
       <div>
         {clusters.map((cluster, index) => {
-          const color = getSeverityColor(cluster.severityIndex, sectors);
+          const color = getSeverityColor(cluster.severityIndex, sectors, isHeat);
           return (
           <ModelMarker
             key={`${cluster.name}-${index}`}
@@ -28,6 +29,8 @@ const ModelClusterMarkers: FC<Props> = observer(
             data = {cluster}
             language={language}
             color={color}
+            isHeat={isHeat}
+            size= {sizeHeat}
             markerIconsType={'general'}
           />
         );

@@ -1,5 +1,6 @@
 import citiesNamesHeb from '../assets/json/cities_names_heb.json';
-import { CityKeyVal } from '../types';
+import segments from "../assets/json/road_segments.json";
+import { CityKeyVal, RoadSegment, SegmentOption } from '../types';
 
 export const createFilterQureyByGroup =
   (filterMatch: string,
@@ -32,7 +33,10 @@ export const createFilterQureyByCityPop = (popMin: number, popMax: number) => {
   return filter;
 };
 
-
+export const getfilterDatasource = (datasource: number) => {
+  let filter = (datasource !== 1)? "": `&pc=1`;
+  return filter;
+};
 
 export const getfilterBounds = (mapBounds: L.LatLngBounds) => {
   let filter = `&lat=${mapBounds.getSouth()},${mapBounds.getNorth()}`;
@@ -48,6 +52,19 @@ export const getCitiesNames = (values: string[]): string[] => {
       .filter((city: CityKeyVal) => numericValues.includes(city.value)) // Filter by number
       .map((city) => city.label); // Return only labels
 }
+
+export const getRoadSegments = () : RoadSegment[] => {
+   return segments as RoadSegment[];
+}
+
+export const toSegmentOptions = (segments: RoadSegment[]): SegmentOption[] =>
+  segments.map(s => ({
+    id: s.segment_id,
+    road: s.road,
+    label: `${s.from_name} - ${s.to_name}`,
+  }));
+
+
 
 // don't use this - for post filter
 export const getFilterStreets = (streets : string[]) => {

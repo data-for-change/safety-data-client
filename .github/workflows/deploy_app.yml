@@ -3,12 +3,17 @@ on:
     push:
         branches:
             - dev
+            - dev-dfc2
 
+env:
+  DFC2_BRANCH: dev-dfc2
+  
 jobs:
     Build-safety-data-client:
-        if: github.repository == "${{ github.repository_owner }}/safety-data-client"
+        if: ${{ github.repository == 'data-for-change/safety-data-client' }}
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
             - name: Login to GitHub Container Registry
               uses: docker/login-action@v3
               with:
@@ -28,7 +33,7 @@ jobs:
                   build-args: |
                       REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
                       VITE_API_URL=${{ secrets.VITE_API_URL }}
-                      VITE_API_ANYWAY_URL=${{ secrets.VITE_API_ANYWAY_URL }}
+                      VITE_API_ANYWAY_URL=${{ github.ref_name == env.DFC2_BRANCH && secrets.DFC2_API || secrets.VITE_API_ANYWAY_URL }}
     deploy:
         needs: Build-safety-data-client
         runs-on: ubuntu-latest
@@ -46,9 +51,15 @@ jobs:
                   export GIT_SSH_COMMAND="ssh -i `pwd`/dfc_iac_deploy_key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" &&\
                   git clone git@github.com:data-for-change/dfc-iac.git &&\
                   cd dfc-iac &&\
+                  if [ "${GITHUB_REF_NAME}" = "$DFC2_BRANCH" ]; then
+                      DFC_APPS_DIR=apps-dfc2
+                  else
+                      DFC_APPS_DIR=apps
+                  fi &&\
                   SAFETY_DATA_CLIENT_IMAGE="${SAFETY_DATA_CLIENT_IMAGE_NAME}:${SHA_TAG}" &&\
-                  bin/update_anyway_env.py '{"safetyDataClientImage":"'${SAFETY_DATA_CLIENT_IMAGE}'"}' &&\
+                  bin/update_anyway_env.py '{"safetyDataClientImage":"'${SAFETY_DATA_CLIENT_IMAGE}'"}' \
+                  "$DFC_APPS_DIR" &&\
                   git config --global user.name "Anyway CI" &&\
                   git config --global user.email "anyway-ci@localhost" &&\
-                  git add apps/anyway/.env && git commit -m "automatic update of anyway (safety data)" &&\
+                  git add $DFC_APPS_DIR/anyway/.env && git commit -m "automatic update of anyway (safety data) $DFC_APPS_DIR" &&\
                   git push origin main

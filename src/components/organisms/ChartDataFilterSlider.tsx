@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useStore } from '../../stores/storeConfig';
 import { useTranslation } from 'react-i18next';
@@ -7,13 +7,13 @@ import { RootState } from '../../stores/store';
 import { ItemCount } from '../../types';
 
 interface IProps {
-  id: string;
-  data: ItemCount[];
+	id: string;
+	data: ItemCount[];
 }
 
 const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
 	const { filterStore } = useStore();
-	const { chartDataRanges, setChartDataRange } = filterStore;
+	const { chartDataRanges, setChartDataRange, chartHideOutOfRange, setChartHideOutOfRange, chartOutOfRangeCounts } = filterStore;
 	const { t } = useTranslation();
 	const direction = useSelector((state: RootState) => state.appUi.direction);
 	const isRtl = direction === 'rtl';
@@ -48,17 +48,20 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
 
 	const handleStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = Math.min(Number(e.target.value), localRange.end - 1);
-		setLocalRange((prev: { start: number; end: number }) => ({ ...prev, start: val }));
+		setLocalRange((prev: { start: number; end: number; }) => ({ ...prev, start: val }));
 		setChartDataRange(id, val, localRange.end);
 	};
 
 	const handleEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = Math.max(Number(e.target.value), localRange.start + 1);
-		setLocalRange((prev: { start: number; end: number }) => ({ ...prev, end: val }));
+		setLocalRange((prev: { start: number; end: number; }) => ({ ...prev, end: val }));
 		setChartDataRange(id, localRange.start, val);
 	};
 
 	if (!data || data.length <= 1) return null;
+
+	const outOfRangeCount = chartOutOfRangeCounts.get(id) ?? 0;
+	const hideOutOfRange = chartHideOutOfRange.get(id) ?? false;
 
 	const leftPosStart = isRtl ? `${100 - (localRange.start / maxVal) * 100}%` : `${(localRange.start / maxVal) * 100}%`;
 	const leftPosEnd = isRtl ? `${100 - (localRange.end / maxVal) * 100}%` : `${(localRange.end / maxVal) * 100}%`;
@@ -141,6 +144,18 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
 					{maxVal}
 				</div>
 			</div>
+			<div style={styles.checkboxRow}>
+				<input
+					type='checkbox'
+					id={`chart-hide-out-of-range-${id}`}
+					checked={hideOutOfRange}
+					onChange={() => setChartHideOutOfRange(id, !hideOutOfRange)}
+					style={styles.checkbox}
+				/>
+				<label htmlFor={`chart-hide-out-of-range-${id}`} style={styles.checkboxLabel}>
+					{t('hide_out_of_range_column', { count: outOfRangeCount })}
+				</label>
+			</div>
 		</div>
 	);
 });
@@ -194,6 +209,26 @@ const styles: Record<string, React.CSSProperties> = {
 		height: '24px',
 		display: 'flex',
 		alignItems: 'center',
+		marginTop: '8px',
+	},
+	checkboxRow: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		gap: '8px',
+		marginTop: '16px',
+		width: '100%',
+	},
+	checkbox: {
+		cursor: 'pointer',
+		flexShrink: 0,
+	},
+	checkboxLabel: {
+		cursor: 'pointer',
+		fontSize: '10px',
+		color: 'var(--primary-color)',
+		userSelect: 'none',
+		fontWeight: 'bold',
 	},
 	track: {
 		position: 'absolute',
@@ -278,10 +313,10 @@ const css = `
 
 // Inject CSS
 if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement("style");
-  styleSheet.type = "text/css";
-  styleSheet.innerText = css;
-  document.head.appendChild(styleSheet);
+	const styleSheet = document.createElement('style');
+	styleSheet.type = 'text/css';
+	styleSheet.innerText = css;
+	document.head.appendChild(styleSheet);
 }
 
 export default ChartDataFilterSlider;

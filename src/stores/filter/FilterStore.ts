@@ -11,7 +11,8 @@ import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
-import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds, createFilterQureyByCityPop } from '../../utils/FilterUtils';
+import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds,
+    createFilterQureyByCityPop, getRoadSegments, getfilterDatasource } from '../../utils/FilterUtils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
@@ -49,19 +50,22 @@ class FilterStore implements IFilterStore  {
          streets: observable,
          groupByDict: observable,
          dataByYears: observable,
-         chartDataRanges: observable
+         chartDataRanges: observable,
+         chartHideOutOfRange: observable,
+         chartOutOfRangeCounts: observable,
+         dataSource: observable
       });
       this.injurySeverity = FC.initInjurySeverity();
       this.setCasualtiesNames(this.injurySeverity);
       // when
-      this.startYear = initStartYear(2020);
-      this.endYear = initEndYear(2024);
+      this.startYear = initStartYear(2021);
+      this.endYear = initEndYear(2025);
       this.dayNight = FC.initDayNight();
       // where
       this.locationAccuracy = FC.initLocationAccuracy();
       this.roadTypes = FC.initRoadTypes();
       this.roads = new ColumnFilterArray('Road', 'rd', false);
-      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', true);
+      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', false);
       this.cities = new ColumnFilterArray('City', 'city', false);
       this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
@@ -155,6 +159,16 @@ class FilterStore implements IFilterStore  {
       else if (!deadChecker.checked && sevIngChecker.checked) res = 'severely-injured';
       this.casualtiesNames = res;
    }
+
+   //datasource of acciednt - 1 police, 3 common file (tik claly), 4 - Offense repot (shomay haderch)
+   @observable
+   dataSource: number = 1;
+
+   @action
+   updateDataSource = (sourceVal: number) => {
+     this.dataSource = sourceVal;
+   }
+
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // where
@@ -250,8 +264,8 @@ class FilterStore implements IFilterStore  {
    roadSegment: ColumnFilterArray;
 
    @action
-   updateRoadSegment = (names: string) => {
-      this.roadSegment.setFilter(names.split(','));
+   updateRoadSegment = (names: number[]) => {
+      this.roadSegment.setFilter(names.map(String));
    }
 
    @observable
@@ -523,6 +537,7 @@ class FilterStore implements IFilterStore  {
       this.groupByName = name;
    }
 
+   // GroupBySort
    @observable
    GroupBySort: string|null = 'd';
 
@@ -535,10 +550,10 @@ class FilterStore implements IFilterStore  {
    submitOnGroupByAfterSort =() =>{
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
    }
-
+ 
+   // GroupByLimit - the max number of groups in "groupby"
    @observable
-   GroupByLimit: number|null = null;
-
+   GroupByLimit: number|null = 1000;
    @action
    SetGroupByLimit = (value:number|null) =>{
       this.GroupByLimit = value;
@@ -617,8 +632,9 @@ class FilterStore implements IFilterStore  {
    @action
    submitfilterdGroup = (aGroupBy: GroupBy) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+      const limit = this.GroupByLimit as number;
       const filtermatch = this.getFilterQueryString(null);
-      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', aGroupBy.limit, this.GroupBySort);
+      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', limit, this.GroupBySort);
       // logger.log(filter);
       AccidentService.fetchGetGroupBy(filter)
          .then((data: any | undefined) => {
@@ -784,6 +800,7 @@ class FilterStore implements IFilterStore  {
       query += this.startYear.getFilter();
       query += this.endYear.getFilter();
       query += this.injurySeverity.getFilter();
+      query += getfilterDatasource(this.dataSource);
       query += this.cities.getFilter();
       if (useBounds && bounds != null) query += getfilterBounds(bounds);
       query += this.dayNight.getFilter();
@@ -944,9 +961,20 @@ class FilterStore implements IFilterStore  {
    @observable
    chartDataRanges: Map<string, { start: number, end: number }> = new Map();
 
+   @observable
+   chartHideOutOfRange: Map<string, boolean> = new Map();
+
+   @observable
+   chartOutOfRangeCounts: Map<string, number> = new Map();
+
    @action
    setChartDataRange = (id: string, start: number, end: number) => {
       this.chartDataRanges.set(id, { start, end });
+   }
+
+   @action
+   setChartHideOutOfRange = (id: string, value: boolean) => {
+      this.chartHideOutOfRange.set(id, value);
    }
 
    getChartDataRange = (id: string) => {
@@ -956,6 +984,8 @@ class FilterStore implements IFilterStore  {
    @action
    resetChartRanges = () => {
       this.chartDataRanges.clear();
+      this.chartHideOutOfRange.clear();
+      this.chartOutOfRangeCounts.clear();
    }
 
    getChartData = (id: EchartId) => {
@@ -989,7 +1019,19 @@ class FilterStore implements IFilterStore  {
 
       const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
       const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
-      const sliced = sliceDataWithAggregation(data, range, metaData);
+      let sliced = sliceDataWithAggregation(data, range, metaData);
+      const outsideItem = sliced.find((item: any) => item._id === 'outside_range');
+      const outOfRangeCount = outsideItem
+         ? (metaData
+            ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
+            : Number(outsideItem.count) || 0)
+         : 0;
+      runInAction(() => {
+         this.chartOutOfRangeCounts.set(id, outOfRangeCount);
+      });
+      if (this.chartHideOutOfRange.get(id)) {
+         sliced = sliced.filter((item: any) => item._id !== 'outside_range');
+      }
       return usePrecision ? formatDataPrecision(sliced) : sliced;
    }
 }

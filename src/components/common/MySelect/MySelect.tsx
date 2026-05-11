@@ -32,12 +32,12 @@ const MySelect = <T,>({
   return (
     <Form.Group controlId={controlId} style={style} className={`mb-2 ${cssClass}`}>
       {label && (
-        <Form.Label className="mb-1" style={{ whiteSpace: "nowrap" }}>
+        <Form.Label style={{ whiteSpace: "nowrap" }}>
           {t(label)}
         </Form.Label>
       )}
       <Form.Select
-        size="sm"
+        className="my-select"
         value={value}
         onChange={onChange}
       >

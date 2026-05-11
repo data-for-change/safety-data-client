@@ -15,6 +15,8 @@ export interface Accident {
     accident_yishuv_name?:string;
     street1_hebrew?:string;
     street2_hebrew?:string;
+    street1?: number;
+    street2?: number;
     road1?:string;
     road2:string;
     road_segment_name?:string;

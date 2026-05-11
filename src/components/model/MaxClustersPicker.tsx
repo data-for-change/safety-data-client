@@ -6,7 +6,7 @@ interface Props {
   onChange: (value: number) => void;
 }
 
-const OPTIONS = [20, 40, 60, 80, 100];
+const OPTIONS = [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 export const MaxClustersPicker: React.FC<Props> = ({
   value,
@@ -16,6 +16,7 @@ export const MaxClustersPicker: React.FC<Props> = ({
     <Form.Group>
       <Form.Label>Max clusters</Form.Label>
       <Form.Select
+        size="sm"
         value={value}
         onChange={e => onChange(Number(e.target.value))}
       >
