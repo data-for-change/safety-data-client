@@ -239,7 +239,7 @@ export const initVehicleTypesFull = () => {
   const col: IColumnFilter = new ColumnFilter('VehicleType', 'vcl', 0);
   col.arrTypes.push(new FilterChecker('vclType.all', true, []));
   col.arrTypes.push(new FilterChecker('vclType.pedestrian', false, [0]));
-   col.arrTypes.push(new FilterChecker('vclType.scooter', false, [32]));
+  col.arrTypes.push(new FilterChecker('vclType.scooter', false, [32]));
   col.arrTypes.push(new FilterChecker('vclType.bicycle', false, [15]));
   col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [35]));
   col.arrTypes.push(new FilterChecker('vclType.segway', false, [30]));
@@ -271,17 +271,17 @@ export const initVehicleTypesFull = () => {
 export const initInvolvedVehicle = () => {
   const col: IColumnFilter = new ColumnFilter('Vehicles', 'vcli', 0);
   col.arrTypes.push(new FilterChecker('vclType.all', true, []));
-  col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [22]));
+  col.arrTypes.push(new FilterChecker('vclType.mobilityscooter', false, [35]));
   col.arrTypes.push(new FilterChecker('vclType.bicycle', false, [15]));
-  col.arrTypes.push(new FilterChecker('vclType.e-scooter', false, [21]));
-  col.arrTypes.push(new FilterChecker('vclType.e-bike', false, [23]));
-  col.arrTypes.push(new FilterChecker('vclType.motorcycle', false, [8]));
+  col.arrTypes.push(new FilterChecker('vclType.e-scooter', false, [34]));
+  col.arrTypes.push(new FilterChecker('vclType.e-bike', false, [36]));
+  col.arrTypes.push(new FilterChecker('vclType.motorcycle', false, [8]));// should be 8,9,10,19
   col.arrTypes.push(new FilterChecker('vclType.car', false, [1]));
   col.arrTypes.push(new FilterChecker('vclType.taxi', false, [12]));
   col.arrTypes.push(new FilterChecker('vclType.tranzit', false, [2]));
   col.arrTypes.push(new FilterChecker('vclType.tender', false, [3]));
-  col.arrTypes.push(new FilterChecker('vclType.bus', false, [11]));
-  col.arrTypes.push(new FilterChecker('vclType.truck', false, [5]));
+  col.arrTypes.push(new FilterChecker('vclType.bus', false, [11]));//should be 11,18
+  col.arrTypes.push(new FilterChecker('vclType.truck', false, [5]));// should be 4,5,6,7,37
   col.arrTypes.push(new FilterChecker('vclType.tractor', false, [14]));
   col.arrTypes.push(new FilterChecker('vclType.train', false, [16]));
   col.arrTypes.push(new FilterChecker('vclType.other', false, [17]));
