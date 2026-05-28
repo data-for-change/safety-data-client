@@ -1,9 +1,12 @@
 import React, { useMemo } from "react";
 import { observer } from "mobx-react";
+import { Polyline, Marker } from "react-leaflet";
+import L from "leaflet";
+
+import ClusterCenterMarker from "./markers/ClusterCenterMarker";
 import { useAccidentMarkers } from "../../hooks/useAccidentMarkers";
 import { clusterMarkers, generateClusterPositions } from "../../utils";
 import MarkerSvg from "./MarkerSvg";
-import "./map.css";
 
 const ClusteredMarkers: React.FC = observer(() => {
   const markers = useAccidentMarkers();
@@ -11,9 +14,10 @@ const ClusteredMarkers: React.FC = observer(() => {
 
   return (
     <>
-      {clusteredMarkers.map((cluster, index) => {
+      {clusteredMarkers.map((cluster) => {
+        const center = cluster[0].position;
+
         if (cluster.length === 1) {
-          // Single marker or zoomed-out - show as normal marker
           return (
             <MarkerSvg
               key={cluster[0].key}
@@ -24,20 +28,35 @@ const ClusteredMarkers: React.FC = observer(() => {
               markerIconsType={cluster[0].markerIconsType}
             />
           );
-        } else {
-          // Clustered markers - show as spiral arrangement
-          const flowerPositions = generateClusterPositions(cluster[0].position, cluster.length);
-          return flowerPositions.map((position, i) => (
-            <MarkerSvg
-              key={`${cluster[0].key}-${i}`}
-              position={position}
-              data={cluster[i].data}
-              language={cluster[i].language}
-              colorBy={cluster[i].colorBy}
-              markerIconsType={cluster[i].markerIconsType}
-            />
-          ));
         }
+
+        const flowerPositions = generateClusterPositions(center, cluster.length);
+
+        return (
+          <React.Fragment key={cluster[0].key}>
+            {/* center red dot */}
+            <ClusterCenterMarker position={center} />
+            {flowerPositions.map((position, i) => (
+              <React.Fragment key={`${cluster[0].key}-${i}`}>
+                {/* line to center */}
+                <Polyline
+                  positions={[position, center]}
+                  color="gray"
+                  weight={1}
+                  opacity={0.7}
+                />
+                {/* marker */}
+                <MarkerSvg
+                  position={position}
+                  data={cluster[i].data}
+                  language={cluster[i].language}
+                  colorBy={cluster[i].colorBy}
+                  markerIconsType={cluster[i].markerIconsType}
+                />
+              </React.Fragment>
+            ))}
+          </React.Fragment>
+        );
       })}
     </>
   );
