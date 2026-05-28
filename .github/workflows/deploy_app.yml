@@ -6,7 +6,8 @@ on:
             - dev-dfc2
 
 env:
-  DFC2_BRANCH: dev-dfc2
+  #DFC2_BRANCH: dev-dfc2
+  DFC2_BRANCH: dev
   
 jobs:
     Build-safety-data-client:
