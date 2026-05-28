@@ -3,7 +3,7 @@ import { useMap } from 'react-leaflet';
 import i18n from 'i18next';
 // import PropTypes from "prop-types";
 import L from 'leaflet';
-import { createLegendByColorType } from '../../../utils/mapUtils';
+import { createLegendByColorType } from '../../../utils';
 
 const legendHtmlFor = (title) => {
   const header = `<h5>${i18n.t(title)}</h5>`;

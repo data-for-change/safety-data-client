@@ -15,7 +15,7 @@ import {
 import Button from 'react-bootstrap/Button';
 import { Table as TableBootstrap, Card } from "react-bootstrap";
 import { Accident } from '../../types';
-import { exportCSV } from '../../utils/exportCSV';
+import { exportCSV } from '../../utils';
 import DetailsTableFilter from './DetailsTableFilter';
 import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
 import AccidentColumns from './AccidentColumns';

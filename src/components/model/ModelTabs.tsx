@@ -15,14 +15,7 @@ import {
 import Button from 'react-bootstrap/Button';
 import { Table as TableBootstrap, Card, Tabs, Tab } from "react-bootstrap";
 import { Accident, ClusterRow, ModelFilterType, ModelSeverityMode } from '../../types';
-import { exportCSV } from '../../utils/exportCSV';
-import DetailsTableFilter from '../detailsTable/DetailsTableFilter';
 import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
-import AccidentColumns from '../detailsTable/AccidentColumns';
-import PaginationControls from '../detailsTable/PaginationControls';
-
-import TableView from '../detailsTable/TableView';
-import AccidentDetailsCard from '../detailsTable/AccidentDetailsCard';
 import { buildClusterTable, clusterPoints, calculateKernelDensity, buildDensityClustersTable } from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';

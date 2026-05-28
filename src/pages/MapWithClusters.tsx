@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "re
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import L, { LatLngExpression } from "leaflet";
 
+import {createFlowerPositions} from "../utils";
 import orangeMarker from '../assets/marker-icon-2x-orange2.png';
 import shadoMarker from '../assets/marker-shadow.png';
 // import circleMarker from '../assets/circle_orange_20.png'
@@ -22,13 +23,6 @@ const ORANGE_ICON = new L.Icon({
     popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
     shadowSize: L.point(iconSize.shadowSize[0], iconSize.shadowSize[1]),
   });
-
-  // const ORANGE_CIRCLE_ICON = new L.Icon({
-  //   iconUrl: circleMarker,
-  //   iconSize: L.point(iconSize.iconSize[0], iconSize.iconSize[1]),
-  //   // iconAnchor: L.point(iconSize.iconAnchor[0], iconSize.iconAnchor[1]),
-  //   popupAnchor: L.point(iconSize.popupAnchor[0], iconSize.popupAnchor[1]),
-  // });
 
 type MarkerData = {
   id: number;
@@ -50,26 +44,7 @@ export const createClusterCustomIcon = function (cluster:any) {
   });
 };
 
-const markers: MarkerData[] = [
-  { id: 1, position: [51.505, -0.09], title: "Marker 1" },
-  { id: 2, position: [51.505, -0.09], title: "Marker 2" },
-  { id: 3, position: [51.51, -0.1], title: "Marker 3" },
-  { id: 4, position: [51.51, -0.09], title: "Marker 4" },
-];
-
-const createFlower = (center: LatLngExpression, count: number): LatLngExpression[] => {
-  const radius = 0.0005; // Adjust for spacing
-  const angleStep = (2 * Math.PI) / count;
-  return Array.from({ length: count }, (_, i) => {
-    const angle = i * angleStep;
-    const latOffset = radius * Math.sin(angle);
-    const lngOffset = radius * Math.cos(angle);
-    return [
-      (center as [number, number])[0] + latOffset,
-      (center as [number, number])[1] + lngOffset,
-    ];
-  });
-};
+const markers: MarkerData[] = [];
 
 const ClusteredMarkers: React.FC = () => {
   const map = useMap();
@@ -108,7 +83,7 @@ const ClusteredMarkers: React.FC = () => {
           );
         } else {
           // Flower arrangement for clustered markers
-          const flowerPositions = createFlower(cluster[0].position, cluster.length);
+          const flowerPositions = createFlowerPositions(cluster[0].position, cluster.length);
           return flowerPositions.map((position, i) => (
             <Marker key={`${cluster[0].id}-${i}`} position={position} icon={icon}>
               <Popup>
@@ -126,8 +101,6 @@ const ClusteredMarkers: React.FC = () => {
   );
 };
   
-  
-
 const MapWithClusters: React.FC = () => {
   return (
     <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: "80vh", width: "100%" }}>

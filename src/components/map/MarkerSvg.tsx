@@ -2,9 +2,8 @@ import React from 'react';
 import { divIcon, LatLngExpression } from 'leaflet';
 import { Marker } from 'react-leaflet';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { getColors, getNumSeverity } from '../../utils/mapUtils';
+import { getColors, getNumSeverity } from '../../utils';
 import { Accident } from '../../types';
-// import { getColorByVehicle } from '../../../services/mapUtils';
 import {IconBike, IconBus, IconCar, IconEmpty, IconMotorcycle, IconQuestion, IconScooter, IconTruck, IconWalk } from './markers/';
 import AccidentPopUp from './AccidentPopUp';
 

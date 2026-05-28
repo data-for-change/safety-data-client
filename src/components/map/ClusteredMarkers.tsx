@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { observer } from "mobx-react";
 import { useAccidentMarkers } from "../../hooks/useAccidentMarkers";
-import { clusterMarkers, generateClusterPositions } from "../../utils/mapUtils";
+import { clusterMarkers, generateClusterPositions } from "../../utils";
 import MarkerSvg from "./MarkerSvg";
 import "./map.css";
 
