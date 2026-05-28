@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { useStore } from '../../stores/storeConfig';
-import { getRoadSegments, toSegmentOptions } from '../../utils/FilterUtils';
+import { getRoadSegments, toSegmentOptions } from '../../utils';
 
 
 interface IProps {

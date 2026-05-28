@@ -12,7 +12,7 @@ import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
 import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds,
-    createFilterQureyByCityPop, getRoadSegments, getfilterDatasource } from '../../utils/FilterUtils';
+    createFilterQureyByCityPop, getfilterDatasource } from '../../utils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';

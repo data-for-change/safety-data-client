@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { reGroupResultIsSelfAcc, changeInjuredTypeValues } from '../../utils/groupByUtils';
+import { reGroupResultIsSelfAcc, changeInjuredTypeValues } from '../../utils';
 import { ItemCount, ItemCount2 } from '../../types';
 
 export interface IGroupBy {
