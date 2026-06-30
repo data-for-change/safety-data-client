@@ -15,7 +15,14 @@ import {
 import Button from 'react-bootstrap/Button';
 import { Table as TableBootstrap, Card, Tabs, Tab } from "react-bootstrap";
 import { Accident, ClusterRow, ModelFilterType, ModelSeverityMode } from '../../types';
+import { exportCSV } from '../../utils/exportCSV';
+import DetailsTableFilter from '../detailsTable/DetailsTableFilter';
 import { selectDataAllInjuries } from "../../stores/casualty/casualtySlice";
+import AccidentColumns from '../detailsTable/AccidentColumns';
+import PaginationControls from '../detailsTable/PaginationControls';
+
+import TableView from '../detailsTable/TableView';
+import AccidentDetailsCard from '../detailsTable/AccidentDetailsCard';
 import { buildClusterTable, clusterPoints, calculateKernelDensity, buildDensityClustersTable } from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';
@@ -29,7 +36,7 @@ import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react-lite';
 import { useStreetSections } from './useStreetSections';
 
-const SECTIONS_ALLOWED_EMAIL = ['galraij@gmail.com', 'sejo1981@gmail.com'];
+const SECTIONS_ALLOWED_EMAIL = ['galraij@gmail.com', 'sejo1981@gmail.com', 'eyalher@gmail.com'];
 const isDev = import.meta.env.DEV;
 
 interface IProps { }
@@ -42,14 +49,6 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const { filterStore, userStore } = useStore();
 
 	const showSections = isDev || SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? '');
-	console.log(
-		'🚀 ~ SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase():',
-		SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? ''),
-	);
-	console.log('🚀 ~ SECTIONS_ALLOWED_EMAIL:', SECTIONS_ALLOWED_EMAIL);
-	console.log('🚀 ~ userStore.user?.email.toLowerCase():', userStore.user?.email.toLowerCase());
-	console.log('🚀 ~ userStore.user:', userStore.user);
-	console.log('🚀 ~ showSections:', showSections);
 
 	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
 	const [junctionRadius, setJunctionRadius] = React.useState(50);
