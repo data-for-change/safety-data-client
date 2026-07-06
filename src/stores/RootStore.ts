@@ -5,6 +5,7 @@ import ImageStore from './image/ImageStore';
 import IRecommendationStore from './recommendation/RecommendationStore';
 import RecommendationStore from './recommendation/RecommendationStore';
 import UserStore from './user/UserStore';
+import GrantStore from './admin/GrantStore';
 import LocalDBFilterStore from './filter/LocalDBFilterStore';
 
 export default class RootStore {
@@ -17,6 +18,7 @@ export default class RootStore {
       this.imageStore = new ImageStore(this);
       this.recommendationStore = new RecommendationStore(this);
       this.userStore = new UserStore(this);
+      this.grantStore = new GrantStore(this);
       this.localDbFilterStroe = new LocalDBFilterStore(this);
     }
 
@@ -27,4 +29,5 @@ export default class RootStore {
     imageStore: ImageStore;
     recommendationStore :IRecommendationStore;
     userStore: UserStore;
+    grantStore: GrantStore;
 }
