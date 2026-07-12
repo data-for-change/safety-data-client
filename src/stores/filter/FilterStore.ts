@@ -5,19 +5,20 @@ import {
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import { ColumnFilterArray } from './ColumnFilterArray';
-import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './ColumnFilterCombo';
+import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './columnFilterCombo';
 import * as FC from './ColumnFilterCheckBoxList';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
 import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds,
-    createFilterQureyByCityPop, getfilterDatasource } from '../../utils';
+    createFilterQureyByCityPop, getfilterDatasource, 
+    loadAreaPolygon} from '../../utils';
 import { getQueryParamValues } from '../../utils/queryStringUtils';
 import AccidentService from '../../services/AccidentService';
 import CityService from '../../services/CityService';
 import logger from '../../services/logger';
-import { BBoxType, Street, Casualty, ItemCount, ItemCount2 } from '../../types';
+import { BBoxType, Street, Casualty, ItemCount, ItemCount2, GeoFilter } from '../../types';
 import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText } from './filterSlice';
@@ -67,6 +68,7 @@ class FilterStore implements IFilterStore  {
       this.roads = new ColumnFilterArray('Road', 'rd', false);
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', false);
       this.cities = new ColumnFilterArray('City', 'city', false);
+      this.zonesNames = new ColumnFilterArray('PoliceStation', 'pStatios', true);
       this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
       // who
@@ -181,7 +183,6 @@ class FilterStore implements IFilterStore  {
       this.isMultipleCities = isMulti;
    }
 
-
    @observable
    cities: ColumnFilterArray;
 
@@ -201,6 +202,12 @@ class FilterStore implements IFilterStore  {
             //[this.cityResult] = this.cities.arrValues;
          }
       }
+   }
+
+   @observable
+   zonesNames: ColumnFilterArray;
+   setZonesNames =  (values: string[]) => {
+      this.zonesNames.setFilter(values);
    }
 
    @action
@@ -752,7 +759,7 @@ class FilterStore implements IFilterStore  {
       this.setBrowserQueryString();
       // logger.log(filter);
       this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-      AccidentService.fetchGetList(filter, 'main')
+      AccidentService.fetchInvolvedList(filter)
          .then((res: any | undefined) => {
             if (res && res.data !== null && res.data !== undefined) {
                // this.updateAllInjuries(res.data);
@@ -825,6 +832,11 @@ class FilterStore implements IFilterStore  {
       return query;
    }
 
+   getGeoFilter = async () => {
+       let geoPolygon = await loadAreaPolygon("תחנת תל אביב צפון");    
+       let geoFilter: GeoFilter = {geo: geoPolygon };
+       return geoFilter;
+   }
 
    /**
     * set filters text - used in info-panel to show current filter

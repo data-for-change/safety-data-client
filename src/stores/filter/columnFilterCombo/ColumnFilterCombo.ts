@@ -1,24 +1,7 @@
 import { observable, action , makeObservable} from 'mobx';
-import i18n from '../../i18n';
-
-export interface IColumnFilterCombo {
-  name: string;
-  queryColName: string;
-  //data for combo
-  arrTypes: any[];
-  //value to be sent as query to server
-  queryValue: string | number;
-  // spaciel value, if selected no filter is needed 
-  allTypesOption: number;
-  isEmpty: () => boolean;
-  setBrowserQueryString: (param: URLSearchParams, delIfEmpthy?: boolean) => void;
-  setValuesByQuery: (param: URLSearchParams) => void;
-  setFilter: (value: string | number) => void;
-  getFilter: () => string;
-  //text is updated ofter filter submit
-  text: string;  
-  setText: () => void;
-}
+import i18n from '../../../i18n';
+import { CITY_POP_SIZE_ALL, CITY_POP_SIZE_OPTIONS, POLICE_STATIONS, YEARS } from './data';
+import { IColumnFilterCombo } from './types';
 /**  filter group of boolaen filters
 *  each group represnt one column in the database that can get
 * several fixd values
@@ -126,17 +109,9 @@ export class ColumnFilterComboValText extends ColumnFilterCombo {
   }
 }
 
-const years: string[] = ['2015', '2016', '2017', '2018','2019','2020','2021','2022','2023','2024', '2025', '2026'];
-const CITY_POP_SIZE_ALL = '{"min":-1,"max":-1}';
-const cityPopSizeArr = [
-  { val: '{"min":-1,"max":-1}', text: 'all' },
-  { val: '{"min":200000,"max":5000000}', text: '200K+' },
-  { val: '{"min":100000,"max":200000}', text: '100K-200K' },
-  { val: '{"min":50000,"max":100000}', text: '50K-100K' },
-  { val: '{"min":20000,"max":50000}', text: '20K-50K' },
-  { val: '{"min":10000,"max":20000}', text: '10K-20K' },
-  { val: '{"min":0,"max":10000}', text: '0-10K' },
-];
+const years: string[] = YEARS;
+const cityPopSizeArr = CITY_POP_SIZE_OPTIONS;
+const policeStations: string[] = POLICE_STATIONS;
 
 export const initStartYear = (year :number) => {
   const col: ColumnFilterCombo = new ColumnFilterCombo('FromYear', 'sy', -1, years, year);
@@ -152,3 +127,9 @@ export const initCityPopSize = () => {
   const col: ColumnFilterComboValText = new ColumnFilterComboValText('city_size', 'p1', 0, cityPopSizeArr, CITY_POP_SIZE_ALL);
   return col;
 };
+
+export const initPoilceStations = () => {
+  const col: ColumnFilterCombo = new ColumnFilterCombo('PoliceStation', 'ey', -1, policeStations, "");
+  return col;
+}
+
