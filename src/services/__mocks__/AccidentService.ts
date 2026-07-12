@@ -60,9 +60,9 @@ class AccidentService {
         }
       ]
       
-    public fetchGetList = async (filter: string, type: string): Promise<Array<any> | undefined> => {
+    public fetchInvolvedList = async (filter: string, type: string): Promise<Array<any> | undefined> => {
         return new Promise((resolve) => {
-            console.log("Called mocked fetchGetList");
+            console.log("Called mocked fetchInvolvedList");
             process.nextTick(() => resolve(this.accidents)); //Resolving the promise with the mocked list
           });
       };

@@ -20,3 +20,4 @@ export type { ModelPointWithDensity }  from './ModelPointWithDensity';
 export * from './ModelFilterType';
 export type { RoadSegment } from './RoadSegment';
 export type { SegmentOption } from './SegmentOption';
+export type { PolygonShape, PolygonsList, GeoFilter } from "./PolygonShape";

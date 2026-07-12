@@ -1,24 +1,28 @@
 
 import { API_URL, API_ANYWAY_URL } from '../utils/globalEnvs';
+import { GeoFilter } from "../types";
 import axios from 'axios';
 
 class AccidentService {
 	apiUrl = API_URL || '';
 
-	public fetchGetList = async (filter: string, type: string): Promise<any | undefined> => {
+	public fetchInvolvedList = async (
+		filter: string, 
+		geo?: GeoFilter
+	): Promise<any | undefined> => {
 		// Default options are marked with *
 		let url = `${API_ANYWAY_URL}/involved`;
-		//let url = `${this.apiUrl}/api/v1/accident/`;
 		url += filter;
 		// console.log(url);
 		const response = await fetch(url, {
-			method: 'GET',
+			method: 'post',
 			mode: 'cors', // no-cors, *cors, same-origin
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 			credentials: 'same-origin', // include, *same-origin, omit
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			body: geo ? JSON.stringify(geo) : null,
 			redirect: 'follow', // manual, *follow, error
 			referrerPolicy: 'no-referrer', // no-referrer, *client
 		});
