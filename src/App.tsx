@@ -9,7 +9,6 @@ import HomePage from './pages/HomePage';
 import CityPage from './pages/CityPage';
 import ModelPage from './pages/ModelPage';
 import Header from './components/templates/Header/Header';
-import MapWithClusters from './pages/MapWithClusters';
 import Footer from './components/templates/footer/Footer';
 
 import './i18n';
@@ -90,7 +89,7 @@ function App() {
 							<Route path='/city' element={<CityPage />} />
 							<Route path='/model' element={<ModelPage />} />
 							<Route path='/recommend' element={<RecommendationsPage />} />
-							<Route path='/map' element={<MapWithClusters />} />
+                            {/* Map view removed: MapWithClusters component deleted */}
 							<Route path='/about' element={<AboutPage />} />
 							<Route path='/login' element={<Login />} />
 							<Route path='/register' element={<Register />} />
