@@ -17,22 +17,21 @@ interface IProps {
 }
 
 const FilterForm: React.FC<IProps> = observer(() => {
-   const { filterStore } = useStore();
-   const { injurySeverity, updateInjurySeverity, formCardKey } = filterStore;
+   const { filterStore: { formCardKey } } = useStore();
    // console.log(injurySeverity)
    return (
       <React.Fragment>
-        
-            <Accordion defaultActiveKey={formCardKey.toString()}>
-               <CardFilterWhen />
-               <CardFilterWhatVehicle />
-               <CardFilterWhere />
-               <CardFilterWho />
-               <CardFilterWhat />
-               <CardFilterWhatRoad />
-               <CardFilterSeverty />
-            </Accordion>
-       
+
+         <Accordion defaultActiveKey={formCardKey.toString()}>
+            <CardFilterWhen />
+            <CardFilterWhatVehicle />
+            <CardFilterWhere />
+            <CardFilterWho />
+            <CardFilterWhat />
+            <CardFilterWhatRoad />
+            <CardFilterSeverty />
+         </Accordion>
+
       </React.Fragment>
    );
 });

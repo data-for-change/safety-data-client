@@ -10,8 +10,8 @@ import UseTd3Checkbox from './UseTd3Checkbox';
 
 const CardFilterSeverty = observer(() => {
     const { t } = useTranslation();
-    const { filterStore } = useStore();
-    const { isValidSeverity, injurySeverity, updateInjurySeverity, setFormCardKey } = filterStore;
+    const { filterStore: { severityStore }, filterStore: {setFormCardKey} } = useStore();
+    const { isValidSeverity, injurySeverity, updateInjurySeverity } = severityStore;
     return (
        <Card>
           <Card.Header>

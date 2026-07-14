@@ -109,20 +109,8 @@ class FilterStore implements IFilterStore  {
    severityStore: SeverityFilterStore;
    locationStore: LocationFilterStore;
 
-   get injurySeverity() {
-      return this.severityStore.injurySeverity;
-   }
-
-   get isValidSeverity() {
-      return this.severityStore.isValidSeverity;
-   }
-
    get casualtiesNames() {
       return this.severityStore.casualtiesNames;
-   }
-
-   updateInjurySeverity = (aType: number, val: boolean) => {
-      this.severityStore.updateInjurySeverity(aType, val);
    }
 
    setCasualtiesNames = (injurySeverity: IColumnFilter) => {
@@ -449,7 +437,7 @@ class FilterStore implements IFilterStore  {
    }
 
    @computed get isValidAllFilters() {
-      const res = this.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
+      const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
          && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
       return res;
    }
@@ -661,7 +649,7 @@ class FilterStore implements IFilterStore  {
       this.submitfilterdGroupByYears();
       this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
       this.submitfilterdGroup2(this.groupByDict.groupBy as GroupBy, (this.group2Dict.groupBy as GroupBy2).name);
-      this.setCasualtiesNames(this.injurySeverity);
+      this.setCasualtiesNames(this.severityStore.injurySeverity);
       this.resetChartRanges();
       const {currentPage, language}  = reduxStore.getState().appUi;
       if (currentPage === 'city') this.rootStore.imageStore.getImagesByPlace(this.cityResult, language);
@@ -733,7 +721,7 @@ class FilterStore implements IFilterStore  {
       let query = '?';
       query += this.timeStore.startYear.getFilter();
       query += this.timeStore.endYear.getFilter();
-      query += this.injurySeverity.getFilter();
+      query += this.severityStore.injurySeverity.getFilter();
       query += getfilterDatasource(this.dataSource);
       query += this.cities.getFilter();
       if (useBounds && bounds != null) query += getfilterBounds(bounds);
@@ -793,7 +781,7 @@ class FilterStore implements IFilterStore  {
       params.set('tab', currentTab);
       this.timeStore.startYear.setBrowserQueryString(params, false);
       this.timeStore.endYear.setBrowserQueryString(params, false);
-      this.injurySeverity.setBrowserQueryString(params, false);
+      this.severityStore.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
       this.genderTypes.setBrowserQueryString(params);
@@ -824,7 +812,7 @@ class FilterStore implements IFilterStore  {
    setStoreByQuery = (params: URLSearchParams, defCity?: string) => {
       this.timeStore.startYear.setValuesByQuery(params);
       this.timeStore.endYear.setValuesByQuery(params);
-      this.injurySeverity.setValuesByQuery(params);
+      this.severityStore.injurySeverity.setValuesByQuery(params);
       this.timeStore.dayNight.setValuesByQuery(params);
       //const citis = this.getCityIdFromQuery(params, defCity);
       const cities = getQueryParamValues(params, 'city', defCity, this.isMultipleCities);
@@ -875,7 +863,7 @@ class FilterStore implements IFilterStore  {
       let filter = '?';
       filter += this.timeStore.startYear.getFilter();
       filter += this.timeStore.endYear.getFilter();
-      filter += this.injurySeverity.getFilter();
+      filter += this.severityStore.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
