@@ -1,4 +1,4 @@
-Token Minimization Guidelines — Practical tips for humans and AI
+Token Minimization Guidelines — Practical tips for AI helpers
 
 When to include file contents
 
@@ -24,7 +24,3 @@ Repository-specific notes
 
 - Large files to avoid sending: `build/asset-manifest.json`, `telAvivDataStreets/*` geojson files, and `build/static/*` assets.
 - Prioritize `src/services`, `src/stores`, `src/components`, and `src/pages` for code edits.
-
-Want an automatic file index?
-
-I can generate a compact index mapping each top-level folder to the most important files (one-line each). Say "generate index" and I will scan the repo and produce it as a single concise file.

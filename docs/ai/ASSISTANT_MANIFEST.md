@@ -8,7 +8,7 @@ High-value files & entry points
 
 - `src/main.tsx` — app bootstrap and providers
 - `src/App.tsx` — routes and top-level layout
-- `src/pages/MapPage.tsx`, `src/MapWithClusters.tsx` — map UI, clustering behavior
+- `src/pages/MapPage.tsx` — map UI and clustering behavior
 - `src/components/filter/CardFilterWhere.tsx` — filter UI (current focus)
 - `src/services/AccidentService.ts` — core data access & transformation
 - `src/stores/RootStore.ts` and `src/stores/*` — global app state and derived selectors
@@ -17,7 +17,7 @@ High-value files & entry points
 
 Large-data locations (avoid fetching whole files)
 
-- `telAvivDataStreets/` — large geojson files (do not paste full contents)
+- `telAvivDataStreets/` — large geojson files
 - `data/` and `build/static/` — prebuilt assets and large JSON/geojson
 
 Recommended small-reads (ask for these ranges)
@@ -46,12 +46,12 @@ Assistant rules / redaction
 - Prefer aggregated outputs (counts, rates) for summaries.
 - When producing examples, synthesize anonymized sample rows.
 
-Files and folders to ignore in prompts (do not paste)
+Files and folders to ignore in prompts
 
 - `node_modules/`
 - `build/` and `build/static/`
 - `telAvivDataStreets/*.geojson` and other large geojson files
-- `public/static/` (images/assets)
+- `public/static/`
 - Any local IndexedDB or binary blobs
 
 Quick local commands
@@ -61,10 +61,3 @@ npm install
 npm run dev
 npm run build
 ```
-
-Schema hint (ask before requesting samples)
-
-- Typical accident record fields: `id, date, lat, lng, severity, vehicle_type, age, gender, street_name, city, description`
-- Ask the human to confirm which fields are present before requesting sample rows.
-
-If you want, I can now generate the compact file index (one line per top-level folder) to further speed navigation.

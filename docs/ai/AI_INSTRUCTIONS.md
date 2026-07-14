@@ -13,7 +13,7 @@ Primary entry points and important files
 
 - `src/main.tsx` — app bootstrap and provider setup.
 - `src/App.tsx` — top-level routes and layout.
-- `src/pages/MapPage.tsx` and `src/MapWithClusters.tsx` — map rendering and clustering.
+- `src/pages/MapPage.tsx` — map rendering and clustering.
 - `src/components/filter/CardFilterWhere.tsx` — current file under development (filters UI).
 - `src/services/AccidentService.ts` — core data access and processing logic.
 - `src/stores/RootStore.ts` and `src/stores/*` — global app state.
@@ -22,7 +22,7 @@ Primary entry points and important files
 Application domains and main views
 
 - The app supports exploration of accident data across several main tabs: `All country`, `City`, `Recommendations`, and `About`.
-- Primary user types: `experts` (planners, researchers) and `general public`. Tailor responses and suggested changes depending on the intended audience.
+- Primary user types: `experts` (planners, researchers) and `general public`.
 
 Data sensitivity
 
@@ -61,6 +61,3 @@ Example prompt templates
 - "Please open `src/components/filter/CardFilterWhere.tsx` and show lines 1–200." 
 - "Summarize how `AccidentService.getAll()` transforms raw geojson into markers." 
 - "Change the filter component to debounce user input by 300ms; show only the modified function and import lines."
-
-
-If you'd like, I can produce a compact file index mapping every top-level folder to a 1-line description.
