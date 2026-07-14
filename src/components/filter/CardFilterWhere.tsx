@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import { Accordion, Card } from 'react-bootstrap';
 import GroupCheckbox from './GroupCheckBox';
 import { useStore } from '../../stores/storeConfig';
+import { environment } from '../../utils/env.utils';
 import { MySelect } from '../common';
 import CustomToggle from './CustomToggle';
 import CitySelector from './CitySelector';
@@ -14,15 +15,20 @@ import '../../styles/accordion.css'
 
 const CardFilterWhere = observer(() => {
     const { t } = useTranslation();
-    const { filterStore } = useStore();
+    const { filterStore , userStore} = useStore();
+    const hasZonePermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isHotSpotGrants);
     const {
-       isValidWhere, roadTypes, updateRoadType,
+       isValidWhere, 
+       cities,
+       roadTypes, updateRoadType, 
+       zoneName, setZonesName,
        locationAccuracy, updateLocationAccuracy,
        isMultipleCities,
        cityPopSizeRange, setCityPopSizeRange,
        setFormCardKey,
     } = filterStore;
-   
+    const cityName = cities.arrValues[0];
+    const showPoliceStation = hasZonePermission && cities.arrValues.length === 1 && (cityName ==='5000');
     return (
        <Card>
           <Card.Header>
@@ -39,6 +45,12 @@ const CardFilterWhere = observer(() => {
              <div>
                 <CitySelector isMultiple={isMultipleCities} /> 
                 <StreetSelector />
+                {showPoliceStation&& <MySelect
+                     label={'PoliceStation'}
+                     value={String(zoneName.queryValue)}
+                     data={zoneName.arrTypes}
+                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}                   
+                />}
                 <RoadNameSelector />
                 <RoadSegmentSelector />
                 <GroupCheckbox

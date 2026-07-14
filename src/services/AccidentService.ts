@@ -8,14 +8,14 @@ class AccidentService {
 
 	public fetchInvolvedList = async (
 		filter: string, 
-		geo?: GeoFilter
+		geo: GeoFilter|null
 	): Promise<any | undefined> => {
 		// Default options are marked with *
 		let url = `${API_ANYWAY_URL}/involved`;
 		url += filter;
-		// console.log(url);
+		const method = (geo == null)? 'GET' : 'POST';
 		const response = await fetch(url, {
-			method: 'post',
+			method: method,
 			mode: 'cors', // no-cors, *cors, same-origin
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 			credentials: 'same-origin', // include, *same-origin, omit
@@ -32,20 +32,22 @@ class AccidentService {
 		return await response.json(); // parses JSON response into native JavaScript objects
 	};
 
-	public fetchGetGroupBy = async (filter: string): Promise<Array<any> | undefined> => {
+	public fetchGroupBy = async (filter: string, geo: GeoFilter|null): Promise<Array<any> | undefined> => {
 		// Default options are marked with *
 		let url = `${API_ANYWAY_URL}/involved/groupby`;
 		//let url = `${this.apiUrl}/api/v1/accident/groupby/`;
 		url += filter;
+		const method = (geo == null)? 'GET' : 'POST';
 		// console.log(url);
 		const response = await fetch(url, {
-			method: 'GET',
+			method: method,
 			mode: 'cors', // no-cors, *cors, same-origin
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 			credentials: 'same-origin', // include, *same-origin, omit
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			body: geo ? JSON.stringify(geo) : null,
 			redirect: 'follow', // manual, *follow, error
 			referrerPolicy: 'no-referrer', // no-referrer, *client
 		});

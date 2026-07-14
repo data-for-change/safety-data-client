@@ -5,7 +5,7 @@ import {
 } from 'mobx';
 import { IColumnFilter } from './ColumnFilterCheckBoxList';
 import { ColumnFilterArray } from './ColumnFilterArray';
-import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize } from './columnFilterCombo';
+import { ColumnFilterCombo, initStartYear, initEndYear, initCityPopSize, initPoilceStations } from './columnFilterCombo';
 import * as FC from './ColumnFilterCheckBoxList';
 import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
@@ -68,9 +68,9 @@ class FilterStore implements IFilterStore  {
       this.roads = new ColumnFilterArray('Road', 'rd', false);
       this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', false);
       this.cities = new ColumnFilterArray('City', 'city', false);
-      this.zonesNames = new ColumnFilterArray('PoliceStation', 'pStatios', true);
       this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
+      this.zoneName = initPoilceStations();
       // who
       this.genderTypes = FC.initGenderTypes();
       this.ageTypes = FC.initAgeTypes();
@@ -205,10 +205,12 @@ class FilterStore implements IFilterStore  {
    }
 
    @observable
-   zonesNames: ColumnFilterArray;
-   setZonesNames =  (values: string[]) => {
-      this.zonesNames.setFilter(values);
+   zoneName: ColumnFilterCombo;
+   setZonesName = async (value: string) => {
+      this.zoneName.setFilter(value);
+      this.geoFilter = await this.getGeoFilter();
    }
+  
 
    @action
    updateModerateDisabledState = () => {
@@ -601,7 +603,7 @@ class FilterStore implements IFilterStore  {
    submitGroupByYears = () => {
       const filtermatch = this.getfilterBySeverityAndCity();
       const filter = createFilterQureyByGroup(filtermatch, 'year');
-      AccidentService.fetchGetGroupBy(filter)
+      AccidentService.fetchGroupBy(filter, this.geoFilter)
          .then((data: ItemCount[] | undefined) => {
             if (data !== undefined) {
                const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
@@ -623,7 +625,7 @@ class FilterStore implements IFilterStore  {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
-      AccidentService.fetchGetGroupBy(filter)
+      AccidentService.fetchGroupBy(filter, this.geoFilter)
          .then((data: ItemCount2[] | undefined) => {
             if (data !== undefined) {
                const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
@@ -643,7 +645,7 @@ class FilterStore implements IFilterStore  {
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', limit, this.GroupBySort);
       // logger.log(filter);
-      AccidentService.fetchGetGroupBy(filter)
+      AccidentService.fetchGroupBy(filter, this.geoFilter)
          .then((data: any | undefined) => {
             if(aGroupBy.transformFetchResult) {
                data = aGroupBy.transformFetchResult(data);
@@ -668,7 +670,7 @@ class FilterStore implements IFilterStore  {
          const filtermatch = this.getFilterQueryString(null);
          const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
-         AccidentService.fetchGetGroupBy(filter)
+         AccidentService.fetchGroupBy(filter, this.geoFilter)
             .then((data: ItemCount2[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
@@ -759,7 +761,7 @@ class FilterStore implements IFilterStore  {
       this.setBrowserQueryString();
       // logger.log(filter);
       this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
-      AccidentService.fetchInvolvedList(filter)
+      AccidentService.fetchInvolvedList(filter, null)
          .then((res: any | undefined) => {
             if (res && res.data !== null && res.data !== undefined) {
                // this.updateAllInjuries(res.data);
@@ -831,9 +833,16 @@ class FilterStore implements IFilterStore  {
       query += createFilterQureyByCityPop(range.min, range.max)
       return query;
    }
+   
+   @observable
+   geoFilter: GeoFilter | null = null;
 
    getGeoFilter = async () => {
-       let geoPolygon = await loadAreaPolygon("תחנת תל אביב צפון");    
+       const policeStationName = this.zoneName.queryValue as string;
+       if (!policeStationName || policeStationName.trim() === '') {
+           return null;
+       }
+       let geoPolygon = await loadAreaPolygon(policeStationName);    
        let geoFilter: GeoFilter = {geo: geoPolygon };
        return geoFilter;
    }
