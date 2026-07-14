@@ -154,4 +154,8 @@ export default class UserStore {
 	get isHotSpotGrants() {
 		return this.user?.grants?.includes(EUserGrants.hot_spots_tab_grant);
 	}
+	get isPolygonFiltreingGrants() {
+		return this.user?.grants?.includes(EUserGrants.polygon_filtering);
+	}
+	
 }

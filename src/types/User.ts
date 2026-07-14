@@ -27,4 +27,5 @@ export interface IUser {
 
 export enum EUserGrants {
 	hot_spots_tab_grant = 'hot_spots_tab_grant',
+	polygon_filtering = 'polygon_filtering',
 }
