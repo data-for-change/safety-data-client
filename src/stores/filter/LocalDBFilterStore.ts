@@ -45,14 +45,14 @@ class LocalDBFilterStore {
     const arrFilters: any[] = [];
     const years = { 
       filterName: "accident_year", 
-      startYear: this.rootStore.filterStore.startYear.queryValue.toString(), 
-      endYear: this.rootStore.filterStore.endYear.queryValue.toString() 
+      startYear: this.rootStore.filterStore.timeStore.startYear.queryValue.toString(), 
+      endYear: this.rootStore.filterStore.timeStore.endYear.queryValue.toString() 
     };
     
     arrFilters.push(years);
     this.getfilterCityIDB(arrFilters);
     this.getFilterStreetsIDB(arrFilters);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.dayNight);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.timeStore.dayNight);
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.rootStore.filterStore.roadSegment.arrValues);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.roadTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.injTypes);
@@ -76,14 +76,14 @@ class LocalDBFilterStore {
     
     const years = { 
       filterName: "accident_year", 
-      startYear: this.rootStore.filterStore.startYear.queryValue.toString(), 
-      endYear: this.rootStore.filterStore.endYear.queryValue.toString() 
+      startYear: this.rootStore.filterStore.timeStore.startYear.queryValue.toString(), 
+      endYear: this.rootStore.filterStore.timeStore.endYear.queryValue.toString() 
     };
     arrFilters.push(years);
     
     this.getfilterCityIDB(arrFilters);
     this.getFilterStreetsIDB(arrFilters);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.dayNight);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.timeStore.dayNight);
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.rootStore.filterStore.roadSegment.arrValues);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.roadTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.injTypes);

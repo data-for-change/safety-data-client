@@ -11,11 +11,11 @@ import '../../styles/accordion.css'
 const CardFilterWhen: React.FC<any> = observer(() => {
     const { t } = useTranslation();
     const { filterStore } = useStore();
+    const { timeStore, setFormCardKey } = filterStore;
     const {
        isValidWhen, startYear, setStartYear, endYear, setEndYear,
        dayNight, updateDayNight,
-       setFormCardKey,
-    } = filterStore;
+    } = timeStore;
    
     return (
        <Card>

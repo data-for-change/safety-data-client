@@ -8,8 +8,7 @@ interface IProps {
 }
 
 const WhenTitle: React.FC<{}> = observer(() => {
-  const { filterStore } = useStore();
-  const { dayNight } = filterStore;
+  const { filterStore: { timeStore: { dayNight } } } = useStore();
   let res = (dayNight.text !== '') ? `, ${dayNight.text}` : '';
   return (
     <span>{res}</span>
@@ -79,8 +78,7 @@ const WhatVehicleTitle: React.FC<{}> = observer(() => {
 });
 const YearsTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
-  const { filterStore } = useStore();
-  const { startYear, endYear } = filterStore;
+  const { filterStore: { timeStore: { startYear, endYear } } } = useStore();
   let res = (startYear.text !== endYear.text) ? `, ${startYear.text} - ${endYear.text}` :  `, ${startYear.text}`;
   return (
     <span>{res}</span>

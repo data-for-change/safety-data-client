@@ -11,6 +11,13 @@ import { IFilterChecker } from './FilterChecker';
 import GroupBy, { initGroupMap } from './GroupBy';
 import GroupBy2 from './GroupBy2';
 import GroupMap, { initGroup2Map } from './GroupMap';
+import SeverityFilterStore from './SeverityFilterStore';
+import LocationFilterStore from './LocationFilterStore';
+import TimeFilterStore from './TimeFilterStore';
+import WhoFilterStore from './WhoFilterStore';
+import WhatFilterStore from './WhatFilterStore';
+import VehicleFilterStore from './VehicleFilterStore';
+import RoadFilterStore from './RoadFilterStore';
 import { getCitiesNames, padDataYearsWith0, createFilterQureyByGroup, getfilterBounds,
     createFilterQureyByCityPop, getfilterDatasource, 
     loadAreaPolygon} from '../../utils';
@@ -31,8 +38,6 @@ import { EchartId } from '../../components/types';
 export interface IFilterStore {
    isLoading: boolean;
    setIsLoading: (value:boolean) => void;
-   startYear: ColumnFilterCombo;
-   endYear: ColumnFilterCombo;
    cities: ColumnFilterArray;
    streets: ColumnFilterArray;
    roads: ColumnFilterArray;
@@ -40,15 +45,35 @@ export interface IFilterStore {
 }
 class FilterStore implements IFilterStore  {
    appInitialized = false
+   timeStore: TimeFilterStore;
+   whoStore: WhoFilterStore;
+   whatStore?: WhatFilterStore;
+   vehicleStore: VehicleFilterStore;
+   roadStore: RoadFilterStore;
+
+      private getWhatStore(): WhatFilterStore {
+         if (!(this as any).whatStore) (this as any).whatStore = new WhatFilterStore();
+         return (this as any).whatStore as WhatFilterStore;
+      }
 
    constructor(rootStore: RootStore) {
       // init app data
       this.rootStore = rootStore;
+      this.severityStore = new SeverityFilterStore();
+      this.locationStore = new LocationFilterStore();
+      this.timeStore = new TimeFilterStore();
+      this.whoStore = new WhoFilterStore();
+      this.vehicleStore = new VehicleFilterStore();
+      this.roadStore = new RoadFilterStore();
+      // whatStore will be lazily created when first accessed
       makeAutoObservable(this, { rootStore: false,
-         startYear: observable,
-         cities: observable,
-         endYear: observable,
-         streets: observable,
+         severityStore: false,
+         locationStore: false,
+         timeStore: false,
+         whoStore: false,
+         whatStore: false,
+         vehicleStore: false,
+         roadStore: false,
          groupByDict: observable,
          dataByYears: observable,
          chartDataRanges: observable,
@@ -56,36 +81,10 @@ class FilterStore implements IFilterStore  {
          chartOutOfRangeCounts: observable,
          dataSource: observable
       });
-      this.injurySeverity = FC.initInjurySeverity();
-      this.setCasualtiesNames(this.injurySeverity);
-      // when
-      this.startYear = initStartYear(2021);
-      this.endYear = initEndYear(2025);
-      this.dayNight = FC.initDayNight();
       // where
-      this.locationAccuracy = FC.initLocationAccuracy();
-      this.roadTypes = FC.initRoadTypes();
-      this.roads = new ColumnFilterArray('Road', 'rd', false);
-      this.roadSegment = new ColumnFilterArray('RoadSegment', 'rds', false);
-      this.cities = new ColumnFilterArray('City', 'city', false);
-      this.streets = new ColumnFilterArray('Street', 'st', false);
-      this.cityPopSizeRange = initCityPopSize();
-      this.zoneName = initPoilceStations();
-      // who
-      this.genderTypes = FC.initGenderTypes();
-      this.ageTypes = FC.initAgeTypes();
-      this.populationTypes = FC.initPopulationTypes();
-      // What
-      this.accidentType = FC.initAccidentType();
-      // what vehicle
-      this.injTypes = FC.initInjTypes();
-      this.vehicleType = FC.initVehicleTypesFull();
-      this.involvedVehicle = FC.initInvolvedVehicle();
-      // What Road
-      this.speedLimit = FC.initSpeedLimit();
-      this.roadWidth = FC.initRoadWidth();
-      this.separator = FC.initSeparator();
-      this.oneLane = FC.initOneLane();
+      // location state is now managed by LocationFilterStore
+      // What state is managed by WhatFilterStore
+      // Road filters are managed by RoadFilterStore
       //init Group-by dictionary
       const map: Map<string, any> = initGroupMap();
       this.groupByDict = new GroupMap(map, 'gb', 'injt');
@@ -98,15 +97,135 @@ class FilterStore implements IFilterStore  {
       this.setDataFilterd(FC.initDataGrpBy1());
       this.dataGroupby2 = FC.initDataGrpBy2();
       this.appInitialized = false;
-      // Reaction to city changes
-      this.updateModerateDisabledState();
+      // Reaction to city changes (severity store handles moderate-option disabling)
+      this.severityStore.updateModerateDisabledState(this.cities.arrValues);
       reaction(
          () => this.cities.arrValues,
-         () => this.updateModerateDisabledState()
+         () => this.severityStore.updateModerateDisabledState(this.cities.arrValues)
       );
    }
 
    rootStore: RootStore;
+   severityStore: SeverityFilterStore;
+   locationStore: LocationFilterStore;
+
+   get injurySeverity() {
+      return this.severityStore.injurySeverity;
+   }
+
+   get isValidSeverity() {
+      return this.severityStore.isValidSeverity;
+   }
+
+   get casualtiesNames() {
+      return this.severityStore.casualtiesNames;
+   }
+
+   updateInjurySeverity = (aType: number, val: boolean) => {
+      this.severityStore.updateInjurySeverity(aType, val);
+   }
+
+   setCasualtiesNames = (injurySeverity: IColumnFilter) => {
+      this.severityStore.setCasualtiesNames(injurySeverity);
+   }
+
+   get isMultipleCities() {
+      return this.locationStore.isMultipleCities;
+   }
+
+   setIsMultipleCities = (isMulti: boolean) => {
+      this.locationStore.setIsMultipleCities(isMulti);
+   }
+
+   get cities() {
+      return this.locationStore.cities;
+   }
+
+   updateCities = async (values: string[], updateCityResult: boolean) => {
+      return this.locationStore.updateCities(values, updateCityResult);
+   }
+
+   get zoneName() {
+      return this.locationStore.zoneName;
+   }
+
+   setZonesName = async (value: string) => {
+      await this.locationStore.setZonesName(value);
+   }
+
+   // severity-related moderate-option logic moved to `SeverityFilterStore`
+
+   get cityResult() {
+      return this.locationStore.cityResult;
+   }
+
+   get previousCity() {
+      return this.locationStore.previousCity;
+   }
+
+   get cityStreets() {
+      return this.locationStore.cityStreets;
+   }
+
+   updateCityResult = (value: string) => {
+      this.locationStore.setCityResult(value);
+   }
+
+   get streets() {
+      return this.locationStore.streets;
+   }
+
+   updateStreets = (values: string[]) => {
+      this.locationStore.updateStreets(values);
+   }
+
+   get roads() {
+      return this.locationStore.roads;
+   }
+
+   setRoads = (names: string[]) => {
+      this.locationStore.setRoads(names);
+   }
+
+   get cityPopSizeRange() {
+      return this.locationStore.cityPopSizeRange;
+   }
+
+   setCityPopSizeRange = (range: string) => {
+      this.locationStore.setCityPopSizeRange(range);
+   }
+
+   get roadSegment() {
+      return this.locationStore.roadSegment;
+   }
+
+   updateRoadSegment = (names: number[]) => {
+      this.locationStore.updateRoadSegment(names);
+   }
+
+   get roadTypes() {
+      return this.locationStore.roadTypes;
+   }
+
+   updateRoadType = (aType: number, val: boolean) => {
+      this.locationStore.updateRoadType(aType, val);
+   }
+
+   get locationAccuracy() {
+      return this.locationStore.locationAccuracy;
+   }
+
+   updateLocationAccuracy = (aType: number, val: boolean) => {
+      this.locationStore.updateLocationAccuracy(aType, val);
+   }
+
+   get isValidWhere() {
+      return this.locationStore.isValidWhere;
+   }
+
+   get geoFilter() {
+      return this.locationStore.geoFilter;
+   }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // Config Filter
@@ -118,8 +237,10 @@ class FilterStore implements IFilterStore  {
    @action
    updateShowAllVehicleTypes = (val: boolean) => {
       this.showAllVehicleTypes = val;
-      if (this.showAllVehicleTypes) this.vehicleType = FC.initVehicleTypesFull();
-      else this.vehicleType = FC.initVehicleTypes();
+      const vt = this.vehicleStore.vehicleType;
+      const newCol = this.showAllVehicleTypes ? FC.initVehicleTypesFull() : FC.initVehicleTypes();
+      vt.arrTypes = newCol.arrTypes;
+      vt.setQueryVals();
    }
 
    @observable isUpdateFromUrl: boolean = true;
@@ -133,35 +254,6 @@ class FilterStore implements IFilterStore  {
       this.formCardKey = value;
    }
 
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // Severity
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   @observable
-   injurySeverity: IColumnFilter
-
-   @action
-   updateInjurySeverity = (aType: number, val: boolean) => {
-      this.updateFilters(this.injurySeverity, aType, val);
-   }
-
-   @computed get isValidSeverity() {
-      const res = !this.injurySeverity.isAllValsFalse;
-      return res;
-   }
-
-   @observable
-   casualtiesNames: string = 'casualties';
-
-   @action
-   setCasualtiesNames = (injurySeverity: IColumnFilter) => {
-      let res = 'casualties';
-      const deadChecker: IFilterChecker = injurySeverity.arrTypes[0];
-      const sevIngChecker: IFilterChecker = injurySeverity.arrTypes[1];
-      if (deadChecker.checked && !sevIngChecker.checked) res = 'killed';
-      else if (!deadChecker.checked && sevIngChecker.checked) res = 'severely-injured';
-      this.casualtiesNames = res;
-   }
-
    //datasource of acciednt - 1 police, 3 common file (tik claly), 4 - Offense repot (shomay haderch)
    @observable
    dataSource: number = 1;
@@ -171,290 +263,123 @@ class FilterStore implements IFilterStore  {
      this.dataSource = sourceVal;
    }
 
-
+   // who (delegated to WhoFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // where
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   @observable
-   isMultipleCities: boolean = false;
 
-   @action
-   setIsMultipleCities = (isMulti: boolean) => {
-      this.isMultipleCities = isMulti;
+   get genderTypes() {
+      return this.whoStore.genderTypes;
    }
 
-   @observable
-   cities: ColumnFilterArray;
-
-   @action
-   updateCities = async (values: string[], updateCityResult: boolean) => {
-      this.cities.setFilter(values);
-      if (this.cities.arrValues.length === 0) {
-         this.streets.arrValues = [];
-      } else {
-         if(this.cities.arrValues.length ===1){
-            const cityId = this.cities.arrValues[0];
-            const srvCity = new CityService();
-            const streets = await srvCity.getStreetsByCity(cityId);
-            this.SetCityStreets(streets);
-         }
-         if (updateCityResult) {
-            //[this.cityResult] = this.cities.arrValues;
-         }
-      }
-   }
-
-   @observable
-   zoneName: ColumnFilterCombo;
-   setZonesName = async (value: string) => {
-      this.zoneName.setFilter(value);
-      this.geoFilter = await this.getGeoFilter();
-   }
-  
-
-   @action
-   updateModerateDisabledState = () => {
-      const moderateOption = this.injurySeverity.arrTypes[2]; // moderate is at index 2
-      // Check if any city is selected (filter out empty strings)
-      const hasCitySelected = this.cities.arrValues.length > 0 &&
-                              this.cities.arrValues.some(val => val && val.trim() !== '');
-      moderateOption.disabled = !hasCitySelected;
-
-      // If moderate is disabled and currently checked, uncheck it
-      if (moderateOption.disabled && moderateOption.checked) {
-         moderateOption.checked = false;
-         this.injurySeverity.setQueryVals();
-      }
-   }
-
-   @observable
-   cityResult: string = '';
-   @action
-   updateCityResult = (value:string) => {
-      this.previousCity = this.cityResult;
-      this.cityResult = value;
-   }
-
-   @observable
-   previousCity: string | null = null;
-
-   @observable
-   cityStreets: Street [] |null = null;
-   @action
-   SetCityStreets =(streets: Street[])=>{
-      this.cityStreets = streets;
-   }
-
-   @observable
-   streets: ColumnFilterArray;
-   @action
-   updateStreets = (values: string[]) => {
-      this.streets.setFilter(values);
-   }
-
-   @observable
-   roads: ColumnFilterArray;
-
-   @action
-   setRoads = (names: string[]) => {
-      this.roads.setFilter(names);
-   }
-
-   @observable
-   cityPopSizeRange: ColumnFilterCombo;
-
-   @action
-   setCityPopSizeRange = (range: string) => {
-      this.cityPopSizeRange.setFilter(range);
-   }
-
-
-   @observable
-   roadSegment: ColumnFilterArray;
-
-   @action
-   updateRoadSegment = (names: number[]) => {
-      this.roadSegment.setFilter(names.map(String));
-   }
-
-   @observable
-   roadTypes: IColumnFilter;
-
-   @action
-   updateRoadType = (aType: number, val: boolean) => {
-      this.updateFilters(this.roadTypes, aType, val);
-   }
-
-   @observable
-   locationAccuracy: IColumnFilter;
-
-   @action
-   updateLocationAccuracy = (aType: number, val: boolean) => {
-      this.updateFilters(this.locationAccuracy, aType, val);
-   }
-
-   @computed get isValidWhere() {
-      const res = !this.roadTypes.isAllValsFalse && !this.locationAccuracy.isAllValsFalse;
-      return res;
-   }
-
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // when
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   startYear: ColumnFilterCombo;
-
-   @action
-   setStartYear = (year: string) => {
-      this.startYear.setFilter(parseInt(year));
-   }
-
-   endYear: ColumnFilterCombo;
-
-   @action
-   setEndYear = (year: string) => {
-      this.endYear.setFilter(parseInt(year));
-   }
-
-   @observable
-   dayNight: IColumnFilter;
-
-   @action
-   updateDayNight = (aType: number, val: boolean) => {
-      this.updateFilters(this.dayNight, aType, val);
-   }
-
-   @computed get isValidWhen() {
-      const res = !this.dayNight.isAllValsFalse;
-      return res;
-   }
-
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // who
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   @observable
-   genderTypes: IColumnFilter
-
-   @action
    updateGenderType = (aType: number, val: boolean) => {
-      this.updateFilters(this.genderTypes, aType, val);
+      this.whoStore.updateGenderType(aType, val);
    }
 
-   @observable
-   ageTypes: IColumnFilter;
+   get ageTypes() {
+      return this.whoStore.ageTypes;
+   }
 
-   @action
    updateAgeType = (aType: number, val: boolean) => {
-      this.updateFilters(this.ageTypes, aType, val);
+      this.whoStore.updateAgeType(aType, val);
    }
 
-   @observable
-   populationTypes: IColumnFilter;
+   get populationTypes() {
+      return this.whoStore.populationTypes;
+   }
 
-   @action
    updatePopulationType = (aType: number, val: boolean) => {
-      this.updateFilters(this.populationTypes, aType, val);
+      this.whoStore.updatePopulationType(aType, val);
    }
 
    @computed get isValidWho() {
-      const res = !this.genderTypes.isAllValsFalse
-         && !this.ageTypes.isAllValsFalse && !this.populationTypes.isAllValsFalse;
-      return res;
+      return this.whoStore.isValidWho;
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What
+   // What (delegated to WhatFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-   @observable
-   accidentType: IColumnFilter;
+   get accidentType() {
+      return this.getWhatStore().accidentType;
+   }
 
-   @action
    updateAccidentType = (aType: number, val: boolean) => {
-      this.updateFilters(this.accidentType, aType, val);
+      this.getWhatStore().updateAccidentType(aType, val);
    }
 
    @computed get isValidWhat() {
-      const res = !this.accidentType.isAllValsFalse;
-      return res;
+      return this.getWhatStore().isValidWhat;
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What Vehicle
    // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-   /**
-   * injuerd type - for example pedestrian bycicle, car driver etc,
-   */
-   @observable
-   injTypes: IColumnFilter;
+   get injTypes() {
+      return this.vehicleStore.injTypes;
+   }
 
-   @action
    updateInjuerdType = (aType: number, val: boolean) => {
-      this.updateFilters(this.injTypes, aType, val);
+      this.vehicleStore.updateInjuerdType(aType, val);
    }
 
-   // vehicle Type of the killed / injured
-   @observable
-   vehicleType: IColumnFilter;
+   get vehicleType() {
+      return this.vehicleStore.vehicleType;
+   }
 
-   @action
    updateVehicleType = (aType: number, val: boolean) => {
-      this.updateFilters(this.vehicleType, aType, val);
+      this.vehicleStore.updateVehicleType(aType, val);
    }
 
-   // vehicle that were in the accident
-   @observable
-   involvedVehicle: IColumnFilter;
+   get involvedVehicle() {
+      return this.vehicleStore.involvedVehicle;
+   }
 
-   @action
    setInvolvedVehicle = (aType: number, val: boolean) => {
-      this.updateFilters(this.involvedVehicle, aType, val);
+      this.vehicleStore.setInvolvedVehicle(aType, val);
    }
 
    @computed get isValidWhatVehicle() {
-      const res = !this.injTypes.isAllValsFalse && !this.vehicleType.isAllValsFalse && !this.involvedVehicle.isAllValsFalse;
-      return res;
+      return this.vehicleStore.isValidWhatVehicle;
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What Road
+   // What Road (delegated to RoadFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-   @observable
-   speedLimit: IColumnFilter;
+   get speedLimit() {
+      return this.roadStore.speedLimit;
+   }
 
    updateSpeedLimit = (aType: number, val: boolean) => {
-      this.updateFilters(this.speedLimit, aType, val);
+      this.roadStore.updateSpeedLimit(aType, val);
    }
 
-   @observable
-   roadWidth: IColumnFilter;
+   get roadWidth() {
+      return this.roadStore.roadWidth;
+   }
 
-   @action
    updateRoadWidth = (aType: number, val: boolean) => {
-      this.updateFilters(this.roadWidth, aType, val);
+      this.roadStore.updateRoadWidth(aType, val);
    }
 
-   @observable
-   separator: IColumnFilter;
+   get separator() {
+      return this.roadStore.separator;
+   }
 
-   @action
    updateSeparator = (aType: number, val: boolean) => {
-      this.updateFilters(this.separator, aType, val);
+      this.roadStore.updateSeparator(aType, val);
    }
 
-   @observable
-   oneLane: IColumnFilter;
+   get oneLane() {
+      return this.roadStore.oneLane;
+   }
 
-   @action
    updateOneLane = (aType: number, val: boolean) => {
-      this.updateFilters(this.oneLane, aType, val);
+      this.roadStore.updateOneLane(aType, val);
    }
 
    @computed get isValidWhatRoad() {
-      const res = !this.speedLimit.isAllValsFalse && !this.roadWidth.isAllValsFalse
-         && !this.separator.isAllValsFalse && !this.oneLane.isAllValsFalse;
-      return res;
+      return this.roadStore.isValidWhatRoad;
    }
 
    // ////////////////////////////////////////////////////////////////////////////////////////////
@@ -524,7 +449,7 @@ class FilterStore implements IFilterStore  {
    }
 
    @computed get isValidAllFilters() {
-      const res = this.isValidSeverity && this.isValidWhen && this.isValidWho
+      const res = this.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
          && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
       return res;
    }
@@ -606,7 +531,7 @@ class FilterStore implements IFilterStore  {
       AccidentService.fetchGroupBy(filter, this.geoFilter)
          .then((data: ItemCount[] | undefined) => {
             if (data !== undefined) {
-               const dataPadded = padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
+               const dataPadded = padDataYearsWith0(data, this.timeStore.startYear.queryValue, this.timeStore.endYear.queryValue);
                this.setDataByYears(dataPadded);
             }
          });
@@ -628,7 +553,7 @@ class FilterStore implements IFilterStore  {
       AccidentService.fetchGroupBy(filter, this.geoFilter)
          .then((data: ItemCount2[] | undefined) => {
             if (data !== undefined) {
-               const dataPadded =  padDataYearsWith0(data, this.startYear.queryValue, this.endYear.queryValue);
+               const dataPadded =  padDataYearsWith0(data, this.timeStore.startYear.queryValue, this.timeStore.endYear.queryValue);
                this.setDataFilterdByYears(dataPadded);
                const count = this.getCountFromGroupByRes(data);
                this.setInjuriesCount(count);
@@ -806,13 +731,13 @@ class FilterStore implements IFilterStore  {
    getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
       //the oreder of the fileds is importnet for indexing in server
       let query = '?';
-      query += this.startYear.getFilter();
-      query += this.endYear.getFilter();
+      query += this.timeStore.startYear.getFilter();
+      query += this.timeStore.endYear.getFilter();
       query += this.injurySeverity.getFilter();
       query += getfilterDatasource(this.dataSource);
       query += this.cities.getFilter();
       if (useBounds && bounds != null) query += getfilterBounds(bounds);
-      query += this.dayNight.getFilter();
+      query += this.timeStore.dayNight.getFilter();
       query += this.streets.getFilter();
       query += this.roads.getFilter();
       query += this.roadSegment.getFilter();
@@ -834,28 +759,15 @@ class FilterStore implements IFilterStore  {
       return query;
    }
    
-   @observable
-   geoFilter: GeoFilter | null = null;
-
-   getGeoFilter = async () => {
-       const policeStationName = this.zoneName.queryValue as string;
-       if (!policeStationName || policeStationName.trim() === '') {
-           return null;
-       }
-       let geoPolygon = await loadAreaPolygon(policeStationName);    
-       let geoFilter: GeoFilter = {geo: geoPolygon };
-       return geoFilter;
-   }
-
    /**
     * set filters text - used in info-panel to show current filter
     * @param ignoreIfAll - if true and if all option is cheked return blank
     */
    setFiltersText = (ignoreIfAll: boolean) => {
-      this.startYear.setText();
-      this.endYear.setText();
+      this.timeStore.startYear.setText();
+      this.timeStore.endYear.setText();
       this.injTypes.setText(ignoreIfAll);
-      this.dayNight.setText(ignoreIfAll);
+      this.timeStore.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
       this.ageTypes.setText(ignoreIfAll);
       this.populationTypes.setText(ignoreIfAll);
@@ -879,8 +791,8 @@ class FilterStore implements IFilterStore  {
       const currentTab  = reduxStore.getState().appUi.currentTab;
       const params = new URLSearchParams(window.location.search);
       params.set('tab', currentTab);
-      this.startYear.setBrowserQueryString(params, false);
-      this.endYear.setBrowserQueryString(params, false);
+      this.timeStore.startYear.setBrowserQueryString(params, false);
+      this.timeStore.endYear.setBrowserQueryString(params, false);
       this.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
       this.injTypes.setBrowserQueryString(params);
@@ -910,10 +822,10 @@ class FilterStore implements IFilterStore  {
     */
    @action
    setStoreByQuery = (params: URLSearchParams, defCity?: string) => {
-      this.startYear.setValuesByQuery(params);
-      this.endYear.setValuesByQuery(params);
+      this.timeStore.startYear.setValuesByQuery(params);
+      this.timeStore.endYear.setValuesByQuery(params);
       this.injurySeverity.setValuesByQuery(params);
-      this.dayNight.setValuesByQuery(params);
+      this.timeStore.dayNight.setValuesByQuery(params);
       //const citis = this.getCityIdFromQuery(params, defCity);
       const cities = getQueryParamValues(params, 'city', defCity, this.isMultipleCities);
       if (cities) this.updateCities(cities, true);
@@ -961,8 +873,8 @@ class FilterStore implements IFilterStore  {
 
    getfilterBySeverityAndCity = () => {
       let filter = '?';
-      filter += this.startYear.getFilter();
-      filter += this.endYear.getFilter();
+      filter += this.timeStore.startYear.getFilter();
+      filter += this.timeStore.endYear.getFilter();
       filter += this.injurySeverity.getFilter();
       filter += this.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
