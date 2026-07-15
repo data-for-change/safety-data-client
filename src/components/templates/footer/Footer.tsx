@@ -8,28 +8,48 @@ interface IProps {}
 export const Footer: React.FC<IProps> = () => {
   const footerStyle: CSSProperties = {
     display: 'flex',
-    gap: '1rem',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     height: '4rem',
     padding: '1rem',
   };
 
-  const linkStyle: CSSProperties = {
+  const logoGroupStyle: CSSProperties = {
     display: 'flex',
+    gap: '1rem',
+    alignItems: 'center',
   };
 
   const imgStyle: CSSProperties = {
     height: '30px',
   };
 
+  const centerTextStyle: CSSProperties = {
+    fontSize: '14px',
+    paddingTop: '5px',
+    textAlign: 'center',
+    flex: 1,
+  };
+
+  const versionStyle: CSSProperties = {
+    fontSize: '12px',
+    color: '#666',
+  };
+
+  const versionLabel = 'ver: 15/07/2026';
+
   return (
     <footer style={footerStyle}>
-      <a href="https://www.natoon.co.il/" title="מבית נתון לשינוי" style={linkStyle}>
-        <img src={logoNatun} alt="Natun logo" style={imgStyle} />
-      </a>
-      <a href="https://www.anyway.co.il/" title="anyway.co.il" style={linkStyle}>
-        <img src={logoAnyway} alt="Anyway logo" style={imgStyle} />
-      </a>
-      <span style={{fontSize:'14px', paddingTop: '5px'}}>פותח בשיתוף המטה לבטיחות בדרכים בעיריית תל אביב-יפו</span>
+      <div style={logoGroupStyle}>
+        <a href="https://www.natoon.co.il/" title="מבית נתון לשינוי">
+          <img src={logoNatun} alt="Natun logo" style={imgStyle} />
+        </a>
+        <a href="https://www.anyway.co.il/" title="anyway.co.il">
+          <img src={logoAnyway} alt="Anyway logo" style={imgStyle} />
+        </a>
+      </div>
+      <span style={centerTextStyle}>פותח בשיתוף המטה לבטיחות בדרכים בעיריית תל אביב-יפו</span>
+      <span style={versionStyle}>{versionLabel}</span>
     </footer>
   );
 };
