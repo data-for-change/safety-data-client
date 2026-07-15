@@ -60,12 +60,12 @@ const CardFilterWhere = observer(() => {
                    onChange={updateRoadType}
                 />
                 <MySelect
-                   style={{ display: 'flex-end', alignItems: 'center' }}
                    label={'city_size'}
                    data={cityPopSizeRange.arrTypes}
                    valProp="val"
                    contentProp="text"
                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCityPopSizeRange(event.target.value)}
+                   cssClass="stacked"
                 />
                 <GroupCheckbox
                    formName="filterForm"
