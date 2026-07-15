@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -22,14 +22,16 @@ const ConfigModal: React.FC<IProps> = observer(({
   const { t } = useTranslation();
   const handleClose = () => setShow(false);
   const { filterStore } = useStore();
+  const { isLoading, isValidAllFilters } = filterStore;
+  const isSubmitDisabled = isLoading || !isValidAllFilters;
 
   const submitChanges = action ?
     <Button
       variant="primary"
       onClick={action}
-      disabled={filterStore.isLoading || !filterStore.isValidAllFilters}
+      disabled={isSubmitDisabled}
     >
-      {filterStore.isLoading ? t('Loading') : t('Submit')}
+      {isLoading ? t('Loading') : t('Submit')}
     </Button>
     : null
 
