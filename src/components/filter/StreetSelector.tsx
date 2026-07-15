@@ -21,7 +21,7 @@ const StreetSelector: React.FC<IProps> = observer(() => {
     return (
       <Form.Group controlId="filterForm.ControlStreet">
         <Form.Label className="filterLable">
-          {t('Street')}
+          {t('Street')}:
         </Form.Label>
         <Typeahead
           id="street-selector"

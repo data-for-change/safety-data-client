@@ -22,6 +22,7 @@ const LanguageSelector = () => {
          valProp="value"
          contentProp="text"
          value={language}
+         cssClass="my-select-spaced"
       />
    );
 };

@@ -46,10 +46,11 @@ const CardFilterWhere = observer(() => {
                 <CitySelector isMultiple={isMultipleCities} /> 
                 <StreetSelector />
                 {showPoliceStation&& <MySelect
-                     label={'PoliceStation'}
-                     value={String(zoneName.queryValue)}
-                     data={zoneName.arrTypes}
-                     onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}                   
+                   label={'PoliceStation'}
+                   value={String(zoneName.queryValue)}
+                   data={zoneName.arrTypes}
+                   onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}   
+                   cssClass="stacked"                
                 />}
                 <RoadNameSelector />
                 <RoadSegmentSelector />

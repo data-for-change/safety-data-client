@@ -17,15 +17,33 @@
    border: 2px rgb(108, 108, 246) solid;
 }
 
+.select-wrapper {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+}
+
 .select-wrapper label {
    font-weight: 700;
 }
 
+/* stacked variant: label above the select */
+.select-wrapper.stacked {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 0.25rem;
+}
+
 .my-select {
   height: 28px;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;       
   padding-top: .15rem;
   padding-bottom: .15rem;
   font-size: 0.95rem;
+}
+
+/* utility class that adds horizontal spacing when needed */
+.my-select-spaced {
+   margin-left: 0.5rem;
+   margin-right: 0.5rem;
 }

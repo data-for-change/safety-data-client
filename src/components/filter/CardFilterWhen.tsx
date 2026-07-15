@@ -35,13 +35,15 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                          label={'FromYear'}
                          value={String(startYear.queryValue)}
                          data={startYear.arrTypes}
-                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}                   
+                         onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
+                         cssClass="my-select-spaced"
                       />
                       <MySelect
                          label={'ToYear'}
                          value={String(endYear.queryValue)}
                          data={endYear.arrTypes}
                          onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
+                         cssClass="my-select-spaced"
                          
                       />
                    </div>

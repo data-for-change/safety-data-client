@@ -30,9 +30,9 @@ const MySelect = <T,>({
   const controlId = id || (label ? `${label}-id` : undefined);
 
   return (
-    <Form.Group controlId={controlId} style={style} className={`mb-2 ${cssClass}`}>
+    <Form.Group controlId={controlId} style={style} className={`mb-2 select-wrapper ${cssClass}`}>
       {label && (
-        <Form.Label style={{ whiteSpace: "nowrap" }}>
+        <Form.Label style={cssClass && cssClass.includes('stacked') ? {} : { whiteSpace: "nowrap" }}>
           {t(label)}
         </Form.Label>
       )}

@@ -28,6 +28,7 @@ const SelectGroupBy2: React.FC<IProps> = observer(({ id }) => {
       valProp="value"
       contentProp="text"
       value={val}
+      cssClass="my-select-spaced"
     />
   );
 });
