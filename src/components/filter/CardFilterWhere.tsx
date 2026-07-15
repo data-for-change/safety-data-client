@@ -16,7 +16,7 @@ import '../../styles/accordion.css'
 const CardFilterWhere = observer(() => {
     const { t } = useTranslation();
     const { filterStore , userStore} = useStore();
-    const hasZonePermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isPolygonFiltreingGrants);
+    const hasZonePermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isHotSpotGrants);
     const {
        isValidWhere, 
        cities,
