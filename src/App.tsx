@@ -11,6 +11,7 @@ import ModelPage from './pages/ModelPage';
 import Header from './components/templates/Header/Header';
 import MapWithClusters from './pages/MapWithClusters';
 import Footer from './components/templates/footer/Footer';
+import AdminRoute from './components/auth/AdminRoute';
 
 import './i18n';
 import './App.css';
@@ -21,6 +22,7 @@ const Login = lazy(() => import('./components/auth/Login'));
 const Register = lazy(() => import('./components/auth/Register'));
 const Profile = lazy(() => import('./components/auth/Profile'));
 const LoginPopupRedirect = lazy(() => import('./components/auth/LoginPopupRedirect'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 const styles = {
   app: {
@@ -96,6 +98,14 @@ function App() {
 							<Route path='/register' element={<Register />} />
 							<Route path='/profile' element={<Profile />} />
 							<Route path='/login-popup-redirect' element={<LoginPopupRedirect />} />
+							<Route
+								path='/admin'
+								element={
+									<AdminRoute>
+										<AdminPage />
+									</AdminRoute>
+								}
+							/>
 						</Routes>
 					</div>
 					<Footer />
