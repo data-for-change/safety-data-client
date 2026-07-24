@@ -50,7 +50,8 @@ const CardFilterWhere = observer(() => {
                    value={String(zoneName.queryValue)}
                    data={zoneName.arrTypes}
                    onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}   
-                   cssClass="stacked"                
+                   cssClass="stacked" 
+                   layout="column"               
                 />}
                 <RoadNameSelector />
                 <RoadSegmentSelector />

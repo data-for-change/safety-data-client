@@ -50,12 +50,8 @@
    display: flex;
 }
 
-.accordion-when-selects .select-wrapper select {
-   width: 4rem;
-}
-
 .accordion-when-selects .select-wrapper {
    display: flex;
    flex-direction: column;
-   align-items: center;
+   align-items: start;
 }

@@ -27,7 +27,7 @@ export const ClusterFilterTypePicker: React.FC<Props> = ({ value, onChange }) =>
   return (
     <MySelect<Option>
       id="cluster-filter-type-picker"
-      label="Cluster type:"
+      label="Cluster type"
       data={OPTIONS}
       valProp="value"
       contentProp="text"

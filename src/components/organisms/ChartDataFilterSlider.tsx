@@ -187,7 +187,7 @@ const styles: Record<string, React.CSSProperties> = {
 		gap: '4px',
 	},
 	rangeInput: {
-		width: '64px',
+		width: '52px',
 		padding: '2px 4px',
 		fontSize: '13px',
 		border: '1px solid rgba(0, 0, 0, 0.15)',

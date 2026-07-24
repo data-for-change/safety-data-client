@@ -49,7 +49,7 @@ const MyInput: React.FC<MyInputProps> = ({
 
   return (
      <Form.Group controlId={id} style={style} className={`mb-2`}>
-        <Form.Label className="mb-0 small">{t(label)}</Form.Label>
+        <Form.Label className="mb-0 small">{t(label)}:</Form.Label>
         <Form.Control
             type="number"
             className="my-input-sm"
