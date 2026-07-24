@@ -68,7 +68,7 @@ const WhatTitle: React.FC<{}> = observer(() => {
 const WhatVehicleTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injTypes, vehicleType , involvedVehicle} = filterStore;
+  const { vehicleStore: {injTypes, vehicleType , involvedVehicle}} = filterStore;
   let res = (injTypes.text !== '') ? `, ${injTypes.text}` : '';
   if (vehicleType.text !== '') res += `,  ${t('VehicleType')}: ${vehicleType.text}`;
   if (involvedVehicle.text !== '') res += `, ${t('Vehicles')}: ${involvedVehicle.text}`;
@@ -87,7 +87,7 @@ const YearsTitle: React.FC<{}> = observer(() => {
 const InjuriesCountTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { injTypes, injuriesCount , casualtiesNames} = filterStore;
+  const { injuriesCount , casualtiesNames} = filterStore;
   let res = (injuriesCount > 0)? `, ${t('Found')}  ${injuriesCount} ${t(casualtiesNames)}`: `, ${t('NoResultsFound')}`;
   return (
     <span>{res}</span>

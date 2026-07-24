@@ -10,15 +10,13 @@ import '../../styles/accordion.css'
 const CardFilterWhatVehicle = observer(() => {
     const { t } = useTranslation();
     const { filterStore } = useStore();
-    const { injTypes,
-       updateInjuerdType,
-       vehicleType,
-       updateVehicleType,
-       involvedVehicle,
-       setInvolvedVehicle,
-       isValidWhatVehicle,
-       setFormCardKey
-    } = filterStore;
+    const { vehicleStore, setFormCardKey } = filterStore;
+    const {
+      injTypes, updateInjuerdType, 
+      vehicleType, updateVehicleType, 
+      involvedVehicle,setInvolvedVehicle, 
+      isValidWhatVehicle,   
+    } = vehicleStore;
     
     return (
        <Card>

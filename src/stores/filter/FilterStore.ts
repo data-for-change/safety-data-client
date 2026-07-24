@@ -297,39 +297,7 @@ class FilterStore implements IFilterStore  {
    @computed get isValidWhat() {
       return this.getWhatStore().isValidWhat;
    }
-
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What Vehicle
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-
-   get injTypes() {
-      return this.vehicleStore.injTypes;
-   }
-
-   updateInjuerdType = (aType: number, val: boolean) => {
-      this.vehicleStore.updateInjuerdType(aType, val);
-   }
-
-   get vehicleType() {
-      return this.vehicleStore.vehicleType;
-   }
-
-   updateVehicleType = (aType: number, val: boolean) => {
-      this.vehicleStore.updateVehicleType(aType, val);
-   }
-
-   get involvedVehicle() {
-      return this.vehicleStore.involvedVehicle;
-   }
-
-   setInvolvedVehicle = (aType: number, val: boolean) => {
-      this.vehicleStore.setInvolvedVehicle(aType, val);
-   }
-
-   @computed get isValidWhatVehicle() {
-      return this.vehicleStore.isValidWhatVehicle;
-   }
-
+   
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What Road (delegated to RoadFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,7 +406,7 @@ class FilterStore implements IFilterStore  {
 
    @computed get isValidAllFilters() {
       const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
-         && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
+         && this.isValidWhere && this.isValidWhat && this.vehicleStore.isValidWhatVehicle && this.isValidWhatRoad;
       return res;
    }
 
@@ -729,13 +697,13 @@ class FilterStore implements IFilterStore  {
       query += this.streets.getFilter();
       query += this.roads.getFilter();
       query += this.roadSegment.getFilter();
-      query += this.injTypes.getFilter();
+      query += this.vehicleStore.injTypes.getFilter();
       query += this.genderTypes.getFilter();
       query += this.ageTypes.getFilter();
       query += this.populationTypes.getFilter();
       query += this.accidentType.getFilter();
-      query += this.vehicleType.getFilter();
-      query += this.involvedVehicle.getFilter();
+      query += this.vehicleStore.vehicleType.getFilter();
+      query += this.vehicleStore.involvedVehicle.getFilter();
       query += this.locationAccuracy.getFilter();
       query += this.roadTypes.getFilter();
       query += this.speedLimit.getFilter();
@@ -754,7 +722,7 @@ class FilterStore implements IFilterStore  {
    setFiltersText = (ignoreIfAll: boolean) => {
       this.timeStore.startYear.setText();
       this.timeStore.endYear.setText();
-      this.injTypes.setText(ignoreIfAll);
+      this.vehicleStore.injTypes.setText(ignoreIfAll);
       this.timeStore.dayNight.setText(ignoreIfAll);
       this.genderTypes.setText(ignoreIfAll);
       this.ageTypes.setText(ignoreIfAll);
@@ -767,8 +735,8 @@ class FilterStore implements IFilterStore  {
       this.roads.setText();
       this.cityPopSizeRange.setText();
       this.accidentType.setText(ignoreIfAll);
-      this.vehicleType.setText(ignoreIfAll);
-      this.involvedVehicle.setText(ignoreIfAll);
+      this.vehicleStore.vehicleType.setText(ignoreIfAll);
+      this.vehicleStore.involvedVehicle.setText(ignoreIfAll);
    }
 
    /**
@@ -783,7 +751,7 @@ class FilterStore implements IFilterStore  {
       this.timeStore.endYear.setBrowserQueryString(params, false);
       this.severityStore.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
-      this.injTypes.setBrowserQueryString(params);
+      this.vehicleStore.injTypes.setBrowserQueryString(params);
       this.genderTypes.setBrowserQueryString(params);
       this.ageTypes.setBrowserQueryString(params);
       this.populationTypes.setBrowserQueryString(params);
@@ -792,8 +760,8 @@ class FilterStore implements IFilterStore  {
       this.roads.setBrowserQueryString(params);
       this.locationAccuracy.setBrowserQueryString(params);
       this.accidentType.setBrowserQueryString(params);
-      this.vehicleType.setBrowserQueryString(params);
-      this.involvedVehicle.setBrowserQueryString(params);
+      this.vehicleStore.vehicleType.setBrowserQueryString(params);
+      this.vehicleStore.involvedVehicle.setBrowserQueryString(params);
       this.speedLimit.setBrowserQueryString(params);
       this.roadWidth.setBrowserQueryString(params);
       this.separator.setBrowserQueryString(params);
@@ -824,13 +792,13 @@ class FilterStore implements IFilterStore  {
       this.setRoads(roads);
       this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
-      this.injTypes.setValuesByQuery(params);
+      this.vehicleStore.injTypes.setValuesByQuery(params);
       this.genderTypes.setValuesByQuery(params);
       this.ageTypes.setValuesByQuery(params);
       this.populationTypes.setValuesByQuery(params);
       this.accidentType.setValuesByQuery(params);
-      this.vehicleType.setValuesByQuery(params);
-      this.involvedVehicle.setValuesByQuery(params);
+      this.vehicleStore.vehicleType.setValuesByQuery(params);
+      this.vehicleStore.involvedVehicle.setValuesByQuery(params);
       this.speedLimit.setValuesByQuery(params);
       this.roadWidth.setValuesByQuery(params);
       this.separator.setValuesByQuery(params);
