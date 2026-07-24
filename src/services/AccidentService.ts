@@ -16,9 +16,9 @@ class AccidentService {
 		const method = (geo == null)? 'GET' : 'POST';
 		const response = await fetch(url, {
 			method: method,
-			mode: 'cors', // no-cors, *cors, same-origin
+			mode: 'cors', 
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
+			credentials: 'include', 
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -41,9 +41,9 @@ class AccidentService {
 		// console.log(url);
 		const response = await fetch(url, {
 			method: method,
-			mode: 'cors', // no-cors, *cors, same-origin
+			mode: 'cors', 
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -62,9 +62,9 @@ class AccidentService {
 		let url = `${API_ANYWAY_URL}/api/latest-cbs-update-date`;
 		const response = await fetch(url, {
 			method: 'GET',
-			mode: 'cors', // no-cors, *cors, same-origin
+			mode: 'cors', 
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
+			credentials: 'include', 
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -77,73 +77,6 @@ class AccidentService {
 		return response.json();
 	};
 
-	public getLatestCbsUpdateDate1 = async () => {
-		return axios.get(`${API_ANYWAY_URL}/api/latest-cbs-update-date`);
-	};
-
-	//old code - fetch post requests
-	public fetchFilter = async (filter: string, type: string): Promise<Array<any> | undefined> => {
-		// Default options are marked with *
-		const url = `${this.apiUrl}/api/v1/accident/${type}`;
-		const response = await fetch(url, {
-			method: 'POST',
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *client
-			body: filter,
-		});
-		if (!response.ok) {
-			return [];
-		}
-		return response.json(); // parses JSON response into native JavaScript objects
-	};
-
-	public fetchAggregatFilter = async (filter: string, type: string): Promise<Array<any> | undefined> => {
-		// Default options are marked with *
-		const url = type === 'main' ? `${this.apiUrl}/api/v1/accident/aggmain` : `${this.apiUrl}/api/v1/accident/agglatlon`;
-		const response = await fetch(url, {
-			method: 'POST',
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *client
-			body: filter,
-		});
-		if (!response.ok) {
-			return [];
-		}
-		return response.json(); // parses JSON response into native JavaScript objects
-	};
-
-	public fetchAggregate = async (filter: string): Promise<Array<any> | undefined> => {
-		// Default options are marked with *
-		const url = `${this.apiUrl}/api/v1/accident/agg`;
-		const response = await fetch(url, {
-			method: 'POST',
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *client
-			body: filter,
-		});
-		if (!response.ok) {
-			return [];
-		}
-		return response.json(); // parses JSON response into native JavaScript objects
-	};
 }
 const AccidentServiceInstance = new AccidentService();
 export default AccidentServiceInstance;
