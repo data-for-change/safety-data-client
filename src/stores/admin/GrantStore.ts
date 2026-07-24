@@ -1,7 +1,9 @@
 import { makeAutoObservable } from 'mobx';
+import { AxiosError } from 'axios';
 import GrantService from '../../services/GrantService';
 import RootStore from '../RootStore';
-import { Grant, CreateGrantPayload, UserGrantPayload } from '../../types/grant';
+import { AdminUserInfo } from '../../types/adminUserInfo';
+import { Grant, CreateGrantPayload } from '../../types/grant';
 
 export default class GrantStore {
 	rootStore: RootStore;
@@ -9,6 +11,11 @@ export default class GrantStore {
 	loading = false;
 	successMessage = '';
 	errorMessage = '';
+
+	selectedUser: AdminUserInfo | null = null;
+	userSearchLoading = false;
+	userSearchError = '';
+	savingUserGrants = false;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -32,6 +39,11 @@ export default class GrantStore {
 		this.errorMessage = '';
 	};
 
+	clearSelectedUser = () => {
+		this.selectedUser = null;
+		this.userSearchError = '';
+	};
+
 	fetchGrants = async () => {
 		if (!this.rootStore.userStore.isAdmin) {
 			this.setErrorMessage('Unauthorized: admin access required.');
@@ -49,6 +61,55 @@ export default class GrantStore {
 		}
 	};
 
+	searchUserByEmail = async (email: string) => {
+		if (!this.rootStore.userStore.isAdmin) {
+			this.setErrorMessage('Unauthorized: admin access required.');
+			return;
+		}
+		const trimmedEmail = email.trim();
+		if (!trimmedEmail) {
+			this.userSearchError = 'Email is required.';
+			this.selectedUser = null;
+			return;
+		}
+
+		this.userSearchLoading = true;
+		this.userSearchError = '';
+		try {
+			const user = await GrantService.getUserByEmail(trimmedEmail);
+			this.selectedUser = user;
+		} catch (error) {
+			this.selectedUser = null;
+			if (error instanceof AxiosError && error.response?.status === 404) {
+				this.userSearchError = 'User not found.';
+			} else {
+				this.userSearchError = 'Failed to load user.';
+			}
+		} finally {
+			this.userSearchLoading = false;
+		}
+	};
+
+	setUserGrants = async (email: string, grantNames: string[]) => {
+		if (!this.rootStore.userStore.isAdmin) {
+			this.setErrorMessage('Unauthorized: admin access required.');
+			return false;
+		}
+		this.savingUserGrants = true;
+		try {
+			await GrantService.setUserGrants({ email, grants: grantNames });
+			this.setSuccessMessage('User grants updated successfully.');
+			this.setErrorMessage('');
+			await this.searchUserByEmail(email);
+			return true;
+		} catch {
+			this.setErrorMessage('Failed to update user grants.');
+			return false;
+		} finally {
+			this.savingUserGrants = false;
+		}
+	};
+
 	createGrant = async (data: CreateGrantPayload) => {
 		if (!this.rootStore.userStore.isAdmin) {
 			this.setErrorMessage('Unauthorized: admin access required.');
@@ -61,49 +122,6 @@ export default class GrantStore {
 			await this.fetchGrants();
 		} catch {
 			this.setErrorMessage('Failed to create grant.');
-		}
-	};
-
-	deleteGrant = async (grantName: string) => {
-		if (!this.rootStore.userStore.isAdmin) {
-			this.setErrorMessage('Unauthorized: admin access required.');
-			return;
-		}
-		try {
-			await GrantService.deleteGrant({ grant: grantName });
-			this.setSuccessMessage('Grant deleted successfully.');
-			this.setErrorMessage('');
-			await this.fetchGrants();
-		} catch {
-			this.setErrorMessage('Failed to delete grant.');
-		}
-	};
-
-	assignGrantToUser = async (data: UserGrantPayload) => {
-		if (!this.rootStore.userStore.isAdmin) {
-			this.setErrorMessage('Unauthorized: admin access required.');
-			return;
-		}
-		try {
-			await GrantService.addToGrant(data);
-			this.setSuccessMessage('Grant assigned to user successfully.');
-			this.setErrorMessage('');
-		} catch {
-			this.setErrorMessage('Failed to assign grant to user.');
-		}
-	};
-
-	removeGrantFromUser = async (data: UserGrantPayload) => {
-		if (!this.rootStore.userStore.isAdmin) {
-			this.setErrorMessage('Unauthorized: admin access required.');
-			return;
-		}
-		try {
-			await GrantService.removeFromGrant(data);
-			this.setSuccessMessage('Grant removed from user successfully.');
-			this.setErrorMessage('');
-		} catch {
-			this.setErrorMessage('Failed to remove grant from user.');
 		}
 	};
 }

@@ -1,10 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import { API_ANYWAY_URL } from '../utils/globalEnvs';
+import { AdminUserInfo } from '../types/adminUserInfo';
 import {
 	Grant,
 	CreateGrantPayload,
-	UserGrantPayload,
-	DeleteGrantPayload,
+	SetUserGrantsPayload,
 } from '../types/grant';
 
 const apiUrl = API_ANYWAY_URL;
@@ -21,6 +21,19 @@ class GrantService {
 		}
 	}
 
+	static async getUserByEmail(email: string): Promise<AdminUserInfo> {
+		try {
+			const response = await axios.get(`${apiUrl}/sd-user/get_user_info_by_email`, {
+				...withCredentials,
+				params: { email },
+			});
+			return response.data;
+		} catch (error) {
+			GrantService.handleError('fetching user by email', error);
+			throw error;
+		}
+	}
+
 	static async addGrant(data: CreateGrantPayload): Promise<void> {
 		try {
 			await axios.post(`${apiUrl}/sd-user/add_grant`, data, withCredentials);
@@ -30,29 +43,11 @@ class GrantService {
 		}
 	}
 
-	static async addToGrant(data: UserGrantPayload): Promise<void> {
+	static async setUserGrants(data: SetUserGrantsPayload): Promise<void> {
 		try {
-			await axios.post(`${apiUrl}/sd-user/add_to_grant`, data, withCredentials);
+			await axios.post(`${apiUrl}/sd-user/set_grants`, data, withCredentials);
 		} catch (error) {
-			GrantService.handleError('assigning grant to user', error);
-			throw error;
-		}
-	}
-
-	static async removeFromGrant(data: UserGrantPayload): Promise<void> {
-		try {
-			await axios.post(`${apiUrl}/sd-user/remove_from_grant`, data, withCredentials);
-		} catch (error) {
-			GrantService.handleError('removing grant from user', error);
-			throw error;
-		}
-	}
-
-	static async deleteGrant(data: DeleteGrantPayload): Promise<void> {
-		try {
-			await axios.post(`${apiUrl}/sd-user/delete_grant`, data, withCredentials);
-		} catch (error) {
-			GrantService.handleError('deleting grant', error);
+			GrantService.handleError('setting user grants', error);
 			throw error;
 		}
 	}

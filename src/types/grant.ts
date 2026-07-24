@@ -14,6 +14,7 @@ export interface UserGrantPayload {
 	grant: string;
 }
 
-export interface DeleteGrantPayload {
-	grant: string;
+export interface SetUserGrantsPayload {
+	email: string;
+	grants: string[];
 }
