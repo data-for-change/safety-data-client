@@ -11,7 +11,7 @@ export const fetchFilterData = createAsyncThunk(
     dispatch(setIsLoading(true));
 
     const filter = mobxStore.filterStore.getFilterQueryString(null); // still using MobX
-    const geoFilter = mobxStore.filterStore.geoFilter;
+    const geoFilter = mobxStore.filterStore.locationStore.geoFilter;
     //const geoFilter = undefined;
     try {
       const res = await AccidentService.fetchInvolvedList(filter, geoFilter);

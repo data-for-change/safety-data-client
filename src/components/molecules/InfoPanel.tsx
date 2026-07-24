@@ -17,7 +17,7 @@ const WhenTitle: React.FC<{}> = observer(() => {
 const WhereMainTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
   const { filterStore } = useStore();
-  const { cities, cityPopSizeRange, roads } = filterStore;
+  const { locationStore: { cities, cityPopSizeRange, roads } } = filterStore;
   let res = t('Israel');
   if (cities.text !== '') {
     res = `${cities.text}`; // maybe use t('several-cities');
