@@ -1,0 +1,114 @@
+.admin-page {
+	direction: ltr;
+	text-align: left;
+}
+
+.admin-page h2,
+.admin-page h4,
+.admin-page h5,
+.admin-page p,
+.admin-page label,
+.admin-page .alert,
+.admin-page .form-label {
+	text-align: left;
+}
+
+.admin-page .nav-tabs {
+	justify-content: flex-start;
+	font-weight: normal;
+	border-bottom: 1px solid #dee2e6;
+}
+
+.admin-page .nav-tabs .nav-link {
+	font-weight: 400;
+	color: #6c757d;
+	border: none;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+}
+
+.admin-page .nav-tabs .nav-link:hover {
+	font-weight: 400;
+	color: #495057;
+	border: none;
+	border-bottom: 2px solid transparent;
+}
+
+.admin-page .nav-tabs .nav-link.active,
+.admin-page .nav-tabs .nav-item.show .nav-link {
+	font-weight: 600;
+	color: rgb(241, 24, 78) !important;
+	border: none;
+	border-bottom: 2px solid rgb(241, 24, 78);
+}
+
+.admin-page .d-flex {
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.admin-page .user-email-input,
+.admin-page .user-info-alert {
+	max-width: 20rem;
+	width: 20rem;
+}
+
+.admin-page .user-email-input {
+	flex: 0 1 auto;
+}
+
+.admin-page .form-check {
+	padding-left: 1.5em;
+	padding-right: 0;
+	text-align: left;
+}
+
+.admin-page .form-check-input {
+	float: left;
+	margin-left: -1.5em;
+	margin-right: 0.25em;
+}
+
+.admin-page .form-check-label {
+	text-align: left;
+	width: 100%;
+}
+
+.admin-page .grant-check-label {
+	display: flex;
+	align-items: baseline;
+	gap: 1.5rem;
+}
+
+.admin-page .grant-check-name {
+	flex: 0 0 16rem;
+	min-width: 16rem;
+}
+
+.admin-page .grant-check-description {
+	flex: 1 1 auto;
+}
+
+.admin-page th,
+.admin-page td {
+	text-align: left;
+}
+
+.admin-page .table {
+	direction: ltr;
+}
+
+.admin-modal {
+	direction: ltr;
+	text-align: left;
+}
+
+.admin-modal .modal-title,
+.admin-modal .modal-body,
+.admin-modal .modal-footer {
+	text-align: left;
+}
+
+.admin-modal .modal-footer {
+	justify-content: flex-end;
+}
