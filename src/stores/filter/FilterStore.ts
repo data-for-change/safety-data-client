@@ -78,7 +78,6 @@ class FilterStore implements IFilterStore  {
          dataByYears: observable,
          chartDataRanges: observable,
          chartHideOutOfRange: observable,
-         chartOutOfRangeCounts: observable,
          dataSource: observable
       });
       // where
@@ -251,37 +250,6 @@ class FilterStore implements IFilterStore  {
      this.dataSource = sourceVal;
    }
 
-   // who (delegated to WhoFilterStore)
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-
-   get genderTypes() {
-      return this.whoStore.genderTypes;
-   }
-
-   updateGenderType = (aType: number, val: boolean) => {
-      this.whoStore.updateGenderType(aType, val);
-   }
-
-   get ageTypes() {
-      return this.whoStore.ageTypes;
-   }
-
-   updateAgeType = (aType: number, val: boolean) => {
-      this.whoStore.updateAgeType(aType, val);
-   }
-
-   get populationTypes() {
-      return this.whoStore.populationTypes;
-   }
-
-   updatePopulationType = (aType: number, val: boolean) => {
-      this.whoStore.updatePopulationType(aType, val);
-   }
-
-   @computed get isValidWho() {
-      return this.whoStore.isValidWho;
-   }
-
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What (delegated to WhatFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -405,7 +373,7 @@ class FilterStore implements IFilterStore  {
    }
 
    @computed get isValidAllFilters() {
-      const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
+      const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.whoStore.isValidWho
          && this.isValidWhere && this.isValidWhat && this.vehicleStore.isValidWhatVehicle && this.isValidWhatRoad;
       return res;
    }
@@ -698,9 +666,9 @@ class FilterStore implements IFilterStore  {
       query += this.roads.getFilter();
       query += this.roadSegment.getFilter();
       query += this.vehicleStore.injTypes.getFilter();
-      query += this.genderTypes.getFilter();
-      query += this.ageTypes.getFilter();
-      query += this.populationTypes.getFilter();
+      query += this.whoStore.genderTypes.getFilter();
+      query += this.whoStore.ageTypes.getFilter();
+      query += this.whoStore.populationTypes.getFilter();
       query += this.accidentType.getFilter();
       query += this.vehicleStore.vehicleType.getFilter();
       query += this.vehicleStore.involvedVehicle.getFilter();
@@ -724,9 +692,7 @@ class FilterStore implements IFilterStore  {
       this.timeStore.endYear.setText();
       this.vehicleStore.injTypes.setText(ignoreIfAll);
       this.timeStore.dayNight.setText(ignoreIfAll);
-      this.genderTypes.setText(ignoreIfAll);
-      this.ageTypes.setText(ignoreIfAll);
-      this.populationTypes.setText(ignoreIfAll);
+      this.whoStore.setText(ignoreIfAll);
       this.locationAccuracy.setText(ignoreIfAll);
       this.roadTypes.setText(ignoreIfAll);
       const cityNamesArr = getCitiesNames(this.cities.arrValues);
@@ -752,9 +718,7 @@ class FilterStore implements IFilterStore  {
       this.severityStore.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
       this.vehicleStore.injTypes.setBrowserQueryString(params);
-      this.genderTypes.setBrowserQueryString(params);
-      this.ageTypes.setBrowserQueryString(params);
-      this.populationTypes.setBrowserQueryString(params);
+      this.whoStore.setBrowserQueryString(params);
       this.cities.setBrowserQueryString(params);
       this.streets.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
@@ -793,9 +757,7 @@ class FilterStore implements IFilterStore  {
       this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
       this.vehicleStore.injTypes.setValuesByQuery(params);
-      this.genderTypes.setValuesByQuery(params);
-      this.ageTypes.setValuesByQuery(params);
-      this.populationTypes.setValuesByQuery(params);
+      this.whoStore.setValuesByQuery(params);
       this.accidentType.setValuesByQuery(params);
       this.vehicleStore.vehicleType.setValuesByQuery(params);
       this.vehicleStore.involvedVehicle.setValuesByQuery(params);
@@ -853,9 +815,6 @@ class FilterStore implements IFilterStore  {
    @observable
    chartHideOutOfRange: Map<string, boolean> = new Map();
 
-   @observable
-   chartOutOfRangeCounts: Map<string, number> = new Map();
-
    @action
    setChartDataRange = (id: string, start: number, end: number) => {
       this.chartDataRanges.set(id, { start, end });
@@ -874,7 +833,41 @@ class FilterStore implements IFilterStore  {
    resetChartRanges = () => {
       this.chartDataRanges.clear();
       this.chartHideOutOfRange.clear();
-      this.chartOutOfRangeCounts.clear();
+   }
+
+   getChartOutOfRangeCount = (id: EchartId) => {
+      let data: any[] = [];
+      let metaData: any[] | undefined;
+
+      switch (id) {
+         case EchartId.Group_1:
+            data = this.dataFilterd;
+            break;
+         case EchartId.Group_2:
+            data = this.dataGroupby2;
+            metaData = (this.group2Dict.groupBy as GroupBy2).getBars();
+            break;
+         case EchartId.Years:
+            data = this.dataFilterdByYears;
+            break;
+         default:
+            return 0;
+      }
+
+      const getItemValue = (item: any) => {
+         if (item.count !== undefined) return Number(item.count);
+         if (metaData) return Math.max(...metaData.map(m => Number(item[m.key]) || 0));
+         return 0;
+      };
+      const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
+      const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
+      const outsideItem = sliceDataWithAggregation(data, range, metaData)
+         .find((item: any) => item._id === 'outside_range');
+
+      if (!outsideItem) return 0;
+      return metaData
+         ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
+         : Number(outsideItem.count) || 0;
    }
 
    getChartData = (id: EchartId) => {
@@ -909,15 +902,6 @@ class FilterStore implements IFilterStore  {
       const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
       const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
       let sliced = sliceDataWithAggregation(data, range, metaData);
-      const outsideItem = sliced.find((item: any) => item._id === 'outside_range');
-      const outOfRangeCount = outsideItem
-         ? (metaData
-            ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
-            : Number(outsideItem.count) || 0)
-         : 0;
-      runInAction(() => {
-         this.chartOutOfRangeCounts.set(id, outOfRangeCount);
-      });
       if (this.chartHideOutOfRange.get(id)) {
          sliced = sliced.filter((item: any) => item._id !== 'outside_range');
       }

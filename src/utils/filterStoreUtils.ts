@@ -38,9 +38,9 @@ export function getFilterQueryString(fs: any, bounds: any, useBounds: boolean = 
   query += fs.roads.getFilter();
   query += fs.roadSegment.getFilter();
   query += fs.injTypes.getFilter();
-  query += fs.genderTypes.getFilter();
-  query += fs.ageTypes.getFilter();
-  query += fs.populationTypes.getFilter();
+  query += fs.whoStore.genderTypes.getFilter();
+  query += fs.whoStore.ageTypes.getFilter();
+  query += fs.whoStore.populationTypes.getFilter();
   query += fs.accidentType.getFilter();
   query += fs.vehicleType.getFilter();
   query += fs.involvedVehicle.getFilter();
@@ -60,9 +60,7 @@ export function setFiltersText(fs: any, ignoreIfAll: boolean) {
   fs.endYear.setText();
   fs.injTypes.setText(ignoreIfAll);
   fs.dayNight.setText(ignoreIfAll);
-  fs.genderTypes.setText(ignoreIfAll);
-  fs.ageTypes.setText(ignoreIfAll);
-  fs.populationTypes.setText(ignoreIfAll);
+  fs.whoStore.setText(ignoreIfAll);
   fs.locationAccuracy.setText(ignoreIfAll);
   fs.roadTypes.setText(ignoreIfAll);
   const cityNamesArr = getCitiesNames(fs.cities.arrValues);
@@ -84,9 +82,7 @@ export function setBrowserQueryString(fs: any) {
   fs.injurySeverity.setBrowserQueryString(params, false);
   fs.roadTypes.setBrowserQueryString(params);
   fs.injTypes.setBrowserQueryString(params);
-  fs.genderTypes.setBrowserQueryString(params);
-  fs.ageTypes.setBrowserQueryString(params);
-  fs.populationTypes.setBrowserQueryString(params);
+  fs.whoStore.setBrowserQueryString(params);
   fs.cities.setBrowserQueryString(params);
   fs.streets.setBrowserQueryString(params);
   fs.roads.setBrowserQueryString(params);
@@ -117,9 +113,7 @@ export function setStoreByQuery(fs: any, params: URLSearchParams, defCity?: stri
   fs.locationAccuracy.setValuesByQuery(params);
   fs.roadTypes.setValuesByQuery(params);
   fs.injTypes.setValuesByQuery(params);
-  fs.genderTypes.setValuesByQuery(params);
-  fs.ageTypes.setValuesByQuery(params);
-  fs.populationTypes.setValuesByQuery(params);
+  fs.whoStore.setValuesByQuery(params);
   fs.accidentType.setValuesByQuery(params);
   fs.vehicleType.setValuesByQuery(params);
   fs.involvedVehicle.setValuesByQuery(params);

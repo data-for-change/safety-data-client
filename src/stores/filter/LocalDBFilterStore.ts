@@ -56,9 +56,9 @@ class LocalDBFilterStore {
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.rootStore.filterStore.roadSegment.arrValues);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.roadTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.injTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.genderTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.ageTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.populationTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.genderTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.ageTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.populationTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.accidentType);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.vehicleType);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.speedLimit);
@@ -87,9 +87,9 @@ class LocalDBFilterStore {
     this.getFilterFromArrayIDb(arrFilters, "road_segment_name", this.rootStore.filterStore.roadSegment.arrValues);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.roadTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.injTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.genderTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.ageTypes);
-    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.populationTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.genderTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.ageTypes);
+    this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.whoStore.populationTypes);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.accidentType);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.vehicleType);
     this.getMultiplefilterIDB(arrFilters, this.rootStore.filterStore.speedLimit);

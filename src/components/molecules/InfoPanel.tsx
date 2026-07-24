@@ -46,8 +46,7 @@ const WhereTitle: React.FC<{}> = observer(() => {
 
 const WhoTitle: React.FC<{}> = observer(() => {
   const { t } = useTranslation();
-  const { filterStore } = useStore();
-  const { genderTypes, ageTypes, populationTypes } = filterStore;
+  const { filterStore: { whoStore: { genderTypes, ageTypes, populationTypes } } } = useStore();
   let res = (genderTypes.text !== '') ? `, ${genderTypes.text}` : '';
   if (populationTypes.text !== '') res += `, ${populationTypes.text}`;
   if (ageTypes.text !== '') res += `, ${t('Age')}: ${ageTypes.text}`;
