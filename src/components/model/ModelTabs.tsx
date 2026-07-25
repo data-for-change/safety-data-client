@@ -47,7 +47,7 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const { t } = useTranslation();
 	const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
 	const { filterStore, userStore } = useStore();
-
+	const { locationStore: {cities} } = filterStore;
 	const showSections = isDev || SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? '');
 
 	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
@@ -83,7 +83,7 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	);
 
 	// -------- Street sections --------
-	const selectedCityIds = filterStore.cities.arrValues ?? [];
+	const selectedCityIds = cities?.arrValues ?? [];
 	const { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched } =
 		useStreetSections(selectedCityIds, dataAllInjuries, maxDistanceMeters);
 
