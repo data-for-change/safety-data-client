@@ -13,7 +13,8 @@ interface IProps {
 
 const CitySelector: React.FC<IProps> = observer(({ isMultiple = false }) => {
   const { filterStore } = useStore();
-  const { cities, updateCities } = filterStore;
+  const { locationStore } = filterStore;
+  const { cities, updateCities } = locationStore;
   const { t } = useTranslation();
   const selectedCities = citisNamesHeb.filter(city => 
     cities.arrValues.includes(city.value.toString())

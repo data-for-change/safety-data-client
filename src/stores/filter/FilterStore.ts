@@ -38,7 +38,6 @@ import { EchartId } from '../../components/types';
 export interface IFilterStore {
    isLoading: boolean;
    setIsLoading: (value:boolean) => void;
-   cities: ColumnFilterArray;
    streets: ColumnFilterArray;
    roads: ColumnFilterArray;
    groupByDict: GroupMap;
@@ -78,7 +77,6 @@ class FilterStore implements IFilterStore  {
          dataByYears: observable,
          chartDataRanges: observable,
          chartHideOutOfRange: observable,
-         chartOutOfRangeCounts: observable,
          dataSource: observable
       });
       // where
@@ -98,10 +96,10 @@ class FilterStore implements IFilterStore  {
       this.dataGroupby2 = FC.initDataGrpBy2();
       this.appInitialized = false;
       // Reaction to city changes (severity store handles moderate-option disabling)
-      this.severityStore.updateModerateDisabledState(this.cities.arrValues);
+      this.severityStore.updateModerateDisabledState(this.locationStore.cities.arrValues);
       reaction(
-         () => this.cities.arrValues,
-         () => this.severityStore.updateModerateDisabledState(this.cities.arrValues)
+         () => this.locationStore.cities.arrValues,
+         () => this.severityStore.updateModerateDisabledState(this.locationStore.cities.arrValues)
       );
    }
 
@@ -115,30 +113,6 @@ class FilterStore implements IFilterStore  {
 
    setCasualtiesNames = (injurySeverity: IColumnFilter) => {
       this.severityStore.setCasualtiesNames(injurySeverity);
-   }
-
-   get isMultipleCities() {
-      return this.locationStore.isMultipleCities;
-   }
-
-   setIsMultipleCities = (isMulti: boolean) => {
-      this.locationStore.setIsMultipleCities(isMulti);
-   }
-
-   get cities() {
-      return this.locationStore.cities;
-   }
-
-   updateCities = async (values: string[], updateCityResult: boolean) => {
-      return this.locationStore.updateCities(values, updateCityResult);
-   }
-
-   get zoneName() {
-      return this.locationStore.zoneName;
-   }
-
-   setZonesName = async (value: string) => {
-      await this.locationStore.setZonesName(value);
    }
 
    // severity-related moderate-option logic moved to `SeverityFilterStore`
@@ -179,7 +153,7 @@ class FilterStore implements IFilterStore  {
       return this.locationStore.cityPopSizeRange;
    }
 
-   setCityPopSizeRange = (range: string) => {
+   setCityPopSizeRange: (range: string) => void = (range: string) => {
       this.locationStore.setCityPopSizeRange(range);
    }
 
@@ -205,14 +179,6 @@ class FilterStore implements IFilterStore  {
 
    updateLocationAccuracy = (aType: number, val: boolean) => {
       this.locationStore.updateLocationAccuracy(aType, val);
-   }
-
-   get isValidWhere() {
-      return this.locationStore.isValidWhere;
-   }
-
-   get geoFilter() {
-      return this.locationStore.geoFilter;
    }
 
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -251,37 +217,6 @@ class FilterStore implements IFilterStore  {
      this.dataSource = sourceVal;
    }
 
-   // who (delegated to WhoFilterStore)
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-
-   get genderTypes() {
-      return this.whoStore.genderTypes;
-   }
-
-   updateGenderType = (aType: number, val: boolean) => {
-      this.whoStore.updateGenderType(aType, val);
-   }
-
-   get ageTypes() {
-      return this.whoStore.ageTypes;
-   }
-
-   updateAgeType = (aType: number, val: boolean) => {
-      this.whoStore.updateAgeType(aType, val);
-   }
-
-   get populationTypes() {
-      return this.whoStore.populationTypes;
-   }
-
-   updatePopulationType = (aType: number, val: boolean) => {
-      this.whoStore.updatePopulationType(aType, val);
-   }
-
-   @computed get isValidWho() {
-      return this.whoStore.isValidWho;
-   }
-
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What (delegated to WhatFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -297,39 +232,7 @@ class FilterStore implements IFilterStore  {
    @computed get isValidWhat() {
       return this.getWhatStore().isValidWhat;
    }
-
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-   // What Vehicle
-   // ///////////////////////////////////////////////////////////////////////////////////////////////
-
-   get injTypes() {
-      return this.vehicleStore.injTypes;
-   }
-
-   updateInjuerdType = (aType: number, val: boolean) => {
-      this.vehicleStore.updateInjuerdType(aType, val);
-   }
-
-   get vehicleType() {
-      return this.vehicleStore.vehicleType;
-   }
-
-   updateVehicleType = (aType: number, val: boolean) => {
-      this.vehicleStore.updateVehicleType(aType, val);
-   }
-
-   get involvedVehicle() {
-      return this.vehicleStore.involvedVehicle;
-   }
-
-   setInvolvedVehicle = (aType: number, val: boolean) => {
-      this.vehicleStore.setInvolvedVehicle(aType, val);
-   }
-
-   @computed get isValidWhatVehicle() {
-      return this.vehicleStore.isValidWhatVehicle;
-   }
-
+   
    // ///////////////////////////////////////////////////////////////////////////////////////////////
    // What Road (delegated to RoadFilterStore)
    // ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -437,8 +340,8 @@ class FilterStore implements IFilterStore  {
    }
 
    @computed get isValidAllFilters() {
-      const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.isValidWho
-         && this.isValidWhere && this.isValidWhat && this.isValidWhatVehicle && this.isValidWhatRoad;
+      const res = this.severityStore.isValidSeverity && this.timeStore.isValidWhen && this.whoStore.isValidWho
+         && this.locationStore.isValidWhere && this.isValidWhat && this.vehicleStore.isValidWhatVehicle && this.isValidWhatRoad;
       return res;
    }
 
@@ -516,7 +419,7 @@ class FilterStore implements IFilterStore  {
    submitGroupByYears = () => {
       const filtermatch = this.getfilterBySeverityAndCity();
       const filter = createFilterQureyByGroup(filtermatch, 'year');
-      AccidentService.fetchGroupBy(filter, this.geoFilter)
+      AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
          .then((data: ItemCount[] | undefined) => {
             if (data !== undefined) {
                const dataPadded = padDataYearsWith0(data, this.timeStore.startYear.queryValue, this.timeStore.endYear.queryValue);
@@ -538,7 +441,7 @@ class FilterStore implements IFilterStore  {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
-      AccidentService.fetchGroupBy(filter, this.geoFilter)
+      AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
          .then((data: ItemCount2[] | undefined) => {
             if (data !== undefined) {
                const dataPadded =  padDataYearsWith0(data, this.timeStore.startYear.queryValue, this.timeStore.endYear.queryValue);
@@ -558,7 +461,7 @@ class FilterStore implements IFilterStore  {
       const filtermatch = this.getFilterQueryString(null);
       const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, '', limit, this.GroupBySort);
       // logger.log(filter);
-      AccidentService.fetchGroupBy(filter, this.geoFilter)
+      AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
          .then((data: any | undefined) => {
             if(aGroupBy.transformFetchResult) {
                data = aGroupBy.transformFetchResult(data);
@@ -583,7 +486,7 @@ class FilterStore implements IFilterStore  {
          const filtermatch = this.getFilterQueryString(null);
          const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max, groupName2, aGroupBy.limit);
          // logger.log(filter)
-         AccidentService.fetchGroupBy(filter, this.geoFilter)
+         AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
             .then((data: ItemCount2[] | undefined) => {
                if (data !== undefined && data.length > 0) {
                   try {
@@ -662,7 +565,7 @@ class FilterStore implements IFilterStore  {
       reduxStore.dispatch(setFiltersText(true));
       this.setBrowserQueryString();
 
-      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
+      this.rootStore.mapStore.updateIsSetBounds(this.locationStore.cities.arrValues, this.roadSegment.arrValues);
 
       reduxStore.dispatch(fetchFilterData());
     };
@@ -673,7 +576,7 @@ class FilterStore implements IFilterStore  {
       this.setFiltersText(true);
       this.setBrowserQueryString();
       // logger.log(filter);
-      this.rootStore.mapStore.updateIsSetBounds(this.cities.arrValues, this.roadSegment.arrValues);
+      this.rootStore.mapStore.updateIsSetBounds(this.locationStore.cities.arrValues, this.roadSegment.arrValues);
       AccidentService.fetchInvolvedList(filter, null)
          .then((res: any | undefined) => {
             if (res && res.data !== null && res.data !== undefined) {
@@ -698,7 +601,7 @@ class FilterStore implements IFilterStore  {
       //    });
    }
    async submitCityNameAndLocation() {
-      const cityId = this.cities.arrValues[0] || "";
+      const cityId = this.locationStore.cities.arrValues[0] || "";
       this.updateCityResult(cityId);
       if (!cityId || !this.rootStore.mapStore.isCenterMapByCity()) return;
       try {
@@ -723,19 +626,19 @@ class FilterStore implements IFilterStore  {
       query += this.timeStore.endYear.getFilter();
       query += this.severityStore.injurySeverity.getFilter();
       query += getfilterDatasource(this.dataSource);
-      query += this.cities.getFilter();
+      query += this.locationStore.cities.getFilter();
       if (useBounds && bounds != null) query += getfilterBounds(bounds);
       query += this.timeStore.dayNight.getFilter();
       query += this.streets.getFilter();
       query += this.roads.getFilter();
       query += this.roadSegment.getFilter();
-      query += this.injTypes.getFilter();
-      query += this.genderTypes.getFilter();
-      query += this.ageTypes.getFilter();
-      query += this.populationTypes.getFilter();
+      query += this.vehicleStore.injTypes.getFilter();
+      query += this.whoStore.genderTypes.getFilter();
+      query += this.whoStore.ageTypes.getFilter();
+      query += this.whoStore.populationTypes.getFilter();
       query += this.accidentType.getFilter();
-      query += this.vehicleType.getFilter();
-      query += this.involvedVehicle.getFilter();
+      query += this.vehicleStore.vehicleType.getFilter();
+      query += this.vehicleStore.involvedVehicle.getFilter();
       query += this.locationAccuracy.getFilter();
       query += this.roadTypes.getFilter();
       query += this.speedLimit.getFilter();
@@ -754,21 +657,19 @@ class FilterStore implements IFilterStore  {
    setFiltersText = (ignoreIfAll: boolean) => {
       this.timeStore.startYear.setText();
       this.timeStore.endYear.setText();
-      this.injTypes.setText(ignoreIfAll);
+      this.vehicleStore.injTypes.setText(ignoreIfAll);
       this.timeStore.dayNight.setText(ignoreIfAll);
-      this.genderTypes.setText(ignoreIfAll);
-      this.ageTypes.setText(ignoreIfAll);
-      this.populationTypes.setText(ignoreIfAll);
+      this.whoStore.setText(ignoreIfAll);
       this.locationAccuracy.setText(ignoreIfAll);
       this.roadTypes.setText(ignoreIfAll);
-      const cityNamesArr = getCitiesNames(this.cities.arrValues);
+      const cityNamesArr = getCitiesNames(this.locationStore.cities.arrValues);
       const cityNames = cityNamesArr.join(', ');
-      this.cities.setTitle(cityNames);
+      this.locationStore.cities.setTitle(cityNames);
       this.roads.setText();
       this.cityPopSizeRange.setText();
       this.accidentType.setText(ignoreIfAll);
-      this.vehicleType.setText(ignoreIfAll);
-      this.involvedVehicle.setText(ignoreIfAll);
+      this.vehicleStore.vehicleType.setText(ignoreIfAll);
+      this.vehicleStore.involvedVehicle.setText(ignoreIfAll);
    }
 
    /**
@@ -783,17 +684,15 @@ class FilterStore implements IFilterStore  {
       this.timeStore.endYear.setBrowserQueryString(params, false);
       this.severityStore.injurySeverity.setBrowserQueryString(params, false);
       this.roadTypes.setBrowserQueryString(params);
-      this.injTypes.setBrowserQueryString(params);
-      this.genderTypes.setBrowserQueryString(params);
-      this.ageTypes.setBrowserQueryString(params);
-      this.populationTypes.setBrowserQueryString(params);
-      this.cities.setBrowserQueryString(params);
+      this.vehicleStore.injTypes.setBrowserQueryString(params);
+      this.whoStore.setBrowserQueryString(params);
+      this.locationStore.cities.setBrowserQueryString(params);
       this.streets.setBrowserQueryString(params);
       this.roads.setBrowserQueryString(params);
       this.locationAccuracy.setBrowserQueryString(params);
       this.accidentType.setBrowserQueryString(params);
-      this.vehicleType.setBrowserQueryString(params);
-      this.involvedVehicle.setBrowserQueryString(params);
+      this.vehicleStore.vehicleType.setBrowserQueryString(params);
+      this.vehicleStore.involvedVehicle.setBrowserQueryString(params);
       this.speedLimit.setBrowserQueryString(params);
       this.roadWidth.setBrowserQueryString(params);
       this.separator.setBrowserQueryString(params);
@@ -815,22 +714,20 @@ class FilterStore implements IFilterStore  {
       this.severityStore.injurySeverity.setValuesByQuery(params);
       this.timeStore.dayNight.setValuesByQuery(params);
       //const citis = this.getCityIdFromQuery(params, defCity);
-      const cities = getQueryParamValues(params, 'city', defCity, this.isMultipleCities);
-      if (cities) this.updateCities(cities, true);
+      const cities = getQueryParamValues(params, 'city', defCity, this.locationStore.isMultipleCities);
+      if (cities) this.locationStore.updateCities(cities, true);
       const streets = getQueryParamValues(params, 'st', undefined, true);
       if (streets) this.updateStreets(streets);
       const roads = getQueryParamValues(params, 'rd', undefined, true);
-      if (roads) this.updateCities(cities, true);
+      if (roads) this.locationStore.updateCities(cities, true);
       this.setRoads(roads);
       this.locationAccuracy.setValuesByQuery(params);
       this.roadTypes.setValuesByQuery(params);
-      this.injTypes.setValuesByQuery(params);
-      this.genderTypes.setValuesByQuery(params);
-      this.ageTypes.setValuesByQuery(params);
-      this.populationTypes.setValuesByQuery(params);
+      this.vehicleStore.injTypes.setValuesByQuery(params);
+      this.whoStore.setValuesByQuery(params);
       this.accidentType.setValuesByQuery(params);
-      this.vehicleType.setValuesByQuery(params);
-      this.involvedVehicle.setValuesByQuery(params);
+      this.vehicleStore.vehicleType.setValuesByQuery(params);
+      this.vehicleStore.involvedVehicle.setValuesByQuery(params);
       this.speedLimit.setValuesByQuery(params);
       this.roadWidth.setValuesByQuery(params);
       this.separator.setValuesByQuery(params);
@@ -864,7 +761,7 @@ class FilterStore implements IFilterStore  {
       filter += this.timeStore.startYear.getFilter();
       filter += this.timeStore.endYear.getFilter();
       filter += this.severityStore.injurySeverity.getFilter();
-      filter += this.cities.getFilter();
+      filter += this.locationStore.cities.getFilter();
       // filter += FiterUtils.getFilterFromArray('city', this.cities.arrValues);
       return filter;
    }
@@ -885,9 +782,6 @@ class FilterStore implements IFilterStore  {
    @observable
    chartHideOutOfRange: Map<string, boolean> = new Map();
 
-   @observable
-   chartOutOfRangeCounts: Map<string, number> = new Map();
-
    @action
    setChartDataRange = (id: string, start: number, end: number) => {
       this.chartDataRanges.set(id, { start, end });
@@ -906,7 +800,41 @@ class FilterStore implements IFilterStore  {
    resetChartRanges = () => {
       this.chartDataRanges.clear();
       this.chartHideOutOfRange.clear();
-      this.chartOutOfRangeCounts.clear();
+   }
+
+   getChartOutOfRangeCount = (id: EchartId) => {
+      let data: any[] = [];
+      let metaData: any[] | undefined;
+
+      switch (id) {
+         case EchartId.Group_1:
+            data = this.dataFilterd;
+            break;
+         case EchartId.Group_2:
+            data = this.dataGroupby2;
+            metaData = (this.group2Dict.groupBy as GroupBy2).getBars();
+            break;
+         case EchartId.Years:
+            data = this.dataFilterdByYears;
+            break;
+         default:
+            return 0;
+      }
+
+      const getItemValue = (item: any) => {
+         if (item.count !== undefined) return Number(item.count);
+         if (metaData) return Math.max(...metaData.map(m => Number(item[m.key]) || 0));
+         return 0;
+      };
+      const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
+      const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
+      const outsideItem = sliceDataWithAggregation(data, range, metaData)
+         .find((item: any) => item._id === 'outside_range');
+
+      if (!outsideItem) return 0;
+      return metaData
+         ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
+         : Number(outsideItem.count) || 0;
    }
 
    getChartData = (id: EchartId) => {
@@ -941,15 +869,6 @@ class FilterStore implements IFilterStore  {
       const maxVal = data.reduce((max, item) => Math.max(max, getItemValue(item)), 0);
       const range = this.chartDataRanges.get(id) || { start: 0, end: maxVal };
       let sliced = sliceDataWithAggregation(data, range, metaData);
-      const outsideItem = sliced.find((item: any) => item._id === 'outside_range');
-      const outOfRangeCount = outsideItem
-         ? (metaData
-            ? metaData.reduce((sum, m) => sum + (Number(outsideItem[m.key]) || 0), 0)
-            : Number(outsideItem.count) || 0)
-         : 0;
-      runInAction(() => {
-         this.chartOutOfRangeCounts.set(id, outOfRangeCount);
-      });
       if (this.chartHideOutOfRange.get(id)) {
          sliced = sliced.filter((item: any) => item._id !== 'outside_range');
       }

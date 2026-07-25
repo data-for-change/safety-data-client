@@ -10,7 +10,7 @@ import { Street } from '../../types';
 interface IProps { }
 const StreetSelector: React.FC<IProps> = observer(() => {
   const { filterStore } = useStore();
-  const { streets, cities, updateStreets, cityStreets } = filterStore;
+  const { locationStore: { streets, cities, updateStreets, cityStreets } } = filterStore;
   const { t } = useTranslation();
   const oCityStreets = toJS(cityStreets);
   const selectedStreets = oCityStreets?.filter((street: Street) =>

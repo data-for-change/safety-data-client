@@ -5,15 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../stores/store';
 import { ItemCount } from '../../types';
+import { EchartId } from '../types';
 
 interface IProps {
-	id: string;
+	id: EchartId;
 	data: ItemCount[];
 }
 
 const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
 	const { filterStore } = useStore();
-	const { chartDataRanges, setChartDataRange, chartHideOutOfRange, setChartHideOutOfRange, chartOutOfRangeCounts } = filterStore;
+	const { chartDataRanges, setChartDataRange, chartHideOutOfRange, setChartHideOutOfRange, getChartOutOfRangeCount } = filterStore;
 	const { t } = useTranslation();
 	const direction = useSelector((state: RootState) => state.appUi.direction);
 	const isRtl = direction === 'rtl';
@@ -60,7 +61,7 @@ const ChartDataFilterSlider: FC<IProps> = observer(({ id, data }) => {
 
 	if (!data || data.length <= 1) return null;
 
-	const outOfRangeCount = chartOutOfRangeCounts.get(id) ?? 0;
+	const outOfRangeCount = getChartOutOfRangeCount(id);
 	const hideOutOfRange = chartHideOutOfRange.get(id) ?? false;
 
 	const leftPosStart = isRtl ? `${100 - (localRange.start / maxVal) * 100}%` : `${(localRange.start / maxVal) * 100}%`;
@@ -186,7 +187,7 @@ const styles: Record<string, React.CSSProperties> = {
 		gap: '4px',
 	},
 	rangeInput: {
-		width: '64px',
+		width: '52px',
 		padding: '2px 4px',
 		fontSize: '13px',
 		border: '1px solid rgba(0, 0, 0, 0.15)',

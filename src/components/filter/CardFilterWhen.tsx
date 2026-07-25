@@ -36,6 +36,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                          value={String(startYear.queryValue)}
                          data={startYear.arrTypes}
                          onChange={(e: ChangeEvent<HTMLSelectElement>) => { setStartYear(e.target.value); }}
+                         layout="column"
                          cssClass="my-select-spaced"
                       />
                       <MySelect
@@ -43,6 +44,7 @@ const CardFilterWhen: React.FC<any> = observer(() => {
                          value={String(endYear.queryValue)}
                          data={endYear.arrTypes}
                          onChange={(e: ChangeEvent<HTMLSelectElement>) => { setEndYear(e.target.value); }}
+                         layout="column"
                          cssClass="my-select-spaced"
                          
                       />

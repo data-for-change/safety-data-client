@@ -10,8 +10,16 @@ import '../../styles/accordion.css'
 const CardFilterWho = observer(() => {
     const { t } = useTranslation();
     const { filterStore } = useStore();
-    const { isValidWho, genderTypes, updateGenderType, } = filterStore;
-    const { ageTypes, updateAgeType, populationTypes, updatePopulationType, setFormCardKey } = filterStore;
+    const { whoStore, setFormCardKey } = filterStore;
+    const {
+       isValidWho,
+       genderTypes,
+       updateGenderType,
+       ageTypes,
+       updateAgeType,
+       populationTypes,
+       updatePopulationType,
+    } = whoStore;
   
     return (
        <Card>
@@ -48,4 +56,4 @@ const CardFilterWho = observer(() => {
     );
  });
 
-export default CardFilterWho; 
+export default CardFilterWho;

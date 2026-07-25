@@ -17,16 +17,16 @@ const CardFilterWhere = observer(() => {
     const { t } = useTranslation();
     const { filterStore , userStore} = useStore();
     const hasZonePermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isHotSpotGrants);
-    const {
-       isValidWhere, 
-       cities,
-       roadTypes, updateRoadType, 
-       zoneName, setZonesName,
-       locationAccuracy, updateLocationAccuracy,
-       isMultipleCities,
-       cityPopSizeRange, setCityPopSizeRange,
-       setFormCardKey,
-    } = filterStore;
+    const { locationStore,  setFormCardKey } = filterStore;
+    const { 
+      isValidWhere,
+      cities,
+      roadTypes, updateRoadType,
+      zoneName, setZonesName,
+      locationAccuracy, updateLocationAccuracy,
+      isMultipleCities,
+      cityPopSizeRange, setCityPopSizeRange,
+   } = locationStore;
     const cityName = cities.arrValues[0];
     const showPoliceStation = hasZonePermission && cities.arrValues.length === 1 && (cityName ==='5000');
     return (
@@ -50,7 +50,8 @@ const CardFilterWhere = observer(() => {
                    value={String(zoneName.queryValue)}
                    data={zoneName.arrTypes}
                    onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}   
-                   cssClass="stacked"                
+                   cssClass="stacked" 
+                   layout="column"               
                 />}
                 <RoadNameSelector />
                 <RoadSegmentSelector />

@@ -21,11 +21,11 @@ const ModelTemplate: React.FC<IProps> = observer(() => {
   const dispatch = useDispatch<AppDispatch>();
   const showFilterModal = useSelector((state: RootState) => state.appUi.showFilterModal);
   const { filterStore } = useStore();
-  const { cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
-  
+  const { locationStore, cityResult, isUpdateFromUrl, setIsUpdateFromUrl } = filterStore;
+  const { setIsMultipleCities } = locationStore;
   useEffect(() => {
     setCurrentPage('city');
-    filterStore.setIsMultipleCities(false);
+    setIsMultipleCities(false);
     if (cityResult !== '') {
       filterStore.submitFilter();
     }

@@ -27,7 +27,7 @@ const LimitInput: React.FC<IProps> = observer(({ id }) => {
       step={10}
       value={GroupByLimit ?? ""}
       onChange={onLimitChange}
-      style={{ display: 'flex', height: '30px' }} 
+      style={{ display: 'flex', height: '30px', gap: '0.5rem' }} 
     />
   );
 });

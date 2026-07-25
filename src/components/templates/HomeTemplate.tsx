@@ -19,8 +19,9 @@ const HomeTemplate: React.FC<IProps> = () => {
 
    // Keep using MobX stores for filtering and map logic
    const { mapStore, filterStore } = useStore();
-   const { setIsMultipleCities, updateCities, submitFilter } = filterStore;
-
+   const { locationStore, submitFilter } = filterStore;
+   const { setIsMultipleCities, updateCities } = locationStore;
+   
    useEffect(() => {
       dispatch(setCurrentPage('home'));
       setIsMultipleCities(true);

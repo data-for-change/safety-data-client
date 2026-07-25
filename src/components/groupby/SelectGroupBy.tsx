@@ -33,6 +33,7 @@ const SelectGroupBy: React.FC<IProps> = observer(({ id, labelText = 'GroupBy' })
       value={val} 
       style={{ display: 'flex', height: '30px'}} 
       cssClass="my-select-spaced"
+      layout="column"
     />
   );
 });
