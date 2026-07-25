@@ -206,7 +206,7 @@ export const initInjTypes = () => {
   col.arrTypes.push(new FilterChecker('all', true, []));
   col.arrTypes.push(new FilterChecker('pedestrian', false, [1]));
   col.arrTypes.push(new FilterChecker('cyclist', false, [6, 7]));
-  col.arrTypes.push(new FilterChecker('other', false, [8, 9]));
+  col.arrTypes.push(new FilterChecker('micromobility', false, [8, 9,10, 11, 12, 13]));
   col.arrTypes.push(new FilterChecker('motorcycle', false, [4, 5]));
   col.arrTypes.push(new FilterChecker('wheels4+', false, [2, 3]));
   return col;
