@@ -16,8 +16,8 @@ import '../../styles/accordion.css'
 const CardFilterWhere = observer(() => {
     const { t } = useTranslation();
     const { filterStore , userStore} = useStore();
-    const hasZonePermission = environment.isLocalMode || (userStore.isAuthenticated && userStore.isHotSpotGrants);
-    const { locationStore,  setFormCardKey } = filterStore;
+    const { isAuthenticated, isPolygonFiltreingGrants } = userStore;
+    const { locationStore, setFormCardKey } = filterStore;
     const { 
       isValidWhere,
       cities,
@@ -28,6 +28,7 @@ const CardFilterWhere = observer(() => {
       cityPopSizeRange, setCityPopSizeRange,
    } = locationStore;
     const cityName = cities.arrValues[0];
+    const hasZonePermission = environment.isLocalMode || (isAuthenticated && isPolygonFiltreingGrants);
     const showPoliceStation = hasZonePermission && cities.arrValues.length === 1 && (cityName ==='5000');
     return (
        <Card>
