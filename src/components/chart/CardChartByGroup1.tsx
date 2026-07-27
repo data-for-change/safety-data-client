@@ -53,19 +53,18 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
          <SmallCard style={{ marginBottom: '0.5rem' }}>
             <div className="chart-config">
                <SelectGroupBy id="Graphs.Main.SelectGroupby" />
-               <SelectSortBy id="Graphs.Main.SelectSort" />
-                <div style={{ width: '200px', margin: '0 auto' }}>
-                 
+               <div className="chart-config-row">
+                  <SelectSortBy id="Graphs.Main.SelectSort" />
+                  <Button
+                     variant="icon"
+                     onClick={() => setShowModal(!showModal)}
+                     title="Chart Settings"
+                     aria-label="Open chart settings"
+                     data-testid="settings-button"
+                  >
+                     {memoSettingsIcon}
+                  </Button>
                </div>
-               <Button
-                  variant="icon"
-                  onClick={() => setShowModal(!showModal)}
-                  title="Chart Settings"
-                  aria-label="Open chart settings"
-                  data-testid="settings-button"
-               >
-                  {memoSettingsIcon}
-               </Button>
             </div>
             <ConfigModal title="Chart Options" showModal={showModal} setShow={setShowModal}>
                <ConfigChart />

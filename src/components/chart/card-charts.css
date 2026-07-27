@@ -4,6 +4,12 @@
   gap: 0.75rem;
 }
 
+.chart-config-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   .chart-config {

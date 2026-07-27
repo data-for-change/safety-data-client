@@ -6,6 +6,9 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
   padding: 0.5rem;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
