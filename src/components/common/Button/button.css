@@ -1,0 +1,20 @@
+.btn-icon {
+  border-radius: 50%;
+  background-color: var(--primary-second);
+  opacity: 0.8;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+}

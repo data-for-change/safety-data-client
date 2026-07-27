@@ -204,14 +204,14 @@ const styles: Record<string, React.CSSProperties> = {
 		color: 'rgba(0, 0, 0, 0.3)',
 		fontWeight: 'normal',
 	},
-	sliderWrapper: {
-		position: 'relative',
-		width: '100%',
-		height: '24px',
-		display: 'flex',
-		alignItems: 'center',
-		marginTop: '8px',
-	},
+  	sliderWrapper: {
+  		position: 'relative',
+  		width: '100%',
+  		height: '40px',
+  		display: 'flex',
+  		alignItems: 'center',
+  		marginTop: '8px',
+  	},
 	checkboxRow: {
 		display: 'flex',
 		alignItems: 'center',
@@ -276,6 +276,12 @@ const styles: Record<string, React.CSSProperties> = {
 
 // Add CSS for the thumb since we can't do it easily inline for all browsers
 const css = `
+  .chart-range-slider-container input[type=range] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+  }
   .chart-range-slider-container input[type=range]::-webkit-slider-thumb {
     pointer-events: auto;
     appearance: none;

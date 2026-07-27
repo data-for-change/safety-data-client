@@ -36,7 +36,6 @@ const SelectSortBy: React.FC<IProps> = observer(({ id, labelText = 'SortBy' }) =
       value={GroupBySort || ''} 
       style={{ display: 'flex', height: '30px' }} 
       cssClass="form-select-m" 
-      layout="column"
     />
   );
 });

@@ -5,7 +5,7 @@ import FilterForm from '../filter/FilterForm'
 import { useStore } from '../../stores/storeConfig';
 import { RootState } from '../../stores/store';
 import { observer } from 'mobx-react';
-import { Button } from 'react-bootstrap';
+import { Button } from '../common';
 import '../../styles/sidebar.css'
 
 const Drawer: React.FC<any> = observer((props) => {
@@ -22,12 +22,12 @@ const Drawer: React.FC<any> = observer((props) => {
             <FilterForm />
          </div>
          <Button
-            style={{ margin: '0.5rem' }}
             variant="primary"
             onClick={() => filterStore.submitFilter()}
             disabled={isLoading || !isValidAllFilters}
+            isLoading={isLoading}
          >
-           {isLoading ? t('Loading') : t('Submit')} 
+           {t('Submit')} 
          </Button>
          {/* <Button
             style={{ margin: '0.5rem' }}
