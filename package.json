@@ -80,7 +80,7 @@
 		"mobx-react-lite": "^4.1.0",
 		"svg-url-loader": "^8.0.0",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.8.2",
+		"typescript": "^5.9.3",
 		"vite": "^6.2.3",
 		"vitest": "^3.1.2"
 	}
