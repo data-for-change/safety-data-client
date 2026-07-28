@@ -7,7 +7,7 @@ interface IProps { }
 
 export const Footer: React.FC<IProps> = () => {
  
-  const versionLabel = 'ver: 25/07/2026';
+  const versionLabel = 'ver: 28/07/2026';
 
   return (
     <footer className="footer">
