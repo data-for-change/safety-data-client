@@ -8,29 +8,41 @@ export const getColorByVehicle = (category: string) => {
         case 'הולך רגל':
             res = '#4cc9f0';
             break;
+        case 'אופניים':
+            res = '#4895ef';
+            break;
+        case 'אופניים חשמליים':
+            res = '#3768c9';
+            break;
+        case 'קורקינט חשמלי':
+            res = '#3f37c9';
+            break;    
         case 'רכב נוסעים פרטי':
+        case 'מונית':
         case 'מכונית':
             res = '#f72585';
             break;
         case 'אופנוע עד 50 סמ"ק':
         case 'אופנוע 51 עד 125 סמ"ק':
         case 'אופנוע 126 עד 400 סמ"ק':
-        case 'אופנוע 401+ סמ"ק':
+        case 'אופנוע 401 סמ"ק ומעלה':
         case 'אופנוע':
             res = '#b5179e';
             break;
-        case 'אופניים':
-            res = '#4895ef';
+       
+        case 'אוטובוס':
+            res = '#c9377e';
             break;
-        case 'אופניים חשמליים':
-        case 'חשמלי דו גלגלי':
-            res = '#3f37c9';
-            break;
-        case 'קורקינט חשמלי':
-            res = '#3f37c9';
+        case 'משא':
+        case 'משא 3.6 עד 9.9 טון':
+        case 'משא 10.0 עד 12.0 טון':
+        case 'משא 12.1 עד 15.9 טון':
+        case 'משא 16.0 עד 33.9 טון':
+        case 'משא 34.0+ טון':
+            res = '#f8961e';
             break;
         default:
-            res = '#FE4E00';
+            res = '#617374';
             break;
     }
     return res;
@@ -172,8 +184,8 @@ export const getColorByRoadType = (value: string) => {
         case 'לא בצומת':
             res = '#4895ef';
             break;
-        case 'לא-עירונית בצומת':
-        case 'עירונית בצומת':
+        case 'לא-עירונית בצומת (כולל מפגש של כביש ורחוב)':
+        case 'עירונית בצומת (כולל צמתים בגבולות יישובים)':
         case 'בצומת':
             res = '#CD6155';
             break;
@@ -237,7 +249,7 @@ export const createLegendByColorType = (colorBy: string) =>
               res = createLegendArr(grade,getColorBySeverity);
               break;
           case 'Vehicle':
-              grade = [ 'חשמלי דו גלגלי', 'מכונית', 'אופנוע', 'לא ידוע', 'הולך רגל', 'אופניים'];
+              grade = ['הולך רגל', 'אופניים', 'אופניים חשמליים', 'קורקינט חשמלי','אופנוע', 'מכונית', 'אוטובוס', 'משא','אחר'];
               res = createLegendArr(grade,getColorByVehicle);
               break;
           case 'DayNight':
