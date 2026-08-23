@@ -9,7 +9,7 @@
 .cluster-table td {
   padding: 8px 10px;
   border-bottom: 1px solid #e5e7eb;
-  text-align: left;
+  text-align: start;
   white-space: nowrap;
 }
 
@@ -38,7 +38,7 @@
 
 /* Numbers alignment */
 .cluster-table .num {
-  text-align: right;
+  text-align: start;
   font-variant-numeric: tabular-nums;
 }
 

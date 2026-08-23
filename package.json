@@ -36,7 +36,7 @@
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite --mode=dev_local",
 		"mock-admin-api": "node scripts/mock-admin-api.mjs",
 		"build": "vite build",
 		"preview": "vite preview",
