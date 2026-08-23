@@ -6,7 +6,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function normalizeStreet(name) {
 	if (!name) return null;
-	return name.replace(/['"]/g, '').trim();
+	const cleaned = name.replace(/['"]/g, '').trim();
+	// Source shapefile stores Hebrew text in visual (reversed) order instead of
+	// logical Unicode order, so reverse it back for correct RTL rendering.
+	if (/[֐-׿]/.test(cleaned)) {
+		return cleaned.split('').reverse().join('');
+	}
+	return cleaned;
 }
 
 function computeBounds(polyline) {

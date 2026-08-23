@@ -64,10 +64,11 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 							<Polyline
 								key={section.id}
 								positions={positions}
-								pathOptions={{ color: isUsed ? '#2196F3' : '#90CAF9', weight: isUsed ? 4 : 2, opacity: isUsed ? 0.9 : 0.4 }}
+								pathOptions={{ color: isUsed ? '#4121f3' : '#90CAF9', weight: isUsed ? 4 : 2, opacity: isUsed ? 0.9 : 0.4 }}
 							>
 								<Popup>
-									{section.streetName}<br />
+									{section.streetName}
+									<br />
 									LAMAS: {section.lamas_id ?? '—'}
 								</Popup>
 							</Polyline>
