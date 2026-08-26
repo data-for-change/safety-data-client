@@ -2,6 +2,7 @@ export { Button } from './Button';
 export { ButtonShowFilterModal } from './ButtonShowFilterModal';
 export { ButtonToggle } from './ButtonToggle';
 export { Checkbox } from './CheckBox';
+export { DataWithLabel } from './DataWithLabel';
 export { ErrorBoundary } from './ErrorBoundary';
 export { Loader } from './Loader';
 export { MySelect } from './MySelect';

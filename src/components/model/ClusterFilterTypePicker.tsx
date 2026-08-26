@@ -1,6 +1,6 @@
 import React from "react";
 import { ModelFilterType } from "../../types";
-import { MySelect } from "../common";
+import { MySelect } from '../common';
 
 interface Option {
   value: string;
@@ -19,22 +19,18 @@ const OPTIONS: Option[] = [
 ];
 
 export const ClusterFilterTypePicker: React.FC<Props> = ({ value, onChange }) => {
-  // local handler: converts string from MySelect to ModelFilterType
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value as ModelFilterType);
-  };
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange(e.target.value as ModelFilterType);
+	};
 
-  return (
-    <MySelect<Option>
-      id="cluster-filter-type-picker"
-      label="Cluster type"
-      data={OPTIONS}
-      valProp="value"
-      contentProp="text"
-      value={value}
-      onChange={handleChange}
-    
-      cssClass="form-select-m"
-    />
-  );
+	return (
+		<MySelect<Option>
+			id='cluster-filter-type-picker'
+			data={OPTIONS}
+			valProp='value'
+			contentProp='text'
+			value={value}
+			onChange={handleChange}
+		/>
+	);
 };

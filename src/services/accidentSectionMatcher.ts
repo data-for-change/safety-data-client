@@ -35,6 +35,8 @@ export type MatchedAccidentRow = {
 	longitude: number;
 	distanceMeters: number;
 	sectionId: string;
+	roadTypeHebrew: string;
+	vehicleTypeHebrew?: string;
 };
 
 export type UnmatchedAccidentRow = {
@@ -218,6 +220,8 @@ export function mapAccidentsToStreetSections(
 			longitude: p.lng,
 			distanceMeters: best.distance,
 			sectionId: best.section.id,
+			roadTypeHebrew: a.road_type_hebrew,
+			vehicleTypeHebrew: a.vehicle_vehicle_type_hebrew,
 		});
 	}
 

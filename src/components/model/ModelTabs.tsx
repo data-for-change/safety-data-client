@@ -23,7 +23,14 @@ import PaginationControls from '../detailsTable/PaginationControls';
 
 import TableView from '../detailsTable/TableView';
 import AccidentDetailsCard from '../detailsTable/AccidentDetailsCard';
-import { buildClusterTable, clusterPoints, calculateKernelDensity, buildDensityClustersTable } from './modelhelper';
+import {
+	buildClusterTable,
+	clusterPoints,
+	calculateKernelDensity,
+	buildDensityClustersTable,
+	buildSectionScores,
+	JUNCTION_HEB_VAL,
+} from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';
 import ClusterTable from './ClusterTable';
@@ -35,6 +42,8 @@ import SectionsMap from './SectionsMap';
 import { useStore } from '../../stores/storeConfig';
 import { observer } from 'mobx-react-lite';
 import { useStreetSections } from './useStreetSections';
+import { DataWithLabel } from '../common';
+import { Form } from 'react-bootstrap';
 
 const SECTIONS_ALLOWED_EMAIL = ['galraij@gmail.com', 'sejo1981@gmail.com', 'eyalher@gmail.com'];
 const isDev = import.meta.env.DEV;
@@ -47,7 +56,9 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const { t } = useTranslation();
 	const dataAllInjuries = useSelector(selectDataAllInjuries) as Accident[];
 	const { filterStore, userStore } = useStore();
-	const { locationStore: {cities} } = filterStore;
+	const {
+		locationStore: { cities },
+	} = filterStore;
 	const showSections = isDev || SECTIONS_ALLOWED_EMAIL.includes(userStore.user?.email.toLowerCase() ?? '');
 
 	const [activeTab, setActiveTab] = React.useState<TTabs>('densityMap');
@@ -57,6 +68,8 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const [filterType, setFilterType] = React.useState<ModelFilterType>(ModelFilterType.All);
 	const [maxClusters, setMaxClusters] = React.useState<number>(30);
 	const [maxDistanceMeters, setMaxDistanceMeters] = React.useState<number>(20);
+	const [sectionStrokeWidth, setSectionStrokeWidth] = React.useState<number>(4);
+	const [showAccidentPoints, setShowAccidentPoints] = React.useState<boolean>(true);
 
 	// density
 	const denstiyPoints = React.useMemo(() => calculateKernelDensity(dataAllInjuries, heatmapRadius), [dataAllInjuries, heatmapRadius]);
@@ -84,39 +97,94 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 
 	// -------- Street sections --------
 	const selectedCityIds = cities?.arrValues ?? [];
-	const { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched } =
-		useStreetSections(selectedCityIds, dataAllInjuries, maxDistanceMeters);
+	const { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched } = useStreetSections(
+		selectedCityIds,
+		dataAllInjuries,
+		maxDistanceMeters,
+	);
+
+	// filter matched accidents by junction/street type (same predicate used for clusters), then cap to top-N sections by score
+	const sectionsMatched = React.useMemo(() => {
+		const sectionIsJunction = new Map<string, boolean>();
+		for (const row of matched) {
+			if (row.roadTypeHebrew === JUNCTION_HEB_VAL) sectionIsJunction.set(row.sectionId, true);
+			else if (!sectionIsJunction.has(row.sectionId)) sectionIsJunction.set(row.sectionId, false);
+		}
+
+		const typeFiltered =
+			filterType === ModelFilterType.All
+				? matched
+				: matched.filter((r) => {
+						const isJunction = sectionIsJunction.get(r.sectionId) ?? false;
+						return filterType === ModelFilterType.Junctions ? isJunction : !isJunction;
+					});
+
+		const scores = buildSectionScores(typeFiltered, severityMode);
+		const top = new Set(
+			Array.from(scores.entries())
+				.sort((a, b) => b[1].score - a[1].score)
+				.slice(0, maxClusters)
+				.map(([id]) => id),
+		);
+
+		return typeFiltered.filter((r) => top.has(r.sectionId));
+	}, [matched, filterType, severityMode, maxClusters]);
+
+	const isSectionsTab = activeTab === 'sectionTable' || activeTab === 'sectionMap';
 
 	return (
 		<Card className='m-1 p-0 border-0'>
 			<Card.Body>
 				{/* -------- Controls -------- */}
-				<div className='d-flex flex-wrap gap-4 mb-3'>
-					<JunctionRadiusPicker
-						value={heatmapRadius}
-						onChange={setHeatmapRadius}
-						text={'heatmap radius'}
-						min={100}
-						max={200}
-						step={50}
-					/>
-					<JunctionRadiusPicker value={junctionRadius} onChange={setJunctionRadius} text='Junction radius' />
+				<div className='d-flex flex-wrap gap-3 mb-3'>
+					<DataWithLabel label={t('HeatmapRadius')}>
+						<JunctionRadiusPicker value={heatmapRadius} onChange={setHeatmapRadius} min={100} max={200} step={50} />
+					</DataWithLabel>
+					<DataWithLabel label={t('JunctionRadius')}>
+						<JunctionRadiusPicker value={junctionRadius} onChange={setJunctionRadius} />
+					</DataWithLabel>
 
-					<SeverityModePicker value={severityMode} onChange={setSeverityMode} />
+					<DataWithLabel label={t('SeverityModeLabel')}>
+						<SeverityModePicker value={severityMode} onChange={setSeverityMode} />
+					</DataWithLabel>
 
-					<ClusterFilterTypePicker value={filterType} onChange={setFilterType} />
+					<DataWithLabel label={t('ClusterType')}>
+						<ClusterFilterTypePicker value={filterType} onChange={setFilterType} />
+					</DataWithLabel>
 
-					<MaxClustersPicker value={maxClusters} onChange={setMaxClusters} />
-					{(activeTab === 'sectionTable' || activeTab === 'sectionMap') && (
-						<JunctionRadiusPicker
-							value={maxDistanceMeters}
-							onChange={setMaxDistanceMeters}
-							text='Max distance'
-							min={0}
-							max={100}
-							step={5}
+					<DataWithLabel label={t('MaxClusters')}>
+						<MaxClustersPicker value={maxClusters} onChange={setMaxClusters} />
+					</DataWithLabel>
+
+					<DataWithLabel label={t('MaxDistance')}>
+						<JunctionRadiusPicker value={maxDistanceMeters} onChange={setMaxDistanceMeters} min={0} max={100} step={5} />
+					</DataWithLabel>
+
+					<DataWithLabel label={t('StrokeWidth')}>
+						<div className='d-flex align-items-center gap-2'>
+							<div className='d-flex' style={{ width: 100 }}>
+								<Form.Range
+									min={1}
+									max={10}
+									step={1}
+									value={sectionStrokeWidth}
+									onChange={(e) => setSectionStrokeWidth(Number(e.target.value))}
+								/>
+							</div>
+							<span className='fw-bold' style={{ fontSize: 14 }}>
+								{sectionStrokeWidth}
+							</span>
+						</div>
+					</DataWithLabel>
+
+					<DataWithLabel label={t('ShowAccidentPoints')}>
+						<Form.Check
+							type='switch'
+							id='show-accident-points-switch'
+							checked={showAccidentPoints}
+							onChange={(e) => setShowAccidentPoints(e.target.checked)}
 						/>
-					)}
+					</DataWithLabel>
 				</div>
 
 				<Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key as TTabs)} mountOnEnter id='model-tabs'>
@@ -138,19 +206,27 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 					{showSections && (
 						<Tab eventKey='sectionTable' title={t('SectionTable')}>
 							<SectionsTable
-								matched={matched}
+								matched={sectionsMatched}
 								unmatched={unmatched}
 								streetSections={streetSections}
 								loadError={sectionsLoadError}
 								telAvivAccidents={telAvivAccidents}
 								isTelAvivSelected={isTelAvivSelected}
+								severityMode={severityMode}
 							/>
 						</Tab>
 					)}
 
 					{showSections && (
 						<Tab eventKey='sectionMap' title={t('SectionMap')}>
-							<SectionsMap matched={matched} unmatched={unmatched} streetSections={streetSections} />
+							<SectionsMap
+								matched={sectionsMatched}
+								unmatched={unmatched}
+								streetSections={streetSections}
+								severityMode={severityMode}
+								sectionStrokeWidth={sectionStrokeWidth}
+								showAccidentPoints={showAccidentPoints}
+							/>
 						</Tab>
 					)}
 				</Tabs>

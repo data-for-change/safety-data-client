@@ -1,7 +1,7 @@
 import { Accident, ClusterRow, ModelFilterType, ModelPointWithDensity, ModelSeverityMode, ModelSeverityRange } from "../../types";
 
 const JUNCTION_RADIUS_METERS = 50;
-const JUNCTION_HEB_VAL = "עירונית בצומת (כולל צמתים בגבולות יישובים)";
+export const JUNCTION_HEB_VAL = 'עירונית בצומת (כולל צמתים בגבולות יישובים)';
 
 export function clusterPoints(points: Accident[], junctionRaduis = JUNCTION_RADIUS_METERS): Accident[][] {
   const clusters: Accident[][] = [];
@@ -116,20 +116,20 @@ export function buildClusterTable(
   let maxResults = maxClusters;
   let result: ClusterRow[];
   switch (filterType) {
-    case ModelFilterType.Junctions:
-      result = junctionRows;
-      break;
+		case ModelFilterType.Junctions:
+			result = junctionRows;
+			break;
 
-    case ModelFilterType.Streets:
-      result = streetRows;
-      break;
+		case ModelFilterType.Streets:
+			result = streetRows;
+			break;
 
-    case ModelFilterType.All:
-    default:   
-      junctionRows = junctionRows.slice(0,maxResults/2);
-      streetRows = streetRows.slice(0,maxResults/2);   
-      result = [...junctionRows, ...streetRows];
-      break;
+		case ModelFilterType.All:
+		default:
+			junctionRows = junctionRows.slice(0, maxResults / 2);
+			streetRows = streetRows.slice(0, maxResults / 2);
+			result = [...junctionRows, ...streetRows];
+			break;
   }
   //filter by minValue
   //result = result.filter(row => row.severityIndex >= minValue);
@@ -138,7 +138,7 @@ export function buildClusterTable(
   return result;
 }
 
-// calculate Kernel Density Function (Quartic) for all points 
+// calculate Kernel Density Function (Quartic) for all points
 // (1/ℎ^2)*Σ((3/𝜋)*(1−(𝑑𝑖𝑗^2/ℎ^2))^2)
 export function calculateKernelDensity(
   points: Accident[],
@@ -242,7 +242,7 @@ function calculateDensityForPoint(
   };
 }
 
-// calculate the kernelWeight for given distance 
+// calculate the kernelWeight for given distance
 function kernelWeight(distance: number, radois: number): number {
   if (distance > radois) return 0;
   const ratio = (distance * distance) / (radois * radois);
@@ -293,53 +293,67 @@ function filterAccuratePoints(points: Accident[]): Accident[] {
   );
 }
 
-//weighted severity index
-function calcSeverityIndex(
-  points: Accident[],
-  mode: ModelSeverityMode = 1
+//weighted severity for a single accident (injury severity + vehicle type), shared by calcSeverityIndex and buildSectionScores
+function severityWeight(
+	injurySeverityHebrew: string | undefined,
+	vehicleTypeHebrew: string | undefined,
+	mode: ModelSeverityMode = 1,
 ): number {
-  return points.reduce((sum, p) => {
-    let weight = 1;
+	switch (mode) {
+		// 1️⃣ All accidents equal
+		case 1:
+			return 1;
 
-    switch (mode) {
-      // 1️⃣ All accidents equal
-      case 1:
-        weight = 1;
-        break;
+		// 2️⃣ Pedestrian = 2
+		case 2:
+			return vehicleTypeHebrew === 'הולך רגל' ? 2 : 1;
 
-      // 2️⃣ Pedestrian = 2
-      case 2:
-        weight =
-          p.vehicle_vehicle_type_hebrew === "הולך רגל" ? 2 : 1;
-        break;
+		// 3️⃣ Pedestrian = 2, electric bike / scooter = 1.5
+		case 3:
+			if (vehicleTypeHebrew === 'הולך רגל') {
+				return 2;
+			}
+			if (vehicleTypeHebrew === 'אופניים חשמליים' || vehicleTypeHebrew === 'קורקינט חשמלי' || vehicleTypeHebrew === 'אופניים') {
+				return 1.5;
+			}
+			return 1;
 
-      // 3️⃣ Pedestrian = 2, electric bike / scooter = 1.5
-      case 3:
-        if (p.vehicle_vehicle_type_hebrew === "הולך רגל") {
-          weight = 2;
-        } else if (
-          p.vehicle_vehicle_type_hebrew === "אופניים חשמליים" ||
-          p.vehicle_vehicle_type_hebrew === "קורקינט חשמלי"||
-           p.vehicle_vehicle_type_hebrew === "אופניים" 
-        ) {
-          weight = 1.5;
-        } else {
-          weight = 1;
-        }
-        break;
+		// 4️⃣ Same as 1–3, but fatal = 2.5
+		case 4:
+			return injurySeverityHebrew === 'הרוג' ? 2.5 : 1;
 
-      // 4️⃣ Same as 1–3, but fatal = 2 
-      case 4:
-        if (p.injury_severity_hebrew === "הרוג") {
-          weight = 2.5;
-        } else {
-          weight = 1;
-        }
-        break;
-    }
+		default:
+			return 1;
+	}
+}
 
-    return sum + weight;
-  }, 0);
+//weighted severity index
+export function calcSeverityIndex(points: Accident[], mode: ModelSeverityMode = 1): number {
+	return points.reduce((sum, p) => sum + severityWeight(p.injury_severity_hebrew, p.vehicle_vehicle_type_hebrew, mode), 0);
+}
+
+export type SectionScore = {
+	score: number;
+	killed: number;
+	severelyInjured: number;
+};
+
+// aggregate the risk-hotspot score (and killed/severely-injured counts) per sectionId, over matched accidents
+export function buildSectionScores(
+	matched: { sectionId: string; severity: string; vehicleTypeHebrew?: string }[],
+	mode: ModelSeverityMode = 1,
+): Map<string, SectionScore> {
+	const result = new Map<string, SectionScore>();
+
+	for (const row of matched) {
+		const entry = result.get(row.sectionId) ?? { score: 0, killed: 0, severelyInjured: 0 };
+		entry.score += severityWeight(row.severity, row.vehicleTypeHebrew, mode);
+		if (row.severity === 'הרוג') entry.killed += 1;
+		if (row.severity === 'פצוע קשה') entry.severelyInjured += 1;
+		result.set(row.sectionId, entry);
+	}
+
+	return result;
 }
 
 //centroid (mean location)
@@ -454,3 +468,21 @@ export const RED_SCALE_HEAT: string[] = [
   '#D50000', // strong red
   '#B71C1C', // deep dark red (high heat)
 ];
+
+// orange -> deep red gradient for coloring sections by risk-hotspot score
+export const SECTION_SCORE_SCALE: string[] = [
+	'#ffc400', // vivid yellow (low score)
+	'#FF9800', // vivid orange
+	'#ff3c00', // deep orange
+	'#ff0000', // red
+	'#970000', // dark red (high score)
+];
+
+export function getSectionScoreColor(score: number, sectors: ModelSeverityRange[]): string {
+  if (!sectors.length) {
+    return SECTION_SCORE_SCALE[0];
+  }
+  const sector = sectors.find(s => score >= s.from && score <= s.to) ?? sectors[sectors.length - 1];
+  const index = Math.min(sector.index, SECTION_SCORE_SCALE.length - 1);
+  return SECTION_SCORE_SCALE[index];
+}
