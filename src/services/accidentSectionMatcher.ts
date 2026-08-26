@@ -20,7 +20,23 @@ export type StreetSection = {
 		isTwoWay?: boolean;
 		length?: number;
 	};
+	junctionNames?: {
+		from?: string;
+		to?: string;
+	};
 };
+
+// Human-readable section name: "streetName: fromJunction — toJunction" when both ends are
+// known, a single junction when only one resolved, or a streetName/LAMAS fallback otherwise.
+export function getSectionDisplayName(section: StreetSection): string {
+	const from = section.junctionNames?.from;
+	const to = section.junctionNames?.to;
+
+	if (from && to && from !== to) return `${section.streetName}: ${from} — ${to}`;
+	if (from || to) return `${section.streetName}: ${from ?? to}`;
+
+	return section.lamas_id != null ? `${section.streetName} (LAMAS ${section.lamas_id})` : section.streetName;
+}
 
 export type MatchedAccidentRow = {
 	accidentId: number;
@@ -35,6 +51,8 @@ export type MatchedAccidentRow = {
 	longitude: number;
 	distanceMeters: number;
 	sectionId: string;
+	roadTypeHebrew: string;
+	vehicleTypeHebrew?: string;
 };
 
 export type UnmatchedAccidentRow = {
@@ -218,6 +236,8 @@ export function mapAccidentsToStreetSections(
 			longitude: p.lng,
 			distanceMeters: best.distance,
 			sectionId: best.section.id,
+			roadTypeHebrew: a.road_type_hebrew,
+			vehicleTypeHebrew: a.vehicle_vehicle_type_hebrew,
 		});
 	}
 

@@ -1,35 +1,39 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import { ModelSeverityMode } from '../../types';
+import { MySelect } from '../common';
 
-type SeverityModePickerProps = {
-  value: ModelSeverityMode;
-  onChange: (value: ModelSeverityMode) => void;
-};
+interface Option {
+	value: string;
+	text: string;
+}
 
-export const SeverityModePicker: React.FC<SeverityModePickerProps> = ({
-  value,
-  onChange,
-}) => {
-  return (
-    <Form.Group className="d-flex align-items-center gap-2 mb-0">
-      <Form.Label className="fw-semibold mb-0">
-        Severity mode:
-      </Form.Label>
+interface Props {
+	value: ModelSeverityMode;
+	onChange: (value: ModelSeverityMode) => void;
+}
 
-      <Form.Select
-        size="sm"
-        style={{ width: 170 }}
-        value={value}
-        onChange={e =>
-          onChange(Number(e.target.value) as ModelSeverityMode)
-        }
-      >
-        <option value={1}>All accidents equal</option>
-        <option value={2}>Pedestrian*2</option>
-        <option value={3}>Pedestrian*2, Bike*1.5</option>
-        <option value={4}>Fatal*2</option>
-      </Form.Select>
-    </Form.Group>
-  );
+const OPTIONS: Option[] = [
+	{ value: '1', text: 'SeverityModeAllEqual' },
+	{ value: '2', text: 'SeverityModePedestrian2' },
+	{ value: '3', text: 'SeverityModePedestrianBike' },
+	{ value: '4', text: 'SeverityModeFatal2' },
+];
+
+export const SeverityModePicker: React.FC<Props> = ({ value, onChange }) => {
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange(Number(e.target.value) as ModelSeverityMode);
+	};
+
+	return (
+		<div style={{ width: 170 }}>
+			<MySelect<Option>
+				id='severity-mode-picker'
+				data={OPTIONS}
+				valProp='value'
+				contentProp='text'
+				value={String(value)}
+				onChange={handleChange}
+			/>
+		</div>
+	);
 };

@@ -1,0 +1,1 @@
+export { DataWithLabel } from './DataWithLabel';

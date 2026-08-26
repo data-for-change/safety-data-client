@@ -29,3 +29,6 @@ yarn-error.log*
 
 # agents
 /.claude
+.gitnexus
+CLAUDE.md
+AGENTS.md
