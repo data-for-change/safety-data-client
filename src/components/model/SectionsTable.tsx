@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Accident, ModelSeverityMode } from "../../types";
 import './modelMainTab.css';
+import { getSectionDisplayName } from '../../services/accidentSectionMatcher';
 import type { StreetSection, MatchedAccidentRow, UnmatchedAccidentRow } from '../../services/accidentSectionMatcher';
 import { buildSectionScores } from './modelhelper';
 
@@ -20,14 +21,17 @@ function SectionsTable({ matched, unmatched, streetSections, loadError, isTelAvi
 
 	const sectionRows = React.useMemo(() => {
 		const scores = buildSectionScores(matched, severityMode);
-		const nameById = new Map((streetSections ?? []).map((s) => [s.id, s.streetName]));
+		const sectionById = new Map((streetSections ?? []).map((s) => [s.id, s]));
 
 		return Array.from(scores.entries())
-			.map(([sectionId, score]) => ({
-				sectionId,
-				sectionName: nameById.get(sectionId) ?? sectionId,
-				...score,
-			}))
+			.map(([sectionId, score]) => {
+				const section = sectionById.get(sectionId);
+				return {
+					sectionId,
+					sectionName: section ? getSectionDisplayName(section) : sectionId,
+					...score,
+				};
+			})
 			.sort((a, b) => b.score - a.score);
 	}, [matched, streetSections, severityMode]);
 

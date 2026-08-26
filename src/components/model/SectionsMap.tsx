@@ -5,6 +5,7 @@ import L from 'leaflet';
 import { Card } from 'react-bootstrap';
 import '../map/map.css';
 import 'leaflet/dist/leaflet.css';
+import { getSectionDisplayName } from '../../services/accidentSectionMatcher';
 import type { MatchedAccidentRow, UnmatchedAccidentRow, StreetSection } from '../../services/accidentSectionMatcher';
 import type { Accident, ModelSeverityMode } from '../../types';
 import { buildSeveritySectors, buildSectionScores, calcSeverityIndex, getSectionScoreColor, JUNCTION_HEB_VAL } from './modelhelper';
@@ -98,7 +99,7 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 									pathOptions={{ color, weight: sectionWeight, opacity: 0.9 }}
 								>
 									<Popup>
-										<strong>{section.streetName}</strong>
+										<strong>{getSectionDisplayName(section)}</strong>
 										<br />
 										{t('killed')}: {score.killed}
 										<br />
