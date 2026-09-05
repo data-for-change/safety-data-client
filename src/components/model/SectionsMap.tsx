@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { MapContainer, TileLayer, CircleMarker, Polyline, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Card } from 'react-bootstrap';
@@ -7,9 +8,11 @@ import '../map/map.css';
 import 'leaflet/dist/leaflet.css';
 import { getSectionDisplayName } from '../../services/accidentSectionMatcher';
 import type { MatchedAccidentRow, UnmatchedAccidentRow, StreetSection } from '../../services/accidentSectionMatcher';
-import type { Accident, ModelSeverityMode } from '../../types';
-import { buildSeveritySectors, buildSectionScores, calcSeverityIndex, getSectionScoreColor, JUNCTION_HEB_VAL } from './modelhelper';
+import type { ModelSeverityMode } from '../../types';
+import type { RootState } from '../../stores/types';
+import { buildSeveritySectors, buildSectionScores, getSectionScoreColor } from './modelhelper';
 import CreateCenterDotPane from './CreateCenterDotPane';
+import AccidentPopUp from '../map/AccidentPopUp';
 
 type Props = {
 	matched: MatchedAccidentRow[];
@@ -52,6 +55,7 @@ const FitBounds: React.FC<{ matched: MatchedAccidentRow[]; unmatched: UnmatchedA
 
 export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSections, severityMode, sectionStrokeWidth, showAccidentPoints }) => {
 	const { t } = useTranslation();
+	const { language } = useSelector((state: RootState) => state.appUi);
 
 	// slider goes 1-10, mapped to an actual stroke weight of 10-20px
 	const sectionWeight = 10 + ((sectionStrokeWidth - 1) * (20 - 10)) / (10 - 1);
@@ -65,15 +69,9 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 		return buildSeveritySectors(min, max);
 	}, [sectionScores]);
 
-	const accidentGroups = React.useMemo(() => {
-		const map = new Map<number, MatchedAccidentRow[]>();
-		for (const r of matched) {
-			const arr = map.get(r.accidentId) ?? [];
-			arr.push(r);
-			map.set(r.accidentId, arr);
-		}
-		return map;
-	}, [matched]);
+	const pStyle = {
+		color: '#004ba0',
+	};
 
 	return (
 		<Card style={{ height: '100%', padding: '0' }}>
@@ -99,11 +97,18 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 									pathOptions={{ color, weight: sectionWeight, opacity: 0.9 }}
 								>
 									<Popup>
-										<strong>{getSectionDisplayName(section)}</strong>
-										<br />
-										{t('killed')}: {score.killed}
-										<br />
-										{t('severely-injured')}: {score.severelyInjured}
+										<div style={{ fontSize: '14px' }} className={`text${language}`}>
+											<strong>{getSectionDisplayName(section)}</strong>
+											<br />
+											<div>
+												<span style={pStyle}>{t('killed')}: </span>
+												{score.killed}
+											</div>
+											<div>
+												<span style={pStyle}>{t('severely-injured')}: </span>
+												{score.severelyInjured}
+											</div>
+										</div>
 									</Popup>
 								</Polyline>
 							);
@@ -112,22 +117,6 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 					{showAccidentPoints &&
 						matched.map((row) => {
 							const color = getAccidentColor(row.severity);
-							const isJunction = row.roadTypeHebrew === JUNCTION_HEB_VAL;
-							const roadType = isJunction ? 'Junction' : 'Street';
-							const name = isJunction
-								? `${row.accidentStreet1 ?? ''} / ${row.accidentStreet2 ?? ''}`.trim()
-								: (row.accidentStreet1 ?? '');
-							const group = accidentGroups.get(row.accidentId) ?? [row];
-							const severityIndex = calcSeverityIndex(
-								group.map(
-									(g) =>
-										({
-											injury_severity_hebrew: g.severity,
-											vehicle_vehicle_type_hebrew: g.vehicleTypeHebrew,
-										}) as Accident,
-								),
-								severityMode,
-							);
 							return (
 								<CircleMarker
 									key={row.accidentId}
@@ -135,13 +124,7 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 									radius={6}
 									pathOptions={{ color: '#D32F2F', fillColor: color, weight: 1, fillOpacity: 1 }}
 								>
-									<Popup>
-										<strong>
-											{t(roadType)} {name}
-										</strong>
-										<br />
-										{t('Severity')}: {severityIndex}, {t('casualties')}: {group.length}
-									</Popup>
+									<AccidentPopUp data={row.raw} language={language} />
 								</CircleMarker>
 							);
 						})}
