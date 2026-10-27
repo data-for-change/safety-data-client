@@ -19,6 +19,7 @@ export interface IColumnFilter {
   getFilter: () => string;
   setBrowserQueryString: (param: URLSearchParams, delIfEmpthy?: boolean) => void;
   setValuesByQuery: (param: URLSearchParams) => void;
+  reset: () => void;
   // spaciel value, if checkd it will mark all options as true
   allTypesOption: number;
   isAllValsFalse: boolean;
@@ -147,6 +148,15 @@ export class ColumnFilter implements IColumnFilter {
         checker.checked = found;
       });
     }
+    this.setQueryVals();
+  }
+
+  /**
+   * restore all options to their initial checked state
+   */
+  @action
+  reset = () => {
+    this.arrTypes.forEach(checker => { checker.checked = checker.defaultChecked; });
     this.setQueryVals();
   }
 

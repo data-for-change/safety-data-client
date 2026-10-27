@@ -19,6 +19,8 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
 
   allTypesOption: number;
 
+  readonly defaultValue: string | number;
+
   constructor(name: string,
     queryColName: string,
     allTypesOption: number = -1,
@@ -28,6 +30,7 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
     this.queryColName = queryColName;
     this.arrTypes = data;
     this.queryValue = defaultVal;
+    this.defaultValue = defaultVal;
     this.allTypesOption = allTypesOption;
     this.text = '';
     makeObservable(this, {
@@ -40,6 +43,10 @@ export class ColumnFilterCombo implements IColumnFilterCombo {
 
   setFilter = (value: string | number) => {
     this.queryValue = value;
+  }
+
+  reset = () => {
+    this.setFilter(this.defaultValue);
   }
 
   isEmpty = () => {

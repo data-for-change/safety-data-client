@@ -2,6 +2,8 @@ import { makeObservable, observable } from 'mobx';
 
 export interface IFilterChecker {
     checked: boolean;
+    // initial checked state, used by reset
+    readonly defaultChecked: boolean;
     label: string;
     disabled?: boolean;
     filters: number[];
@@ -12,6 +14,7 @@ export interface IFilterChecker {
  */
 export default class FilterChecker implements IFilterChecker {
     checked: boolean;
+    readonly defaultChecked: boolean;
     label: string;
     disabled?: boolean;
     filters: number[];
@@ -19,6 +22,7 @@ export default class FilterChecker implements IFilterChecker {
     constructor(label: string, valid: boolean, filters: number[], disabled = false) {
         this.label = label;
         this.checked = valid;
+        this.defaultChecked = valid;
         this.filters = filters;
         this.disabled = disabled;
 

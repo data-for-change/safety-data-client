@@ -37,6 +37,12 @@ export default class VehicleFilterStore {
       this.involvedVehicle.setValuesByQuery(params);
    }
 
+   resetFilters = () => {
+      this.injTypes.reset();
+      this.vehicleType.reset();
+      this.involvedVehicle.reset();
+   }
+
    setBrowserQueryString = (params: URLSearchParams) => {
       this.injTypes.setBrowserQueryString(params);
       this.vehicleType.setBrowserQueryString(params);

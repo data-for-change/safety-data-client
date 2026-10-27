@@ -45,6 +45,13 @@ export default class RoadFilterStore {
     this.oneLane.setValuesByQuery(params);
   }
 
+  resetFilters = () => {
+    this.speedLimit.reset();
+    this.roadWidth.reset();
+    this.separator.reset();
+    this.oneLane.reset();
+  }
+
   setBrowserQueryString = (params: URLSearchParams) => {
     this.speedLimit.setBrowserQueryString(params);
     this.roadWidth.setBrowserQueryString(params);
