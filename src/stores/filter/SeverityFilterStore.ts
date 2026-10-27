@@ -22,6 +22,11 @@ export default class SeverityFilterStore {
       return !this.injurySeverity.isAllValsFalse;
    }
 
+   resetFilters = () => {
+      this.injurySeverity.reset();
+      this.setCasualtiesNames(this.injurySeverity);
+   }
+
    setCasualtiesNames = (injurySeverity: IColumnFilter) => {
       let res = 'casualties';
       const deadChecker: IFilterChecker = injurySeverity.arrTypes[0];

@@ -14,22 +14,27 @@ const Drawer: React.FC<any> = observer((props) => {
    const {isLoading, isValidAllFilters} = filterStore;
    //get cbs dataUpdatedTo
    const dataUpdatedToepochSeconds  = useSelector((state: RootState) => state.appUi.dataUpdatedTo);
-   const dataUpdatedTo = dataUpdatedToepochSeconds ? new Date(dataUpdatedToepochSeconds * 1000) : null; 
+   const dataUpdatedTo = dataUpdatedToepochSeconds ? new Date(dataUpdatedToepochSeconds * 1000) : null;
    const dataUpdateStr = dataUpdatedTo ? dataUpdatedTo.toLocaleDateString('en-GB') : '';
    return (
-      <div className="sidebar">
-         <div className="filters">
-            <FilterForm />
-         </div>
-         <Button
-            variant="primary"
-            onClick={() => filterStore.submitFilter()}
-            disabled={isLoading || !isValidAllFilters}
-            isLoading={isLoading}
-         >
-           {t('Submit')} 
-         </Button>
-         {/* <Button
+		<div className='sidebar'>
+			<div className='filters'>
+				<FilterForm />
+			</div>
+			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+				<Button
+					variant='primary'
+					onClick={() => filterStore.submitFilter()}
+					disabled={isLoading || !isValidAllFilters}
+					isLoading={isLoading}
+				>
+					{t('Submit')}
+				</Button>
+				<Button variant='secondary' onClick={() => filterStore.resetFilters()} disabled={isLoading}>
+					{t('Reset_filters')}
+				</Button>
+			</div>
+			{/* <Button
             style={{ margin: '0.5rem' }}
             variant="info"
             onClick={() => alert('action in filter store to collect filters')}
@@ -37,9 +42,11 @@ const Drawer: React.FC<any> = observer((props) => {
          >
             {t('Save')}  {t('Filter')}
          </Button> */}
-         <div>{t('Data_updated_until')}: {dataUpdateStr}</div>
-      </div>
-   )
+			<div>
+				{t('Data_updated_until')}: {dataUpdateStr}
+			</div>
+		</div>
+   );
   })
 
 export default Drawer

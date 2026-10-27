@@ -37,6 +37,12 @@ export default class TimeFilterStore {
       this.dayNight.setValuesByQuery(params);
    }
 
+   resetFilters = () => {
+      this.startYear.reset();
+      this.endYear.reset();
+      this.dayNight.reset();
+   }
+
    setBrowserQueryString = (params: URLSearchParams) => {
       this.startYear.setBrowserQueryString(params, false);
       this.endYear.setBrowserQueryString(params, false);

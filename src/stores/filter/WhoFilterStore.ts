@@ -37,6 +37,12 @@ export default class WhoFilterStore {
       this.populationTypes.setValuesByQuery(params);
    }
 
+   resetFilters = () => {
+      this.genderTypes.reset();
+      this.ageTypes.reset();
+      this.populationTypes.reset();
+   }
+
    setBrowserQueryString = (params: URLSearchParams) => {
       this.genderTypes.setBrowserQueryString(params);
       this.ageTypes.setBrowserQueryString(params);

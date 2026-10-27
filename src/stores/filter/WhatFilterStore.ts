@@ -22,6 +22,10 @@ export default class WhatFilterStore {
       this.accidentType.setValuesByQuery(params);
    }
 
+   resetFilters = () => {
+      this.accidentType.reset();
+   }
+
    setBrowserQueryString = (params: URLSearchParams) => {
       this.accidentType.setBrowserQueryString(params);
    }

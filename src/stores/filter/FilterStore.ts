@@ -535,6 +535,28 @@ class FilterStore implements IFilterStore  {
       if (this.isUse2StepsMarkers) this.markersLoadStep = step;
    }
 
+   /**
+    * restore all filters to their initial values, then submit
+    * (submit updates the browser url and fetches the data)
+    */
+   @action
+   resetFilters = () => {
+      this.resetFilterValues();
+      this.submitFilter();
+   }
+
+   @action
+   resetFilterValues = () => {
+      this.timeStore.resetFilters();
+      this.severityStore.resetFilters();
+      this.locationStore.resetFilters();
+      this.whoStore.resetFilters();
+      this.getWhatStore().resetFilters();
+      this.vehicleStore.resetFilters();
+      this.roadStore.resetFilters();
+      if (this.showAllVehicleTypes) this.updateShowAllVehicleTypes(false);
+   }
+
    @action
    submitFilter = () => {
       // this.setMarkersLoadStep(0);

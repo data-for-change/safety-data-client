@@ -90,6 +90,18 @@ export default class LocationFilterStore {
       this.locationAccuracy.setFilter(aType, val);
    }
 
+   resetFilters = () => {
+      this.cities.setFilter([]);
+      this.streets.setFilter([]);
+      this.roads.setFilter([]);
+      this.roadSegment.setFilter([]);
+      this.cityPopSizeRange.reset();
+      this.roadTypes.reset();
+      this.locationAccuracy.reset();
+      this.zoneName.reset();
+      this.geoFilter = null;
+   }
+
    get isValidWhere() {
       return !this.roadTypes.isAllValsFalse && !this.locationAccuracy.isAllValsFalse;
    }
