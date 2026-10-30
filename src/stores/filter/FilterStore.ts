@@ -30,7 +30,7 @@ import RootStore from '../RootStore';
 import { store as reduxStore } from '../store';
 import { setIsLoading, setFiltersText } from './filterSlice';
 import { fetchFilterData } from './filterThunks';
-import { sliceDataWithAggregation, formatDataPrecision } from '../../utils/chartDataUtils';
+import { sliceDataWithAggregation, formatDataPrecision, getComparisonEndMonth, alignCompareData } from '../../utils/chartDataUtils';
 import { EchartId } from '../../components/types';
 //import { observer } from 'mobx-react-lite';
 // import autorun  from "mobx"
@@ -323,6 +323,30 @@ class FilterStore implements IFilterStore  {
       this.dataFilterd = data;
    }
 
+   // compare-to-period: same group-by over other years, each year cut at the last completed month
+   @observable
+   compareEnabled: boolean = false;
+   @observable
+   compareFromYear: number = 2021;
+   @observable
+   compareToYear: number = new Date().getFullYear();
+   @observable
+   dataCompare: ItemCount[] = [];
+
+   @action
+   setCompareEnabled = (enabled: boolean) => {
+      this.compareEnabled = enabled;
+      if (enabled) this.submitCompareGroup(this.groupByDict.groupBy as GroupBy);
+      else this.dataCompare = [];
+   }
+
+   @action
+   setCompareYears = (from: number, to: number) => {
+      this.compareFromYear = from;
+      this.compareToYear = to;
+      if (this.compareEnabled) this.submitCompareGroup(this.groupByDict.groupBy as GroupBy);
+   }
+
    // casualties groupd by 2 groups, filterd on main filter
    @observable
    dataGroupby2: any[] = [];
@@ -373,7 +397,7 @@ class FilterStore implements IFilterStore  {
    }
    @action
    submitOnGroupByAfterSort =() =>{
-      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy, false);
    }
  
    // GroupByLimit - the max number of groups in "groupby"
@@ -385,7 +409,7 @@ class FilterStore implements IFilterStore  {
    }
    @action
    submitOnGroupByAfterLimit =() =>{
-      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy);
+      this.submitfilterdGroup(this.groupByDict.groupBy as GroupBy, false);
    }
 
 
@@ -455,7 +479,7 @@ class FilterStore implements IFilterStore  {
 
 
    @action
-   submitfilterdGroup = (aGroupBy: GroupBy) => {
+   submitfilterdGroup = (aGroupBy: GroupBy, refetchCompare: boolean = true) => {
       const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
       const limit = this.GroupByLimit as number;
       const filtermatch = this.getFilterQueryString(null);
@@ -468,6 +492,37 @@ class FilterStore implements IFilterStore  {
             }
             if (data !== undefined) this.setDataFilterd(data);
          });
+      if (refetchCompare) this.submitCompareGroup(aGroupBy);
+   }
+
+   // id of the latest comparison request, a slower older response must not overwrite a newer one
+   private compareRequestId = 0;
+
+   /**
+    * fetch the main group-by for the comparison period: all sidebar filters apply,
+    * only the years are replaced and each year is cut at the last completed month.
+    * The old comparison data is cleared first so it is never matched to bars of another group-by.
+    */
+   @action
+   submitCompareGroup = (aGroupBy: GroupBy) => {
+      const requestId = ++this.compareRequestId;
+      this.dataCompare = [];
+      if (!this.compareEnabled) return;
+      const endMonth = getComparisonEndMonth(reduxStore.getState().appUi.dataUpdatedTo);
+      if (endMonth < 1) return;
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+      const filtermatch = this.getFilterQueryString(null, false, {
+         fromYear: this.compareFromYear, toYear: this.compareToYear, endMonth,
+      });
+      // no limit/sort: bars are matched by label, top-N of the two periods may differ
+      const filter = createFilterQureyByGroup(filtermatch, aGroupBy.value, range.min, range.max);
+      AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
+         .then((data: any | undefined) => {
+            if (aGroupBy.transformFetchResult) data = aGroupBy.transformFetchResult(data);
+            if (requestId !== this.compareRequestId) return;
+            runInAction(() => { this.dataCompare = this.compareEnabled && data ? data : []; });
+         })
+         .catch((error: unknown) => console.error('Error fetching comparison data:', error));
    }
 
    // observable for group by name
@@ -641,11 +696,18 @@ class FilterStore implements IFilterStore  {
     * @param useBounds if true will use gis bound to filter reqest
     * @returns query string , for example ?sy=2017&sev=1&city="תל אביב -יפו","חיפה"
     */
-   getFilterQueryString = (bounds: any, useBounds: boolean = false) => {
+   getFilterQueryString = (bounds: any, useBounds: boolean = false,
+      compare?: { fromYear: number, toYear: number, endMonth: number }) => {
       //the oreder of the fileds is importnet for indexing in server
       let query = '?';
-      query += this.timeStore.startYear.getFilter();
-      query += this.timeStore.endYear.getFilter();
+      if (compare) {
+         // comparison period: replace the years and keep months 1..endMonth (&mn=1,2,..)
+         query += `&sy=${compare.fromYear}&ey=${compare.toYear}`;
+         query += `&mn=${Array.from({ length: compare.endMonth }, (_, i) => i + 1).join(',')}`;
+      } else {
+         query += this.timeStore.startYear.getFilter();
+         query += this.timeStore.endYear.getFilter();
+      }
       query += this.severityStore.injurySeverity.getFilter();
       query += getfilterDatasource(this.dataSource);
       query += this.locationStore.cities.getFilter();
@@ -895,6 +957,12 @@ class FilterStore implements IFilterStore  {
          sliced = sliced.filter((item: any) => item._id !== 'outside_range');
       }
       return usePrecision ? formatDataPrecision(sliced) : sliced;
+   }
+
+   /** comparison-period counts aligned to the bars of the main chart (empty when compare is off) */
+   getCompareChartData = (id: EchartId) => {
+      if (id !== EchartId.Group_1 || !this.compareEnabled || this.dataCompare.length === 0) return [];
+      return alignCompareData(this.getChartData(id), this.dataCompare);
    }
 }
 

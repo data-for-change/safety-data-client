@@ -5,6 +5,8 @@ import {
   LinearScale,
   BarElement,
   ArcElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -20,6 +22,8 @@ import { useTranslation } from 'react-i18next';
 interface IProps {
   data: readonly any[];
   metaData?: any[];
+  // comparison-period counts aligned to `data` (same order); drawn as a red marker per bar
+  compareData?: readonly any[];
   chartType?: string;
   height?: number;
   fill?: string;
@@ -187,6 +191,8 @@ ChartJS.register(
   LinearScale,
   BarElement,
   ArcElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -215,7 +221,7 @@ export const options = {
   },
 };
 
-const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
+const ChartBar: React.FC<IProps> = ({ data, metaData, compareData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
 
   // Separate visible items from the aggregated outside item
@@ -278,6 +284,28 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, chartType = 'BarChart', he
         // barPercentage: 0.5, // Make it look more like a "candle"
       });
     }
+  }
+
+  // Comparison period: red horizontal marker at the comparison value of each bar (vertical bar chart only)
+  if (compareData && compareData.length === data.length && metaData === undefined && chartType === 'BarChart') {
+    chartDatasets.push({
+      type: 'line',
+      label: t('compare_period'),
+      data: compareData.map(item => item.count),
+      showLine: false,
+      pointStyle: 'line',
+      pointRadius: 18,
+      pointHoverRadius: 18,
+      // point style 'line' is stroked with the point border, not the dataset border
+      pointBorderColor: '#FF2A00',
+      pointBackgroundColor: '#FF2A00',
+      pointBorderWidth: 3,
+      pointHoverBorderWidth: 3,
+      borderColor: '#FF2A00',
+      // lower order = drawn on top of the bars
+      order: -1,
+      datalabels: { anchor: 'center', align: 'bottom', color: '#FF2A00', font: { size: 12, weight: 'bold' } },
+    });
   }
 
   const chartData = {

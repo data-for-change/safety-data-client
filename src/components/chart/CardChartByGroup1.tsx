@@ -7,6 +7,7 @@ import { useMemos } from '../../hooks/myUseMemo';
 import { SmallCard } from '../common';
 import ChartBar from './ChartBar';
 import ConfigChart from './ConfigChart';
+import ChartCompareConfig from './ChartCompareConfig';
 import ConfigModal from '../organisms/ConfigModal';
 import SvgIconSettings from '../../assets/SvgIconSettings';
 import ChartDataFilterSlider from '../organisms/ChartDataFilterSlider';
@@ -32,13 +33,15 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
    // const { t } = useTranslation();
    const [showModal, setShowModal] = useState(false);
    const { filterStore } = useStore();
-   const { dataFilterd, getChartData } = filterStore;
+   const { dataFilterd, getChartData, getCompareChartData } = filterStore;
    const chartId = EchartId.Group_1;
    const dataFormated = getChartData(chartId);
+   const compareData = getCompareChartData(chartId);
    const { chartType, direction } = useSelector((state: RootState) => state.appUi);
 
    const chart = <ChartBar
       data={dataFormated}
+      compareData={compareData}
       fill="#8884d8"
       chartType={chartType}
       height={150}
@@ -72,6 +75,7 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
                   <ChartDataFilterSlider id={chartId} data={dataFilterd} />
                </div>
                <LimitInput id="Graphs.Main.LimitInput" />
+               <ChartCompareConfig />
             </ConfigModal>
             <div >
                <hr />
