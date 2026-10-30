@@ -172,6 +172,22 @@ export default class MapStore {
     }
   }
 
+  ////////// place search /////////////////
+  @observable
+  searchedPlace: { lat: number; lng: number; label: string } | null = null;
+
+  @action
+  goToPlace = (lat: number, lng: number, label: string) => {
+    this.searchedPlace = { lat, lng, label };
+    this.updateMapCenter(new L.LatLng(lat, lng));
+    this.setMapZoom(16);
+  }
+
+  @action
+  clearSearchedPlace = () => {
+    this.searchedPlace = null;
+  }
+
   @observable
   useSetBounds = true;
 

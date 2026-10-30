@@ -11,6 +11,8 @@ import MapCenterUpdater from './MapCenterUpdater';
 import ClusteredMarkers from './ClusteredMarkers';
 import LegendWarpper from './legend/LegendWarpper';
 import {createClusterCustomIcon} from './markers/clusterCustomIcon';
+import MapSearch from './MapSearch';
+import SearchedPlaceMarker from './SearchedPlaceMarker';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import SelectMapMarkersType from './SelectMapMarkersType';
@@ -64,7 +66,8 @@ const AccidentsMap: FC<IProps> = observer(() => {
   return (
 		<Card style={{ height: '100%' }}>
 			<Card.Body style={{ padding: 0 }}>
-				<div id='map' style={{ height: '90%', width: '100%' }}>
+				<div id='map' style={{ height: '90%', width: '100%', position: 'relative' }}>
+					<MapSearch />
 					<MapContainer
 						center={position}
 						zoom={13}
@@ -89,6 +92,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
 								<ClusteredMarkers />
 							</MarkerClusterGroup>
 						)}
+						<SearchedPlaceMarker />
 						<MapCenterUpdater center={mapCenter} zoom={mapZoom} />
 						<LegendWarpper />
 						<MapEventHandler />
