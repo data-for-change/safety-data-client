@@ -221,6 +221,22 @@ export const options = {
   },
 };
 
+// red horizontal dash used as the comparison marker (created once, canvas works as a chart.js point image)
+let compareMarker: HTMLCanvasElement | undefined;
+const getCompareMarker = () => {
+  if (!compareMarker) {
+    compareMarker = document.createElement('canvas');
+    compareMarker.width = 32;
+    compareMarker.height = 4;
+    const ctx = compareMarker.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#FF2A00';
+      ctx.fillRect(0, 0, 32, 4);
+    }
+  }
+  return compareMarker;
+};
+
 const ChartBar: React.FC<IProps> = ({ data, metaData, compareData, chartType = 'BarChart', height = 60, dir, fill = '#8884d8', }: IProps) => {
   const { t } = useTranslation();
 
@@ -293,14 +309,12 @@ const ChartBar: React.FC<IProps> = ({ data, metaData, compareData, chartType = '
       label: t('compare_period'),
       data: compareData.map(item => item.count),
       showLine: false,
-      pointStyle: 'line',
-      pointRadius: 18,
-      pointHoverRadius: 18,
-      // point style 'line' is stroked with the point border, not the dataset border
-      pointBorderColor: '#FF2A00',
-      pointBackgroundColor: '#FF2A00',
-      pointBorderWidth: 3,
-      pointHoverBorderWidth: 3,
+      // image point style is drawn at its own size, so the wide marker does not make Chart.js
+      // pad the plot area for a big point radius (which shrank the chart)
+      pointStyle: getCompareMarker(),
+      pointRadius: 1,
+      pointHoverRadius: 1,
+      pointBorderWidth: 0,
       borderColor: '#FF2A00',
       // lower order = drawn on top of the bars
       order: -1,
