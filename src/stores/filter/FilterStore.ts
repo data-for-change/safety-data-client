@@ -347,6 +347,18 @@ class FilterStore implements IFilterStore  {
       if (this.compareEnabled) this.submitCompareGroup(this.groupByDict.groupBy as GroupBy);
    }
 
+   // compare-to-last-update-month on the years chart: each year cut at the last completed month
+   @observable
+   compareYearsEnabled: boolean = false;
+   @observable
+   dataCompareYears: ItemCount[] = [];
+
+   @action
+   setCompareYearsEnabled = (enabled: boolean) => {
+      this.compareYearsEnabled = enabled;
+      this.submitCompareYears();
+   }
+
    // casualties groupd by 2 groups, filterd on main filter
    @observable
    dataGroupby2: any[] = [];
@@ -474,7 +486,36 @@ class FilterStore implements IFilterStore  {
                this.setInjuriesCount(count);
             }
          });
+      this.submitCompareYears();
+   }
 
+   // id of the latest years-comparison request, a slower older response must not overwrite a newer one
+   private compareYearsRequestId = 0;
+
+   /**
+    * fetch counts by year for the same year range and filters, with each year cut at the
+    * last completed month of the latest data update.
+    */
+   @action
+   submitCompareYears = () => {
+      const requestId = ++this.compareYearsRequestId;
+      this.dataCompareYears = [];
+      if (!this.compareYearsEnabled) return;
+      const endMonth = getComparisonEndMonth(reduxStore.getState().appUi.dataUpdatedTo);
+      if (endMonth < 1) return;
+      const range = JSON.parse(this.cityPopSizeRange.queryValue.toString());
+      const filtermatch = this.getFilterQueryString(null, false, {
+         fromYear: Number(this.timeStore.startYear.queryValue),
+         toYear: Number(this.timeStore.endYear.queryValue),
+         endMonth,
+      });
+      const filter = createFilterQureyByGroup(filtermatch, 'year', range.min, range.max);
+      AccidentService.fetchGroupBy(filter, this.locationStore.geoFilter)
+         .then((data: ItemCount[] | undefined) => {
+            if (requestId !== this.compareYearsRequestId) return;
+            runInAction(() => { this.dataCompareYears = this.compareYearsEnabled && data ? data : []; });
+         })
+         .catch((error: unknown) => console.error('Error fetching years comparison data:', error));
    }
 
 
@@ -961,6 +1002,10 @@ class FilterStore implements IFilterStore  {
 
    /** comparison-period counts aligned to the bars of the main chart (empty when compare is off) */
    getCompareChartData = (id: EchartId) => {
+      if (id === EchartId.Years) {
+         if (!this.compareYearsEnabled || this.dataCompareYears.length === 0) return [];
+         return alignCompareData(this.getChartData(id), this.dataCompareYears);
+      }
       if (id !== EchartId.Group_1 || !this.compareEnabled || this.dataCompare.length === 0) return [];
       return alignCompareData(this.getChartData(id), this.dataCompare);
    }
