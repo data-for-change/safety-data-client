@@ -21,6 +21,8 @@ export default class LocationFilterStore {
    previousCity: string | null = null;
    cityStreets: Street[] | null = null;
    geoFilter: GeoFilter | null = null;
+   accurateOnly: boolean = false;
+   private savedAccuracyChecked: boolean[] = [];
 
    constructor() {
       makeAutoObservable(this);
@@ -90,6 +92,36 @@ export default class LocationFilterStore {
       this.locationAccuracy.setFilter(aType, val);
    }
 
+   /**
+    * Lock the location-accuracy filter to the precise option only (used by the risk model).
+    * The previous selection is restored when the lock is released.
+    */
+   setAccurateLocationOnly = (on: boolean): boolean => {
+      if (on === this.accurateOnly) return false;
+      const types = this.locationAccuracy.arrTypes;
+      if (on) this.savedAccuracyChecked = types.map(c => c.checked);
+      this.accurateOnly = on;
+      types.forEach((c, i) => {
+         if (i === 0) {
+            c.checked = on ? true : (this.savedAccuracyChecked[i] ?? c.defaultChecked);
+         } else {
+            c.disabled = on;
+            c.checked = on ? false : (this.savedAccuracyChecked[i] ?? c.defaultChecked);
+         }
+      });
+      this.locationAccuracy.setQueryVals();
+      return true;
+   }
+
+   /**
+    * re-apply the precise-only selection after something else (e.g. the url) overwrote it
+    */
+   enforceAccurateOnly = () => {
+      if (!this.accurateOnly) return;
+      this.locationAccuracy.arrTypes.forEach((c, i) => { c.checked = i === 0; });
+      this.locationAccuracy.setQueryVals();
+   }
+
    resetFilters = () => {
       this.cities.setFilter([]);
       this.streets.setFilter([]);
@@ -98,6 +130,11 @@ export default class LocationFilterStore {
       this.cityPopSizeRange.reset();
       this.roadTypes.reset();
       this.locationAccuracy.reset();
+      // keep the precise-only lock (risk model) after reset; leaving it restores the defaults
+      if (this.accurateOnly) {
+         this.savedAccuracyChecked = this.locationAccuracy.arrTypes.map(c => c.defaultChecked);
+         this.enforceAccurateOnly();
+      }
       this.zoneName.reset();
       this.geoFilter = null;
    }
