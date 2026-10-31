@@ -29,7 +29,9 @@ import {
 	calculateKernelDensity,
 	buildDensityClustersTable,
 	buildSectionScores,
-	JUNCTION_HEB_VAL,
+	buildMunicipalCrossroads,
+	buildMunicipalCrossroadRows,
+	buildOsmStreetRows,
 } from './modelhelper';
 import { JunctionRadiusPicker } from './JunctionRadiusPicker';
 import { SeverityModePicker } from './SeverityModePicker';
@@ -70,6 +72,7 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const [maxDistanceMeters, setMaxDistanceMeters] = React.useState<number>(20);
 	const [sectionStrokeWidth, setSectionStrokeWidth] = React.useState<number>(4);
 	const [showAccidentPoints, setShowAccidentPoints] = React.useState<boolean>(true);
+	console.log('🚀 ~ showAccidentPoints:', showAccidentPoints)
 
 	// density
 	const denstiyPoints = React.useMemo(() => calculateKernelDensity(dataAllInjuries, heatmapRadius), [dataAllInjuries, heatmapRadius]);
@@ -83,43 +86,54 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 		return clusterPoints(dataAllInjuries, junctionRadius);
 	}, [dataAllInjuries, junctionRadius]);
 
-	const clusterTable = React.useMemo(
-		() =>
-			buildClusterTable(
-				clusters,
-				severityMode,
-				filterType,
-				maxClusters,
-				4, // minValue
-			),
-		[clusters, severityMode, filterType, maxClusters],
-	);
-
 	// -------- Street sections --------
 	const selectedCityIds = cities?.arrValues ?? [];
-	const { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched } = useStreetSections(
-		selectedCityIds,
-		dataAllInjuries,
-		maxDistanceMeters,
-	);
+	const {
+		isTelAvivSelected,
+		streetSections,
+		sectionsLoadError,
+		telAvivAccidents,
+		matched,
+		unmatched,
+		osmStreets,
+		osmMatched,
+		osmUnmatched,
+	} = useStreetSections(selectedCityIds, dataAllInjuries, maxDistanceMeters);
 
-	// filter matched accidents by junction/street type (same predicate used for clusters), then cap to top-N sections by score
-	const sectionsMatched = React.useMemo(() => {
-		const sectionIsJunction = new Map<string, boolean>();
-		for (const row of matched) {
-			if (row.roadTypeHebrew === JUNCTION_HEB_VAL) sectionIsJunction.set(row.sectionId, true);
-			else if (!sectionIsJunction.has(row.sectionId)) sectionIsJunction.set(row.sectionId, false);
+	// Tel Aviv: crossroads come from the municipal segments and streets from OSM; elsewhere (or until the data loads) use the CBS clusters
+	const municipalCrossroads = React.useMemo(() => (streetSections ? buildMunicipalCrossroads(streetSections) : []), [streetSections]);
+	const hasTelAvivModelData = isTelAvivSelected && !!streetSections && !!osmStreets;
+
+	const clusterTable = React.useMemo(() => {
+		if (!hasTelAvivModelData) return buildClusterTable(clusters, severityMode, filterType, maxClusters);
+
+		const crossroadRows = () => buildMunicipalCrossroadRows(municipalCrossroads, telAvivAccidents, junctionRadius, severityMode, maxClusters);
+		const streetRows = () => buildOsmStreetRows(osmMatched, severityMode, maxClusters);
+
+		switch (filterType) {
+			case ModelFilterType.Segments:
+				return [];
+			case ModelFilterType.Crossroads:
+				return crossroadRows();
+			case ModelFilterType.Streets:
+				return streetRows();
+			case ModelFilterType.All:
+			default:
+				return [...crossroadRows().slice(0, maxClusters / 2), ...streetRows().slice(0, maxClusters / 2)];
 		}
+	}, [hasTelAvivModelData, clusters, severityMode, filterType, maxClusters, municipalCrossroads, telAvivAccidents, junctionRadius, osmMatched]);
 
-		const typeFiltered =
-			filterType === ModelFilterType.All
-				? matched
-				: matched.filter((r) => {
-						const isJunction = sectionIsJunction.get(r.sectionId) ?? false;
-						return filterType === ModelFilterType.Junctions ? isJunction : !isJunction;
-					});
+	// sections tabs: Segments/All -> municipal segments, Streets -> OSM streets, Crossroads -> none (shown as points in the cluster tabs)
+	const useOsmSections = filterType === ModelFilterType.Streets;
+	const sectionsSource = useOsmSections ? osmStreets : streetSections;
+	const sectionsUnmatched = useOsmSections ? osmUnmatched : unmatched;
 
-		const scores = buildSectionScores(typeFiltered, severityMode);
+	// cap to the top-N sections by score
+	const sectionsMatched = React.useMemo(() => {
+		if (filterType === ModelFilterType.Crossroads) return [];
+
+		const source = useOsmSections ? osmMatched : matched;
+		const scores = buildSectionScores(source, severityMode);
 		const top = new Set(
 			Array.from(scores.entries())
 				.sort((a, b) => b[1].score - a[1].score)
@@ -127,8 +141,8 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 				.map(([id]) => id),
 		);
 
-		return typeFiltered.filter((r) => top.has(r.sectionId));
-	}, [matched, filterType, severityMode, maxClusters]);
+		return source.filter((r) => top.has(r.sectionId));
+	}, [matched, osmMatched, useOsmSections, filterType, severityMode, maxClusters]);
 
 	const isSectionsTab = activeTab === 'sectionTable' || activeTab === 'sectionMap';
 
@@ -207,8 +221,8 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 						<Tab eventKey='sectionTable' title={t('SectionTable')}>
 							<SectionsTable
 								matched={sectionsMatched}
-								unmatched={unmatched}
-								streetSections={streetSections}
+								unmatched={sectionsUnmatched}
+								streetSections={sectionsSource}
 								loadError={sectionsLoadError}
 								telAvivAccidents={telAvivAccidents}
 								isTelAvivSelected={isTelAvivSelected}
@@ -221,8 +235,8 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 						<Tab eventKey='sectionMap' title={t('SectionMap')}>
 							<SectionsMap
 								matched={sectionsMatched}
-								unmatched={unmatched}
-								streetSections={streetSections}
+								unmatched={sectionsUnmatched}
+								streetSections={sectionsSource}
 								severityMode={severityMode}
 								sectionStrokeWidth={sectionStrokeWidth}
 								showAccidentPoints={showAccidentPoints}

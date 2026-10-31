@@ -1,4 +1,5 @@
 import { Accident, ClusterRow, ModelFilterType, ModelPointWithDensity, ModelSeverityMode, ModelSeverityRange } from "../../types";
+import type { StreetSection } from "../../services/accidentSectionMatcher";
 
 const JUNCTION_RADIUS_METERS = 50;
 export const JUNCTION_HEB_VAL = 'עירונית בצומת (כולל צמתים בגבולות יישובים)';
@@ -116,7 +117,12 @@ export function buildClusterTable(
   let maxResults = maxClusters;
   let result: ClusterRow[];
   switch (filterType) {
-		case ModelFilterType.Junctions:
+		case ModelFilterType.Segments:
+			// segments are polylines (see sections tabs), not point clusters
+			result = [];
+			break;
+
+		case ModelFilterType.Crossroads:
 			result = junctionRows;
 			break;
 
@@ -136,6 +142,110 @@ export function buildClusterTable(
   //filter by max maxClusters
   result = result.slice(0, maxResults);
   return result;
+}
+
+const CROSSROAD_MERGE_METERS = 15;
+const MIN_SEGMENT_ENDS_AT_CROSSROAD = 3;
+
+type MunicipalCrossroad = { lat: number; lng: number; name: string; ends: number };
+
+// derive crossroad pins from municipal segments: segment endpoints (within CROSSROAD_MERGE_METERS of each other)
+// where at least MIN_SEGMENT_ENDS_AT_CROSSROAD segments meet are a crossroad; named from the segments' junctionNames
+export function buildMunicipalCrossroads(sections: StreetSection[]): MunicipalCrossroad[] {
+  const groups: { lat: number; lng: number; ends: number; names: Map<string, number> }[] = [];
+
+  const addEnd = (p: { lat: number; lng: number }, name?: string) => {
+    const group = groups.find(
+      g => haversineDistance({ latitude: g.lat, longitude: g.lng } as Accident, { latitude: p.lat, longitude: p.lng } as Accident) <= CROSSROAD_MERGE_METERS
+    );
+    if (!group) {
+      groups.push({ lat: p.lat, lng: p.lng, ends: 1, names: new Map(name ? [[name, 1]] : []) });
+      return;
+    }
+    group.lat = (group.lat * group.ends + p.lat) / (group.ends + 1);
+    group.lng = (group.lng * group.ends + p.lng) / (group.ends + 1);
+    group.ends += 1;
+    if (name) group.names.set(name, (group.names.get(name) ?? 0) + 1);
+  };
+
+  for (const s of sections) {
+    const line = s.geometry.polyline;
+    if (line.length < 2) continue;
+    addEnd(line[0], s.junctionNames?.from);
+    addEnd(line[line.length - 1], s.junctionNames?.to);
+  }
+
+  return groups
+    .filter(g => g.ends >= MIN_SEGMENT_ENDS_AT_CROSSROAD)
+    .map(g => ({
+      lat: g.lat,
+      lng: g.lng,
+      ends: g.ends,
+      // most frequent junction name among the segments meeting here
+      name: Array.from(g.names.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '',
+    }));
+}
+
+// crossroad rows: accidents within `radius` meters of each municipal crossroad pin, scored by severity mode
+export function buildMunicipalCrossroadRows(
+  crossroads: MunicipalCrossroad[],
+  accidents: Accident[],
+  radius: number,
+  mode: ModelSeverityMode = 1,
+  maxClusters: number = 20,
+): ClusterRow[] {
+  const rows: ClusterRow[] = [];
+
+  for (const c of crossroads) {
+    const center = { latitude: c.lat, longitude: c.lng } as Accident;
+    const near = accidents.filter(a => haversineDistance(center, a) <= radius);
+    if (near.length === 0) continue;
+
+    rows.push({
+      count: near.length,
+      severityIndex: calcSeverityIndex(near, mode),
+      roadType: "Junction",
+      name: c.name,
+      latitude: c.lat,
+      longitude: c.lng,
+    });
+  }
+
+  return rows.sort((a, b) => b.severityIndex - a.severityIndex).slice(0, maxClusters);
+}
+
+// street rows from accidents matched to OSM streets: one row per street name, pinned at the mean accident location
+export function buildOsmStreetRows(
+  matched: { streetNameFromJson: string; severity: string; vehicleTypeHebrew?: string; latitude: number; longitude: number }[],
+  mode: ModelSeverityMode = 1,
+  maxClusters: number = 20,
+): ClusterRow[] {
+  const byStreet = new Map<string, typeof matched>();
+  for (const row of matched) {
+    const group = byStreet.get(row.streetNameFromJson);
+    if (group) group.push(row);
+    else byStreet.set(row.streetNameFromJson, [row]);
+  }
+
+  const rows: ClusterRow[] = [];
+  for (const [name, group] of byStreet) {
+    const lat = group.reduce((sum, r) => sum + r.latitude, 0) / group.length;
+    const lng = group.reduce((sum, r) => sum + r.longitude, 0) / group.length;
+    // closest accident to the mean so the pin sits on the street rather than between parallel streets
+    const pin = group.reduce((best, r) =>
+      (r.latitude - lat) ** 2 + (r.longitude - lng) ** 2 < (best.latitude - lat) ** 2 + (best.longitude - lng) ** 2 ? r : best,
+    );
+    rows.push({
+      count: group.length,
+      severityIndex: group.reduce((sum, r) => sum + severityWeight(r.severity, r.vehicleTypeHebrew, mode), 0),
+      roadType: "Street",
+      name,
+      latitude: pin.latitude,
+      longitude: pin.longitude,
+    });
+  }
+
+  return rows.sort((a, b) => b.severityIndex - a.severityIndex).slice(0, maxClusters);
 }
 
 // calculate Kernel Density Function (Quartic) for all points
@@ -168,9 +278,10 @@ export function buildDensityClustersTable(
   topX: number,
   ): ClusterRow[] {
   // 1️⃣ filter by type
+  if (filterType === ModelFilterType.Segments) return [];
+
   const filteredPoints = points.filter(p => {
-    if (filterType === ModelFilterType.All) return true;
-    if (filterType === ModelFilterType.Junctions)
+    if (filterType === ModelFilterType.Crossroads)
       return p.road_type_hebrew === JUNCTION_HEB_VAL;
     if (filterType === ModelFilterType.Streets)
       return p.road_type_hebrew !== JUNCTION_HEB_VAL;

@@ -14,7 +14,8 @@ interface Props {
 
 const OPTIONS: Option[] = [
   { value: ModelFilterType.All, text: "All" },
-  { value: ModelFilterType.Junctions, text: "Junctions" },
+  { value: ModelFilterType.Segments, text: "Segments" },
+  { value: ModelFilterType.Crossroads, text: "Crossroads" },
   { value: ModelFilterType.Streets, text: "Streets" },
 ];
 

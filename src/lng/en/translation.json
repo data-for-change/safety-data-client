@@ -314,6 +314,8 @@
 	"ClusterType": "Cluster type",
 	"All": "All",
 	"Junctions": "Junctions",
+	"Segments": "Segments",
+	"Crossroads": "Crossroads",
 	"Streets": "Streets",
 	"SectionName": "Section name",
 	"Score": "Score",
