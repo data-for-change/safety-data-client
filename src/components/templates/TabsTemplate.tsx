@@ -1,4 +1,4 @@
-import React, { FunctionComponent, lazy, Suspense } from 'react';
+import React, { FunctionComponent, lazy, Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react';
 import Tabs from 'react-bootstrap/Tabs';
@@ -31,8 +31,19 @@ const styles = {
 export const TabsTemplate: FunctionComponent<IProps> = observer(({ type }) => {
 	const { t } = useTranslation();
 	const dispatch = useDispatch<AppDispatch>();
-	const { mapStore } = useStore();
+	const { mapStore, filterStore } = useStore();
 	const { currentTab } = useSelector((state: RootState) => state.appUi);
+	// the risk model works only with precise locations
+	useEffect(() => {
+		// refetch only when the lock actually changed the filter
+		if (filterStore.locationStore.setAccurateLocationOnly(currentTab === 'riskModel')) {
+			filterStore.submitFilter();
+		}
+	}, [currentTab, filterStore]);
+	// release the lock when leaving the page
+	useEffect(() => () => {
+		filterStore.locationStore.setAccurateLocationOnly(false);
+	}, [filterStore]);
 	return (
 		<Tabs
 			mountOnEnter
