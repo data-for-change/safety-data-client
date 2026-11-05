@@ -72,7 +72,6 @@ const ModelTabs: React.FC<IProps> = observer(() => {
 	const [maxDistanceMeters, setMaxDistanceMeters] = React.useState<number>(20);
 	const [sectionStrokeWidth, setSectionStrokeWidth] = React.useState<number>(4);
 	const [showAccidentPoints, setShowAccidentPoints] = React.useState<boolean>(true);
-	console.log('🚀 ~ showAccidentPoints:', showAccidentPoints)
 
 	// density
 	const denstiyPoints = React.useMemo(() => calculateKernelDensity(dataAllInjuries, heatmapRadius), [dataAllInjuries, heatmapRadius]);
