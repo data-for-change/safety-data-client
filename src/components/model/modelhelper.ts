@@ -186,6 +186,25 @@ export function buildMunicipalCrossroads(sections: StreetSection[]): MunicipalCr
     }));
 }
 
+// keep only the items located within `radius` meters of any crossroad pin
+export function filterNearCrossroads<T extends { latitude: number; longitude: number }>(
+  items: T[],
+  crossroads: MunicipalCrossroad[],
+  radius: number,
+): T[] {
+  // cheap bounding-box pre-check (in degrees) before the exact haversine distance
+  const dLat = radius / 111_320;
+  return items.filter(item => {
+    const dLng = radius / (111_320 * Math.cos((item.latitude * Math.PI) / 180));
+    return crossroads.some(
+      c =>
+        Math.abs(c.lat - item.latitude) <= dLat &&
+        Math.abs(c.lng - item.longitude) <= dLng &&
+        haversineDistance({ latitude: c.lat, longitude: c.lng } as Accident, item as unknown as Accident) <= radius,
+    );
+  });
+}
+
 // crossroad rows: accidents within `radius` meters of each municipal crossroad pin, scored by severity mode
 export function buildMunicipalCrossroadRows(
   crossroads: MunicipalCrossroad[],

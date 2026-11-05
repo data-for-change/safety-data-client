@@ -5,6 +5,36 @@ import { mapAccidentsToStreetSections } from '../../services/accidentSectionMatc
 
 const TEL_AVIV_CITY_ID = '5000';
 
+// upper bound of the max-distance slider; matching is done once at this distance
+export const MAX_MATCH_DISTANCE_METERS = 100;
+
+type MatchResult = { matched: MatchedAccidentRow[]; unmatched: UnmatchedAccidentRow[] };
+const EMPTY_RESULT: MatchResult = { matched: [], unmatched: [] };
+
+// rows matched farther than `maxDistance` become unmatched
+function applyMaxDistance(all: MatchResult, maxDistance: number): MatchResult {
+	if (all === EMPTY_RESULT) return all;
+	const matched: MatchedAccidentRow[] = [];
+	const unmatched = all.unmatched.slice();
+	for (const r of all.matched) {
+		if (r.distanceMeters <= maxDistance) {
+			matched.push(r);
+		} else {
+			unmatched.push({
+				accidentId: r.accidentId,
+				accidentStreet1: r.accidentStreet1,
+				accidentStreet2: r.accidentStreet2,
+				accidentStreet1Id: r.accidentStreet1Id,
+				accidentStreet2Id: r.accidentStreet2Id,
+				accidentType: r.raw.accident_type_hebrew,
+				latitude: r.latitude,
+				longitude: r.longitude,
+			});
+		}
+	}
+	return { matched, unmatched };
+}
+
 interface UseStreetSectionsResult {
 	isTelAvivSelected: boolean;
 	streetSections: StreetSection[] | null;
@@ -21,6 +51,7 @@ export function useStreetSections(
 	selectedCityIds: string[],
 	dataAllInjuries: Accident[],
 	maxDistanceMeters: number,
+	enabled: boolean = true,
 ): UseStreetSectionsResult {
 	const isTelAvivSelected = React.useMemo(
 		() => selectedCityIds.includes(TEL_AVIV_CITY_ID),
@@ -74,22 +105,32 @@ export function useStreetSections(
 		return dataAllInjuries.filter((a) => a.accident_yishuv_name === 'תל אביב - יפו');
 	}, [dataAllInjuries]);
 
-	const { matched, unmatched } = React.useMemo((): { matched: MatchedAccidentRow[]; unmatched: UnmatchedAccidentRow[] } => {
-		if (!isTelAvivSelected || !streetSections) return { matched: [], unmatched: [] };
+	// The expensive geometry matching runs once at the maximum distance (it does not depend on the slider);
+	// the slider only filters the result by each row's distanceMeters.
+	const allMatch = React.useMemo(() => {
+		if (!enabled || !isTelAvivSelected || !streetSections) return EMPTY_RESULT;
 		return mapAccidentsToStreetSections(telAvivAccidents, streetSections, {
-			maxDistanceMeters,
+			maxDistanceMeters: MAX_MATCH_DISTANCE_METERS,
 			enableGeoOnlyFallback: false,
 		});
-	}, [isTelAvivSelected, streetSections, telAvivAccidents, maxDistanceMeters]);
+	}, [enabled, isTelAvivSelected, streetSections, telAvivAccidents]);
 
 	// OSM streets have no LAMAS ids, so accidents are matched purely by geometry
-	const { matched: osmMatched, unmatched: osmUnmatched } = React.useMemo((): { matched: MatchedAccidentRow[]; unmatched: UnmatchedAccidentRow[] } => {
-		if (!isTelAvivSelected || !osmStreets) return { matched: [], unmatched: [] };
+	const allOsmMatch = React.useMemo(() => {
+		if (!enabled || !isTelAvivSelected || !osmStreets) return EMPTY_RESULT;
 		return mapAccidentsToStreetSections(telAvivAccidents, osmStreets, {
-			maxDistanceMeters,
+			maxDistanceMeters: MAX_MATCH_DISTANCE_METERS,
+			// the geo shortlist is bounds-based, so pad it by the max distance or larger distances would never match
+			boundsPaddingMeters: MAX_MATCH_DISTANCE_METERS,
 			enableGeoOnlyFallback: true,
 		});
-	}, [isTelAvivSelected, osmStreets, telAvivAccidents, maxDistanceMeters]);
+	}, [enabled, isTelAvivSelected, osmStreets, telAvivAccidents]);
+
+	const { matched, unmatched } = React.useMemo(() => applyMaxDistance(allMatch, maxDistanceMeters), [allMatch, maxDistanceMeters]);
+	const { matched: osmMatched, unmatched: osmUnmatched } = React.useMemo(
+		() => applyMaxDistance(allOsmMatch, maxDistanceMeters),
+		[allOsmMatch, maxDistanceMeters],
+	);
 
 	return { isTelAvivSelected, streetSections, sectionsLoadError, telAvivAccidents, matched, unmatched, osmStreets, osmMatched, osmUnmatched };
 }

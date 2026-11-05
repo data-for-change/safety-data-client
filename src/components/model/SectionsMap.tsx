@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { MapContainer, TileLayer, CircleMarker, Polyline, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, CircleMarker, Polyline, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Card } from 'react-bootstrap';
 import '../map/map.css';
 import 'leaflet/dist/leaflet.css';
 import { getSectionDisplayName } from '../../services/accidentSectionMatcher';
 import type { MatchedAccidentRow, UnmatchedAccidentRow, StreetSection } from '../../services/accidentSectionMatcher';
-import type { ModelSeverityMode } from '../../types';
+import type { ClusterRow, ModelSeverityMode } from '../../types';
 import type { RootState } from '../../stores/types';
 import { buildSeveritySectors, buildSectionScores, getSectionScoreColor } from './modelhelper';
 import CreateCenterDotPane from './CreateCenterDotPane';
@@ -18,6 +18,11 @@ type Props = {
 	matched: MatchedAccidentRow[];
 	unmatched: UnmatchedAccidentRow[];
 	streetSections: StreetSection[] | null;
+	// when given (Crossroads mode) the map draws these crossroad circles instead of the segment lines
+	crossroads?: ClusterRow[];
+	// draw the segment lines (default: only when no crossroads are given); with both, the crossroads are drawn bold over the lines
+	showSegments?: boolean;
+	crossroadRadius?: number;
 	severityMode: ModelSeverityMode;
 	sectionStrokeWidth: number;
 	showAccidentPoints: boolean;
@@ -53,7 +58,19 @@ const FitBounds: React.FC<{ matched: MatchedAccidentRow[]; unmatched: UnmatchedA
 	return null;
 };
 
-export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSections, severityMode, sectionStrokeWidth, showAccidentPoints }) => {
+export const SectionsMap: React.FC<Props> = ({
+	matched,
+	unmatched,
+	streetSections,
+	crossroads,
+	showSegments,
+	crossroadRadius = 50,
+	severityMode,
+	sectionStrokeWidth,
+	showAccidentPoints,
+}) => {
+	const showCrossroads = !!crossroads;
+	const drawSegments = showSegments ?? !showCrossroads;
 	const { t } = useTranslation();
 	const { language } = useSelector((state: RootState) => state.appUi);
 
@@ -68,6 +85,11 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 		const max = scores.length ? Math.max(...scores) : 0;
 		return buildSeveritySectors(min, max);
 	}, [sectionScores]);
+
+	const crossroadSectors = React.useMemo(() => {
+		const scores = (crossroads ?? []).map((c) => c.severityIndex);
+		return buildSeveritySectors(scores.length ? Math.min(...scores) : 0, scores.length ? Math.max(...scores) : 0);
+	}, [crossroads]);
 
 	const pStyle = {
 		color: '#004ba0',
@@ -84,7 +106,8 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 					<CreateCenterDotPane />
 					<FitBounds matched={matched} unmatched={unmatched} />
 
-					{streetSections
+					{drawSegments &&
+						streetSections
 						?.filter((section) => sectionScores.has(section.id))
 						.map((section) => {
 							const positions = section.geometry.polyline.map((p) => [p.lat, p.lng] as [number, number]);
@@ -113,6 +136,25 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 								</Polyline>
 							);
 						})}
+
+					{crossroads?.map((c, i) => (
+						<Circle
+							key={`${c.latitude},${c.longitude}`}
+							center={[c.latitude, c.longitude]}
+							radius={crossroadRadius}
+							pathOptions={{ color: getSectionScoreColor(c.severityIndex, crossroadSectors), weight: drawSegments ? 5 : 2, fillOpacity: drawSegments ? 0.3 : 0.45 }}
+						>
+							<Popup>
+								<div style={{ fontSize: '14px' }} className={`text${language}`}>
+									<strong>{c.name || `#${i + 1}`}</strong>
+									<br />
+									{t('Score')}: {c.severityIndex}
+									<br />
+									{c.count}
+								</div>
+							</Popup>
+						</Circle>
+					))}
 
 					{showAccidentPoints &&
 						matched.map((row) => {
