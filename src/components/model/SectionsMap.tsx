@@ -1,23 +1,53 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { MapContainer, TileLayer, CircleMarker, Polyline, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, CircleMarker, Polyline, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Card } from 'react-bootstrap';
 import '../map/map.css';
 import 'leaflet/dist/leaflet.css';
 import { getSectionDisplayName } from '../../services/accidentSectionMatcher';
 import type { MatchedAccidentRow, UnmatchedAccidentRow, StreetSection } from '../../services/accidentSectionMatcher';
-import type { ModelSeverityMode } from '../../types';
+import type { ClusterRow, ModelSeverityMode } from '../../types';
 import type { RootState } from '../../stores/types';
 import { buildSeveritySectors, buildSectionScores, getSectionScoreColor } from './modelhelper';
 import CreateCenterDotPane from './CreateCenterDotPane';
 import AccidentPopUp from '../map/AccidentPopUp';
 
+const popupLabelStyle = { color: '#004ba0' };
+
+// shared popup for segments and junctions: bold title + killed / severely-injured counts
+const StatsPopup: React.FC<{ title: string; subtitle?: string; killed: number; severelyInjured: number }> = ({ title, subtitle, killed, severelyInjured }) => {
+	const { t } = useTranslation();
+	const { language } = useSelector((state: RootState) => state.appUi);
+	return (
+		<Popup>
+			<div style={{ fontSize: '14px' }} className={`text${language}`}>
+				<strong>{title}</strong>
+				{subtitle && <div>{subtitle}</div>}
+				<br />
+				<div>
+					<span style={popupLabelStyle}>{t('killed')}: </span>
+					{killed}
+				</div>
+				<div>
+					<span style={popupLabelStyle}>{t('severely-injured')}: </span>
+					{severelyInjured}
+				</div>
+			</div>
+		</Popup>
+	);
+};
+
 type Props = {
 	matched: MatchedAccidentRow[];
 	unmatched: UnmatchedAccidentRow[];
 	streetSections: StreetSection[] | null;
+	// when given (Crossroads mode) the map draws these crossroad circles instead of the segment lines
+	crossroads?: ClusterRow[];
+	// draw the segment lines (default: only when no crossroads are given); with both, the crossroads are drawn bold over the lines
+	showSegments?: boolean;
+	crossroadRadius?: number;
 	severityMode: ModelSeverityMode;
 	sectionStrokeWidth: number;
 	showAccidentPoints: boolean;
@@ -53,7 +83,19 @@ const FitBounds: React.FC<{ matched: MatchedAccidentRow[]; unmatched: UnmatchedA
 	return null;
 };
 
-export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSections, severityMode, sectionStrokeWidth, showAccidentPoints }) => {
+export const SectionsMap: React.FC<Props> = ({
+	matched,
+	unmatched,
+	streetSections,
+	crossroads,
+	showSegments,
+	crossroadRadius = 50,
+	severityMode,
+	sectionStrokeWidth,
+	showAccidentPoints,
+}) => {
+	const showCrossroads = !!crossroads;
+	const drawSegments = showSegments ?? !showCrossroads;
 	const { t } = useTranslation();
 	const { language } = useSelector((state: RootState) => state.appUi);
 
@@ -69,9 +111,10 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 		return buildSeveritySectors(min, max);
 	}, [sectionScores]);
 
-	const pStyle = {
-		color: '#004ba0',
-	};
+	const crossroadSectors = React.useMemo(() => {
+		const scores = (crossroads ?? []).map((c) => c.severityIndex);
+		return buildSeveritySectors(scores.length ? Math.min(...scores) : 0, scores.length ? Math.max(...scores) : 0);
+	}, [crossroads]);
 
 	return (
 		<Card style={{ height: '100%', padding: '0' }}>
@@ -84,7 +127,8 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 					<CreateCenterDotPane />
 					<FitBounds matched={matched} unmatched={unmatched} />
 
-					{streetSections
+					{drawSegments &&
+						streetSections
 						?.filter((section) => sectionScores.has(section.id))
 						.map((section) => {
 							const positions = section.geometry.polyline.map((p) => [p.lat, p.lng] as [number, number]);
@@ -96,23 +140,21 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 									positions={positions}
 									pathOptions={{ color, weight: sectionWeight, opacity: 0.9 }}
 								>
-									<Popup>
-										<div style={{ fontSize: '14px' }} className={`text${language}`}>
-											<strong>{getSectionDisplayName(section)}</strong>
-											<br />
-											<div>
-												<span style={pStyle}>{t('killed')}: </span>
-												{score.killed}
-											</div>
-											<div>
-												<span style={pStyle}>{t('severely-injured')}: </span>
-												{score.severelyInjured}
-											</div>
-										</div>
-									</Popup>
+									<StatsPopup title={getSectionDisplayName(section)} killed={score.killed} severelyInjured={score.severelyInjured} />
 								</Polyline>
 							);
 						})}
+
+					{/* {crossroads?.map((c, i) => (
+						<Circle
+							key={`${c.latitude},${c.longitude}`}
+							center={[c.latitude, c.longitude]}
+							radius={crossroadRadius}
+							pathOptions={{ color: getSectionScoreColor(c.severityIndex, crossroadSectors), weight: drawSegments ? 5 : 2, fillOpacity: drawSegments ? 0.3 : 0.45 }}
+						>
+							<StatsPopup title={c.name || `#${i + 1}`} subtitle={c.streets && c.streets.length > 2 ? c.streets.slice(2).join(' / ') : undefined} killed={c.killed ?? 0} severelyInjured={c.severelyInjured ?? 0} />
+						</Circle>
+					))} */}
 
 					{showAccidentPoints &&
 						matched.map((row) => {
@@ -122,6 +164,7 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 									key={row.accidentId}
 									center={[row.latitude, row.longitude]}
 									radius={6}
+									pane='center-dot'
 									pathOptions={{ color: '#D32F2F', fillColor: color, weight: 1, fillOpacity: 1 }}
 								>
 									<AccidentPopUp data={row.raw} language={language} />
@@ -135,6 +178,7 @@ export const SectionsMap: React.FC<Props> = ({ matched, unmatched, streetSection
 								key={row.accidentId}
 								center={[row.latitude, row.longitude]}
 								radius={5}
+								pane='center-dot'
 								pathOptions={{ color: UNMATCHED_COLOR, fillColor: UNMATCHED_COLOR, fillOpacity: 1, weight: 1 }}
 							>
 								<Popup>

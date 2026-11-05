@@ -1,5 +1,6 @@
 export enum ModelFilterType {
   All = "all",
-  Junctions = "junctions",
+  Segments = "segments",
+  Crossroads = "crossroads",
   Streets = "streets",
 }

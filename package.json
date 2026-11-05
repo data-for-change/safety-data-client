@@ -42,7 +42,8 @@
 		"preview": "vite preview",
 		"test": "vitest",
 		"test:watch": "vitest --watch",
-		"process-streets": "node telAvivDataStreets/shp-to-processed-json.mjs"
+		"process-streets": "node telAvivDataStreets/shp-to-processed-json.mjs",
+		"process-osm-streets": "node telAvivDataStreets/osm-streets-to-json.mjs"
 	},
 	"eslintConfig": {
 		"extends": [

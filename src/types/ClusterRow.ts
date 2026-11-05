@@ -5,4 +5,8 @@ export type ClusterRow = {
   name: string;
   latitude: number;
   longitude: number;
+  // only set for municipal crossroad rows (used by the section map popup)
+  streets?: string[]; // all streets meeting at the crossroad, most frequent first
+  killed?: number;
+  severelyInjured?: number;
 };

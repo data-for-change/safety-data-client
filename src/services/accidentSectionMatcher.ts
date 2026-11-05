@@ -84,6 +84,9 @@ const DEFAULT_OPTIONS: Required<AccidentSectionMatcherOptions> = {
 	enableGeoOnlyFallback: true,
 };
 
+// turf line strings are expensive to build; cache them per section object across calls
+const LINE_CACHE = new WeakMap<StreetSection, ReturnType<typeof lineString>>();
+
 export function normalizeHebrewStreetName(input?: string): string | undefined {
 	if (!input) return undefined;
 	const trimmed = input.trim();
@@ -141,7 +144,7 @@ export function mapAccidentsToStreetSections(
 ): MapAccidentsResult {
 	const opt = { ...DEFAULT_OPTIONS, ...(options ?? {}) };
 	const sectionsByLamasId = buildSectionsByLamasId(sections);
-	const lineCache = new Map<string, ReturnType<typeof lineString>>();
+	const lineCache = LINE_CACHE;
 
 	const matched: MatchedAccidentRow[] = [];
 	const unmatched: UnmatchedAccidentRow[] = [];
@@ -198,10 +201,10 @@ export function mapAccidentsToStreetSections(
 		let best: { section: StreetSection; distance: number } | null = null;
 
 		for (const s of shortlist) {
-			let ls = lineCache.get(s.id);
+			let ls = lineCache.get(s);
 			if (!ls) {
 				ls = lineString(s.geometry.polyline.map((v) => [v.lng, v.lat]));
-				lineCache.set(s.id, ls);
+				lineCache.set(s, ls);
 			}
 
 			const dist = pointToLineDistance(pt, ls, { units: 'meters' });
