@@ -51,12 +51,12 @@ function acc(over: Partial<Accident> = {}): Accident {
 }
 const junctionAcc = (over: Partial<Accident> = {}) => acc({ road_type_hebrew: JUNCTION_HEB_VAL, ...over });
 
-function section(id: string, line: [number, number][], names?: { from?: string; to?: string }): StreetSection {
+function section(id: string, line: [number, number][], names?: { from?: string; to?: string }, streetName = `street-${id}`): StreetSection {
 	const lats = line.map((p) => p[0]);
 	const lngs = line.map((p) => p[1]);
 	return {
 		id,
-		streetName: `street-${id}`,
+		streetName,
 		geometry: { polyline: line.map(([lat, lng]) => ({ lat, lng })) },
 		bounds: { minLat: Math.min(...lats), maxLat: Math.max(...lats), minLng: Math.min(...lngs), maxLng: Math.max(...lngs) },
 		junctionNames: names,
@@ -69,10 +69,10 @@ const D = 0.002; // ~200m arms
 function plusCrossroad(prefix: string, center: [number, number], name: string): StreetSection[] {
 	const [lat, lng] = center;
 	return [
-		section(`${prefix}-n`, [[lat + D, lng], center], { to: name }),
-		section(`${prefix}-s`, [[lat - D, lng], center], { to: name }),
-		section(`${prefix}-e`, [[lat, lng + D], center], { to: name }),
-		section(`${prefix}-w`, [[lat, lng - D], center], { to: name }),
+		section(`${prefix}-n`, [[lat + D, lng], center], { to: name }, name),
+		section(`${prefix}-s`, [[lat - D, lng], center], { to: name }, name),
+		section(`${prefix}-e`, [[lat, lng + D], center], { to: name }, name),
+		section(`${prefix}-w`, [[lat, lng - D], center], { to: name }, name),
 	];
 }
 
@@ -185,6 +185,19 @@ describe('buildMunicipalCrossroads', () => {
 			section('c', [[BASE_LAT, BASE_LNG + D], [BASE_LAT, BASE_LNG]]),
 		];
 		expect(buildMunicipalCrossroads(far)).toHaveLength(0);
+	});
+
+	it('names a crossroad after the two most frequent streets meeting there and lists all of them', () => {
+		const [lat, lng] = CENTER;
+		const result = buildMunicipalCrossroads([
+			section('ns1', [[lat + D, lng], CENTER], { to: 'Beta' }, 'Alpha'),
+			section('ns2', [[lat - D, lng], CENTER], { to: 'Beta' }, 'Alpha'),
+			section('ew1', [[lat, lng + D], CENTER], { to: 'Alpha / Gamma' }, 'Beta'),
+			section('ew2', [[lat, lng - D], CENTER], { to: 'Alpha' }, 'Beta'),
+		]);
+		expect(result).toHaveLength(1);
+		expect(result[0].name).toBe('Alpha / Beta');
+		expect(result[0].streets).toEqual(['Alpha', 'Beta', 'Gamma']);
 	});
 
 	it('keeps separate crossroads separate', () => {

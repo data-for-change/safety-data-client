@@ -14,6 +14,31 @@ import { buildSeveritySectors, buildSectionScores, getSectionScoreColor } from '
 import CreateCenterDotPane from './CreateCenterDotPane';
 import AccidentPopUp from '../map/AccidentPopUp';
 
+const popupLabelStyle = { color: '#004ba0' };
+
+// shared popup for segments and junctions: bold title + killed / severely-injured counts
+const StatsPopup: React.FC<{ title: string; subtitle?: string; killed: number; severelyInjured: number }> = ({ title, subtitle, killed, severelyInjured }) => {
+	const { t } = useTranslation();
+	const { language } = useSelector((state: RootState) => state.appUi);
+	return (
+		<Popup>
+			<div style={{ fontSize: '14px' }} className={`text${language}`}>
+				<strong>{title}</strong>
+				{subtitle && <div>{subtitle}</div>}
+				<br />
+				<div>
+					<span style={popupLabelStyle}>{t('killed')}: </span>
+					{killed}
+				</div>
+				<div>
+					<span style={popupLabelStyle}>{t('severely-injured')}: </span>
+					{severelyInjured}
+				</div>
+			</div>
+		</Popup>
+	);
+};
+
 type Props = {
 	matched: MatchedAccidentRow[];
 	unmatched: UnmatchedAccidentRow[];
@@ -91,10 +116,6 @@ export const SectionsMap: React.FC<Props> = ({
 		return buildSeveritySectors(scores.length ? Math.min(...scores) : 0, scores.length ? Math.max(...scores) : 0);
 	}, [crossroads]);
 
-	const pStyle = {
-		color: '#004ba0',
-	};
-
 	return (
 		<Card style={{ height: '100%', padding: '0' }}>
 			<div style={{ height: '70vh', width: '100%' }}>
@@ -119,42 +140,21 @@ export const SectionsMap: React.FC<Props> = ({
 									positions={positions}
 									pathOptions={{ color, weight: sectionWeight, opacity: 0.9 }}
 								>
-									<Popup>
-										<div style={{ fontSize: '14px' }} className={`text${language}`}>
-											<strong>{getSectionDisplayName(section)}</strong>
-											<br />
-											<div>
-												<span style={pStyle}>{t('killed')}: </span>
-												{score.killed}
-											</div>
-											<div>
-												<span style={pStyle}>{t('severely-injured')}: </span>
-												{score.severelyInjured}
-											</div>
-										</div>
-									</Popup>
+									<StatsPopup title={getSectionDisplayName(section)} killed={score.killed} severelyInjured={score.severelyInjured} />
 								</Polyline>
 							);
 						})}
 
-					{crossroads?.map((c, i) => (
+					{/* {crossroads?.map((c, i) => (
 						<Circle
 							key={`${c.latitude},${c.longitude}`}
 							center={[c.latitude, c.longitude]}
 							radius={crossroadRadius}
 							pathOptions={{ color: getSectionScoreColor(c.severityIndex, crossroadSectors), weight: drawSegments ? 5 : 2, fillOpacity: drawSegments ? 0.3 : 0.45 }}
 						>
-							<Popup>
-								<div style={{ fontSize: '14px' }} className={`text${language}`}>
-									<strong>{c.name || `#${i + 1}`}</strong>
-									<br />
-									{t('Score')}: {c.severityIndex}
-									<br />
-									{c.count}
-								</div>
-							</Popup>
+							<StatsPopup title={c.name || `#${i + 1}`} subtitle={c.streets && c.streets.length > 2 ? c.streets.slice(2).join(' / ') : undefined} killed={c.killed ?? 0} severelyInjured={c.severelyInjured ?? 0} />
 						</Circle>
-					))}
+					))} */}
 
 					{showAccidentPoints &&
 						matched.map((row) => {
@@ -164,6 +164,7 @@ export const SectionsMap: React.FC<Props> = ({
 									key={row.accidentId}
 									center={[row.latitude, row.longitude]}
 									radius={6}
+									pane='center-dot'
 									pathOptions={{ color: '#D32F2F', fillColor: color, weight: 1, fillOpacity: 1 }}
 								>
 									<AccidentPopUp data={row.raw} language={language} />
@@ -177,6 +178,7 @@ export const SectionsMap: React.FC<Props> = ({
 								key={row.accidentId}
 								center={[row.latitude, row.longitude]}
 								radius={5}
+								pane='center-dot'
 								pathOptions={{ color: UNMATCHED_COLOR, fillColor: UNMATCHED_COLOR, fillOpacity: 1, weight: 1 }}
 							>
 								<Popup>

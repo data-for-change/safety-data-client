@@ -147,49 +147,53 @@ export function buildClusterTable(
 const CROSSROAD_MERGE_METERS = 15;
 const MIN_SEGMENT_ENDS_AT_CROSSROAD = 3;
 
-type MunicipalCrossroad = { lat: number; lng: number; name: string; ends: number };
+// `name` = the two most frequent streets meeting here ("A / B"); `streets` = all distinct streets, most frequent first
+type MunicipalCrossroad = { lat: number; lng: number; name: string; streets: string[]; ends: number };
 
 // derive crossroad pins from municipal segments: segment endpoints (within CROSSROAD_MERGE_METERS of each other)
-// where at least MIN_SEGMENT_ENDS_AT_CROSSROAD segments meet are a crossroad; named from the segments' junctionNames
+// where at least MIN_SEGMENT_ENDS_AT_CROSSROAD segments meet are a crossroad; named from the streets of the segments ending there
+// (their own street names and their junctionNames, which can already hold several streets separated by "/")
 export function buildMunicipalCrossroads(sections: StreetSection[]): MunicipalCrossroad[] {
   const groups: { lat: number; lng: number; ends: number; names: Map<string, number> }[] = [];
 
-  const addEnd = (p: { lat: number; lng: number }, name?: string) => {
-    const group = groups.find(
+  const addEnd = (p: { lat: number; lng: number }, names: (string | undefined)[]) => {
+    let group = groups.find(
       g => haversineDistance({ latitude: g.lat, longitude: g.lng } as Accident, { latitude: p.lat, longitude: p.lng } as Accident) <= CROSSROAD_MERGE_METERS
     );
-    if (!group) {
-      groups.push({ lat: p.lat, lng: p.lng, ends: 1, names: new Map(name ? [[name, 1]] : []) });
-      return;
+    if (group) {
+      group.lat = (group.lat * group.ends + p.lat) / (group.ends + 1);
+      group.lng = (group.lng * group.ends + p.lng) / (group.ends + 1);
+      group.ends += 1;
+    } else {
+      group = { lat: p.lat, lng: p.lng, ends: 1, names: new Map() };
+      groups.push(group);
     }
-    group.lat = (group.lat * group.ends + p.lat) / (group.ends + 1);
-    group.lng = (group.lng * group.ends + p.lng) / (group.ends + 1);
-    group.ends += 1;
-    if (name) group.names.set(name, (group.names.get(name) ?? 0) + 1);
+    // a name can already hold several streets ("A / B"): count each street separately
+    for (const street of names.flatMap(n => (n ?? '').split('/')).map(n => n.trim()).filter(Boolean)) {
+      group.names.set(street, (group.names.get(street) ?? 0) + 1);
+    }
   };
 
   for (const s of sections) {
     const line = s.geometry.polyline;
     if (line.length < 2) continue;
-    addEnd(line[0], s.junctionNames?.from);
-    addEnd(line[line.length - 1], s.junctionNames?.to);
+    addEnd(line[0], [s.streetName, s.junctionNames?.from]);
+    addEnd(line[line.length - 1], [s.streetName, s.junctionNames?.to]);
   }
 
   return groups
     .filter(g => g.ends >= MIN_SEGMENT_ENDS_AT_CROSSROAD)
-    .map(g => ({
-      lat: g.lat,
-      lng: g.lng,
-      ends: g.ends,
-      // most frequent junction name among the segments meeting here
-      name: Array.from(g.names.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '',
-    }));
+    .map(g => {
+      // most frequent streets first
+      const streets = Array.from(g.names.entries()).sort((a, b) => b[1] - a[1]).map(([name]) => name);
+      return { lat: g.lat, lng: g.lng, ends: g.ends, streets, name: streets.slice(0, 2).join(' / ') };
+    });
 }
 
 // keep only the items located within `radius` meters of any crossroad pin
 export function filterNearCrossroads<T extends { latitude: number; longitude: number }>(
   items: T[],
-  crossroads: MunicipalCrossroad[],
+  crossroads: { lat: number; lng: number }[],
   radius: number,
 ): T[] {
   // cheap bounding-box pre-check (in degrees) before the exact haversine distance
@@ -225,8 +229,11 @@ export function buildMunicipalCrossroadRows(
       severityIndex: calcSeverityIndex(near, mode),
       roadType: "Junction",
       name: c.name,
+      streets: c.streets,
       latitude: c.lat,
       longitude: c.lng,
+      killed: near.filter(a => a.injury_severity_hebrew === 'הרוג').length,
+      severelyInjured: near.filter(a => a.injury_severity_hebrew === 'פצוע קשה').length,
     });
   }
 
