@@ -847,6 +847,7 @@ class FilterStore implements IFilterStore  {
       if (roads) this.locationStore.updateCities(cities, true);
       this.setRoads(roads);
       this.locationAccuracy.setValuesByQuery(params);
+      this.locationStore.enforceAccurateOnly();
       this.roadTypes.setValuesByQuery(params);
       this.vehicleStore.injTypes.setValuesByQuery(params);
       this.whoStore.setValuesByQuery(params);
