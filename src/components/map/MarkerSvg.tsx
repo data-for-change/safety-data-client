@@ -11,21 +11,28 @@ import AccidentPopUp from './AccidentPopUp';
 //   iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
 // };
 
-const customMarketIcon = (iconMarkup:any, isSmall :boolean = false) => {
-  const size = isSmall? 9:22;
+const getPinSize = (isSmall: boolean) => ({
+  width: isSmall ? 16.2 : 24.6,
+  height: isSmall ? 20 : 30,
+});
+
+// The pin's tip is at the bottom-center of the SVG, so anchor the icon there
+// to make the tip sit exactly on the accident's coordinates.
+const customMarketIcon = (iconMarkup: any, isSmall: boolean = false) => {
+  const { width, height } = getPinSize(isSmall);
   const res = divIcon({
     html: iconMarkup,
     className: 'ship-div-icon',
-    iconAnchor: [0, size],
-    popupAnchor: [2, -(size-2)],
+    iconSize: [width, height],
+    iconAnchor: [width / 2, height],
+    popupAnchor: [0, -height],
   });
   return res;
 };
 
 const getSVGPinByVehicleType = (VehicleType: string, color: string, isAccuratePos: boolean, isSmall :boolean = false) => {
   let pin;
-  const width = (isSmall)? 16.2: 24.6; 
-  const height= (isSmall)? 20: 30;
+  const { width, height } = getPinSize(isSmall);
   switch (VehicleType) {
     case 'הולך רגל':
       pin = <IconWalk fill={color} isAccuratePos={isAccuratePos} width={width} height={height} />;

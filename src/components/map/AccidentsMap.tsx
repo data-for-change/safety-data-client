@@ -82,8 +82,9 @@ const AccidentsMap: FC<IProps> = observer(() => {
 						{mapMarkersType === MapMarkersType.Markers_AND_Clusters && (
 							<MarkerClusterGroup
 								showCoverageOnHover={false}
+								spiderfyOnMaxZoom={true}
 								spiderfyDistanceMultiplier={2}
-								maxClusterRadius={10}
+								maxClusterRadius={40}
 								iconCreateFunction={createClusterCustomIcon}
 							>
 								<ClusteredMarkers />

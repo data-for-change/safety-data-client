@@ -1,4 +1,4 @@
-import L , {LatLngExpression} from 'leaflet';
+import L from 'leaflet';
 import { Accident, MarkerData } from '../types';
 
 export const getColorByVehicle = (category: string) => {
@@ -294,58 +294,47 @@ export const createLegendArr = (grades: string[], getColorfunc: (value: string) 
     return labels;
 };
 
-export const clusterMarkers = (markers: MarkerData[]): MarkerData[][] => {
-    return markers.reduce<MarkerData[][]>((clusters, marker) => {
-      const existingCluster = clusters.find(cluster =>
-        L.latLng(cluster[0].position).equals(L.latLng(marker.position))
-      );
-      if (existingCluster) {
-        existingCluster.push(marker);
-      } else {
-        clusters.push([marker]);
-      }
-      return clusters;
-    }, []);
-  };
-
 /**
- * Generates a set of LatLng positions in a spiral arrangement
- * around the center position.
- * 
- * @param center - The center position for the cluster.
- * @param count - The number of positions to generate around the center.
- * @returns An array of LatLngExpression positions.
+ * Accidents that share (almost) the same coordinates are drawn exactly on top
+ * of each other, so only the top pin is visible/clickable. This nudges each
+ * member of such a group onto a tiny circle (~3m) around the shared point so
+ * every pin stays visible and clickable. Groups of one are returned untouched.
  */
-export const generateClusterPositions = (center: LatLngExpression, count: number): LatLngExpression[] => {
-    const radius = 0.0005; // Adjust for spacing
-    const angleStep = (2 * Math.PI) / count;
-    return Array.from({ length: count }, (_, i) => {
-      const angle = i * angleStep;
-      const latOffset = radius * Math.sin(angle)- 0.0001;
-      const lngOffset = (radius * Math.cos(angle))- 0.00005;
-      return [
-        (center as [number, number])[0] + latOffset,
-        (center as [number, number])[1] + lngOffset,
-      ];
+const OVERLAP_PRECISION = 5; // decimals of a degree, ~1m
+const OVERLAP_RADIUS_DEG = 0.00003; // ~3m
+
+export const spreadOverlappingMarkers = (markers: MarkerData[]): MarkerData[] => {
+    const groups = new Map<string, MarkerData[]>();
+    markers.forEach((marker) => {
+        const { lat, lng } = L.latLng(marker.position);
+        const key = `${lat.toFixed(OVERLAP_PRECISION)},${lng.toFixed(OVERLAP_PRECISION)}`;
+        const group = groups.get(key);
+        if (group) {
+            group.push(marker);
+        } else {
+            groups.set(key, [marker]);
+        }
     });
-  };
-  
-export const createFlowerPositions = (
-  center: LatLngExpression,
-  count: number
-): LatLngExpression[] => {
-  const radius = 0.0005;
 
-  return Array.from({ length: count }, (_, i) => {
-    const angle = (2 * Math.PI * i) / count;
-
-    const latOffset = radius * Math.sin(angle);
-    const lngOffset = radius * Math.cos(angle);
-
-    return [
-      (center as [number, number])[0] + latOffset,
-      (center as [number, number])[1] + lngOffset,
-    ];
-  });
+    const result: MarkerData[] = [];
+    groups.forEach((group) => {
+        if (group.length === 1) {
+            result.push(group[0]);
+            return;
+        }
+        const { lat, lng } = L.latLng(group[0].position);
+        // compensate longitude degrees so the circle is round on the ground
+        const lngScale = 1 / Math.max(Math.cos((lat * Math.PI) / 180), 0.1);
+        group.forEach((marker, i) => {
+            const angle = (2 * Math.PI * i) / group.length;
+            result.push({
+                ...marker,
+                position: [
+                    lat + OVERLAP_RADIUS_DEG * Math.sin(angle),
+                    lng + OVERLAP_RADIUS_DEG * Math.cos(angle) * lngScale,
+                ],
+            });
+        });
+    });
+    return result;
 };
-
