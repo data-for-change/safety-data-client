@@ -9,6 +9,25 @@
     width: 30px;
   }
 
+  /* While a cluster is spiderfied (expanded) Leaflet.markercluster fades its icon
+     to opacity 0.3. Show just a small dot at the center instead of the numbered circle. */
+  .marker-cluster-custom[style*="opacity: 0.3"] {
+    border: none;
+    opacity: 1 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .marker-cluster-custom[style*="opacity: 0.3"] > div {
+    width: 10px !important;
+    height: 10px !important;
+    border-width: 2px !important;
+    box-sizing: border-box;
+  }
+  .marker-cluster-custom[style*="opacity: 0.3"] > div > span {
+    display: none;
+  }
+
   .map-select-wrapper {
     display: flex;
     justify-content: flex-start;

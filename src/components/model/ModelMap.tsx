@@ -46,7 +46,7 @@ export const ModelMap: React.FC<Props> = ({ clusters, isHeat, sizeHeat}) => {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <CreateCenterDotPane /> 
+                    <CreateCenterDotPane />
                     <ModelClusterMarkers clusters={clusters} colorBy='1' isHeat={isHeat} sizeHeat={sizeHeat} />
                 </MapContainer>
             </div>
