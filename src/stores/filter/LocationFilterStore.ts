@@ -1,9 +1,11 @@
 import { makeAutoObservable } from 'mobx';
-import { IColumnFilter } from './ColumnFilterCheckBoxList';
+import { IColumnFilter, ColumnFilter } from './ColumnFilterCheckBoxList';
 import { ColumnFilterArray } from './ColumnFilterArray';
-import { ColumnFilterCombo, initCityPopSize, initPoilceStations } from './columnFilterCombo';
+import { ColumnFilterCombo, initCityPopSize } from './columnFilterCombo';
+import { POLICE_STATIONS } from './columnFilterCombo/data';
+import FilterChecker from './FilterChecker';
 import * as FC from './ColumnFilterCheckBoxList';
-import { GeoFilter, Street } from '../../types';
+import { GeoFilter, PolygonShape, Street } from '../../types';
 import CityService from '../../services/CityService';
 import { loadAreaPolygon } from '../../utils';
 
@@ -14,7 +16,7 @@ export default class LocationFilterStore {
    roads: ColumnFilterArray;
    roadSegment: ColumnFilterArray;
    cityPopSizeRange: ColumnFilterCombo;
-   zoneName: ColumnFilterCombo;
+   zoneName: IColumnFilter;
    roadTypes: IColumnFilter;
    locationAccuracy: IColumnFilter;
    cityResult: string = '';
@@ -33,7 +35,7 @@ export default class LocationFilterStore {
       this.cities = new ColumnFilterArray('City', 'city', false);
       this.streets = new ColumnFilterArray('Street', 'st', false);
       this.cityPopSizeRange = initCityPopSize();
-      this.zoneName = initPoilceStations();
+      this.zoneName = this.initPoliceStations();
    }
 
    setIsMultipleCities = (isMulti: boolean) => {
@@ -54,8 +56,18 @@ export default class LocationFilterStore {
       }
    }
 
-   setZonesName = async (value: string) => {
-      this.zoneName.setFilter(value);
+   initPoliceStations = (): IColumnFilter => {
+      const col: IColumnFilter = new ColumnFilter('PoliceStation', 'ey', 0);
+      col.arrTypes.push(new FilterChecker('all', true, []));
+      POLICE_STATIONS.forEach((station, index) => {
+         col.arrTypes.push(new FilterChecker(station, false, [index + 1]));
+      });
+      col.setQueryVals();
+      return col;
+   }
+
+   updateZonesName = async (aType: number, val: boolean) => {
+      this.zoneName.setFilter(aType, val);
       this.geoFilter = await this.getGeoFilter();
    }
 
@@ -144,11 +156,21 @@ export default class LocationFilterStore {
    }
 
    private getGeoFilter = async () => {
-      const policeStationName = this.zoneName.queryValue as string;
-      if (!policeStationName || policeStationName.trim() === '') {
+      // "all" option checked (or no stations selected) → no geo filter
+      if (this.zoneName.arrTypes[this.zoneName.allTypesOption].checked) {
          return null;
       }
-      const geoPolygon = await loadAreaPolygon(policeStationName);
-      return { geo: geoPolygon };
+      const checkedStations = this.zoneName.arrTypes
+         .filter((checker, index) => index !== this.zoneName.allTypesOption && checker.checked)
+         .map(checker => POLICE_STATIONS[checker.filters[0] - 1]);
+      if (checkedStations.length === 0) {
+         return null;
+      }
+      const polygons: PolygonShape[] = [];
+      for (const stationName of checkedStations) {
+         const geoPolygon = await loadAreaPolygon(stationName);
+         polygons.push(...geoPolygon.polygons);
+      }
+      return { geo: { polygons } };
    }
 }

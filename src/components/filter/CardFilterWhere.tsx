@@ -22,7 +22,7 @@ const CardFilterWhere = observer(() => {
       isValidWhere,
       cities,
       roadTypes, updateRoadType,
-      zoneName, setZonesName,
+      zoneName, updateZonesName,
       locationAccuracy, updateLocationAccuracy,
       isMultipleCities,
       cityPopSizeRange, setCityPopSizeRange,
@@ -46,13 +46,10 @@ const CardFilterWhere = observer(() => {
              <div>
                 <CitySelector isMultiple={isMultipleCities} /> 
                 <StreetSelector />
-                {showPoliceStation&& <MySelect
-                   label={'PoliceStation'}
-                   value={String(zoneName.queryValue)}
-                   data={zoneName.arrTypes}
-                   onChange={(e: ChangeEvent<HTMLSelectElement>) => { setZonesName(e.target.value); }}   
-                   cssClass="stacked" 
-                   layout="column"               
+                {showPoliceStation && <GroupCheckbox
+                   formName="filterForm"
+                   colFilter={zoneName}
+                   onChange={updateZonesName}
                 />}
                 <RoadNameSelector />
                 <RoadSegmentSelector />

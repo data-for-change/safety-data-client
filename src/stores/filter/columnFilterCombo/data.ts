@@ -13,7 +13,6 @@ export const CITY_POP_SIZE_OPTIONS = [
 ];
 
 export const POLICE_STATIONS = [
-  '',  
   'תחנת השכונות',
   'תחנת יפו',
   'תחנת לב תל אביב',
