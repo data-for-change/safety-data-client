@@ -1,4 +1,4 @@
-import React, { lazy, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AppDispatch } from './stores/store';
@@ -11,6 +11,7 @@ import ModelPage from './pages/ModelPage';
 import Header from './components/templates/Header/Header';
 import Footer from './components/templates/footer/Footer';
 import AdminRoute from './components/auth/AdminRoute';
+import { Loader } from './components/common';
 
 import './i18n';
 import './App.css';
@@ -86,26 +87,28 @@ function App() {
 				<div style={{ height: '100%' }}>
 					<Header title='Safety Data' />
 					<div style={styles.app}>
-						<Routes>
-							<Route path='/' element={<HomePage />} />
-							<Route path='/city' element={<CityPage />} />
-							<Route path='/model' element={<ModelPage />} />
-							<Route path='/recommend' element={<RecommendationsPage />} />
-                            {/* Map view removed: MapWithClusters component deleted */}
-							<Route path='/about' element={<AboutPage />} />
-							<Route path='/login' element={<Login />} />
-							<Route path='/register' element={<Register />} />
-							<Route path='/profile' element={<Profile />} />
-							<Route path='/login-popup-redirect' element={<LoginPopupRedirect />} />
-							<Route
-								path='/admin'
-								element={
-									<AdminRoute>
-										<AdminPage />
-									</AdminRoute>
-								}
-							/>
-						</Routes>
+						<Suspense fallback={<Loader />}>
+							<Routes>
+								<Route path='/' element={<HomePage />} />
+								<Route path='/city' element={<CityPage />} />
+								<Route path='/model' element={<ModelPage />} />
+								<Route path='/recommend' element={<RecommendationsPage />} />
+								{/* Map view removed: MapWithClusters component deleted */}
+								<Route path='/about' element={<AboutPage />} />
+								<Route path='/login' element={<Login />} />
+								<Route path='/register' element={<Register />} />
+								<Route path='/profile' element={<Profile />} />
+								<Route path='/login-popup-redirect' element={<LoginPopupRedirect />} />
+								<Route
+									path='/admin'
+									element={
+										<AdminRoute>
+											<AdminPage />
+										</AdminRoute>
+									}
+								/>
+							</Routes>
+						</Suspense>
 					</div>
 					<Footer />
 				</div>
