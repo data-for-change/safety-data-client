@@ -14,6 +14,7 @@ import {createClusterCustomIcon} from './markers/clusterCustomIcon';
 import SelectMarkersColorType from './SelectMarkersColorType';
 import SelectMarkersIConType from './SelectMarkersIConType';
 import SelectMapMarkersType from './SelectMapMarkersType';
+import SelectedFilterPolygons from './SelectedFilterPolygons';
 import 'leaflet/dist/leaflet.css';
 //import AccidentHeatLayer from './AccidentHeatLayer';
 
@@ -77,6 +78,7 @@ const AccidentsMap: FC<IProps> = observer(() => {
 							attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 							url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 						/>
+						<SelectedFilterPolygons />
 						{/* {mapMarkersType === MapMarkersType.Heat_Map && <AccidentHeatLayer />} */}
 						{mapMarkersType === MapMarkersType.Markers && <AccidentsMarkers />}
 						{mapMarkersType === MapMarkersType.Markers_AND_Clusters && (
