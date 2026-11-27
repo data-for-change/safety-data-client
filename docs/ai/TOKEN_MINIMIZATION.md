@@ -1,26 +1,9 @@
-Token Minimization Guidelines — Practical tips for AI helpers
+﻿# Token-efficient repository work
 
-When to include file contents
+- Search first (`rg`) and read only the relevant symbol plus its direct context.
+- For behavior changes, trace the smallest necessary path through page, component, store, and service.
+- Share failing inputs and the relevant error excerpt; avoid full logs and full-file dumps.
+- For large datasets, inspect schema or a tiny sample. Do not print person-level records, full GeoJSON, generated bundles, or local environment values.
+- Ask for a focused diff or modified function when discussing a change; include enough surrounding context to preserve imports and callers.
 
-- Include only the function/component block you are editing, plus 3–5 lines of context above and below.
-- Never paste full JSON or geojson files into prompts; provide a small sample or a description instead.
-
-Search and narrowing strategies
-
-- Use grep-style queries: search for function names, component names, or unique strings.
-- Share failing inputs, console logs, or unit test failures rather than entire logs.
-
-How to ask for changes
-
-- Be explicit about the file and line range. Example: "Edit `src/components/filter/CardFilterWhere.tsx` lines 40–120 to add input debounce." 
-- Request only the diff or the modified function — not the whole file.
-
-Example compact workflows
-
-- Debugging: 1) ask AI to open the small function, 2) provide minimal failing input, 3) request a focused patch.
-- Feature change: 1) indicate target file and UI behaviour, 2) request component-level changes with import lines, 3) run and report errors.
-
-Repository-specific notes
-
-- Large files to avoid sending: `build/asset-manifest.json`, `telAvivDataStreets/*` geojson files, and `build/static/*` assets.
-- Prioritize `src/services`, `src/stores`, `src/components`, and `src/pages` for code edits.
+Repository paths to avoid reading wholesale: `node_modules/`, `build/`, `dist/`, generated `public/data/`, and `telAvivDataStreets/` data files.
