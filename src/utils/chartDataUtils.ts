@@ -66,6 +66,18 @@ export const getComparisonEndMonth = (updatedToSec: number | null | undefined): 
 };
 
 /**
+ * Text of the comparison range for a chart header, e.g. "2021-2025 (Jan-Sep)".
+ * Returns '' when the end month is unknown.
+ */
+export const formatComparePeriod = (fromYear: number, toYear: number, endMonth: number, locale?: string): string => {
+  if (endMonth < 1) return '';
+  const monthName = (m: number) => new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UTC' }).format(new Date(Date.UTC(2000, m - 1, 1)));
+  const years = fromYear === toYear ? `${fromYear}` : `${fromYear}-${toYear}`;
+  const months = endMonth === 1 ? monthName(1) : `${monthName(1)}-${monthName(endMonth)}`;
+  return `${years} (${months})`;
+};
+
+/**
  * Align comparison-period counts to the main chart items (same order, missing -> 0).
  * The 'outside_range' item gets the comparison total of every category not shown as a bar.
  */

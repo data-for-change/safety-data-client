@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { formatComparePeriod, getComparisonEndMonth } from '../../utils/chartDataUtils';
 import { useStore } from '../../stores/storeConfig';
 import { RootState } from '../../stores/store';
 import { useMemos } from '../../hooks/myUseMemo';
@@ -33,7 +35,13 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
    // const { t } = useTranslation();
    const [showModal, setShowModal] = useState(false);
    const { filterStore } = useStore();
-   const { dataFilterd, getChartData, getCompareChartData } = filterStore;
+   const { t, i18n } = useTranslation();
+   const { dataFilterd, getChartData, getCompareChartData, compareEnabled, compareFromYear, compareToYear } = filterStore;
+   const dataUpdatedTo = useSelector((state: RootState) => state.appUi.dataUpdatedTo);
+   const comparePeriod = compareEnabled
+      ? formatComparePeriod(compareFromYear, compareToYear, getComparisonEndMonth(dataUpdatedTo), i18n.language)
+      : '';
+   const header = comparePeriod ? `${t('compare_header')}: ${comparePeriod}` : undefined;
    const chartId = EchartId.Group_1;
    const dataFormated = getChartData(chartId);
    const compareData = getCompareChartData(chartId);
@@ -50,12 +58,13 @@ const CardChartByGroup1: React.FC<{}> = observer(() => {
    const memoSettingsIcon = useMemos([],
       <SvgIconSettings color={'var(--onprimary-color)'} />
    );
-   
+
    return (
       <>
          <SmallCard style={{ marginBottom: '0.5rem' }}>
             <div className="chart-config">
                <SelectGroupBy id="Graphs.Main.SelectGroupby" />
+               <span style={{ fontSize: 14, fontWeight: 'bold' }}>{header}</span>
                <div className="chart-config-row">
                   <SelectSortBy id="Graphs.Main.SelectSort" />
                   <Button

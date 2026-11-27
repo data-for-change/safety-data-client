@@ -49,13 +49,14 @@ const CardChartGrpBy2: FC<IProps> = observer(() => {
                      &nbsp;
                      <SelectGroupBy2 id="Graphs" />
                      {/* <RangeSlider id="Graphs" label="resize" value={80} onChange={onSizeSliderChange}/> */}
-                  <div style={{ width: '250px', margin: '0 auto' }}>
-                     <ChartDataFilterSlider id={chartId} data={dataGroupby2} />
-                  </div>
+
                   </div>
                   <hr />
                   <div style={styles.divChart}>
                      <ChartBar data={dataFormated} metaData={metaDAta} chartType={chartType} dir={direction} />
+                  </div>
+                   <div style={{ width: '250px', margin: '0 auto' }}>
+                     <ChartDataFilterSlider id={chartId} data={dataGroupby2} />
                   </div>
                </SmallCard>
             )}
