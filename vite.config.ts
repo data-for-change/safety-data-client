@@ -10,7 +10,12 @@ export default defineConfig({
       "/sd-authorize": { target: "http://localhost:8080", changeOrigin: true },
       "/logout": { target: "http://localhost:8080", changeOrigin: true },
       "/involved": { target: "http://localhost:8080", changeOrigin: true },
-      "/city": { target: "http://localhost:8080", changeOrigin: true },
+      "/city": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        // Let the client-side /city page reach Vite; proxy API requests only.
+        bypass: (req) => req.headers.accept?.includes("text/html") ? req.url : undefined,
+      },
       "/api": { target: "http://localhost:8080", changeOrigin: true },
     },
   },

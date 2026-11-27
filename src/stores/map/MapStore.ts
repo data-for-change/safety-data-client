@@ -1,12 +1,9 @@
 import { observable, action, makeAutoObservable } from 'mobx';
-//import { Map } from 'react-leaflet';
 import L from 'leaflet';
 import logger from '../../services/logger';
 import RootStore from './../RootStore';
 import { setBrowserQueryString, delBrowserQueryString } from '../../utils/queryStringUtils';
 import { BBoxType, MapMarkersType } from '../../types';
-import { useSelector } from 'react-redux';
-import { selectDataAllInjuries } from '../casualty/casualtySlice';
 import { store as reduxStore } from '../store';
 
 // import autorun  from "mobx"
@@ -19,6 +16,7 @@ const DEFAULT_BOUNDS = [
 const QUERY_STR_NAME_LAT = 'lat';
 const QUERY_STR_NAME_LNG = 'lng';
 const QUERY_STR_NAME_MRKRCOLOR = 'mkclr';
+const QUERY_STR_NAME_MRKRTYPE = 'mktyp';
 
 export interface IMapStore {
   isLoading: boolean;
@@ -70,6 +68,7 @@ export default class MapStore {
     this.setMapCenterByQuery(params);
     this.setMapZoomByQuery(params);
     this.setMarkerColorTypeByQuery(params);
+    this.setMapMarkersTypeByQuery(params);
   }
 
   delQueryStrMapCenter = () => {
@@ -225,6 +224,18 @@ export default class MapStore {
   @action
   setMapMarkersType = (value: MapMarkersType) => {
     this.mapMarkersType = value;
+    const queryValue = value === MapMarkersType.Markers ? 'm' : 'c';
+    setBrowserQueryString(QUERY_STR_NAME_MRKRTYPE, queryValue);
+  }
+
+  @action
+  setMapMarkersTypeByQuery = (params: URLSearchParams) => {
+    const value = params.get(QUERY_STR_NAME_MRKRTYPE);
+    if (value?.toLowerCase() === 'm' || value === MapMarkersType.Markers) {
+      this.mapMarkersType = MapMarkersType.Markers;
+    } else if (value?.toLowerCase() === 'c' || value === MapMarkersType.Markers_AND_Clusters) {
+      this.mapMarkersType = MapMarkersType.Markers_AND_Clusters;
+    }
   }
 
   mapMarkersTypesArr = [
