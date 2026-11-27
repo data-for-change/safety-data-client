@@ -29,9 +29,9 @@ export const GroupByGraphsPanel: React.FC<IProps> = observer(() => {
    const { injuriesCount } = filterStore;
    if (injuriesCount > 0 || true) {
       return (
-         <div style={styles.divCharts}>           
+         <div style={styles.divCharts}>
             <Row>
-               <Col md={4}>                  
+               <Col md={4}>
                   <CardChartYears />
                </Col>
                <Col md={8} >

@@ -10,15 +10,25 @@ import ChartBar from './ChartBar';
 import { RootState } from '../../stores/store';
 import ChartDataFilterSlider from '../organisms/ChartDataFilterSlider';
 import { EchartId } from '../types';
+import { formatComparePeriod, getComparisonEndMonth } from '../../utils/chartDataUtils';
 
 const CardChartYears: React.FC<{}> = observer(() => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { filterStore } = useStore();
     const { casualtiesNames, getChartData, getCompareChartData, compareYearsEnabled, setCompareYearsEnabled } = filterStore;
     const chartId = EchartId.Years;
     const dataFormated = getChartData(chartId);
     const compareData = getCompareChartData(chartId);
     const direction  = useSelector((state: RootState) => state.appUi.direction);
+    const dataUpdatedTo = useSelector((state: RootState) => state.appUi.dataUpdatedTo);
+    const comparePeriod = compareYearsEnabled
+       ? formatComparePeriod(
+          Number(filterStore.timeStore.startYear.queryValue),
+          Number(filterStore.timeStore.endYear.queryValue),
+          getComparisonEndMonth(dataUpdatedTo),
+          i18n.language)
+       : '';
+    const header = `${t(casualtiesNames)} ${t('by-years')}${comparePeriod ? ` | ${t('compare_header')}: ${comparePeriod}` : ''}`;
     const styles = {
        divChart: {
           width: '100%',
@@ -26,7 +36,7 @@ const CardChartYears: React.FC<{}> = observer(() => {
        },
     };
     return (
-        <SmallCard styleType={2} header={`${t(casualtiesNames)} ${t('by-years')}`}>
+        <SmallCard styleType={2} header={header}>
            <div style={styles.divChart}>
               <ChartBar data={dataFormated} compareData={compareData} fill="#FE9772" dir={direction} />
            </div>
